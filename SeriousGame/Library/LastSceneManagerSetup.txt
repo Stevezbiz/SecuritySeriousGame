@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/ArpPoisoning.unity
+- path: Assets/Scenes/InitScreen.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
