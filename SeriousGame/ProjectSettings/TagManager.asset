@@ -4,10 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Network
-  - MessageList
-  - Packet
-  - Station
+  - Canvas
+  - GUI
   layers:
   - Default
   - TransparentFX

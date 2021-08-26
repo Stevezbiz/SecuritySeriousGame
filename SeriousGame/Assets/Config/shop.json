@@ -1,0 +1,10 @@
+{
+	"powerUps":
+	[
+		{
+			"name": "Power up di prova",
+			"description": "Qui si spiegano gli effetti del power up",
+			"cost": 200
+		}
+	]
+}
