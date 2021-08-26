@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class GUI : MonoBehaviour {
     [SerializeField] TextMeshProUGUI moneyText;
@@ -17,20 +17,22 @@ public class GUI : MonoBehaviour {
     [SerializeField] float usersGain;
 
     DateTime dateTime;
-
+    float startTime;
     int updateTime = 1;
 
     // Start is called before the first frame update
     void Start() {
-        DateTime dt = DateTime.Now.AddDays(1);
-        dateTime = new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0, 0, DateTimeKind.Local);
+        startTime = Time.time;
+        Time.timeScale = 1;
+        DateTime dt = DateTime.Now.AddMonths(1);
+        dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
         Refresh();
     }
 
     // Update is called once per frame
     void Update() {
         // update the GUI every second
-        if (Time.time >= updateTime) {
+        if (Time.time - startTime >= updateTime) {
             updateTime++;
             money += moneyGain * (float)Math.Floor(users);
             users += usersGain;

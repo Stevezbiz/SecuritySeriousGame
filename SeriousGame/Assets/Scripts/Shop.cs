@@ -22,7 +22,7 @@ public class Shop : MonoBehaviour {
     [SerializeField] GameObject details;
 
     GameObject canvas;
-
+    float oldTimeScale = 1;
     int height = 100;
     int id = 0;
 
@@ -70,6 +70,7 @@ public class Shop : MonoBehaviour {
     }
 
     public void OpenShop() {
+        oldTimeScale = Time.timeScale;
         Time.timeScale = 0;
         gameObject.SetActive(true);
     }
@@ -78,7 +79,7 @@ public class Shop : MonoBehaviour {
         if (details.transform.childCount > 0) {
             Destroy(details.transform.GetChild(0).gameObject);
         }
-        Time.timeScale = 1;
+        Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);
     }
 }
