@@ -10,23 +10,15 @@ public class ShopItem : MonoBehaviour {
     [SerializeField] GameObject ownedImage;
 
     RectTransform spawnPoint;
-    int id;
-    string item;
-    string description;
-    int cost;
-    bool owned;
+    ShopItemInfo shopItemInfo;
 
     public RectTransform SpawnPoint { get => spawnPoint; set => spawnPoint = value; }
-    public int Id { get => id; set => id = value; }
-    public string Item { get => item; set => item = value; }
-    public string Description { get => description; set => description = value; }
-    public int Cost { get => cost; set => cost = value; }
-    public bool Owned { get => owned; set => owned = value; }
+    public ShopItemInfo ShopItemInfo { get => shopItemInfo; set => shopItemInfo = value; }
 
     // Start is called before the first frame update
     void Start() {
-        itemText.SetText(Item);
-        costText.SetText(Cost.ToString());
+        itemText.SetText(shopItemInfo.name);
+        costText.SetText(shopItemInfo.cost.ToString());
     }
 
     // Update is called once per frame
@@ -40,15 +32,10 @@ public class ShopItem : MonoBehaviour {
         details.transform.SetParent(SpawnPoint, false);
         ShopItemDetail newShopItemDetail = details.GetComponent<ShopItemDetail>();
         newShopItemDetail.Parent = this;
-        newShopItemDetail.Item = Item;
-        newShopItemDetail.Description = Description;
-        newShopItemDetail.Cost = Cost;
-        newShopItemDetail.Owned = Owned;
     }
 
     public void Purchase() {
         ownedImage.SetActive(true);
         costText.SetText("");
-        Owned = true;
     }
 }

@@ -13,26 +13,23 @@ public class ShopItemDetail : MonoBehaviour {
     GUI gui;
 
     ShopItem parent;
-    string item;
-    string description;
-    int cost;
-    bool owned;
 
     public ShopItem Parent { get => parent; set => parent = value; }
-    public string Item { get => item; set => item = value; }
-    public string Description { get => description; set => description = value; }
-    public int Cost { get => cost; set => cost = value; }
-    public bool Owned { get => owned; set => owned = value; }
 
     // Start is called before the first frame update
     void Start() {
         gui = GameObject.FindGameObjectWithTag("GUI").GetComponent<GUI>();
 
-        titleText.SetText(Item + " - costo " + Cost.ToString());
-        descriptionText.SetText(Description);
-        if (Owned) {
-            purchaseButton.interactable = false;
-            purchaseButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color(.0f, 1.0f, .0f, .5f);
+        titleText.SetText(Parent.ShopItemInfo.name + " - costo " + Parent.ShopItemInfo.cost.ToString());
+        descriptionText.SetText(Parent.ShopItemInfo.description);
+        if (Parent.ShopItemInfo.owned) {
+            //purchaseButton.interactable = false;
+            //purchaseButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color(.0f, 1.0f, .0f, .5f);
+            if (Parent.ShopItemInfo.on) {
+                purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("disattiva");
+            } else {
+                purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("attiva");
+            }
         }
     }
 
@@ -41,20 +38,19 @@ public class ShopItemDetail : MonoBehaviour {
 
     }
 
-    public void ConfirmPurchase() {
-        switch (gui.Purchase(Cost)) {
-            case ECode.INSUFFICIENT_MONEY:
-                Vector3 newPos = new Vector3(0, 0, 0);
-                GameObject errorWindow = Instantiate(windowPopUp, newPos, Quaternion.identity);
-                errorWindow.transform.SetParent(gui.gameObject.transform, false);
-                WindowPopUp newWindow = errorWindow.GetComponent<WindowPopUp>();
-                newWindow.Resume = false;
-                newWindow.Message = "Non hai abbastanza fondi";
-                break;
-            default:
-                Parent.Purchase();
-                Destroy(gameObject);
-                break;
+    public void ConfirmPurchaseOrEnableDisable() {
+        if (Parent.ShopItemInfo.owned) {
+            if (Parent.ShopItemInfo.on) {
+                gui.Disable(Parent.ShopItemInfo.id);
+                purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("attiva");
+            } else {
+                gui.Enable(Parent.ShopItemInfo.id);
+                purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("disattiva");
+            }
+        } else {
+            gui.Purchase(Parent.ShopItemInfo.id);
+            Parent.Purchase();
+            Destroy(gameObject);
         }
     }
 

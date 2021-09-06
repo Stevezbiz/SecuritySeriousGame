@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class ShopJSONObj {
+public class ShopItemInfo {
+    public int id;
     public string name;
     public string description;
     public int cost;
+    public float moneyMalus;
+    public float usersMalus;
+    public bool owned;
+    public bool on;
+    public int[] attacks;
 }
 
 [System.Serializable]
 public class ShopJSON {
-    public ShopJSONObj[] powerUps;
+    public ShopItemInfo[] powerUps;
 }
 
 public class Shop : MonoBehaviour {
@@ -24,7 +30,6 @@ public class Shop : MonoBehaviour {
     GameObject canvas;
     float oldTimeScale = 1;
     int height = 100;
-    int id = 0;
 
     Dictionary<int, ShopItem> items = new Dictionary<int, ShopItem>();
 
@@ -34,18 +39,8 @@ public class Shop : MonoBehaviour {
 
         gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         ShopJSON shopContent = JsonUtility.FromJson<ShopJSON>(shopFileJSON.text);
-        foreach (ShopJSONObj p in shopContent.powerUps) {
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
-            AddShopRecord(p.name, p.description, p.cost);
+        foreach (ShopItemInfo item in shopContent.powerUps) {
+            AddShopRecord(item);
         }
     }
 
@@ -54,18 +49,19 @@ public class Shop : MonoBehaviour {
 
     }
 
-    void AddShopRecord(string name, string description, int cost) {
+    public ShopItemInfo Item(int id) {
+        return items[id].ShopItemInfo;
+    }
+
+    void AddShopRecord(ShopItemInfo shopItemInfo) {
         Vector3 newPos = new Vector3(0, -content.sizeDelta.y, 0);
         GameObject newRecord = Instantiate(shopItem, newPos, Quaternion.identity);
         newRecord.transform.SetParent(spawnPoint, false);
-        newRecord.name = "ShopItem" + id.ToString();
+        newRecord.name = "ShopItem" + shopItemInfo.id.ToString();
         ShopItem newShopItem = newRecord.GetComponent<ShopItem>();
-        newShopItem.Id = id;
-        newShopItem.Item = name;
-        newShopItem.Description = description;
-        newShopItem.Cost = cost;
+        newShopItem.ShopItemInfo = shopItemInfo;
         newShopItem.SpawnPoint = details.GetComponent<RectTransform>();
-        items.Add(id++, newShopItem);
+        items.Add(shopItemInfo.id, newShopItem);
         content.sizeDelta = new Vector2(0, items.Count * height);
     }
 

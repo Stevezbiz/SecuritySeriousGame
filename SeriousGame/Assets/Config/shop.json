@@ -2,9 +2,15 @@
 	"powerUps":
 	[
 		{
+			"id": 0,
 			"name": "Power up di prova",
 			"description": "Qui si spiegano gli effetti del power up",
-			"cost": 200
+			"cost": 200,
+			"moneyMalus": 0.1,
+			"usersMalus": 0.9,
+			"owned": false,
+			"on": false,
+			"attacks": [ 0 ]
 		}
 	]
 }

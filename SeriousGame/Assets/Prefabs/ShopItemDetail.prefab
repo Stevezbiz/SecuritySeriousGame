@@ -367,7 +367,7 @@ PrefabInstance:
       objectReference: {fileID: 1394089464810432391}
     - target: {fileID: 7065891689545675860, guid: 473d7a6c229490d45a6ea423da9bad1d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ConfirmPurchase
+      value: ConfirmPurchaseOrEnableDisable
       objectReference: {fileID: 0}
     - target: {fileID: 7065891689545675860, guid: 473d7a6c229490d45a6ea423da9bad1d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

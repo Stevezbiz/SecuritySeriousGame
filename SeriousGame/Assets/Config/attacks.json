@@ -1,0 +1,17 @@
+{
+	"attacks":
+	[
+		{
+			"id": 0,
+			"name": "Attacco 0",
+			"description": "Qui si spiegano gli effetti dell'attacco",
+			"moneyLoss": 0,
+			"usersLoss": 0,
+			"moneyMalus": 0.2,
+			"usersMalus": 2,
+			"reputationMalus": 0.1,
+			"maxTime": 20,
+			"duration": 5
+		}
+	]
+}
