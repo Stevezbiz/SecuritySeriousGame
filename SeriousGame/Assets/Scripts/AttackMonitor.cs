@@ -26,9 +26,11 @@ public class AttackMonitor : MonoBehaviour {
     }
 
     IEnumerator PerformAttack(int id) {
+        //Debug.Log("Attack @" + Time.time);
         warningImage.SetActive(true);
-
+        gui.StartAttack(id);
         yield return new WaitForSeconds(gui.GetDuration(id));
+        gui.StopAttack(id);
         warningImage.SetActive(false);
     }
 }

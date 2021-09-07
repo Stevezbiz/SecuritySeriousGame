@@ -2,25 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class AttackInfo {
-    public int id;
-    public string name;
-    public string description;
-    public float moneyLoss;
-    public float usersLoss;
-    public float moneyMalus;
-    public float usersMalus;
-    public float reputationMalus;
-    public float maxTime;
-    public float duration;
-}
-
-[System.Serializable]
-public class AttacksJSON {
-    public AttackInfo[] attacks;
-}
-
 public class AttacksManager : MonoBehaviour {
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] GUI gui;

@@ -8,6 +8,7 @@ public class ShopItem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI itemText;
     [SerializeField] TextMeshProUGUI costText;
     [SerializeField] GameObject ownedImage;
+    [SerializeField] GameObject pausedImage;
 
     RectTransform spawnPoint;
     ShopItemInfo shopItemInfo;
@@ -35,7 +36,18 @@ public class ShopItem : MonoBehaviour {
     }
 
     public void Purchase() {
-        ownedImage.SetActive(true);
         costText.SetText("");
+        Enable();
     }
+
+    public void Enable() {
+        ownedImage.SetActive(true);
+        pausedImage.SetActive(false);
+    }
+
+    public void Disable() {
+        ownedImage.SetActive(false);
+        pausedImage.SetActive(true);
+    }
+
 }

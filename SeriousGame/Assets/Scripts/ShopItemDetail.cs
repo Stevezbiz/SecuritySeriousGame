@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class ShopItemDetail : MonoBehaviour {
     [SerializeField] TextMeshProUGUI titleText;
     [SerializeField] TextMeshProUGUI descriptionText;
-    [SerializeField] GameObject windowPopUp;
     [SerializeField] Button purchaseButton;
 
     GUI gui;
@@ -41,10 +40,12 @@ public class ShopItemDetail : MonoBehaviour {
     public void ConfirmPurchaseOrEnableDisable() {
         if (Parent.ShopItemInfo.owned) {
             if (Parent.ShopItemInfo.on) {
-                gui.Disable(Parent.ShopItemInfo.id);
+                gui.DisableShopItem(Parent.ShopItemInfo.id);
+                parent.Disable();
                 purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("attiva");
             } else {
-                gui.Enable(Parent.ShopItemInfo.id);
+                gui.EnableShopItem(Parent.ShopItemInfo.id);
+                parent.Enable();
                 purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("disattiva");
             }
         } else {

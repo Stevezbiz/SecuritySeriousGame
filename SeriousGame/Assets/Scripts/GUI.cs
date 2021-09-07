@@ -1,8 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using DateTime = System.DateTime;
+using DateTimeKind = System.DateTimeKind;
+using Image = UnityEngine.UI.Image;
 
 public class GUI : MonoBehaviour {
     [SerializeField] TextMeshProUGUI moneyText;
@@ -10,6 +12,8 @@ public class GUI : MonoBehaviour {
     [SerializeField] TextMeshProUGUI reputationText;
     [SerializeField] TextMeshProUGUI dateText;
     [SerializeField] TextMeshProUGUI timeText;
+    [SerializeField] Image reputationBar;
+    [SerializeField] GameObject windowPopUp;
     [SerializeField] Shop shop;
     [SerializeField] AttacksManager attacksManager;
     [SerializeField] float money;
@@ -30,9 +34,14 @@ public class GUI : MonoBehaviour {
         { .004f, 10060f },
     };
 
+    Dictionary<int, float> resistances = new Dictionary<int, float>();
+
     float moneyMalus = 0f;
     float usersMalus = 1f;
+    float attackMalus = 0f;
     float endurance = 1f;
+    int negativeTime = 0;
+    int maxNegative = 60;
 
     // Start is called before the first frame update
     void Start() {
@@ -51,32 +60,48 @@ public class GUI : MonoBehaviour {
             money = CalculateMoney();
             users = CalculateUsers();
             dateTime = dateTime.AddHours(4);
-            Refresh();
+            if (money < 0) {
+                negativeTime++;
+            } else {
+                negativeTime = 0;
+            }
+            if(negativeTime > maxNegative) {
+                // end the game
+                Time.timeScale = 0;
+                Vector3 newPos = new Vector3(0, 0, 0);
+                GameObject newWindow = Instantiate(windowPopUp, newPos, Quaternion.identity);
+                newWindow.transform.SetParent(gameObject.transform, false);
+                newWindow.GetComponent<WindowPopUp>().Message = "GAME OVER";
+            } else {
+                Refresh();
+            }
+            
         }
     }
 
     void Refresh() {
-        moneyText.SetText(Math.Floor(money).ToString());
-        usersText.SetText(Math.Floor(users).ToString());
-        reputationText.SetText(reputation.ToString());
+        moneyText.SetText(Mathf.Floor(money).ToString());
+        usersText.SetText(Mathf.Floor(users).ToString());
+        reputationText.SetText(Mathf.FloorToInt(reputation * 100).ToString() + "%");
+        reputationBar.fillAmount = reputation;
         dateText.SetText(dateTime.ToString("d MMM yyyy"));
         timeText.SetText(dateTime.ToString("HH:mm"));
     }
 
     public void Purchase(int id) {
         money -= shop.Item(id).cost;
-        Enable(id);
+        EnableShopItem(id);
         shop.Item(id).owned = true;
         Refresh();
     }
 
-    public void Enable(int id) {
+    public void EnableShopItem(int id) {
         moneyMalus += shop.Item(id).moneyMalus;
         usersMalus *= shop.Item(id).usersMalus;
         shop.Item(id).on = true;
     }
 
-    public void Disable(int id) {
+    public void DisableShopItem(int id) {
         moneyMalus -= shop.Item(id).moneyMalus;
         usersMalus /= shop.Item(id).usersMalus;
         shop.Item(id).on = false;
@@ -87,7 +112,19 @@ public class GUI : MonoBehaviour {
     }
 
     public float GetDuration(int id) {
-        return attacksManager.Attack(id).duration;
+        return attacksManager.Attack(id).duration + 1;
+    }
+
+    public void StartAttack(int id) {
+        money -= attacksManager.Attack(id).moneyLoss;
+        users -= attacksManager.Attack(id).usersLoss;
+        attackMalus += attacksManager.Attack(id).usersMalus;
+        moneyMalus += attacksManager.Attack(id).moneyMalus;
+    }
+
+    public void StopAttack(int id) {
+        attackMalus -= attacksManager.Attack(id).usersMalus;
+        moneyMalus -= attacksManager.Attack(id).moneyMalus;
     }
 
     float CalculateMoney() {
@@ -98,10 +135,10 @@ public class GUI : MonoBehaviour {
             i++;
         }
         //Debug.Log("Costs: " + moneyMalus * (coeffs[i, 0] * (float)Math.Floor(users) + coeffs[i, 1]) + "\nDiff: " + (moneyGain * (float)Math.Floor(users) - moneyMalus * (coeffs[i, 0] * (float)Math.Floor(users) + coeffs[i, 1])));
-        return money + moneyGain * (float)Math.Floor(users) - moneyMalus * (coeffs[i, 0] * (float)Math.Floor(users) + coeffs[i, 1]);
+        return money + moneyGain * (float)Mathf.Floor(users) - moneyMalus * (coeffs[i, 0] * (float)Mathf.Floor(users) + coeffs[i, 1]);
     }
 
     float CalculateUsers() {
-        return users + 0.01f * reputation * usersMalus * users;
+        return users + 0.01f * (reputation * usersMalus - attackMalus) * (float)Mathf.Floor(users);
     }
 }

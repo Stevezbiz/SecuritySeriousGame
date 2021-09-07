@@ -6,14 +6,14 @@ using UnityEngine;
 public class WindowPopUp : MonoBehaviour {
     [SerializeField] TextMeshProUGUI messageText;
 
-    bool resume;
     string message;
+    float oldTimeScale;
 
-    public bool Resume { get => resume; set => resume = value; }
     public string Message { get => message; set => message = value; }
 
     // Start is called before the first frame update
     void Start() {
+        oldTimeScale = Time.timeScale;
         messageText.SetText(message);
     }
 
@@ -23,7 +23,7 @@ public class WindowPopUp : MonoBehaviour {
     }
 
     public void OkButton() {
-        if (Resume) Time.timeScale = 1;
+        Time.timeScale = oldTimeScale;
         Destroy(gameObject);
     }
 }

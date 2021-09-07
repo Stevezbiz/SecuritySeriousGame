@@ -2,24 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class ShopItemInfo {
-    public int id;
-    public string name;
-    public string description;
-    public int cost;
-    public float moneyMalus;
-    public float usersMalus;
-    public bool owned;
-    public bool on;
-    public int[] attacks;
-}
-
-[System.Serializable]
-public class ShopJSON {
-    public ShopItemInfo[] powerUps;
-}
-
 public class Shop : MonoBehaviour {
     [SerializeField] GameObject shopItem;
     [SerializeField] Transform spawnPoint;
