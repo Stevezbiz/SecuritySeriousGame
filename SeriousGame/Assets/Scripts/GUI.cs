@@ -25,7 +25,7 @@ public class GUI : MonoBehaviour {
     float startTime;
     int updateTime = 1;
 
-    float[,] coeffs = new float[,] {
+    float[,] moneyCoeffs = new float[,] {
         { .5f, 0f },
         { .2f, 28f },
         { .08f, 145f },
@@ -34,14 +34,28 @@ public class GUI : MonoBehaviour {
         { .004f, 10060f },
     };
 
-    Dictionary<int, float> resistances = new Dictionary<int, float>();
+    float[] usersCoeffs = new float[] {
+        0.1f,
+        0.05f,
+        0.03f,
+        0.02f,
+        0.01f,
+        0.005f
+    };
 
-    float moneyMalus = 0f;
+    Dictionary<int, Resistance> resistances = new Dictionary<int, Resistance>();
+
+    float moneyMalus = 0.1f;
     float usersMalus = 1f;
-    float attackMalus = 0f;
+    float attackUsersMalus = 0f;
+    float attackMoneyMalus = 0f;
     float endurance = 1f;
+    float miss = 0f;
     int negativeTime = 0;
     int maxNegative = 60;
+    int noAttackTime = 0;
+    int noAttackStep = 6;
+    int ongoingAttacks = 0;
 
     // Start is called before the first frame update
     void Start() {
@@ -57,25 +71,21 @@ public class GUI : MonoBehaviour {
         // update the GUI every second
         if (Time.time - startTime >= updateTime) {
             updateTime++;
-            money = CalculateMoney();
-            users = CalculateUsers();
-            dateTime = dateTime.AddHours(4);
-            if (money < 0) {
-                negativeTime++;
-            } else {
-                negativeTime = 0;
-            }
-            if(negativeTime > maxNegative) {
-                // end the game
-                Time.timeScale = 0;
-                Vector3 newPos = new Vector3(0, 0, 0);
-                GameObject newWindow = Instantiate(windowPopUp, newPos, Quaternion.identity);
-                newWindow.transform.SetParent(gameObject.transform, false);
-                newWindow.GetComponent<WindowPopUp>().Message = "GAME OVER";
-            } else {
-                Refresh();
-            }
             
+            // money
+            money = CalculateMoney();
+            // users
+            users = CalculateUsers();
+            // reputation
+            reputation = CalculateReputation();
+            // date
+            dateTime = dateTime.AddHours(4);
+
+            // game over check
+            CheckGameOver();
+
+            // refresh
+            Refresh();
         }
     }
 
@@ -86,59 +96,138 @@ public class GUI : MonoBehaviour {
         reputationBar.fillAmount = reputation;
         dateText.SetText(dateTime.ToString("d MMM yyyy"));
         timeText.SetText(dateTime.ToString("HH:mm"));
+        Debug.Log("\n" +
+            "moneyMalus\t\t" + moneyMalus + "\n" +
+            "usersMalus\t\t" + usersMalus + "\n" +
+            "attackMoneyMalus\t\t" + attackMoneyMalus + "\n" +
+            "attackUsersMalus\t\t" + attackUsersMalus+ "\n" +
+            "");
+    }
+
+    public void AddResistance(int id) {
+        if (!resistances.ContainsKey(id)) resistances.Add(id, new Resistance(id, 0f, 0f, 0f));
     }
 
     public void Purchase(int id) {
-        money -= shop.Item(id).cost;
+        ShopItemInfo sii = shop.GetItem(id);
+        money -= sii.cost;
+        sii.owned = true;
+        shop.SetItem(sii);
         EnableShopItem(id);
-        shop.Item(id).owned = true;
         Refresh();
     }
 
     public void EnableShopItem(int id) {
-        moneyMalus += shop.Item(id).moneyMalus;
-        usersMalus *= shop.Item(id).usersMalus;
-        shop.Item(id).on = true;
+        ShopItemInfo sii = shop.GetItem(id);
+        moneyMalus += sii.moneyMalus;
+        usersMalus *= 1 - sii.usersMalus;
+        sii.on = true;
+        shop.SetItem(sii);
+        foreach(Resistance r in shop.GetItem(id).resistances) {
+            resistances[r.id].miss += r.miss;
+            resistances[r.id].duration += r.duration;
+            resistances[r.id].endurance += r.endurance;
+        }
     }
 
     public void DisableShopItem(int id) {
-        moneyMalus -= shop.Item(id).moneyMalus;
-        usersMalus /= shop.Item(id).usersMalus;
-        shop.Item(id).on = false;
+        ShopItemInfo sii = shop.GetItem(id);
+        moneyMalus -= sii.moneyMalus;
+        usersMalus /= 1 - sii.usersMalus;
+        sii.on = false;
+        shop.SetItem(sii);
+        foreach (Resistance r in shop.GetItem(id).resistances) {
+            resistances[r.id].miss -= r.miss;
+            resistances[r.id].duration -= r.duration;
+            resistances[r.id].endurance -= r.endurance;
+        }
     }
 
-    public float GetEndurance(int id) {
-        return endurance;
+    public float GetMiss(int id) {
+        return miss + resistances[id].miss;
     }
 
     public float GetDuration(int id) {
-        return attacksManager.Attack(id).duration + 1;
+        return (1 - resistances[id].duration) * attacksManager.Attack(id).duration + 1;
+    }
+
+    public float GetEndurance(int id) {
+        return endurance + resistances[id].endurance;
     }
 
     public void StartAttack(int id) {
+        ongoingAttacks++;
         money -= attacksManager.Attack(id).moneyLoss;
         users -= attacksManager.Attack(id).usersLoss;
-        attackMalus += attacksManager.Attack(id).usersMalus;
-        moneyMalus += attacksManager.Attack(id).moneyMalus;
+        attackUsersMalus += attacksManager.Attack(id).usersMalus;
+        attackMoneyMalus += attacksManager.Attack(id).moneyMalus;
+        reputation -= attacksManager.Attack(id).reputationMalus;
     }
 
     public void StopAttack(int id) {
-        attackMalus -= attacksManager.Attack(id).usersMalus;
-        moneyMalus -= attacksManager.Attack(id).moneyMalus;
+        ongoingAttacks--;
+        attackUsersMalus -= attacksManager.Attack(id).usersMalus;
+        attackMoneyMalus -= attacksManager.Attack(id).moneyMalus;
+    }
+
+    public void MissedAttack() {
+        reputation += 0.1f;
     }
 
     float CalculateMoney() {
-        int i = 0;
-        float m = money;
-        while (m > 100) {
-            m /= 10;
-            i++;
-        }
+        int i;
+        if (money < 100) i = 0;
+        else if (money < 1000) i = 1;
+        else if (money < 10000) i = 2;
+        else if (money < 100000) i = 3;
+        else if (money < 1000000) i = 4;
+        else i = 5;
         //Debug.Log("Costs: " + moneyMalus * (coeffs[i, 0] * (float)Math.Floor(users) + coeffs[i, 1]) + "\nDiff: " + (moneyGain * (float)Math.Floor(users) - moneyMalus * (coeffs[i, 0] * (float)Math.Floor(users) + coeffs[i, 1])));
-        return money + moneyGain * (float)Mathf.Floor(users) - moneyMalus * (coeffs[i, 0] * (float)Mathf.Floor(users) + coeffs[i, 1]);
+        return money + (moneyGain - attackMoneyMalus) * (float)Mathf.Floor(users) - moneyMalus * (moneyCoeffs[i, 0] * (float)Mathf.Floor(users) + moneyCoeffs[i, 1]);
     }
 
     float CalculateUsers() {
-        return users + 0.01f * (reputation * usersMalus - attackMalus) * (float)Mathf.Floor(users);
+        int i;
+        if (users < 100) i = 0;
+        else if (users < 1000) i = 1;
+        else if (users < 10000) i = 2;
+        else if (users < 100000) i = 3;
+        else if (users < 1000000) i = 4;
+        else i = 5;
+        return users + usersCoeffs[i] * (0.5f * (1 + reputation) * usersMalus - attackUsersMalus) * (float)Mathf.Floor(users);
+    }
+
+    float CalculateReputation() {
+        float rep = reputation + 0.0005f;
+        if(ongoingAttacks == 0) {
+            noAttackTime++;
+            if (noAttackTime == noAttackStep) {
+                noAttackTime = 0;
+                rep += 0.01f;
+            }
+        } else {
+            noAttackTime = 0;
+        }
+        if(rep > 1f) {
+            return 1;
+        } else {
+            return rep;
+        }
+    }
+
+    void CheckGameOver() {
+        if (money < 0) {
+            negativeTime++;
+        } else {
+            negativeTime = 0;
+        }
+        if (negativeTime > maxNegative) {
+            // end the game
+            Time.timeScale = 0;
+            Vector3 newPos = new Vector3(0, 0, 0);
+            GameObject newWindow = Instantiate(windowPopUp, newPos, Quaternion.identity);
+            newWindow.transform.SetParent(gameObject.transform, false);
+            newWindow.GetComponent<WindowPopUp>().Message = "GAME OVER";
+        }
     }
 }

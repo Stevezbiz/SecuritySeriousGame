@@ -9,7 +9,6 @@ public class Shop : MonoBehaviour {
     [SerializeField] TextAsset shopFileJSON;
     [SerializeField] GameObject details;
 
-    GameObject canvas;
     float oldTimeScale = 1;
     int height = 100;
 
@@ -17,8 +16,6 @@ public class Shop : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        canvas = GameObject.FindGameObjectWithTag("Canvas");
-
         gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         ShopJSON shopContent = JsonUtility.FromJson<ShopJSON>(shopFileJSON.text);
         foreach (ShopItemInfo item in shopContent.powerUps) {
@@ -31,11 +28,16 @@ public class Shop : MonoBehaviour {
 
     }
 
-    public ShopItemInfo Item(int id) {
+    public ShopItemInfo GetItem(int id) {
         return items[id].ShopItemInfo;
     }
 
+    public void SetItem(ShopItemInfo sii) {
+        items[sii.id].ShopItemInfo = sii;
+    }
+
     void AddShopRecord(ShopItemInfo shopItemInfo) {
+        // create the new item
         Vector3 newPos = new Vector3(0, -content.sizeDelta.y, 0);
         GameObject newRecord = Instantiate(shopItem, newPos, Quaternion.identity);
         newRecord.transform.SetParent(spawnPoint, false);

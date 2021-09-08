@@ -3,6 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+public class Resistance {
+    public int id;
+    public float duration;
+    public float miss;
+    public float endurance;
+
+    public Resistance(int id, float duration, float miss, float endurance) {
+        this.id = id;
+        this.duration = duration;
+        this.miss = miss;
+        this.endurance = endurance;
+    }
+}
+
+[System.Serializable]
 public class ShopItemInfo {
     public int id;
     public string name;
@@ -12,7 +27,7 @@ public class ShopItemInfo {
     public float usersMalus;
     public bool owned;
     public bool on;
-    public int[] attacks;
+    public Resistance[] resistances;
 }
 
 [System.Serializable]

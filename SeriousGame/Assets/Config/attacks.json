@@ -9,7 +9,7 @@
 			"usersLoss": 0,
 			"moneyMalus": 0.1,
 			"usersMalus": 1,
-			"reputationMalus": 1,
+			"reputationMalus": 0.03,
 			"maxTime": 20,
 			"duration": 7
 		}

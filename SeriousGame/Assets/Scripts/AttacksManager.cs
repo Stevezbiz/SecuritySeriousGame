@@ -14,8 +14,9 @@ public class AttacksManager : MonoBehaviour {
         AttacksJSON attacksContent = JsonUtility.FromJson<AttacksJSON>(attacksFileJSON.text);
         foreach (AttackInfo attack in attacksContent.attacks) {
             AddAttack(attack);
+            gui.AddResistance(attack.id);
+            StartCoroutine(ExecuteAttack(attack.id));
         }
-        StartCoroutine(ExecuteAttack());
     }
 
     // Update is called once per frame
@@ -31,22 +32,27 @@ public class AttacksManager : MonoBehaviour {
         attacks.Add(attack.id, attack);
     }
 
-    IEnumerator ExecuteAttack() {
+    IEnumerator ExecuteAttack(int id) {
         // choose first attack
-        int nextAttack = Random.Range(0, attacks.Count);
-        float maxTime = attacks[nextAttack].maxTime * gui.GetEndurance(nextAttack);
+        float maxTime = attacks[id].maxTime * gui.GetEndurance(id);
         float nextTime = maxTime - Random.Range(0, 0.5f * maxTime);
 
         while (true) {
             // wait for the attack
             yield return new WaitForSeconds(nextTime);
 
-            // launch the attack
-            attackMonitor.LaunchAttack(nextAttack);
+            // launch the attack if hits
+            if(Random.Range(0f,1f) > gui.GetMiss(id)) {
+                // hit
+                attackMonitor.LaunchAttack(id);
+            } else {
+                // miss
+                gui.MissedAttack();
+                Debug.Log("Attack @" + Time.time + " missed");
+            }
 
-            // choose the next attack
-            nextAttack = Random.Range(0, attacks.Count);
-            maxTime = attacks[nextAttack].maxTime * gui.GetEndurance(nextAttack);
+            // choose the time for the next attack
+            maxTime = attacks[id].maxTime * gui.GetEndurance(id);
             nextTime = maxTime - Random.Range(0, 0.5f * maxTime);
         }
     }
