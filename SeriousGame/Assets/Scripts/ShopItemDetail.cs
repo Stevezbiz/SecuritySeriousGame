@@ -10,21 +10,25 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] Button purchaseButton;
 
     GUI gui;
-
+    ShopGUI shop;
     ShopItem parent;
+    int id;
 
+    public ShopGUI Shop { get => shop; set => shop = value; }
+    public int Id { get => id; set => id = value; }
     public ShopItem Parent { get => parent; set => parent = value; }
 
     // Start is called before the first frame update
     void Start() {
         gui = GameObject.FindGameObjectWithTag("GUI").GetComponent<GUI>();
 
-        titleText.SetText(Parent.ShopItemInfo.name + " - costo " + Parent.ShopItemInfo.cost.ToString());
-        descriptionText.SetText(Parent.ShopItemInfo.description);
-        if (Parent.ShopItemInfo.owned) {
+        ShopItemInfo sii = shop.GetItem(id);
+        titleText.SetText(sii.name + " - costo " + sii.cost.ToString());
+        descriptionText.SetText(sii.description);
+        if (sii.owned) {
             //purchaseButton.interactable = false;
             //purchaseButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color(.0f, 1.0f, .0f, .5f);
-            if (Parent.ShopItemInfo.on) {
+            if (sii.on) {
                 purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("disattiva");
             } else {
                 purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("attiva");
@@ -38,19 +42,19 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void ConfirmPurchaseOrEnableDisable() {
-        if (Parent.ShopItemInfo.owned) {
-            if (Parent.ShopItemInfo.on) {
-                gui.DisableShopItem(Parent.ShopItemInfo.id);
+        if (shop.ItemIsOwned(id)) {
+            if (shop.ItemIsOn(id)) {
+                gui.DisableShopItem(id);
                 parent.Disable();
                 purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("attiva");
             } else {
-                gui.EnableShopItem(Parent.ShopItemInfo.id);
+                gui.EnableShopItem(id);
                 parent.Enable();
                 purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("disattiva");
             }
         } else {
-            gui.Purchase(Parent.ShopItemInfo.id);
-            Parent.Purchase();
+            gui.Purchase(id);
+            parent.Purchase();
             Destroy(gameObject);
         }
     }

@@ -62,7 +62,7 @@ public class AttacksManager : MonoBehaviour {
             yield return new WaitForSeconds(nextTime);
 
             // launch the attack if hits
-            if(Random.Range(0f,1f) > GetMiss(id)) {
+            if (Random.Range(0f, 1f) > GetMiss(id)) {
                 // hit
                 attackMonitor.LaunchAttack(id, GetDuration(id));
             } else {

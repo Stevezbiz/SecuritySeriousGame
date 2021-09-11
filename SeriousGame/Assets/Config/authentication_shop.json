@@ -1,0 +1,24 @@
+{
+	"powerUps":
+	[
+		{
+			"id": 0,
+			"name": "name",
+			"description": "description",
+			"cost": 0,
+			"moneyMalus": 0,
+			"usersMalus": 0,
+			"owned": false,
+			"on": false,
+			"resistances":
+			[
+				{
+					"id": 0,
+					"duration": 0,
+					"miss": 0,
+					"endurance": 0
+				}
+			]
+		}
+	]
+}

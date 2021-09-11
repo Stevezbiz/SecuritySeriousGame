@@ -14,7 +14,7 @@ public class GUI : MonoBehaviour {
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] Image reputationBar;
     [SerializeField] GameObject windowPopUp;
-    [SerializeField] Shop shop;
+    [SerializeField] ShopGUI shop;
     [SerializeField] AttacksManager attacksManager;
     [SerializeField] float money;
     [SerializeField] float users;
@@ -107,7 +107,7 @@ public class GUI : MonoBehaviour {
             "moneyMalus\t\t" + moneyMalus + "\n" +
             "usersMalus\t\t" + usersMalus + "\n" +
             "attackMoneyMalus\t\t" + attackMoneyMalus + "\n" +
-            "attackUsersMalus\t\t" + attackUsersMalus+ "\n" +
+            "attackUsersMalus\t\t" + attackUsersMalus + "\n" +
             "");
     }
 
@@ -159,7 +159,7 @@ public class GUI : MonoBehaviour {
 
     float CalculateMoney(int i) {
         Debug.Log("moneyGain = " + moneyGain[i] + "\n" +
-            "moneyMalus = " + moneyMalus + "\n" + 
+            "moneyMalus = " + moneyMalus + "\n" +
             "attackMoneyMalus = " + attackMoneyMalus + "\n" +
             "gain = " + (moneyGain[i] * attackMoneyMalus - moneyMalus) + "\n");
         return money + moneyGain[i] * attackMoneyMalus - moneyMalus;
@@ -182,7 +182,7 @@ public class GUI : MonoBehaviour {
 
     float CalculateReputation() {
         float rep = reputation + 0.0005f;
-        if(ongoingAttacks == 0) {
+        if (ongoingAttacks == 0) {
             noAttackTime++;
             if (noAttackTime == noAttackStep) {
                 noAttackTime = 0;
@@ -191,7 +191,7 @@ public class GUI : MonoBehaviour {
         } else {
             noAttackTime = 0;
         }
-        if(rep > 1f) {
+        if (rep > 1f) {
             return 1;
         } else {
             return rep;

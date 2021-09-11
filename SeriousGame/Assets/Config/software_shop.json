@@ -1,0 +1,24 @@
+{
+	"powerUps":
+	[
+		{
+			"id": 1,
+			"name": "Intrusion Detection Systems (IDS)",
+			"description": "L'utilizzo di IDS permette di analizzare anomalie nel traffico e aiuta a prevenire gli attacchi DoS. Può identificare comportamenti insoliti, spesso riconducibili all'opera di malware o accessi non autorizzati.",
+			"cost": 500,
+			"moneyMalus": 10,
+			"usersMalus": 0,
+			"owned": false,
+			"on": false,
+			"resistances":
+			[
+				{
+					"id": 0,
+					"duration": 0.3,
+					"miss": 0.2,
+					"endurance": 0.5
+				}
+			]
+		}
+	]
+}
