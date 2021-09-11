@@ -21,15 +21,15 @@ public class AttackMonitor : MonoBehaviour {
 
     }
 
-    public void LaunchAttack(int id) {
-        StartCoroutine(PerformAttack(id));
+    public void LaunchAttack(int id, float duration) {
+        StartCoroutine(PerformAttack(id, duration));
     }
 
-    IEnumerator PerformAttack(int id) {
+    IEnumerator PerformAttack(int id, float duration) {
         //Debug.Log("Attack @" + Time.time);
         warningImage.SetActive(true);
         gui.StartAttack(id);
-        yield return new WaitForSeconds(gui.GetDuration(id));
+        yield return new WaitForSeconds(duration);
         gui.StopAttack(id);
         warningImage.SetActive(false);
     }

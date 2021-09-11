@@ -8,13 +8,17 @@ public class AttacksManager : MonoBehaviour {
     [SerializeField] AttackMonitor attackMonitor;
 
     Dictionary<int, AttackInfo> attacks = new Dictionary<int, AttackInfo>();
+    Dictionary<int, Resistance> resistances = new Dictionary<int, Resistance>();
+
+    float endurance = 1f;
+    float miss = 0f;
 
     // Start is called before the first frame update
     void Start() {
         AttacksJSON attacksContent = JsonUtility.FromJson<AttacksJSON>(attacksFileJSON.text);
         foreach (AttackInfo attack in attacksContent.attacks) {
             AddAttack(attack);
-            gui.AddResistance(attack.id);
+            AddResistance(attack.id);
             StartCoroutine(ExecuteAttack(attack.id));
         }
     }
@@ -32,9 +36,25 @@ public class AttacksManager : MonoBehaviour {
         attacks.Add(attack.id, attack);
     }
 
+    void AddResistance(int id) {
+        if (!resistances.ContainsKey(id)) resistances.Add(id, new Resistance(id, 0f, 0f, 0f));
+    }
+
+    float GetMiss(int id) {
+        return miss + resistances[id].miss;
+    }
+
+    float GetDuration(int id) {
+        return (1 - resistances[id].duration) * attacks[id].duration + 1;
+    }
+
+    float GetEndurance(int id) {
+        return endurance + resistances[id].endurance;
+    }
+
     IEnumerator ExecuteAttack(int id) {
         // choose first attack
-        float maxTime = attacks[id].maxTime * gui.GetEndurance(id);
+        float maxTime = attacks[id].maxTime * GetEndurance(id);
         float nextTime = maxTime - Random.Range(0, 0.5f * maxTime);
 
         while (true) {
@@ -42,9 +62,9 @@ public class AttacksManager : MonoBehaviour {
             yield return new WaitForSeconds(nextTime);
 
             // launch the attack if hits
-            if(Random.Range(0f,1f) > gui.GetMiss(id)) {
+            if(Random.Range(0f,1f) > GetMiss(id)) {
                 // hit
-                attackMonitor.LaunchAttack(id);
+                attackMonitor.LaunchAttack(id, GetDuration(id));
             } else {
                 // miss
                 gui.MissedAttack();
@@ -52,8 +72,24 @@ public class AttacksManager : MonoBehaviour {
             }
 
             // choose the time for the next attack
-            maxTime = attacks[id].maxTime * gui.GetEndurance(id);
+            maxTime = attacks[id].maxTime * GetEndurance(id);
             nextTime = maxTime - Random.Range(0, 0.5f * maxTime);
+        }
+    }
+
+    public void EnableShopItem(Resistance[] res) {
+        foreach (Resistance r in res) {
+            resistances[r.id].miss += r.miss;
+            resistances[r.id].duration += r.duration;
+            resistances[r.id].endurance += r.endurance;
+        }
+    }
+
+    public void DisableShopItem(Resistance[] res) {
+        foreach (Resistance r in res) {
+            resistances[r.id].miss -= r.miss;
+            resistances[r.id].duration -= r.duration;
+            resistances[r.id].endurance -= r.endurance;
         }
     }
 }

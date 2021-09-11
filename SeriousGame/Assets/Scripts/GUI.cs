@@ -51,14 +51,11 @@ public class GUI : MonoBehaviour {
         60f
     };
 
-    Dictionary<int, Resistance> resistances = new Dictionary<int, Resistance>();
 
     float moneyMalus = 5f;
     float usersMalus = 1f;
     float attackUsersMalus = 0f;
     float attackMoneyMalus = 1f;
-    float endurance = 1f;
-    float miss = 0f;
     int negativeTime = 0;
     int maxNegative = 60;
     int noAttackTime = 0;
@@ -114,10 +111,6 @@ public class GUI : MonoBehaviour {
             "");
     }
 
-    public void AddResistance(int id) {
-        if (!resistances.ContainsKey(id)) resistances.Add(id, new Resistance(id, 0f, 0f, 0f));
-    }
-
     public void Purchase(int id) {
         ShopItemInfo sii = shop.GetItem(id);
         money -= sii.cost;
@@ -133,11 +126,7 @@ public class GUI : MonoBehaviour {
         usersMalus *= 1 - sii.usersMalus;
         sii.on = true;
         shop.SetItem(sii);
-        foreach(Resistance r in shop.GetItem(id).resistances) {
-            resistances[r.id].miss += r.miss;
-            resistances[r.id].duration += r.duration;
-            resistances[r.id].endurance += r.endurance;
-        }
+        attacksManager.EnableShopItem(sii.resistances);
     }
 
     public void DisableShopItem(int id) {
@@ -146,23 +135,7 @@ public class GUI : MonoBehaviour {
         usersMalus /= 1 - sii.usersMalus;
         sii.on = false;
         shop.SetItem(sii);
-        foreach (Resistance r in shop.GetItem(id).resistances) {
-            resistances[r.id].miss -= r.miss;
-            resistances[r.id].duration -= r.duration;
-            resistances[r.id].endurance -= r.endurance;
-        }
-    }
-
-    public float GetMiss(int id) {
-        return miss + resistances[id].miss;
-    }
-
-    public float GetDuration(int id) {
-        return (1 - resistances[id].duration) * attacksManager.Attack(id).duration + 1;
-    }
-
-    public float GetEndurance(int id) {
-        return endurance + resistances[id].endurance;
+        attacksManager.DisableShopItem(sii.resistances);
     }
 
     public void StartAttack(int id) {
