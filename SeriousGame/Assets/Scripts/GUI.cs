@@ -19,7 +19,6 @@ public class GUI : MonoBehaviour {
     [SerializeField] float money;
     [SerializeField] float users;
     [SerializeField] float reputation;
-    [SerializeField] float moneyGain;
 
     DateTime dateTime;
     float startTime;
@@ -43,12 +42,21 @@ public class GUI : MonoBehaviour {
         0.005f
     };
 
+    float[] moneyGain = new float[] {
+        10f,
+        20f,
+        30f,
+        40f,
+        50f,
+        60f
+    };
+
     Dictionary<int, Resistance> resistances = new Dictionary<int, Resistance>();
 
-    float moneyMalus = 0.1f;
+    float moneyMalus = 5f;
     float usersMalus = 1f;
     float attackUsersMalus = 0f;
-    float attackMoneyMalus = 0f;
+    float attackMoneyMalus = 1f;
     float endurance = 1f;
     float miss = 0f;
     int negativeTime = 0;
@@ -56,6 +64,7 @@ public class GUI : MonoBehaviour {
     int noAttackTime = 0;
     int noAttackStep = 6;
     int ongoingAttacks = 0;
+    int userLevel = 0;
 
     // Start is called before the first frame update
     void Start() {
@@ -71,11 +80,12 @@ public class GUI : MonoBehaviour {
         // update the GUI every second
         if (Time.time - startTime >= updateTime) {
             updateTime++;
-            
+
+            userLevel = CalculateUserLevel();
             // money
-            money = CalculateMoney();
+            money = CalculateMoney(userLevel);
             // users
-            users = CalculateUsers();
+            users = CalculateUsers(userLevel);
             // reputation
             reputation = CalculateReputation();
             // date
@@ -160,33 +170,33 @@ public class GUI : MonoBehaviour {
         money -= attacksManager.Attack(id).moneyLoss;
         users -= attacksManager.Attack(id).usersLoss;
         attackUsersMalus += attacksManager.Attack(id).usersMalus;
-        attackMoneyMalus += attacksManager.Attack(id).moneyMalus;
+        attackMoneyMalus *= attacksManager.Attack(id).moneyMalus;
         reputation -= attacksManager.Attack(id).reputationMalus;
     }
 
     public void StopAttack(int id) {
         ongoingAttacks--;
         attackUsersMalus -= attacksManager.Attack(id).usersMalus;
-        attackMoneyMalus -= attacksManager.Attack(id).moneyMalus;
+        attackMoneyMalus /= attacksManager.Attack(id).moneyMalus;
     }
 
     public void MissedAttack() {
         reputation += 0.1f;
     }
 
-    float CalculateMoney() {
-        int i;
-        if (money < 100) i = 0;
-        else if (money < 1000) i = 1;
-        else if (money < 10000) i = 2;
-        else if (money < 100000) i = 3;
-        else if (money < 1000000) i = 4;
-        else i = 5;
-        //Debug.Log("Costs: " + moneyMalus * (coeffs[i, 0] * (float)Math.Floor(users) + coeffs[i, 1]) + "\nDiff: " + (moneyGain * (float)Math.Floor(users) - moneyMalus * (coeffs[i, 0] * (float)Math.Floor(users) + coeffs[i, 1])));
-        return money + (moneyGain - attackMoneyMalus) * (float)Mathf.Floor(users) - moneyMalus * (moneyCoeffs[i, 0] * (float)Mathf.Floor(users) + moneyCoeffs[i, 1]);
+    float CalculateMoney(int i) {
+        Debug.Log("moneyGain = " + moneyGain[i] + "\n" +
+            "moneyMalus = " + moneyMalus + "\n" + 
+            "attackMoneyMalus = " + attackMoneyMalus + "\n" +
+            "gain = " + (moneyGain[i] * attackMoneyMalus - moneyMalus) + "\n");
+        return money + moneyGain[i] * attackMoneyMalus - moneyMalus;
     }
 
-    float CalculateUsers() {
+    float CalculateUsers(int i) {
+        return users + usersCoeffs[i] * (0.5f * (1 + reputation) * usersMalus - attackUsersMalus) * (float)Mathf.Floor(users);
+    }
+
+    int CalculateUserLevel() {
         int i;
         if (users < 100) i = 0;
         else if (users < 1000) i = 1;
@@ -194,7 +204,7 @@ public class GUI : MonoBehaviour {
         else if (users < 100000) i = 3;
         else if (users < 1000000) i = 4;
         else i = 5;
-        return users + usersCoeffs[i] * (0.5f * (1 + reputation) * usersMalus - attackUsersMalus) * (float)Mathf.Floor(users);
+        return i;
     }
 
     float CalculateReputation() {
