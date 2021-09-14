@@ -21,7 +21,6 @@ public class ShopItemDetail : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         gui = GameObject.FindGameObjectWithTag("GUI").GetComponent<GUI>();
-
         ShopItemInfo sii = shop.GetItem(id);
         titleText.SetText(sii.name + " - costo " + sii.cost.ToString());
         descriptionText.SetText(sii.description);

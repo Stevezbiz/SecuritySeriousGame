@@ -27,6 +27,7 @@ public class ShopGUI : MonoBehaviour {
     }
 
     public int AddItem(ShopItemInfo si) {
+        si.id = shopItemId;
         items.Add(shopItemId, si);
         return shopItemId++;
     }

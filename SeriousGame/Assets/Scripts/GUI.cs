@@ -103,12 +103,12 @@ public class GUI : MonoBehaviour {
         reputationBar.fillAmount = reputation;
         dateText.SetText(dateTime.ToString("d MMM yyyy"));
         timeText.SetText(dateTime.ToString("HH:mm"));
-        Debug.Log("\n" +
-            "moneyMalus\t\t" + moneyMalus + "\n" +
-            "usersMalus\t\t" + usersMalus + "\n" +
-            "attackMoneyMalus\t\t" + attackMoneyMalus + "\n" +
-            "attackUsersMalus\t\t" + attackUsersMalus + "\n" +
-            "");
+        //Debug.Log("\n" +
+        //    "moneyMalus\t\t" + moneyMalus + "\n" +
+        //    "usersMalus\t\t" + usersMalus + "\n" +
+        //    "attackMoneyMalus\t\t" + attackMoneyMalus + "\n" +
+        //    "attackUsersMalus\t\t" + attackUsersMalus + "\n" +
+        //    "");
     }
 
     public void Purchase(int id) {
@@ -157,11 +157,15 @@ public class GUI : MonoBehaviour {
         reputation += 0.1f;
     }
 
+    public string GetDateTime() {
+        return dateTime.ToString("dd-MMM-yyyy-HH:mm | ");
+    }
+
     float CalculateMoney(int i) {
-        Debug.Log("moneyGain = " + moneyGain[i] + "\n" +
-            "moneyMalus = " + moneyMalus + "\n" +
-            "attackMoneyMalus = " + attackMoneyMalus + "\n" +
-            "gain = " + (moneyGain[i] * attackMoneyMalus - moneyMalus) + "\n");
+        //Debug.Log("moneyGain = " + moneyGain[i] + "\n" +
+        //    "moneyMalus = " + moneyMalus + "\n" +
+        //    "attackMoneyMalus = " + attackMoneyMalus + "\n" +
+        //    "gain = " + (moneyGain[i] * attackMoneyMalus - moneyMalus) + "\n");
         return money + moneyGain[i] * attackMoneyMalus - moneyMalus;
     }
 

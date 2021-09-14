@@ -17,10 +17,6 @@ public class AttackMonitor : MonoBehaviour {
 
     }
 
-    public void OnClick() {
-
-    }
-
     public void LaunchAttack(int id, float duration) {
         StartCoroutine(PerformAttack(id, duration));
     }

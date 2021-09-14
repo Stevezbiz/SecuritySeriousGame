@@ -6,6 +6,7 @@ public class AttacksManager : MonoBehaviour {
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] GUI gui;
     [SerializeField] AttackMonitor attackMonitor;
+    [SerializeField] LogManager logManager;
 
     Dictionary<int, AttackInfo> attacks = new Dictionary<int, AttackInfo>();
     Dictionary<int, Resistance> resistances = new Dictionary<int, Resistance>();
@@ -65,10 +66,14 @@ public class AttacksManager : MonoBehaviour {
             if (Random.Range(0f, 1f) > GetMiss(id)) {
                 // hit
                 attackMonitor.LaunchAttack(id, GetDuration(id));
+                // log print hit
+                logManager.LogPrint(attacks[id].name, true);
             } else {
                 // miss
                 gui.MissedAttack();
-                Debug.Log("Attack @" + Time.time + " missed");
+                //Debug.Log("Attack @" + Time.time + " missed");
+                // log print miss
+                logManager.LogPrint(attacks[id].name, false);
             }
 
             // choose the time for the next attack
