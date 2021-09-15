@@ -67,13 +67,13 @@ public class AttacksManager : MonoBehaviour {
                 // hit
                 attackMonitor.LaunchAttack(id, GetDuration(id));
                 // log print hit
-                logManager.LogPrint(attacks[id].name, true);
+                logManager.LogPrintAttack(attacks[id].name, true);
             } else {
                 // miss
                 gui.MissedAttack();
                 //Debug.Log("Attack @" + Time.time + " missed");
                 // log print miss
-                logManager.LogPrint(attacks[id].name, false);
+                logManager.LogPrintAttack(attacks[id].name, false);
             }
 
             // choose the time for the next attack

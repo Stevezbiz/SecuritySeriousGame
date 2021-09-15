@@ -16,6 +16,7 @@ public class GUI : MonoBehaviour {
     [SerializeField] GameObject windowPopUp;
     [SerializeField] ShopGUI shop;
     [SerializeField] AttacksManager attacksManager;
+    [SerializeField] LogManager logManager;
     [SerializeField] float money;
     [SerializeField] float users;
     [SerializeField] float reputation;
@@ -113,29 +114,35 @@ public class GUI : MonoBehaviour {
 
     public void Purchase(int id) {
         ShopItemInfo sii = shop.GetItem(id);
+        string name = sii.name;
         money -= sii.cost;
         sii.owned = true;
         shop.SetItem(sii);
+        logManager.LogPrintItem(name, ActionCode.PURCHASE);
         EnableShopItem(id);
         Refresh();
     }
 
     public void EnableShopItem(int id) {
         ShopItemInfo sii = shop.GetItem(id);
+        string name = sii.name;
         moneyMalus += sii.moneyMalus;
         usersMalus *= 1 - sii.usersMalus;
         sii.on = true;
         shop.SetItem(sii);
         attacksManager.EnableShopItem(sii.resistances);
+        logManager.LogPrintItem(name, ActionCode.ENABLE);
     }
 
     public void DisableShopItem(int id) {
         ShopItemInfo sii = shop.GetItem(id);
+        string name = sii.name;
         moneyMalus -= sii.moneyMalus;
         usersMalus /= 1 - sii.usersMalus;
         sii.on = false;
         shop.SetItem(sii);
         attacksManager.DisableShopItem(sii.resistances);
+        logManager.LogPrintItem(name, ActionCode.DISABLE);
     }
 
     public void StartAttack(int id) {

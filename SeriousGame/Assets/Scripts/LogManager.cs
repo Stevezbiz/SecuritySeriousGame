@@ -7,8 +7,16 @@ public class LogManager : MonoBehaviour {
     [SerializeField] GUI gui;
     [SerializeField] GameObject logRecord;
     [SerializeField] RectTransform content;
+    [SerializeField] GameObject next;
+    [SerializeField] GameObject previous;
 
     float oldTimeScale;
+    int nLines = 0;
+    int nPages = 1;
+    int currentPage;
+    const int nLinesStep = 20;
+    List<LogLine> lines = new List<LogLine>();
+    List<GameObject> toDestroy = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start() {
@@ -20,31 +28,110 @@ public class LogManager : MonoBehaviour {
 
     }
 
-    public void LogPrint(string attack, bool hit) {
-        GameObject newLog = Instantiate(logRecord);
-        newLog.transform.SetParent(content, false);
-        TextMeshProUGUI text = newLog.GetComponent<TextMeshProUGUI>();
+    void PrintCurrentPage() {
+        foreach (GameObject go in toDestroy) Destroy(go);
+        toDestroy.Clear();
+
+        int i = (currentPage - 1) * nLinesStep;
+        int N = i + nLines;
+        
+        Debug.Log("start print");
+        for (int j = i; j < N; j++) {
+            Debug.Log("New Record");
+            Debug.Log("i " + i);
+            Debug.Log("N " + N);
+            Debug.Log("j " + j);
+            Debug.Log("currentPage " + currentPage);
+            Debug.Log("nPages " + nPages);
+            GameObject newLog = Instantiate(logRecord);
+            newLog.transform.SetParent(content, false);
+            toDestroy.Add(newLog);
+            TextMeshProUGUI text = newLog.GetComponent<TextMeshProUGUI>();
+            text.SetText(lines[j].line);
+            text.color = lines[j].color;
+        }
+        Debug.Log("finish");
+    }
+
+    public void LogPrintAttack(string attack, bool hit) {
+        if (nLines == nLinesStep) {
+            nLines = 0;
+            nPages++;
+        }
+
         string dateTime = gui.GetDateTime();
         string desc;
+        Color color;
 
         if (hit) {
             desc = "Individuato attacco " + attack;
-            text.color = new Color(1f, .25f, .0f, 1f);
+            color = COLOR.RED;
         } else {
             desc = "Sventato attacco " + attack;
-            text.color = new Color(.0f, 1f, 1f, 1f);
+            color = COLOR.BLUE;
         }
-        text.SetText(dateTime + desc);
+        lines.Add(new LogLine(dateTime + desc, color));
+        nLines++;
+    }
+
+    public void LogPrintItem(string item, ActionCode action) {
+        if (nLines == nLinesStep) {
+            nLines = 0;
+            nPages++;
+        }
+
+        string dateTime = gui.GetDateTime();
+        string desc;
+
+        switch (action) {
+            case ActionCode.PURCHASE:
+                desc = "Acquistato " + item;
+                break;
+            case ActionCode.ENABLE:
+                desc = "Abilitato " + item;
+                break;
+            case ActionCode.DISABLE:
+                desc = "Disabilitato " + item;
+                break;
+            default:
+                return;
+        }
+        lines.Add(new LogLine(dateTime + desc, COLOR.GREEN));
+        nLines++;
     }
 
     public void OpenLog() {
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0;
+        currentPage = nPages;
+
+        next.SetActive(false);
+        if (currentPage > 1) previous.SetActive(true);
+        else previous.SetActive(false);
+
+        PrintCurrentPage();
+
         gameObject.SetActive(true);
     }
 
     public void CloseLog() {
         Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);
+    }
+
+    public void NextPage() {
+        currentPage++;
+        PrintCurrentPage();
+
+        previous.SetActive(true);
+        if (currentPage == nPages) next.SetActive(false);
+    }
+
+    public void PreviousPage() {
+        currentPage--;
+        PrintCurrentPage();
+
+        next.SetActive(true);
+        if (currentPage == 1) previous.SetActive(false);
     }
 }
