@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class ShopItemDetail : MonoBehaviour {
     [SerializeField] TextMeshProUGUI titleText;
     [SerializeField] TextMeshProUGUI descriptionText;
-    [SerializeField] Button purchaseButton;
+    [SerializeField] GameObject purchaseButton;
+    [SerializeField] GameObject enableButton;
+    [SerializeField] GameObject disableButton;
 
     GUI gui;
     ShopGUI shop;
@@ -25,11 +27,9 @@ public class ShopItemDetail : MonoBehaviour {
         titleText.SetText(sii.name + " - costo " + sii.cost.ToString());
         descriptionText.SetText(sii.description);
         if (sii.owned) {
-            if (sii.on) {
-                purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("disattiva");
-            } else {
-                purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("attiva");
-            }
+            purchaseButton.SetActive(false);
+            if (sii.on) disableButton.SetActive(true);
+            else enableButton.SetActive(true);
         }
     }
 
@@ -56,7 +56,28 @@ public class ShopItemDetail : MonoBehaviour {
         }
     }
 
-    public void CancelPurchase() {
+    public void ConfirmPurchase() {
+        gui.Purchase(id);
+        parent.Purchase();
+        disableButton.SetActive(true);
+        purchaseButton.SetActive(false);
+    }
+
+    public void EnableItem() {
+        gui.EnableShopItem(id);
+        parent.Enable();
+        disableButton.SetActive(true);
+        enableButton.SetActive(false);
+    }
+
+    public void DisableItem() {
+        gui.DisableShopItem(id);
+        parent.Disable();
+        enableButton.SetActive(true);
+        disableButton.SetActive(false);
+    }
+
+    public void Back() {
         Destroy(gameObject);
     }
 }
