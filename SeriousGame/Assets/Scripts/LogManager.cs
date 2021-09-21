@@ -33,16 +33,12 @@ public class LogManager : MonoBehaviour {
         toDestroy.Clear();
 
         int i = (currentPage - 1) * nLinesStep;
-        int N = i + nLines;
+        int N;
+        if (currentPage == nPages) N = i + nLines;
+        else N = i + nLinesStep;
         
         Debug.Log("start print");
         for (int j = i; j < N; j++) {
-            Debug.Log("New Record");
-            Debug.Log("i " + i);
-            Debug.Log("N " + N);
-            Debug.Log("j " + j);
-            Debug.Log("currentPage " + currentPage);
-            Debug.Log("nPages " + nPages);
             GameObject newLog = Instantiate(logRecord);
             newLog.transform.SetParent(content, false);
             toDestroy.Add(newLog);
@@ -65,10 +61,10 @@ public class LogManager : MonoBehaviour {
 
         if (hit) {
             desc = "Individuato attacco " + attack;
-            color = COLOR.RED;
+            color = COLOR.LOG_RED;
         } else {
             desc = "Sventato attacco " + attack;
-            color = COLOR.BLUE;
+            color = COLOR.LOG_BLUE;
         }
         lines.Add(new LogLine(dateTime + desc, color));
         nLines++;
@@ -96,7 +92,7 @@ public class LogManager : MonoBehaviour {
             default:
                 return;
         }
-        lines.Add(new LogLine(dateTime + desc, COLOR.GREEN));
+        lines.Add(new LogLine(dateTime + desc, COLOR.LOG_GREEN));
         nLines++;
     }
 

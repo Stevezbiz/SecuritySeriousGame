@@ -2,7 +2,7 @@
 	"powerUps":
 	[
 		{
-			"id": 0,
+			"id": -3,
 			"name": "name",
 			"description": "description",
 			"cost": 0,

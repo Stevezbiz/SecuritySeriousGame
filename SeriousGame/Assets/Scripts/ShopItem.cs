@@ -31,8 +31,7 @@ public class ShopItem : MonoBehaviour {
     }
 
     public void ShowDetails() {
-        Vector3 newPos = new Vector3(0, 0, 0);
-        GameObject details = Instantiate(shopItemDetail, newPos, Quaternion.identity);
+        GameObject details = Instantiate(shopItemDetail, new Vector3(0, 0, 0), Quaternion.identity);
         details.transform.SetParent(spawnPoint, false);
         ShopItemDetail newShopItemDetail = details.GetComponent<ShopItemDetail>();
         newShopItemDetail.Shop = shop;

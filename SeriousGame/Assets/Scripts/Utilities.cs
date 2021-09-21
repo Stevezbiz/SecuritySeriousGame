@@ -79,7 +79,7 @@ public enum ActionCode {
 }
 
 public static class COLOR {
-    public static Color RED = new Color(1f, .25f, .0f, 1f);
-    public static Color BLUE = new Color(.0f, 1f, 1f, 1f);
-    public static Color GREEN = new Color(.0f, 1f, .0f, 1f);
+    public static Color LOG_RED = new Color(1f, .25f, .0f, 1f);
+    public static Color LOG_BLUE = new Color(.0f, 1f, 1f, 1f);
+    public static Color LOG_GREEN = new Color(.0f, 1f, .0f, 1f);
 }

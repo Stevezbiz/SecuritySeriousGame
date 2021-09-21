@@ -25,8 +25,6 @@ public class ShopItemDetail : MonoBehaviour {
         titleText.SetText(sii.name + " - costo " + sii.cost.ToString());
         descriptionText.SetText(sii.description);
         if (sii.owned) {
-            //purchaseButton.interactable = false;
-            //purchaseButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color(.0f, 1.0f, .0f, .5f);
             if (sii.on) {
                 purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("disattiva");
             } else {

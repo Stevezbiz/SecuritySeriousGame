@@ -25,16 +25,7 @@ public class GUI : MonoBehaviour {
     float startTime;
     int updateTime = 1;
 
-    float[,] moneyCoeffs = new float[,] {
-        { .5f, 0f },
-        { .2f, 28f },
-        { .08f, 145f },
-        { .03f, 642f },
-        { .012f, 2606f },
-        { .004f, 10060f },
-    };
-
-    float[] usersCoeffs = new float[] {
+    float[] usersGain = new float[] {
         0.1f,
         0.05f,
         0.03f,
@@ -60,7 +51,7 @@ public class GUI : MonoBehaviour {
     int negativeTime = 0;
     int maxNegative = 60;
     int noAttackTime = 0;
-    int noAttackStep = 6;
+    int noAttackStep = 10;
     int ongoingAttacks = 0;
     int userLevel = 0;
 
@@ -87,7 +78,7 @@ public class GUI : MonoBehaviour {
             // reputation
             reputation = CalculateReputation();
             // date
-            dateTime = dateTime.AddHours(4);
+            dateTime = dateTime.AddHours(1);
 
             // game over check
             CheckGameOver();
@@ -104,12 +95,6 @@ public class GUI : MonoBehaviour {
         reputationBar.fillAmount = reputation;
         dateText.SetText(dateTime.ToString("d MMM yyyy"));
         timeText.SetText(dateTime.ToString("HH:mm"));
-        //Debug.Log("\n" +
-        //    "moneyMalus\t\t" + moneyMalus + "\n" +
-        //    "usersMalus\t\t" + usersMalus + "\n" +
-        //    "attackMoneyMalus\t\t" + attackMoneyMalus + "\n" +
-        //    "attackUsersMalus\t\t" + attackUsersMalus + "\n" +
-        //    "");
     }
 
     public void Purchase(int id) {
@@ -152,6 +137,10 @@ public class GUI : MonoBehaviour {
         attackUsersMalus += attacksManager.Attack(id).usersMalus;
         attackMoneyMalus *= attacksManager.Attack(id).moneyMalus;
         reputation -= attacksManager.Attack(id).reputationMalus;
+        if (reputation <= 0) {
+            reputation = 0;
+            // game over
+        }
     }
 
     public void StopAttack(int id) {
@@ -161,7 +150,8 @@ public class GUI : MonoBehaviour {
     }
 
     public void MissedAttack() {
-        reputation += 0.1f;
+        reputation += 0.01f;
+        if (reputation > 1f) reputation = 1f;
     }
 
     public string GetDateTime() {
@@ -169,15 +159,11 @@ public class GUI : MonoBehaviour {
     }
 
     float CalculateMoney(int i) {
-        //Debug.Log("moneyGain = " + moneyGain[i] + "\n" +
-        //    "moneyMalus = " + moneyMalus + "\n" +
-        //    "attackMoneyMalus = " + attackMoneyMalus + "\n" +
-        //    "gain = " + (moneyGain[i] * attackMoneyMalus - moneyMalus) + "\n");
         return money + moneyGain[i] * attackMoneyMalus - moneyMalus;
     }
 
     float CalculateUsers(int i) {
-        return users + usersCoeffs[i] * (0.5f * (1 + reputation) * usersMalus - attackUsersMalus) * (float)Mathf.Floor(users);
+        return users + usersGain[i] * (0.5f * (1 + reputation) * usersMalus - attackUsersMalus) * (float)Mathf.Floor(users);
     }
 
     int CalculateUserLevel() {
@@ -203,7 +189,7 @@ public class GUI : MonoBehaviour {
             noAttackTime = 0;
         }
         if (rep > 1f) {
-            return 1;
+            return 1f;
         } else {
             return rep;
         }
@@ -218,8 +204,7 @@ public class GUI : MonoBehaviour {
         if (negativeTime > maxNegative) {
             // end the game
             Time.timeScale = 0;
-            Vector3 newPos = new Vector3(0, 0, 0);
-            GameObject newWindow = Instantiate(windowPopUp, newPos, Quaternion.identity);
+            GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
             newWindow.transform.SetParent(gameObject.transform, false);
             newWindow.GetComponent<WindowPopUp>().Message = "GAME OVER";
         }

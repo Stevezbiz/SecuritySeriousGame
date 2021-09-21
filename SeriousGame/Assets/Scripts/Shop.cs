@@ -28,7 +28,8 @@ public class Shop : MonoBehaviour {
         GameObject newRecord = Instantiate(shopItem);
         newRecord.transform.SetParent(content, false);
         ShopItem newShopItem = newRecord.GetComponent<ShopItem>();
-        newShopItem.Id = shop.AddItem(shopItemInfo);
+        newShopItem.Id = shopItemInfo.id;
+        shop.AddItem(shopItemInfo);
         newShopItem.SpawnPoint = details.GetComponent<RectTransform>();
         newShopItem.Shop = shop;
         newRecord.name = "ShopItem" + newShopItem.Id.ToString();

@@ -12,7 +12,6 @@ public class ShopGUI : MonoBehaviour {
     [SerializeField] GameObject shopButton;
 
     float oldTimeScale = 1f;
-    int shopItemId = 0;
 
     Dictionary<int, ShopItemInfo> items = new Dictionary<int, ShopItemInfo>();
 
@@ -26,10 +25,8 @@ public class ShopGUI : MonoBehaviour {
 
     }
 
-    public int AddItem(ShopItemInfo si) {
-        si.id = shopItemId;
-        items.Add(shopItemId, si);
-        return shopItemId++;
+    public void AddItem(ShopItemInfo si) {
+        items.Add(si.id, si);
     }
 
     public ShopItemInfo GetItem(int id) {

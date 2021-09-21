@@ -56,7 +56,7 @@ public class AttacksManager : MonoBehaviour {
     IEnumerator ExecuteAttack(int id) {
         // choose first attack
         float maxTime = attacks[id].maxTime * GetEndurance(id);
-        float nextTime = maxTime - Random.Range(0, 0.5f * maxTime);
+        float nextTime = Random.Range(0.5f * maxTime, maxTime);
 
         while (true) {
             // wait for the attack
@@ -71,14 +71,13 @@ public class AttacksManager : MonoBehaviour {
             } else {
                 // miss
                 gui.MissedAttack();
-                //Debug.Log("Attack @" + Time.time + " missed");
                 // log print miss
                 logManager.LogPrintAttack(attacks[id].name, false);
             }
 
             // choose the time for the next attack
             maxTime = attacks[id].maxTime * GetEndurance(id);
-            nextTime = maxTime - Random.Range(0, 0.5f * maxTime);
+            nextTime = Random.Range(0.5f * maxTime, maxTime);
         }
     }
 
