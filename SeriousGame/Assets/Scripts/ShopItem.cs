@@ -11,18 +11,13 @@ public class ShopItem : MonoBehaviour {
     [SerializeField] GameObject pausedImage;
 
     ShopGUI shop;
-    RectTransform spawnPoint;
+    ShopItemDetail details;
     int id;
 
-    public ShopGUI Shop { get => shop; set => shop = value; }
-    public RectTransform SpawnPoint { get => spawnPoint; set => spawnPoint = value; }
-    public int Id { get => id; set => id = value; }
 
     // Start is called before the first frame update
     void Start() {
-        ShopItemInfo sii = shop.GetItem(id);
-        itemText.SetText(sii.name);
-        costText.SetText(sii.cost.ToString());
+        
     }
 
     // Update is called once per frame
@@ -30,13 +25,19 @@ public class ShopItem : MonoBehaviour {
 
     }
 
+    public void Load(ShopItemInfo sii, ShopGUI shop, ShopItemDetail details) {
+        id = sii.id;
+        this.shop = shop;
+        this.details = details;
+        shop.AddItem(sii);
+        gameObject.name = "ShopItem" + id.ToString();
+        itemText.SetText(sii.name);
+        costText.SetText(sii.cost.ToString());
+    }
+
     public void ShowDetails() {
-        GameObject details = Instantiate(shopItemDetail, new Vector3(0, 0, 0), Quaternion.identity);
-        details.transform.SetParent(spawnPoint, false);
-        ShopItemDetail newShopItemDetail = details.GetComponent<ShopItemDetail>();
-        newShopItemDetail.Shop = shop;
-        newShopItemDetail.Parent = this;
-        newShopItemDetail.Id = id;
+        details.Load(id, this);
+        details.gameObject.SetActive(true);
     }
 
     public void Purchase() {

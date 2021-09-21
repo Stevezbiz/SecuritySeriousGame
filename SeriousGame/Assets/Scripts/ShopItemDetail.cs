@@ -7,30 +7,20 @@ using UnityEngine.UI;
 public class ShopItemDetail : MonoBehaviour {
     [SerializeField] TextMeshProUGUI titleText;
     [SerializeField] TextMeshProUGUI descriptionText;
+    [SerializeField] TextMeshProUGUI detailsText;
     [SerializeField] GameObject purchaseButton;
     [SerializeField] GameObject enableButton;
     [SerializeField] GameObject disableButton;
+    [SerializeField] ShopGUI shop;
+    [SerializeField] GUI gui;
+    [SerializeField] AttacksManager attacksManager;
 
-    GUI gui;
-    ShopGUI shop;
     ShopItem parent;
     int id;
 
-    public ShopGUI Shop { get => shop; set => shop = value; }
-    public int Id { get => id; set => id = value; }
-    public ShopItem Parent { get => parent; set => parent = value; }
-
     // Start is called before the first frame update
     void Start() {
-        gui = GameObject.FindGameObjectWithTag("GUI").GetComponent<GUI>();
-        ShopItemInfo sii = shop.GetItem(id);
-        titleText.SetText(sii.name + " - costo " + sii.cost.ToString());
-        descriptionText.SetText(sii.description);
-        if (sii.owned) {
-            purchaseButton.SetActive(false);
-            if (sii.on) disableButton.SetActive(true);
-            else enableButton.SetActive(true);
-        }
+        
     }
 
     // Update is called once per frame
@@ -38,21 +28,38 @@ public class ShopItemDetail : MonoBehaviour {
 
     }
 
-    public void ConfirmPurchaseOrEnableDisable() {
-        if (shop.ItemIsOwned(id)) {
-            if (shop.ItemIsOn(id)) {
-                gui.DisableShopItem(id);
-                parent.Disable();
-                purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("attiva");
-            } else {
-                gui.EnableShopItem(id);
-                parent.Enable();
-                purchaseButton.GetComponentInChildren<TextMeshProUGUI>().SetText("disattiva");
-            }
-        } else {
-            gui.Purchase(id);
-            parent.Purchase();
-            Destroy(gameObject);
+    void ComposeDetails(ShopItemInfo sii) {
+        titleText.SetText(sii.name + " - costo " + sii.cost.ToString());
+        descriptionText.SetText(sii.description);
+
+        string details = "Resistenze:\n";
+        foreach (Resistance res in sii.resistances) {
+            details += "    " + attacksManager.Attack(res.id).name + "\n";
+            if (res.duration != 0) details += "        durata dell'attacco -" + (res.duration * 100) + "%\n";
+            if (res.miss != 0) details += "        probabilità di bloccare l'attacco +" + (res.miss * 100) + "%\n";
+            if (res.endurance != 0) details += "        tempo medio tra 2 attacchi consecutivi +" + (res.endurance * 100) + "%\n";
+        }
+        if (sii.resistances.Length == 0) details += "nessuna\n";
+
+        details += "Costo: " + sii.moneyMalus + " F/h";
+        if (sii.usersMalus != 0) {
+            details += "\nPrestazioni e usabilità: ";
+            if (sii.usersMalus > 0) details += "-" + (sii.usersMalus * 100) + "%\n";
+            else details += "+" + (sii.usersMalus * 100) + "%\n";
+        }
+
+        detailsText.SetText(details);
+    }
+
+    public void Load(int id, ShopItem parent) {
+        this.id = id;
+        this.parent = parent;
+        ShopItemInfo sii = shop.GetItem(id);
+        ComposeDetails(sii);
+        if (sii.owned) {
+            purchaseButton.SetActive(false);
+            if (sii.on) disableButton.SetActive(true);
+            else enableButton.SetActive(true);
         }
     }
 
@@ -78,6 +85,6 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void Back() {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

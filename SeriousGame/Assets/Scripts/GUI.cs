@@ -102,7 +102,7 @@ public class GUI : MonoBehaviour {
         string name = sii.name;
         money -= sii.cost;
         sii.owned = true;
-        shop.SetItem(sii);
+        shop.AddItem(sii);
         logManager.LogPrintItem(name, ActionCode.PURCHASE);
         EnableShopItem(id);
         Refresh();
@@ -114,7 +114,7 @@ public class GUI : MonoBehaviour {
         moneyMalus += sii.moneyMalus;
         usersMalus *= 1 - sii.usersMalus;
         sii.on = true;
-        shop.SetItem(sii);
+        shop.AddItem(sii);
         attacksManager.EnableShopItem(sii.resistances);
         logManager.LogPrintItem(name, ActionCode.ENABLE);
     }
@@ -125,7 +125,7 @@ public class GUI : MonoBehaviour {
         moneyMalus -= sii.moneyMalus;
         usersMalus /= 1 - sii.usersMalus;
         sii.on = false;
-        shop.SetItem(sii);
+        shop.AddItem(sii);
         attacksManager.DisableShopItem(sii.resistances);
         logManager.LogPrintItem(name, ActionCode.DISABLE);
     }

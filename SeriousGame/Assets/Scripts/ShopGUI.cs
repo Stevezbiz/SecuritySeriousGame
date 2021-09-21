@@ -9,7 +9,6 @@ public class ShopGUI : MonoBehaviour {
     [SerializeField] GameObject employeeShop;
     [SerializeField] GameObject customerCareShop;
     [SerializeField] GameObject details;
-    [SerializeField] GameObject shopButton;
 
     float oldTimeScale = 1f;
 
@@ -25,16 +24,13 @@ public class ShopGUI : MonoBehaviour {
 
     }
 
-    public void AddItem(ShopItemInfo si) {
-        items.Add(si.id, si);
+    public void AddItem(ShopItemInfo sii) {
+        if(items.ContainsKey(sii.id)) items[sii.id] = sii;
+        else items.Add(sii.id, sii);
     }
 
     public ShopItemInfo GetItem(int id) {
         return items[id];
-    }
-
-    public void SetItem(ShopItemInfo sii) {
-        items[sii.id] = sii;
     }
 
     public bool ItemIsOn(int id) {
@@ -49,20 +45,16 @@ public class ShopGUI : MonoBehaviour {
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0;
         gameObject.SetActive(true);
-        shopButton.SetActive(false);
     }
 
     public void CloseShop() {
-        if (details.transform.childCount > 0) {
-            Destroy(details.transform.GetChild(0).gameObject);
-        }
         Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);
-        shopButton.SetActive(true);
         networkShop.SetActive(false);
         authenticationShop.SetActive(false);
         softwareShop.SetActive(false);
         employeeShop.SetActive(false);
         customerCareShop.SetActive(false);
+        details.SetActive(false);
     }
 }
