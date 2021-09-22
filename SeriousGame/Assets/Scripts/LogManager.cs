@@ -101,9 +101,7 @@ public class LogManager : MonoBehaviour {
         Time.timeScale = 0;
         currentPage = nPages;
 
-        next.SetActive(false);
         if (currentPage > 1) previous.SetActive(true);
-        else previous.SetActive(false);
 
         PrintCurrentPage();
 
@@ -113,6 +111,8 @@ public class LogManager : MonoBehaviour {
     public void CloseLog() {
         Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);
+        previous.SetActive(false);
+        next.SetActive(false);
     }
 
     public void NextPage() {
