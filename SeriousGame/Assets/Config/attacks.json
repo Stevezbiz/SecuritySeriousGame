@@ -4,7 +4,7 @@
 		{
 			"id": 0,
 			"name": "Denial of Service (DoS)",
-			"description": "Qualcuno sta sovraccaricando la nostra rete! Sta arrivando una grande quantità di richieste di connessione e i nostri server faticano a gestirle. Anche i clienti trovano difficoltà a connettersi e le transazioni sono diminuite drasticamente. Alcuni di loro potrebbero addirittura non utilizzare più il nostro servizio.",
+			"description": "Qualcuno sta sovraccaricando la nostra rete! Sta arrivando una grande quantità di richieste di connessione e i nostri server faticano a gestirle. Anche gli utenti trovano difficoltà a connettersi e le transazioni sono diminuite drasticamente. Alcuni di loro potrebbero addirittura non utilizzare più il nostro servizio.",
 			"moneyLoss": 0,
 			"usersLoss": 0,
 			"moneyMalus": 0.5,

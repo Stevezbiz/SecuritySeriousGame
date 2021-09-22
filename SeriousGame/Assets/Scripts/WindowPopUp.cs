@@ -14,6 +14,7 @@ public class WindowPopUp : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         oldTimeScale = Time.timeScale;
+        Time.timeScale = 0;
         messageText.SetText(message);
     }
 
@@ -22,7 +23,7 @@ public class WindowPopUp : MonoBehaviour {
 
     }
 
-    public void OkButton() {
+    public void CloseButton() {
         Time.timeScale = oldTimeScale;
         Destroy(gameObject);
     }

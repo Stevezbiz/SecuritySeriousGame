@@ -64,6 +64,20 @@ public class LogLine {
     }
 }
 
+public class AttackStats {
+    public int id;
+    public int n;
+    public int hit;
+    public int miss;
+
+    public AttackStats(int id, int n, int hit, int miss) {
+        this.id = id;
+        this.n = n;
+        this.hit = hit;
+        this.miss = miss;
+    }
+}
+
 // error codes used in the project
 public enum ECode {
     OK, // no error
