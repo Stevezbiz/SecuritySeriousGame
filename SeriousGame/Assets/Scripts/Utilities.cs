@@ -24,7 +24,7 @@ public class ShopItemInfo {
     public string description;
     public int cost;
     public float moneyMalus;
-    public float usersMalus;
+    public float usersMod;
     public bool owned;
     public bool on;
     public Resistance[] resistances;

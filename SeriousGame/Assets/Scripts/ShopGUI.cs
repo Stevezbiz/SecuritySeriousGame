@@ -25,7 +25,7 @@ public class ShopGUI : MonoBehaviour {
     }
 
     public void AddItem(ShopItemInfo sii) {
-        if(items.ContainsKey(sii.id)) items[sii.id] = sii;
+        if (items.ContainsKey(sii.id)) items[sii.id] = sii;
         else items.Add(sii.id, sii);
     }
 

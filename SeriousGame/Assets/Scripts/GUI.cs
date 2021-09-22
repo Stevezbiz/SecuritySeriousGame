@@ -46,6 +46,7 @@ public class GUI : MonoBehaviour {
 
     float moneyMalus = 5f;
     float usersMalus = 1f;
+    float usersBonus = 1f;
     float attackUsersMalus = 0f;
     float attackMoneyMalus = 1f;
     int negativeTime = 0;
@@ -72,9 +73,9 @@ public class GUI : MonoBehaviour {
 
             userLevel = CalculateUserLevel();
             // money
-            money = CalculateMoney(userLevel);
+            money = CalculateMoney();
             // users
-            users = CalculateUsers(userLevel);
+            users = CalculateUsers();
             // reputation
             reputation = CalculateReputation();
             // date
@@ -112,7 +113,8 @@ public class GUI : MonoBehaviour {
         ShopItemInfo sii = shop.GetItem(id);
         string name = sii.name;
         moneyMalus += sii.moneyMalus;
-        usersMalus *= 1 - sii.usersMalus;
+        if (sii.usersMod < 1) usersMalus *= 1 - sii.usersMod;
+        else usersBonus *= sii.usersMod;
         sii.on = true;
         shop.AddItem(sii);
         attacksManager.EnableShopItem(sii.resistances);
@@ -123,7 +125,8 @@ public class GUI : MonoBehaviour {
         ShopItemInfo sii = shop.GetItem(id);
         string name = sii.name;
         moneyMalus -= sii.moneyMalus;
-        usersMalus /= 1 - sii.usersMalus;
+        if (sii.usersMod < 1) usersMalus /= 1 - sii.usersMod;
+        else usersBonus /= sii.usersMod;
         sii.on = false;
         shop.AddItem(sii);
         attacksManager.DisableShopItem(sii.resistances);
@@ -158,12 +161,44 @@ public class GUI : MonoBehaviour {
         return dateTime.ToString("dd-MMM-yyyy-HH:mm | ");
     }
 
-    float CalculateMoney(int i) {
-        return money + moneyGain[i] * attackMoneyMalus - moneyMalus;
+    public float GetActualMoneyGain() {
+        return moneyGain[userLevel] * attackMoneyMalus - moneyMalus;
     }
 
-    float CalculateUsers(int i) {
-        return users + usersGain[i] * (0.5f * (1 + reputation) * usersMalus - attackUsersMalus) * (float)Mathf.Floor(users);
+    public float GetMoneyGain() {
+        return moneyGain[userLevel];
+    }
+
+    public float GetMoneyMalus() {
+        return moneyMalus;
+    }
+
+    public float GetAttackMoneyMalus() {
+        return attackMoneyMalus;
+    }
+
+    public float GetActualUsersGain() {
+        return (float)Mathf.Floor(usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * (float)Mathf.Floor(users));
+    }
+
+    public float GetUsersGain() {
+        return (float)Mathf.Floor(usersGain[userLevel] * (float)Mathf.Floor(users) * 0.5f * (1 + reputation));
+    }
+
+    public float GetUsersMod() {
+        return usersMalus * usersBonus;
+    }
+
+    public float GetAttackUsersMalus() {
+        return (float)Mathf.Floor(usersGain[userLevel] * (float)Mathf.Floor(users) * attackUsersMalus);
+    }
+
+    float CalculateMoney() {
+        return money + moneyGain[userLevel] * attackMoneyMalus - moneyMalus;
+    }
+
+    float CalculateUsers() {
+        return users + usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * (float)Mathf.Floor(users);
     }
 
     int CalculateUserLevel() {

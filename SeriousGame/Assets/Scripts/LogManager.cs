@@ -36,8 +36,7 @@ public class LogManager : MonoBehaviour {
         int N;
         if (currentPage == nPages) N = i + nLines;
         else N = i + nLinesStep;
-        
-        Debug.Log("start print");
+
         for (int j = i; j < N; j++) {
             GameObject newLog = Instantiate(logRecord);
             newLog.transform.SetParent(content, false);
@@ -46,7 +45,6 @@ public class LogManager : MonoBehaviour {
             text.SetText(lines[j].line);
             text.color = lines[j].color;
         }
-        Debug.Log("finish");
     }
 
     public void LogPrintAttack(string attack, bool hit) {

@@ -20,7 +20,7 @@ public class ShopItemDetail : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        
+
     }
 
     // Update is called once per frame
@@ -42,10 +42,10 @@ public class ShopItemDetail : MonoBehaviour {
         if (sii.resistances.Length == 0) details += "nessuna\n";
 
         details += "Costo: " + sii.moneyMalus + " F/h";
-        if (sii.usersMalus != 0) {
-            details += "\nPrestazioni e usabilità: ";
-            if (sii.usersMalus > 0) details += "-" + (sii.usersMalus * 100) + "%\n";
-            else details += "+" + (sii.usersMalus * 100) + "%\n";
+
+        if (sii.usersMod != 0) {
+            if (sii.usersMod < 1) details += "\nPrestazioni e usabilità: -" + (sii.usersMod * 100) + "%\n";
+            else details += "\nPrestazioni e usabilità: +" + ((sii.usersMod - 1) * 100) + "%\n";
         }
 
         detailsText.SetText(details);
@@ -56,10 +56,15 @@ public class ShopItemDetail : MonoBehaviour {
         this.parent = parent;
         ShopItemInfo sii = shop.GetItem(id);
         ComposeDetails(sii);
+        
+        purchaseButton.SetActive(false);
+        enableButton.SetActive(false);
+        disableButton.SetActive(false);
         if (sii.owned) {
-            purchaseButton.SetActive(false);
             if (sii.on) disableButton.SetActive(true);
             else enableButton.SetActive(true);
+        } else {
+            purchaseButton.SetActive(true);
         }
     }
 

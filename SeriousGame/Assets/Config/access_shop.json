@@ -7,7 +7,7 @@
 			"description": "description",
 			"cost": 0,
 			"moneyMalus": 0,
-			"usersMalus": 0,
+			"usersMod": 0,
 			"owned": false,
 			"on": false,
 			"resistances":
