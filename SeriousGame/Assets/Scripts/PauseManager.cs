@@ -10,12 +10,7 @@ public class PauseManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        stop = false;
-    }
-
-    // Update is called once per frame
-    void Update() {
-
+        stop = true;
     }
 
     public void StopOrResume() {

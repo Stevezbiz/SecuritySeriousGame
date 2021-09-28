@@ -18,16 +18,6 @@ public class LogManager : MonoBehaviour {
     List<LogLine> lines = new List<LogLine>();
     List<GameObject> toDestroy = new List<GameObject>();
 
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     void PrintCurrentPage() {
         foreach (GameObject go in toDestroy) Destroy(go);
         toDestroy.Clear();
@@ -43,7 +33,7 @@ public class LogManager : MonoBehaviour {
             toDestroy.Add(newLog);
             TextMeshProUGUI text = newLog.GetComponent<TextMeshProUGUI>();
             text.SetText(lines[j].line);
-            text.color = lines[j].color;
+            text.color = ToColor(lines[j].color);
         }
     }
 
@@ -64,7 +54,7 @@ public class LogManager : MonoBehaviour {
             desc = "Sventato attacco " + attack;
             color = COLOR.LOG_BLUE;
         }
-        lines.Add(new LogLine(dateTime + desc, color));
+        lines.Add(new LogLine(dateTime + desc, ToFloat(color)));
         nLines++;
     }
 
@@ -90,7 +80,7 @@ public class LogManager : MonoBehaviour {
             default:
                 return;
         }
-        lines.Add(new LogLine(dateTime + desc, COLOR.LOG_GREEN));
+        lines.Add(new LogLine(dateTime + desc, ToFloat(COLOR.LOG_GREEN)));
         nLines++;
     }
 
@@ -127,5 +117,26 @@ public class LogManager : MonoBehaviour {
 
         next.SetActive(true);
         if (currentPage == 1) previous.SetActive(false);
+    }
+
+    public LogData GetLogs() {
+        return new LogData(lines.ToArray(), nLines, nPages);
+    }
+
+    public void SetLogs(LogData logs) {
+        nLines = logs.nLines;
+        nPages = logs.nPages;
+
+        foreach(LogLine line in logs.lines) {
+            lines.Add(line);
+        }
+    }
+
+    Color ToColor(float[] c) {
+        return new Color(c[0], c[1], c[2], c[3]);
+    }
+
+    float[] ToFloat(Color c) {
+        return new float[4] { c.r, c.g, c.b, c.a };
     }
 }

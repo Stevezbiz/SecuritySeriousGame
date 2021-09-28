@@ -58,11 +58,7 @@ public class GUI : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        startTime = Time.time;
-        Time.timeScale = 1;
-        DateTime dt = DateTime.Now.AddMonths(1);
-        dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
-        Refresh();
+        Init();
     }
 
     // Update is called once per frame
@@ -100,37 +96,26 @@ public class GUI : MonoBehaviour {
 
     public void Purchase(int id) {
         ShopItemInfo sii = shop.GetItem(id);
-        string name = sii.name;
+        
         money -= sii.cost;
-        sii.owned = true;
-        shop.AddItem(sii);
-        logManager.LogPrintItem(name, ActionCode.PURCHASE);
-        EnableShopItem(id);
         Refresh();
     }
 
     public void EnableShopItem(int id) {
         ShopItemInfo sii = shop.GetItem(id);
-        string name = sii.name;
+
         moneyMalus += sii.moneyMalus;
         if (sii.usersMod < 1) usersMalus *= 1 - sii.usersMod;
         else usersBonus *= sii.usersMod;
-        sii.on = true;
-        shop.AddItem(sii);
-        attacksManager.EnableShopItem(sii.resistances);
-        logManager.LogPrintItem(name, ActionCode.ENABLE);
     }
 
     public void DisableShopItem(int id) {
         ShopItemInfo sii = shop.GetItem(id);
-        string name = sii.name;
+        
         moneyMalus -= sii.moneyMalus;
         if (sii.usersMod < 1) usersMalus /= 1 - sii.usersMod;
         else usersBonus /= sii.usersMod;
-        sii.on = false;
-        shop.AddItem(sii);
-        attacksManager.DisableShopItem(sii.resistances);
-        logManager.LogPrintItem(name, ActionCode.DISABLE);
+        
     }
 
     public void StartAttack(int id) {
@@ -191,6 +176,35 @@ public class GUI : MonoBehaviour {
 
     public float GetAttackUsersMalus() {
         return (float)Mathf.Floor(usersGain[userLevel] * (float)Mathf.Floor(users) * attackUsersMalus);
+    }
+
+    public GameSave SaveGame() {
+        return new GameSave(money, users, reputation, dateTime.ToString(), shop.GetShopItemRecap(), logManager.GetLogs());
+    }
+
+    void Init() {
+        startTime = Time.time;
+        Time.timeScale = 0;
+
+        shop.Init();
+
+        if (SaveSystem.load) {
+            GameSave gameSave = SaveSystem.LoadGame();
+            money = gameSave.money;
+            users = gameSave.users;
+            reputation = gameSave.reputation;
+            dateTime = DateTime.Parse(gameSave.date);
+            shop.SetShopItemRecap(gameSave.sir);
+            logManager.SetLogs(gameSave.logs);
+        } else {
+            DateTime dt = DateTime.Now.AddMonths(1);
+            dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
+        }
+
+        shop.Load();
+
+        userLevel = CalculateUserLevel();
+        Refresh();
     }
 
     float CalculateMoney() {

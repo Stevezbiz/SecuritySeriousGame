@@ -4,35 +4,24 @@ using TMPro;
 using UnityEngine;
 
 public class ShopItem : MonoBehaviour {
-    [SerializeField] GameObject shopItemDetail;
     [SerializeField] TextMeshProUGUI itemText;
     [SerializeField] TextMeshProUGUI costText;
     [SerializeField] GameObject ownedImage;
     [SerializeField] GameObject pausedImage;
 
-    ShopGUI shop;
     ShopItemDetail details;
     int id;
 
-
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
-    public void Load(ShopItemInfo sii, ShopGUI shop, ShopItemDetail details) {
+    public void Load(ShopItemInfo sii, ShopItemDetail details) {
         id = sii.id;
-        this.shop = shop;
         this.details = details;
-        shop.AddItem(sii);
         gameObject.name = "ShopItem" + id.ToString();
         itemText.SetText(sii.name);
         costText.SetText(sii.cost.ToString());
+        if (sii.owned) {
+            Purchase();
+            if (!sii.on) Disable();
+        }
     }
 
     public void ShowDetails() {

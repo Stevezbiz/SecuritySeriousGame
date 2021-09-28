@@ -26,11 +26,6 @@ public class AttacksManager : MonoBehaviour {
         }
     }
 
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     public AttackInfo Attack(int id) {
         return attacks[id];
     }

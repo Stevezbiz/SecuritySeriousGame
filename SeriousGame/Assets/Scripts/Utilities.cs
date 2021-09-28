@@ -54,13 +54,59 @@ public class AttacksJSON {
     public AttackInfo[] attacks;
 }
 
+[System.Serializable]
+public class ShopItemRecap {
+    public int id;
+    public bool owned;
+    public bool on;
+
+    public ShopItemRecap(int id, bool owned, bool on) {
+        this.id = id;
+        this.owned = owned;
+        this.on = on;
+    }
+}
+
+[System.Serializable]
+public class GameSave {
+    public float money;
+    public float users;
+    public float reputation;
+    public string date;
+    public ShopItemRecap[] sir;
+    public LogData logs;
+
+    public GameSave(float money, float users, float reputation, string date, ShopItemRecap[] sir, LogData logs) {
+        this.money = money;
+        this.users = users;
+        this.reputation = reputation;
+        this.date = date;
+        this.sir = sir;
+        this.logs = logs;
+    }
+}
+
+[System.Serializable]
 public class LogLine {
     public string line;
-    public Color color;
+    public float[] color;
 
-    public LogLine(string line, Color color) {
+    public LogLine(string line, float[] color) {
         this.line = line;
         this.color = color;
+    }
+}
+
+[System.Serializable]
+public class LogData {
+    public LogLine[] lines;
+    public int nLines;
+    public int nPages;
+
+    public LogData(LogLine[] lines, int nLines, int nPages) {
+        this.lines = lines;
+        this.nLines = nLines;
+        this.nPages = nPages;
     }
 }
 

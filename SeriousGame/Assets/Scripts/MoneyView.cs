@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class MoneyView : MonoBehaviour {
     [SerializeField] GUI gui;
@@ -38,7 +38,7 @@ public class MoneyView : MonoBehaviour {
         else actualMoneyGainText.SetText("- " + (-val).ToString("0.##"));
 
         usersGainText.SetText(gui.GetUsersGain().ToString());
-        val = (gui.GetUsersMod() -1) * 100;
+        val = (gui.GetUsersMod() - 1) * 100;
         if (val > 0) usersModText.SetText(val.ToString("0.##"));
         else usersModText.SetText("- " + (-val).ToString("0.##"));
         attackUsersMalusText.SetText("- " + gui.GetAttackUsersMalus().ToString());

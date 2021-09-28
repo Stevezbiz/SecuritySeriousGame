@@ -14,19 +14,10 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] ShopGUI shop;
     [SerializeField] GUI gui;
     [SerializeField] AttacksManager attacksManager;
+    [SerializeField] LogManager logManager;
 
     ShopItem parent;
     int id;
-
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
 
     void ComposeDetails(ShopItemInfo sii) {
         titleText.SetText(sii.name + " - costo " + sii.cost.ToString());
@@ -56,7 +47,7 @@ public class ShopItemDetail : MonoBehaviour {
         this.parent = parent;
         ShopItemInfo sii = shop.GetItem(id);
         ComposeDetails(sii);
-        
+
         purchaseButton.SetActive(false);
         enableButton.SetActive(false);
         disableButton.SetActive(false);
@@ -69,22 +60,49 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void ConfirmPurchase() {
+        ShopItemInfo sii = shop.GetItem(id);
+
+        sii.owned = true;
+        shop.AddItem(sii);
+
         gui.Purchase(id);
         parent.Purchase();
-        disableButton.SetActive(true);
+
+        logManager.LogPrintItem(shop.GetItem(id).name, ActionCode.PURCHASE);
+        
         purchaseButton.SetActive(false);
+
+        EnableItem();
     }
 
     public void EnableItem() {
+        ShopItemInfo sii = shop.GetItem(id);
+
+        sii.on = true;
+        shop.AddItem(sii);
+
         gui.EnableShopItem(id);
         parent.Enable();
+
+        attacksManager.EnableShopItem(sii.resistances);
+        logManager.LogPrintItem(shop.GetItem(id).name, ActionCode.ENABLE);
+        
         disableButton.SetActive(true);
         enableButton.SetActive(false);
     }
 
     public void DisableItem() {
+        ShopItemInfo sii = shop.GetItem(id);
+
+        sii.on = false;
+        shop.AddItem(sii);
+
         gui.DisableShopItem(id);
         parent.Disable();
+
+        attacksManager.DisableShopItem(sii.resistances);
+        logManager.LogPrintItem(shop.GetItem(id).name, ActionCode.DISABLE);
+        
         enableButton.SetActive(true);
         disableButton.SetActive(false);
     }

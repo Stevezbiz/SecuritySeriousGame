@@ -9,25 +9,28 @@ public class Shop : MonoBehaviour {
     [SerializeField] ShopItemDetail details;
     [SerializeField] ShopGUI shop;
 
-    // Start is called before the first frame update
-    void Start() {
+    List<int> items = new List<int>();
+
+    public void Init() {
         gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         ShopJSON shopContent = JsonUtility.FromJson<ShopJSON>(shopFileJSON.text);
         foreach (ShopItemInfo item in shopContent.powerUps) {
-            AddShopRecord(item);
+            shop.AddItem(item);
+            items.Add(item.id);
         }
     }
 
-    // Update is called once per frame
-    void Update() {
-
+    public void Load() {
+        foreach (int id in items) {
+            AddShopRecord(shop.GetItem(id));
+        }
     }
 
     void AddShopRecord(ShopItemInfo sii) {
         // create the new item
         GameObject newRecord = Instantiate(shopItem);
         newRecord.transform.SetParent(content, false);
-        newRecord.GetComponent<ShopItem>().Load(sii, shop, details);
+        newRecord.GetComponent<ShopItem>().Load(sii, details);
     }
 
     public void OpenList() {

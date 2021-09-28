@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SettingsMenu : MonoBehaviour {
+    [SerializeField] GUI gui;
+    
     float oldTimeScale = 1;
 
     // Start is called before the first frame update
@@ -27,6 +29,10 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     public void SaveButton() {
-        // save game
+        SaveSystem.SaveGame(gui.SaveGame());
+    }
+
+    public void ExitButton() {
+        SceneLoader.LoadScene("MainMenu");
     }
 }
