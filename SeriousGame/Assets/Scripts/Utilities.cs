@@ -69,18 +69,12 @@ public class ShopItemRecap {
 
 [System.Serializable]
 public class GameSave {
-    public float money;
-    public float users;
-    public float reputation;
-    public string date;
+    public GameConfig gc;
     public ShopItemRecap[] sir;
     public LogData logs;
 
-    public GameSave(float money, float users, float reputation, string date, ShopItemRecap[] sir, LogData logs) {
-        this.money = money;
-        this.users = users;
-        this.reputation = reputation;
-        this.date = date;
+    public GameSave(GameConfig gc, ShopItemRecap[] sir, LogData logs) {
+        this.gc = gc;
         this.sir = sir;
         this.logs = logs;
     }
@@ -108,6 +102,55 @@ public class LogData {
         this.nLines = nLines;
         this.nPages = nPages;
     }
+}
+
+[System.Serializable]
+public class GameConfig {
+    public int negativeTime;
+    public int maxNegative;
+    public int noAttackTime;
+    public int noAttackStep;
+    public int ongoingAttacks;
+    public int userLevel;
+    public float money;
+    public float users;
+    public float reputation;
+    public float moneyMalus;
+    public float usersMalus;
+    public float usersBonus;
+    public float attackUsersMalus;
+    public float attackMoneyMalus;
+    public float endurance;
+    public float miss;
+    public float[] usersGain;
+    public float[] moneyGain;
+    public string date;
+
+    public GameConfig(int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel, float money, float users, float reputation, float moneyMalus, float usersMalus, float usersBonus, float attackUsersMalus, float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, string date) {
+        this.negativeTime = negativeTime;
+        this.maxNegative = maxNegative;
+        this.noAttackTime = noAttackTime;
+        this.noAttackStep = noAttackStep;
+        this.ongoingAttacks = ongoingAttacks;
+        this.userLevel = userLevel;
+        this.money = money;
+        this.users = users;
+        this.reputation = reputation;
+        this.moneyMalus = moneyMalus;
+        this.usersMalus = usersMalus;
+        this.usersBonus = usersBonus;
+        this.attackUsersMalus = attackUsersMalus;
+        this.attackMoneyMalus = attackMoneyMalus;
+        this.endurance = endurance;
+        this.miss = miss;
+        this.usersGain = usersGain;
+        this.moneyGain = moneyGain;
+        this.date = date;
+    }
+}
+
+public class GameConfigJSON {
+    public GameConfig gameConfig;
 }
 
 public class AttackStats {

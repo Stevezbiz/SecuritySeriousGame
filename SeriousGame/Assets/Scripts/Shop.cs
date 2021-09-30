@@ -7,7 +7,7 @@ public class Shop : MonoBehaviour {
     [SerializeField] RectTransform content;
     [SerializeField] TextAsset shopFileJSON;
     [SerializeField] ShopItemDetail details;
-    [SerializeField] ShopGUI shop;
+    [SerializeField] GameManager gameManager;
 
     List<int> items = new List<int>();
 
@@ -15,14 +15,14 @@ public class Shop : MonoBehaviour {
         gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         ShopJSON shopContent = JsonUtility.FromJson<ShopJSON>(shopFileJSON.text);
         foreach (ShopItemInfo item in shopContent.powerUps) {
-            shop.AddItem(item);
+            gameManager.AddToShopItems(item);
             items.Add(item.id);
         }
     }
 
     public void Load() {
         foreach (int id in items) {
-            AddShopRecord(shop.GetItem(id));
+            AddShopRecord(gameManager.GetShopItem(id));
         }
     }
 

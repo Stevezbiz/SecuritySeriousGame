@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class LogManager : MonoBehaviour {
-    [SerializeField] GUI gui;
+public class Log : MonoBehaviour {
+    [SerializeField] GameManager gameManager;
     [SerializeField] GameObject logRecord;
     [SerializeField] RectTransform content;
     [SerializeField] GameObject next;
@@ -15,7 +15,6 @@ public class LogManager : MonoBehaviour {
     int nPages = 1;
     int currentPage;
     const int nLinesStep = 20;
-    List<LogLine> lines = new List<LogLine>();
     List<GameObject> toDestroy = new List<GameObject>();
 
     void PrintCurrentPage() {
@@ -32,8 +31,9 @@ public class LogManager : MonoBehaviour {
             newLog.transform.SetParent(content, false);
             toDestroy.Add(newLog);
             TextMeshProUGUI text = newLog.GetComponent<TextMeshProUGUI>();
-            text.SetText(lines[j].line);
-            text.color = ToColor(lines[j].color);
+            LogLine line = gameManager.GetLog(j);
+            text.SetText(line.line);
+            text.color = ToColor(line.color);
         }
     }
 
@@ -43,7 +43,7 @@ public class LogManager : MonoBehaviour {
             nPages++;
         }
 
-        string dateTime = gui.GetDateTime();
+        string dateTime = gameManager.GetDateTime();
         string desc;
         Color color;
 
@@ -54,7 +54,7 @@ public class LogManager : MonoBehaviour {
             desc = "Sventato attacco " + attack;
             color = COLOR.LOG_BLUE;
         }
-        lines.Add(new LogLine(dateTime + desc, ToFloat(color)));
+        gameManager.AddToLogs(new LogLine(dateTime + desc, ToFloat(color)));
         nLines++;
     }
 
@@ -64,7 +64,7 @@ public class LogManager : MonoBehaviour {
             nPages++;
         }
 
-        string dateTime = gui.GetDateTime();
+        string dateTime = gameManager.GetDateTime();
         string desc;
 
         switch (action) {
@@ -80,7 +80,7 @@ public class LogManager : MonoBehaviour {
             default:
                 return;
         }
-        lines.Add(new LogLine(dateTime + desc, ToFloat(COLOR.LOG_GREEN)));
+        gameManager.AddToLogs(new LogLine(dateTime + desc, ToFloat(COLOR.LOG_GREEN)));
         nLines++;
     }
 
@@ -119,17 +119,9 @@ public class LogManager : MonoBehaviour {
         if (currentPage == 1) previous.SetActive(false);
     }
 
-    public LogData GetLogs() {
-        return new LogData(lines.ToArray(), nLines, nPages);
-    }
-
-    public void SetLogs(LogData logs) {
-        nLines = logs.nLines;
-        nPages = logs.nPages;
-
-        foreach(LogLine line in logs.lines) {
-            lines.Add(line);
-        }
+    public void LoadGameData(int nLines, int nPages) {
+        this.nLines = nLines;
+        this.nPages = nPages;
     }
 
     Color ToColor(float[] c) {
@@ -138,5 +130,13 @@ public class LogManager : MonoBehaviour {
 
     float[] ToFloat(Color c) {
         return new float[4] { c.r, c.g, c.b, c.a };
+    }
+
+    public int GetNLines() {
+        return nLines;
+    }
+
+    public int GetNPages() {
+        return nPages;
     }
 }

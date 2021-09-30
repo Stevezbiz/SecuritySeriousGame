@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SettingsMenu : MonoBehaviour {
-    [SerializeField] GUI gui;
+    [SerializeField] GameManager gameManager;
     
     float oldTimeScale = 1;
 
@@ -29,7 +29,7 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     public void SaveButton() {
-        SaveSystem.SaveGame(gui.SaveGame());
+        SaveSystem.SaveGame(gameManager.SaveGame());
     }
 
     public void ExitButton() {

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 
 public class MoneyView : MonoBehaviour {
-    [SerializeField] GUI gui;
+    [SerializeField] GameManager gameManager;
     [SerializeField] TextMeshProUGUI moneyGainText;
     [SerializeField] TextMeshProUGUI moneyMalusText;
     [SerializeField] TextMeshProUGUI attackMoneyMalusText;
@@ -29,20 +29,20 @@ public class MoneyView : MonoBehaviour {
     void Load() {
         float val;
 
-        moneyGainText.SetText(gui.GetMoneyGain().ToString());
-        val = (1 - gui.GetAttackMoneyMalus()) * 100;
+        moneyGainText.SetText(gameManager.GetMoneyGain().ToString());
+        val = (1 - gameManager.GetAttackMoneyMalus()) * 100;
         attackMoneyMalusText.SetText("- " + val.ToString("0.##"));
-        moneyMalusText.SetText("- " + gui.GetMoneyMalus().ToString());
-        val = gui.GetActualMoneyGain();
+        moneyMalusText.SetText("- " + gameManager.GetMoneyMalus().ToString());
+        val = gameManager.GetActualMoneyGain();
         if (val > 0) actualMoneyGainText.SetText(val.ToString("0.##"));
         else actualMoneyGainText.SetText("- " + (-val).ToString("0.##"));
 
-        usersGainText.SetText(gui.GetUsersGain().ToString());
-        val = (gui.GetUsersMod() - 1) * 100;
+        usersGainText.SetText(gameManager.GetUsersGain().ToString());
+        val = (gameManager.GetUsersMod() - 1) * 100;
         if (val > 0) usersModText.SetText(val.ToString("0.##"));
         else usersModText.SetText("- " + (-val).ToString("0.##"));
-        attackUsersMalusText.SetText("- " + gui.GetAttackUsersMalus().ToString());
-        val = gui.GetActualUsersGain();
+        attackUsersMalusText.SetText("- " + gameManager.GetAttackUsersMalus().ToString());
+        val = gameManager.GetActualUsersGain();
         if (val > 0) actualUsersGainText.SetText(val.ToString());
         else actualUsersGainText.SetText("- " + (-val).ToString());
     }

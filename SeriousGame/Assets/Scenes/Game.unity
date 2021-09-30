@@ -538,7 +538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 792e0a8e8df8371448aa398facea4b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gui: {fileID: 709143593}
+  gameManager: {fileID: 709143596}
   logRecord: {fileID: 4270722030790891160, guid: 06fd075fbfb729c41b7f28d418ae5a12, type: 3}
   content: {fileID: 20600218}
   next: {fileID: 847085472}
@@ -1790,7 +1790,7 @@ MonoBehaviour:
   content: {fileID: 1973033390}
   shopFileJSON: {fileID: 4900000, guid: faeeb1acb0fe22242ac0e5f5b7819982, type: 3}
   details: {fileID: 1749539191}
-  shop: {fileID: 826710605}
+  gameManager: {fileID: 709143596}
 --- !u!114 &144179587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2179,7 +2179,7 @@ MonoBehaviour:
   content: {fileID: 1443388931}
   shopFileJSON: {fileID: 4900000, guid: eab27bdaece62c747bbd4d7df03feac3, type: 3}
   details: {fileID: 1749539191}
-  shop: {fileID: 826710605}
+  gameManager: {fileID: 709143596}
 --- !u!114 &244610719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6571,19 +6571,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3fd72ec01465b43a89e0a9aab89d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 709143596}
   moneyText: {fileID: 1954834856}
   usersText: {fileID: 16725813}
   reputationText: {fileID: 582871243}
   dateText: {fileID: 59579463}
   timeText: {fileID: 2020337251}
   reputationBar: {fileID: 114412320}
-  windowPopUp: {fileID: 7429000584695828995, guid: 2fa7e241c74cfd14683799803d5d6f00, type: 3}
-  shop: {fileID: 826710605}
-  attacksManager: {fileID: 709143596}
-  logManager: {fileID: 44570360}
-  money: 500
-  users: 100
-  reputation: 0.5
 --- !u!114 &709143594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6631,13 +6625,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 709143591}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91b8df18dc7c1274994a4ca3ad086f00, type: 3}
+  m_Script: {fileID: 11500000, guid: 50e1972181dd59e47a7dc1bb8b84cf4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windowPopUp: {fileID: 7429000584695828995, guid: 2fa7e241c74cfd14683799803d5d6f00, type: 3}
-  attacksFileJSON: {fileID: 4900000, guid: a1d2035f2e9207a42b7fc1d02bfb87f2, type: 3}
   gui: {fileID: 709143593}
+  shop: {fileID: 826710605}
   logManager: {fileID: 44570360}
+  windowPopUp: {fileID: 7429000584695828995, guid: 2fa7e241c74cfd14683799803d5d6f00, type: 3}
+  gameConfigJSON: {fileID: 4900000, guid: e60745214a7362142996acefa56014bf, type: 3}
+  attacksFileJSON: {fileID: 4900000, guid: a1d2035f2e9207a42b7fc1d02bfb87f2, type: 3}
 --- !u!1 &709549545
 GameObject:
   m_ObjectHideFlags: 0
@@ -7916,7 +7912,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a50f2870cecd5af4ab2f3404761cb020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gui: {fileID: 709143593}
+  gameManager: {fileID: 709143596}
   networkShop: {fileID: 2048967064}
   authenticationShop: {fileID: 244610717}
   softwareShop: {fileID: 881059603}
@@ -8324,7 +8320,7 @@ MonoBehaviour:
   content: {fileID: 657015701}
   shopFileJSON: {fileID: 4900000, guid: d15f51ac3292a1746a413cb9b86bb50a, type: 3}
   details: {fileID: 1749539191}
-  shop: {fileID: 826710605}
+  gameManager: {fileID: 709143596}
 --- !u!114 &881059606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11651,7 +11647,7 @@ MonoBehaviour:
   content: {fileID: 1094652940}
   shopFileJSON: {fileID: 4900000, guid: 67967fdda233cae41a7f54b3485e207c, type: 3}
   details: {fileID: 1749539191}
-  shop: {fileID: 826710605}
+  gameManager: {fileID: 709143596}
 --- !u!114 &1266891654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15884,9 +15880,7 @@ MonoBehaviour:
   purchaseButton: {fileID: 312732335}
   enableButton: {fileID: 507119128}
   disableButton: {fileID: 1972853488}
-  shop: {fileID: 826710605}
-  gui: {fileID: 709143593}
-  attacksManager: {fileID: 709143596}
+  gameManager: {fileID: 709143596}
   logManager: {fileID: 44570360}
 --- !u!114 &1749539192
 MonoBehaviour:
@@ -16261,7 +16255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61ff26967103a24989ad16619a43fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gui: {fileID: 709143593}
+  gameManager: {fileID: 709143596}
 --- !u!114 &1784087731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19736,7 +19730,7 @@ MonoBehaviour:
   content: {fileID: 902183608}
   shopFileJSON: {fileID: 4900000, guid: fa649bcf954b9f545abb9131446bda26, type: 3}
   details: {fileID: 1749539191}
-  shop: {fileID: 826710605}
+  gameManager: {fileID: 709143596}
 --- !u!1 &2058341849
 GameObject:
   m_ObjectHideFlags: 0
@@ -19999,7 +19993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d7d88007666f1408ed2ae6cc78873a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gui: {fileID: 709143593}
+  gameManager: {fileID: 709143596}
   moneyGainText: {fileID: 1365535038}
   moneyMalusText: {fileID: 779663718}
   attackMoneyMalusText: {fileID: 1050403783}

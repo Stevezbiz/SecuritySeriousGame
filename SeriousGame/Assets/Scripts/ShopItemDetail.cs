@@ -11,10 +11,8 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] GameObject purchaseButton;
     [SerializeField] GameObject enableButton;
     [SerializeField] GameObject disableButton;
-    [SerializeField] ShopGUI shop;
-    [SerializeField] GUI gui;
-    [SerializeField] AttacksManager attacksManager;
-    [SerializeField] LogManager logManager;
+    [SerializeField] GameManager gameManager;
+    [SerializeField] Log logManager;
 
     ShopItem parent;
     int id;
@@ -25,7 +23,7 @@ public class ShopItemDetail : MonoBehaviour {
 
         string details = "Resistenze:\n";
         foreach (Resistance res in sii.resistances) {
-            details += "    " + attacksManager.Attack(res.id).name + "\n";
+            details += "    " + gameManager.GetAttack(res.id).name + "\n";
             if (res.duration != 0) details += "        durata dell'attacco -" + (res.duration * 100) + "%\n";
             if (res.miss != 0) details += "        probabilità di bloccare l'attacco +" + (res.miss * 100) + "%\n";
             if (res.endurance != 0) details += "        tempo medio tra 2 attacchi consecutivi +" + (res.endurance * 100) + "%\n";
@@ -45,7 +43,7 @@ public class ShopItemDetail : MonoBehaviour {
     public void Load(int id, ShopItem parent) {
         this.id = id;
         this.parent = parent;
-        ShopItemInfo sii = shop.GetItem(id);
+        ShopItemInfo sii = gameManager.GetShopItem(id);
         ComposeDetails(sii);
 
         purchaseButton.SetActive(false);
@@ -60,15 +58,10 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void ConfirmPurchase() {
-        ShopItemInfo sii = shop.GetItem(id);
-
-        sii.owned = true;
-        shop.AddItem(sii);
-
-        gui.Purchase(id);
+        gameManager.Purchase(id);
         parent.Purchase();
 
-        logManager.LogPrintItem(shop.GetItem(id).name, ActionCode.PURCHASE);
+        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.PURCHASE);
         
         purchaseButton.SetActive(false);
 
@@ -76,32 +69,20 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void EnableItem() {
-        ShopItemInfo sii = shop.GetItem(id);
-
-        sii.on = true;
-        shop.AddItem(sii);
-
-        gui.EnableShopItem(id);
+        gameManager.EnableShopItem(id);
         parent.Enable();
 
-        attacksManager.EnableShopItem(sii.resistances);
-        logManager.LogPrintItem(shop.GetItem(id).name, ActionCode.ENABLE);
+        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.ENABLE);
         
         disableButton.SetActive(true);
         enableButton.SetActive(false);
     }
 
     public void DisableItem() {
-        ShopItemInfo sii = shop.GetItem(id);
-
-        sii.on = false;
-        shop.AddItem(sii);
-
-        gui.DisableShopItem(id);
+        gameManager.DisableShopItem(id);
         parent.Disable();
 
-        attacksManager.DisableShopItem(sii.resistances);
-        logManager.LogPrintItem(shop.GetItem(id).name, ActionCode.DISABLE);
+        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.DISABLE);
         
         enableButton.SetActive(true);
         disableButton.SetActive(false);
