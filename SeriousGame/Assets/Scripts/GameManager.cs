@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour {
         // update the GUI every second
         if (Time.time - startTime >= updateTime) {
             updateTime++;
+            dateTime = dateTime.AddHours(1);
 
             // update attacks
             PerformAttacks();
@@ -60,7 +61,6 @@ public class GameManager : MonoBehaviour {
             money = CalculateMoney();
             users = CalculateUsers();
             reputation = CalculateReputation();
-            dateTime = dateTime.AddHours(1);
 
             // refresh
             gui.Refresh(Mathf.Floor(money).ToString(), Mathf.Floor(users).ToString(), reputation, dateTime);
@@ -107,32 +107,39 @@ public class GameManager : MonoBehaviour {
     }
 
     public GameSave SaveGame() {
-        return new GameSave(new GameConfig(negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel, money, users, reputation, moneyMalus, usersMalus, usersBonus, attackUsersMalus, attackMoneyMalus, endurance, miss, usersGain, moneyGain, dateTime.ToString()), GetShopItemRecap(), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()));
+        return new GameSave(new GameConfig(negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
+            money, users, reputation, moneyMalus, usersMalus, usersBonus, attackUsersMalus, attackMoneyMalus, endurance, miss,
+            usersGain, moneyGain, dateTime.ToString()), GetShopItemRecap(), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
+            new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
 
     void Init() {
         startTime = Time.time;
         Time.timeScale = 0;
         shop.Init();
+        
+        AttacksJSON attacksContent = JsonUtility.FromJson<AttacksJSON>(attacksFileJSON.text);
+        foreach (AttackInfo attack in attacksContent.attacks) {
+            attacks.Add(attack.id, attack);
+        }
 
         if (SaveSystem.load) {
             LoadGameData(SaveSystem.LoadGame());
         } else {
             GameConfigJSON gameConfigContent = JsonUtility.FromJson<GameConfigJSON>(gameConfigJSON.text);
             LoadGameConfig(gameConfigContent.gameConfig);
+            foreach (AttackInfo attack in attacks.Values) {
+                if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0f, 0f, 0f));
+                attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
+                ScheduleAttack(attack.id, attackSchedule.Count, false);
+            }
             userLevel = CalculateUserLevel();
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
+            PerformAttacks();
         }
 
         shop.Load();
-        AttacksJSON attacksContent = JsonUtility.FromJson<AttacksJSON>(attacksFileJSON.text);
-        foreach (AttackInfo attack in attacksContent.attacks) {
-            attacks.Add(attack.id, attack);
-            if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0f, 0f, 0f));
-            attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
-            ScheduleAttack(attack.id, attackSchedule.Count, false);
-        }
 
         gui.Refresh(Mathf.Floor(money).ToString(), Mathf.Floor(users).ToString(), reputation, dateTime);
     }
@@ -205,6 +212,8 @@ public class GameManager : MonoBehaviour {
     void ScheduleAttack(int id, int i, bool replace) {
         float maxTime = attacks[id].maxTime * GetEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
+        Debug.Log("maxTime: " + maxTime + ", attack: " + attacks[id].maxTime + ", endurance: " + GetEndurance(id));
+        Debug.Log("timer: " + nextTime);
         if (replace) attackSchedule[i] = new AttackRecap(id, Mathf.CeilToInt(GetDuration(id)), false, Mathf.CeilToInt(nextTime));
         else attackSchedule.Insert(i, new AttackRecap(id, Mathf.CeilToInt(GetDuration(id)), false, Mathf.CeilToInt(nextTime)));
     }
@@ -218,6 +227,7 @@ public class GameManager : MonoBehaviour {
     }
 
     float GetEndurance(int id) {
+        Debug.Log("endurance: " + endurance + ", resistances: " + resistances[id].endurance);
         return endurance + resistances[id].endurance;
     }
 
@@ -280,7 +290,7 @@ public class GameManager : MonoBehaviour {
                 if (attackSchedule[i].duration == 0) {
                     StopAttack(attackSchedule[i].id);
                     ScheduleAttack(attackSchedule[i].id, i, true);
-
+                    attackSchedule[i].timer--;
                 } else {
                     attackSchedule[i].duration--;
                 }
@@ -341,6 +351,10 @@ public class GameManager : MonoBehaviour {
 
         logs = new List<LogLine>(gameSave.logs.lines);
         logManager.LoadGameData(gameSave.logs.nLines, gameSave.logs.nPages);
+
+        foreach(AttackStats aStat in gameSave.aStats) attackStats.Add(aStat.id, aStat);
+        foreach(Resistance res in gameSave.res) resistances.Add(res.id, res);
+        attackSchedule = new List<AttackRecap>(gameSave.aSchedule);
     }
 
     public void Purchase(int id) {

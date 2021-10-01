@@ -72,11 +72,17 @@ public class GameSave {
     public GameConfig gc;
     public ShopItemRecap[] sir;
     public LogData logs;
+    public AttackStats[] aStats;
+    public AttackRecap[] aSchedule;
+    public Resistance[] res;
 
-    public GameSave(GameConfig gc, ShopItemRecap[] sir, LogData logs) {
+    public GameSave(GameConfig gc, ShopItemRecap[] sir, LogData logs, AttackStats[] aStats, AttackRecap[] aSchedule, Resistance[] res) {
         this.gc = gc;
         this.sir = sir;
         this.logs = logs;
+        this.aStats = aStats;
+        this.aSchedule = aSchedule;
+        this.res = res;
     }
 }
 
