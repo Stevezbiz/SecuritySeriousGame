@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour {
     DateTime dateTime;
 
     List<LogLine> logs = new List<LogLine>();
+    List<AttackRecap> attackSchedule = new List<AttackRecap>();
     Dictionary<int, AttackInfo> attacks = new Dictionary<int, AttackInfo>();
     Dictionary<int, Resistance> resistances = new Dictionary<int, Resistance>();
     Dictionary<int, AttackStats> attackStats = new Dictionary<int, AttackStats>();
@@ -51,21 +52,21 @@ public class GameManager : MonoBehaviour {
         if (Time.time - startTime >= updateTime) {
             updateTime++;
 
+            // update attacks
+            PerformAttacks();
+            
+            // update values
             userLevel = CalculateUserLevel();
-            // money
             money = CalculateMoney();
-            // users
             users = CalculateUsers();
-            // reputation
             reputation = CalculateReputation();
-            // date
             dateTime = dateTime.AddHours(1);
-
-            // game over check
-            CheckGameOver();
 
             // refresh
             gui.Refresh(Mathf.Floor(money).ToString(), Mathf.Floor(users).ToString(), reputation, dateTime);
+
+            // game over check
+            CheckGameOver();
         }
     }
 
@@ -90,11 +91,11 @@ public class GameManager : MonoBehaviour {
     }
 
     public float GetActualUsersGain() {
-        return (float)Mathf.Floor(usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * (float)Mathf.Floor(users));
+        return Mathf.Floor(usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * Mathf.Floor(users));
     }
 
     public float GetUsersGain() {
-        return (float)Mathf.Floor(usersGain[userLevel] * (float)Mathf.Floor(users) * 0.5f * (1 + reputation));
+        return Mathf.Floor(usersGain[userLevel] * Mathf.Floor(users) * 0.5f * (1 + reputation));
     }
 
     public float GetUsersMod() {
@@ -102,7 +103,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public float GetAttackUsersMalus() {
-        return (float)Mathf.Floor(usersGain[userLevel] * (float)Mathf.Floor(users) * attackUsersMalus);
+        return Mathf.Floor(usersGain[userLevel] * Mathf.Floor(users) * attackUsersMalus);
     }
 
     public GameSave SaveGame() {
@@ -130,7 +131,7 @@ public class GameManager : MonoBehaviour {
             attacks.Add(attack.id, attack);
             if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0f, 0f, 0f));
             attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
-            StartCoroutine(ExecuteAttack(attack.id));
+            ScheduleAttack(attack.id, attackSchedule.Count, false);
         }
 
         gui.Refresh(Mathf.Floor(money).ToString(), Mathf.Floor(users).ToString(), reputation, dateTime);
@@ -141,7 +142,7 @@ public class GameManager : MonoBehaviour {
     }
 
     float CalculateUsers() {
-        return users + usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * (float)Mathf.Floor(users);
+        return users + usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * Mathf.Floor(users);
     }
 
     int CalculateUserLevel() {
@@ -166,26 +167,23 @@ public class GameManager : MonoBehaviour {
         } else {
             noAttackTime = 0;
         }
-        if (rep > 1f) {
-            return 1f;
-        } else {
-            return rep;
-        }
+        if (rep > 1f) return 1f;
+        else return rep;
+    }
+
+    void GameOver() {
+        Time.timeScale = 0;
+        GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
+        newWindow.transform.SetParent(gameObject.transform, false);
+        newWindow.GetComponent<WindowPopUp>().Load("GAME OVER");
     }
 
     void CheckGameOver() {
-        if (money < 0) {
-            negativeTime++;
-        } else {
-            negativeTime = 0;
-        }
-        if (negativeTime > maxNegative) {
-            // end the game
-            Time.timeScale = 0;
-            GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
-            newWindow.transform.SetParent(gameObject.transform, false);
-            newWindow.GetComponent<WindowPopUp>().Message = "GAME OVER";
-        }
+        if (negativeTime > maxNegative) GameOver();
+        if (reputation == 0) GameOver();
+
+        if (money < 0) negativeTime++;
+        else negativeTime = 0;
     }
     
     // LOG
@@ -204,41 +202,11 @@ public class GameManager : MonoBehaviour {
         return attacks[id];
     }
 
-    IEnumerator ExecuteAttack(int id) {
-        // choose first attack
+    void ScheduleAttack(int id, int i, bool replace) {
         float maxTime = attacks[id].maxTime * GetEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
-
-        while (true) {
-            // wait for the attack
-            yield return new WaitForSeconds(nextTime);
-
-            attackStats[id].n++;
-            // launch the attack if hits
-            if (Random.Range(0f, 1f) > GetMiss(id)) {
-                // hit
-                attackStats[id].hit++;
-                LaunchAttack(id, GetDuration(id));
-                GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
-                newWindow.transform.SetParent(gameObject.transform, false);
-                newWindow.GetComponent<WindowPopUp>().Message = "Individuato attacco " + attacks[id].name + "! " + attacks[id].description;
-                // log print hit
-                logManager.LogPrintAttack(attacks[id].name, true);
-            } else {
-                // miss
-                attackStats[id].miss++;
-                MissedAttack();
-                GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
-                newWindow.transform.SetParent(gameObject.transform, false);
-                newWindow.GetComponent<WindowPopUp>().Message = "Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name;
-                // log print miss
-                logManager.LogPrintAttack(attacks[id].name, false);
-            }
-
-            // choose the time for the next attack
-            maxTime = attacks[id].maxTime * GetEndurance(id);
-            nextTime = Random.Range(0.5f * maxTime, maxTime);
-        }
+        if (replace) attackSchedule[i] = new AttackRecap(id, Mathf.CeilToInt(GetDuration(id)), false, Mathf.CeilToInt(nextTime));
+        else attackSchedule.Insert(i, new AttackRecap(id, Mathf.CeilToInt(GetDuration(id)), false, Mathf.CeilToInt(nextTime)));
     }
 
     float GetMiss(int id) {
@@ -246,21 +214,11 @@ public class GameManager : MonoBehaviour {
     }
 
     float GetDuration(int id) {
-        return (1 - resistances[id].duration) * attacks[id].duration + 1;
+        return (1 - resistances[id].duration) * attacks[id].duration;
     }
 
     float GetEndurance(int id) {
         return endurance + resistances[id].endurance;
-    }
-
-    void LaunchAttack(int id, float duration) {
-        StartCoroutine(PerformAttack(id, duration));
-    }
-
-    IEnumerator PerformAttack(int id, float duration) {
-        StartAttack(id);
-        yield return new WaitForSeconds(duration);
-        StopAttack(id);
     }
 
     void StartAttack(int id) {
@@ -270,10 +228,11 @@ public class GameManager : MonoBehaviour {
         attackUsersMalus += attacks[id].usersMalus;
         attackMoneyMalus *= attacks[id].moneyMalus;
         reputation -= attacks[id].reputationMalus;
-        if (reputation <= 0) {
-            reputation = 0;
-            // game over
-        }
+        if (reputation <= 0) reputation = 0;
+
+        GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
+        newWindow.transform.SetParent(gameObject.transform, false);
+        newWindow.GetComponent<WindowPopUp>().Load("Individuato attacco " + attacks[id].name + "! " + attacks[id].description);
     }
 
     void StopAttack(int id) {
@@ -282,9 +241,51 @@ public class GameManager : MonoBehaviour {
         attackMoneyMalus /= attacks[id].moneyMalus;
     }
 
-    void MissedAttack() {
+    void MissedAttack(int id) {
         reputation += 0.01f;
         if (reputation > 1f) reputation = 1f;
+
+        GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
+        newWindow.transform.SetParent(gameObject.transform, false);
+        newWindow.GetComponent<WindowPopUp>().Load("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name);
+    }
+
+    void PerformAttacks() {
+        for(int i = 0; i < attackSchedule.Count; i++) {
+            if (attackSchedule[i].timer > 0) {
+                attackSchedule[i].timer--;
+            } else {
+                // start the attack eventually
+                if (!attackSchedule[i].active) {
+                    if (Random.Range(0f, 1f) > GetMiss(attackSchedule[i].id)) {
+                        // hit
+                        attackStats[attackSchedule[i].id].hit++;
+                        attackSchedule[i].active = true;
+                        StartAttack(attackSchedule[i].id);
+
+                        // log print hit
+                        logManager.LogPrintAttack(attacks[attackSchedule[i].id].name, true);
+                    } else {
+                        // miss
+                        attackStats[attackSchedule[i].id].miss++;
+                        MissedAttack(attackSchedule[i].id);
+                        ScheduleAttack(attackSchedule[i].id, i, true);
+
+                        // log print miss
+                        logManager.LogPrintAttack(attacks[attackSchedule[i].id].name, false);
+                    }
+                    attackSchedule[i].active = true;
+                }
+                // end the attack eventually
+                if (attackSchedule[i].duration == 0) {
+                    StopAttack(attackSchedule[i].id);
+                    ScheduleAttack(attackSchedule[i].id, i, true);
+
+                } else {
+                    attackSchedule[i].duration--;
+                }
+            }
+        }
     }
 
     // SHOP
@@ -334,12 +335,8 @@ public class GameManager : MonoBehaviour {
         LoadGameConfig(gameSave.gc);
 
         foreach (ShopItemRecap s in gameSave.sir) {
-            if (s.owned) {
-                shopItems[s.id].owned = true;
-                if (s.on) {
-                    shopItems[s.id].on = true;
-                }
-            }
+            shopItems[s.id].owned = s.owned;
+            shopItems[s.id].on = s.on;
         }
 
         logs = new List<LogLine>(gameSave.logs.lines);

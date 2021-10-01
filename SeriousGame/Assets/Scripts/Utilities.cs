@@ -149,10 +149,27 @@ public class GameConfig {
     }
 }
 
+[System.Serializable]
 public class GameConfigJSON {
     public GameConfig gameConfig;
 }
 
+[System.Serializable]
+public class AttackRecap {
+    public int id;
+    public int duration;
+    public bool active;
+    public int timer;
+
+    public AttackRecap(int id, int duration, bool active, int timer) {
+        this.id = id;
+        this.duration = duration;
+        this.active = active;
+        this.timer = timer;
+    }
+}
+
+[System.Serializable]
 public class AttackStats {
     public int id;
     public int n;

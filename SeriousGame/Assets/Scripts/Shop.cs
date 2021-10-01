@@ -9,19 +9,19 @@ public class Shop : MonoBehaviour {
     [SerializeField] ShopItemDetail details;
     [SerializeField] GameManager gameManager;
 
-    List<int> items = new List<int>();
+    List<int> indexes = new List<int>();
 
     public void Init() {
         gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         ShopJSON shopContent = JsonUtility.FromJson<ShopJSON>(shopFileJSON.text);
         foreach (ShopItemInfo item in shopContent.powerUps) {
             gameManager.AddToShopItems(item);
-            items.Add(item.id);
+            indexes.Add(item.id);
         }
     }
 
     public void Load() {
-        foreach (int id in items) {
+        foreach (int id in indexes) {
             AddShopRecord(gameManager.GetShopItem(id));
         }
     }
