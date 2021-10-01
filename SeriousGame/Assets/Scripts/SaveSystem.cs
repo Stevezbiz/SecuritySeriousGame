@@ -7,6 +7,9 @@ using System.IO;
 public static class SaveSystem {
     public static bool load = false;
 
+    /**
+     * <summary>Save the game data on a flie</summary>
+     */
     public static void SaveGame(GameSave gameSave) {
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/savedata.data";
@@ -15,6 +18,9 @@ public static class SaveSystem {
         fs.Close();
     }
 
+    /**
+     * <summary>Load the game data from a file</summary>
+     */
     public static GameSave LoadGame() {
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/savedata.data";

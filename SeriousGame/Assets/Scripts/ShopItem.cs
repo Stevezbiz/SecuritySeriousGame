@@ -12,6 +12,9 @@ public class ShopItem : MonoBehaviour {
     ShopItemDetail details;
     int id;
 
+    /**
+     * <summary>Populate the item of the shop with all the elements to show</summary>
+     */
     public void Load(ShopItemInfo sii, ShopItemDetail details) {
         id = sii.id;
         this.details = details;
@@ -24,24 +27,35 @@ public class ShopItem : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary>Show the details of the item of the shop</summary>
+     */
     public void ShowDetails() {
         details.Load(id, this);
         details.gameObject.SetActive(true);
     }
 
+    /**
+     * <summary>Change the aspect of the item of the shop</summary>
+     */
     public void Purchase() {
         costText.SetText("");
         Enable();
     }
 
+    /**
+     * <summary>Change the aspect of the item of the shop</summary>
+     */
     public void Enable() {
         ownedImage.SetActive(true);
         pausedImage.SetActive(false);
     }
 
+    /**
+     * <summary>Change the aspect of the item of the shop</summary>
+     */
     public void Disable() {
         ownedImage.SetActive(false);
         pausedImage.SetActive(true);
     }
-
 }

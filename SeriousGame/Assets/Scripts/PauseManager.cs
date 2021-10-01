@@ -13,6 +13,9 @@ public class PauseManager : MonoBehaviour {
         stop = true;
     }
 
+    /**
+     * <summary>Switch the status of the time in the game</summary>
+     */
     public void StopOrResume() {
         if (stop) {
             // game is frozen -> resume

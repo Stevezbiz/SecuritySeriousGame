@@ -16,9 +16,12 @@ public class MoneyView : MonoBehaviour {
 
     float oldTimeScale = 1f;
 
+    /**
+     * <summary>Populate the view with the values to show</summary>
+     */
     void Load() {
         float val;
-
+        // set the money part
         moneyGainText.SetText(gameManager.GetMoneyGain().ToString());
         val = (1 - gameManager.GetAttackMoneyMalus()) * 100;
         attackMoneyMalusText.SetText("- " + val.ToString("0.##"));
@@ -26,7 +29,7 @@ public class MoneyView : MonoBehaviour {
         val = gameManager.GetActualMoneyGain();
         if (val > 0) actualMoneyGainText.SetText(val.ToString("0.##"));
         else actualMoneyGainText.SetText("- " + (-val).ToString("0.##"));
-
+        // set the users part
         usersGainText.SetText(gameManager.GetUsersGain().ToString());
         val = (gameManager.GetUsersMod() - 1) * 100;
         if (val > 0) usersModText.SetText(val.ToString("0.##"));
@@ -37,6 +40,9 @@ public class MoneyView : MonoBehaviour {
         else actualUsersGainText.SetText("- " + (-val).ToString());
     }
 
+    /**
+     * <summary>Open the view</summary>
+     */
     public void OpenView() {
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0;
@@ -44,6 +50,9 @@ public class MoneyView : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
+    /**
+     * <summary>Close the view</summary>
+     */
     public void CloseView() {
         Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);

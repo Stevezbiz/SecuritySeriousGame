@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShopGUI : MonoBehaviour {
-    [SerializeField] GameManager gameManager;
     [SerializeField] GameObject networkShop;
     [SerializeField] GameObject authenticationShop;
     [SerializeField] GameObject softwareShop;
@@ -13,7 +12,9 @@ public class ShopGUI : MonoBehaviour {
 
     float oldTimeScale = 1f;
 
-
+    /**
+     * <summary>Initialize the data structures</summary>
+     */
     public void Init() {
         networkShop.GetComponent<Shop>().Init();
         authenticationShop.GetComponent<Shop>().Init();
@@ -22,6 +23,9 @@ public class ShopGUI : MonoBehaviour {
         servicesShop.GetComponent<Shop>().Init();
     }
 
+    /**
+     * <summary>Load all the items in the shop</summary>
+     */
     public void Load() {
         networkShop.GetComponent<Shop>().Load();
         authenticationShop.GetComponent<Shop>().Load();
@@ -30,12 +34,18 @@ public class ShopGUI : MonoBehaviour {
         servicesShop.GetComponent<Shop>().Load();
     }
 
+    /**
+     * <summary>Open the shop view</summary>
+     */
     public void OpenShop() {
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0;
         gameObject.SetActive(true);
     }
 
+    /**
+     * <summary>Close the shop view</summary>
+     */
     public void CloseShop() {
         Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);

@@ -11,6 +11,9 @@ public class Shop : MonoBehaviour {
 
     List<int> indexes = new List<int>();
 
+    /**
+     * <summary>Initialize the data structures</summary>
+     */
     public void Init() {
         gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         ShopJSON shopContent = JsonUtility.FromJson<ShopJSON>(shopFileJSON.text);
@@ -20,12 +23,18 @@ public class Shop : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary>Load all the items in the list</summary>
+     */
     public void Load() {
         foreach (int id in indexes) {
             AddShopRecord(gameManager.GetShopItem(id));
         }
     }
 
+    /**
+     * <summary>Load an item in the list</summary>
+     */
     void AddShopRecord(ShopItemInfo sii) {
         // create the new item
         GameObject newRecord = Instantiate(shopItem);
@@ -33,10 +42,16 @@ public class Shop : MonoBehaviour {
         newRecord.GetComponent<ShopItem>().Load(sii, details);
     }
 
+    /**
+     * <summary>Open the list of items</summary>
+     */
     public void OpenList() {
         gameObject.SetActive(true);
     }
 
+    /**
+     * <summary>Close the list of items</summary>
+     */
     public void CloseList() {
         gameObject.SetActive(false);
     }

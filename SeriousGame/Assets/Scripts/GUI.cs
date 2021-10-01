@@ -14,6 +14,9 @@ public class GUI : MonoBehaviour {
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] Image reputationBar;
 
+    /**
+     * <summary>Displays the current (updated) values in the GUI</summary>
+     */
     public void Refresh(string money, string users, float reputation, DateTime dateTime) {
         moneyText.SetText(money);
         usersText.SetText(users);
