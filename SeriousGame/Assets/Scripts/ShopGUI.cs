@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShopGUI : MonoBehaviour {
     [SerializeField] GameObject networkShop;
-    [SerializeField] GameObject authenticationShop;
+    [SerializeField] GameObject accessShop;
     [SerializeField] GameObject softwareShop;
     [SerializeField] GameObject assetShop;
     [SerializeField] GameObject servicesShop;
@@ -17,7 +17,7 @@ public class ShopGUI : MonoBehaviour {
      */
     public void Init() {
         networkShop.GetComponent<Shop>().Init();
-        authenticationShop.GetComponent<Shop>().Init();
+        accessShop.GetComponent<Shop>().Init();
         softwareShop.GetComponent<Shop>().Init();
         assetShop.GetComponent<Shop>().Init();
         servicesShop.GetComponent<Shop>().Init();
@@ -28,7 +28,7 @@ public class ShopGUI : MonoBehaviour {
      */
     public void Load() {
         networkShop.GetComponent<Shop>().Load();
-        authenticationShop.GetComponent<Shop>().Load();
+        accessShop.GetComponent<Shop>().Load();
         softwareShop.GetComponent<Shop>().Load();
         assetShop.GetComponent<Shop>().Load();
         servicesShop.GetComponent<Shop>().Load();
@@ -50,7 +50,7 @@ public class ShopGUI : MonoBehaviour {
         Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);
         networkShop.SetActive(false);
-        authenticationShop.SetActive(false);
+        accessShop.SetActive(false);
         softwareShop.SetActive(false);
         assetShop.SetActive(false);
         servicesShop.SetActive(false);

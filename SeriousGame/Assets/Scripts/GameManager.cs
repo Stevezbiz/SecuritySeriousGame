@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
 
     float startTime;
     int updateTime = 1;
+    int totalTime;
     int negativeTime;
     int maxNegative;
     int noAttackTime;
@@ -40,6 +41,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<int, Resistance> resistances = new Dictionary<int, Resistance>();
     Dictionary<int, AttackStats> attackStats = new Dictionary<int, AttackStats>();
     Dictionary<int, ShopItemInfo> shopItems = new Dictionary<int, ShopItemInfo>();
+    int shopItemsId = 0;
 
     // Start is called before the first frame update
     void Start() {
@@ -52,7 +54,10 @@ public class GameManager : MonoBehaviour {
         if (Time.time - startTime >= updateTime) {
             // step up the time
             updateTime++;
+            totalTime++;
             dateTime = dateTime.AddHours(1);
+            // schedule new attacks
+            ActivateAttacks();
             // update attacks
             UpdateAttacks();
             // update values
@@ -137,7 +142,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the data to be saved to resume correctly the game in future</summary>
      */
     public GameSave SaveGame() {
-        return new GameSave(new GameConfig(negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
+        return new GameSave(new GameConfig(totalTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
             money, users, reputation, moneyMalus, usersMalus, usersBonus, attackUsersMalus, attackMoneyMalus, endurance, miss,
             usersGain, moneyGain, dateTime.ToString()), GetShopItemRecap(), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
             new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), new List<Resistance>(resistances.Values).ToArray());
@@ -168,8 +173,8 @@ public class GameManager : MonoBehaviour {
             foreach (AttackInfo attack in attacks.Values) {
                 if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0f, 0f, 0f));
                 attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
-                ScheduleAttack(attack.id, attackSchedule.Count);
             }
+            ScheduleAttack((int)AttackCode.DOS, attackSchedule.Count);
             userLevel = CalculateUserLevel();
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
@@ -288,6 +293,17 @@ public class GameManager : MonoBehaviour {
     }
 
     /**
+     * <summary>Schedule new attacks when the game reaches some checkpoints</summary>
+     */
+    void ActivateAttacks() {
+        switch (totalTime) {
+            
+            default:
+                break;
+        }
+    }
+
+    /**
      * <summary>Return the miss ratio for the specified attack</summary>
      */
     float GetMiss(int id) {
@@ -315,7 +331,7 @@ public class GameManager : MonoBehaviour {
         ongoingAttacks++;
         // apply the maluses
         money -= attacks[id].moneyLoss;
-        users -= attacks[id].usersLoss;
+        users -= attacks[id].usersLoss * users;
         attackUsersMalus += attacks[id].usersMalus;
         attackMoneyMalus *= attacks[id].moneyMalus;
         reputation -= attacks[id].reputationMalus;
@@ -395,6 +411,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Inserts an item of the shop in the collection</summary>
      */
     public void AddToShopItems(ShopItemInfo sii) {
+        sii.id = shopItemsId++;
         if (shopItems.ContainsKey(sii.id)) shopItems[sii.id] = sii;
         else shopItems.Add(sii.id, sii);
     }
@@ -423,6 +440,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Load the basic configuration of the game</summary>
      */
     void LoadGameConfig(GameConfig gc) {
+        totalTime = gc.totalTime;
         negativeTime = gc.negativeTime;
         maxNegative = gc.maxNegative;
         noAttackTime = gc.noAttackTime;

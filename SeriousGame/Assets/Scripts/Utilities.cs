@@ -112,6 +112,7 @@ public class LogData {
 
 [System.Serializable]
 public class GameConfig {
+    public int totalTime;
     public int negativeTime;
     public int maxNegative;
     public int noAttackTime;
@@ -132,7 +133,8 @@ public class GameConfig {
     public float[] moneyGain;
     public string date;
 
-    public GameConfig(int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel, float money, float users, float reputation, float moneyMalus, float usersMalus, float usersBonus, float attackUsersMalus, float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, string date) {
+    public GameConfig(int totalTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel, float money, float users, float reputation, float moneyMalus, float usersMalus, float usersBonus, float attackUsersMalus, float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, string date) {
+        this.totalTime = totalTime;
         this.negativeTime = negativeTime;
         this.maxNegative = maxNegative;
         this.noAttackTime = noAttackTime;
@@ -202,6 +204,21 @@ public enum ActionCode {
     PURCHASE,
     ENABLE,
     DISABLE
+}
+
+public enum AttackCode {
+    DOS,
+    MITM,
+    BRUTE_FORCE,
+    DICTIONARY,
+    RAINBOW_TABLE,
+    API_VULNERABILITY,
+    SOCIAL_ENGINEERING,
+    PHISHING,
+    WORM,
+    VIRUS,
+    SPYWARE,
+    RANSOMWARE
 }
 
 public static class COLOR {

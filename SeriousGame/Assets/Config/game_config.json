@@ -1,5 +1,6 @@
 {
 	"gameConfig": {
+		"totalTime": 0,
 		"negativeTime": 0,
 		"maxNegative": 60,
 		"noAttackTime": 0,

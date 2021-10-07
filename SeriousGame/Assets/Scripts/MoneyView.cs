@@ -112,6 +112,4 @@ public class MoneyView : MonoBehaviour {
         newWindow.transform.SetParent(gameObject.transform, false);
         newWindow.GetComponent<WindowPopUp>().Load("Malus attacchi: riduzione applicata al numero di nuovi utenti, dovuta agli attacchi in corso");
     }
-
-
 }
