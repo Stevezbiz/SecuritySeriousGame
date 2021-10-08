@@ -21,7 +21,7 @@ public class ShopItemDetail : MonoBehaviour {
      * <summary>Compose all the details of the item</summary>
      */
     void ComposeDetails(ShopItemInfo sii) {
-        titleText.SetText(sii.name + " - costo " + sii.cost.ToString());
+        titleText.SetText(sii.name + "\n" + sii.cost.ToString() + " Fondi");
         descriptionText.SetText(sii.description);
         // set the technical details about resistances
         string details = "Resistenze:\n";
@@ -33,7 +33,12 @@ public class ShopItemDetail : MonoBehaviour {
         }
         if (sii.resistances.Length == 0) details += "nessuna\n";
         // set the technical details about costs and usability
-        details += "Costo: " + sii.moneyMalus + " F/h";
+        if (sii.moneyMalus < 0) {
+            details += "Costo: 0 F/h";
+            details += "\nGuadagno aggiuntivo: " + (-sii.moneyMalus) + " F/h";
+        } else {
+            details += "Costo: " + sii.moneyMalus + " F/h";
+        }
         if (sii.usersMod != 0) {
             if (sii.usersMod < 1) details += "\nPrestazioni e usabilità: -" + (sii.usersMod * 100) + "%\n";
             else details += "\nPrestazioni e usabilità: +" + ((sii.usersMod - 1) * 100) + "%\n";
