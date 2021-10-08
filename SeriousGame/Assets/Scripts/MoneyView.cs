@@ -33,7 +33,7 @@ public class MoneyView : MonoBehaviour {
         // set the users part
         usersGainText.SetText(gameManager.GetUsersGain().ToString());
         val = (gameManager.GetUsersMod() - 1) * 100;
-        if (val >= 0) usersModText.SetText(val.ToString("0.##"));
+        if (val >= 0) usersModText.SetText("+ " + val.ToString("0.##"));
         else usersModText.SetText("- " + (-val).ToString("0.##"));
         attackUsersMalusText.SetText("- " + gameManager.GetAttackUsersMalus().ToString());
         val = gameManager.GetActualUsersGain();

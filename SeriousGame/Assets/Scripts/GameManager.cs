@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour {
     float users;
     float reputation;
     float moneyMalus;
+    float moneyBonus;
     float usersMalus;
     float usersBonus;
     float attackUsersMalus;
@@ -87,14 +88,14 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the actual gain of money</summary>
      */
     public float GetActualMoneyGain() {
-        return moneyGain[userLevel] * attackMoneyMalus - moneyMalus;
+        return (moneyGain[userLevel] + moneyBonus) * attackMoneyMalus - moneyMalus;
     }
 
     /**
      * <summary>Return the gain of money based on the number of users</summary>
      */
     public float GetMoneyGain() {
-        return moneyGain[userLevel];
+        return moneyGain[userLevel] + moneyBonus;
     }
 
     /**
@@ -144,7 +145,7 @@ public class GameManager : MonoBehaviour {
      */
     public GameSave SaveGame() {
         return new GameSave(new GameConfig(totalTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
-            money, users, reputation, moneyMalus, usersMalus, usersBonus, attackUsersMalus, attackMoneyMalus, endurance, miss,
+            money, users, reputation, moneyMalus, moneyBonus, usersMalus, usersBonus, attackUsersMalus, attackMoneyMalus, endurance, miss,
             usersGain, moneyGain, dateTime.ToString()), GetShopItemRecap(), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
             new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
@@ -195,7 +196,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the money updated</summary>
      */
     float CalculateMoney() {
-        return money + moneyGain[userLevel] * attackMoneyMalus - moneyMalus;
+        return money + (moneyGain[userLevel] + moneyBonus) * attackMoneyMalus - moneyMalus;
     }
 
     /**
@@ -487,6 +488,7 @@ public class GameManager : MonoBehaviour {
         users = gc.users;
         reputation = gc.reputation;
         moneyMalus = gc.moneyMalus;
+        moneyBonus = gc.moneyBonus;
         usersMalus = gc.usersMalus;
         usersBonus = gc.usersBonus;
         attackUsersMalus = gc.attackUsersMalus;
@@ -533,7 +535,8 @@ public class GameManager : MonoBehaviour {
     public void EnableShopItem(int id) {
         shopItems[id].on = true;
         ShopItemInfo sii = shopItems[id];
-        moneyMalus += sii.moneyMalus;
+        if (sii.moneyMalus >= 0) moneyMalus += sii.moneyMalus;
+        else moneyBonus -= sii.moneyMalus;
         if (sii.usersMod < 1) usersMalus *= 1 - sii.usersMod;
         else usersBonus *= sii.usersMod;
         // update resistances
@@ -551,7 +554,8 @@ public class GameManager : MonoBehaviour {
     public void DisableShopItem(int id) {
         shopItems[id].on = false;
         ShopItemInfo sii = shopItems[id];
-        moneyMalus -= sii.moneyMalus;
+        if (sii.moneyMalus >= 0) moneyMalus -= sii.moneyMalus;
+        else moneyBonus += sii.moneyMalus;
         if (sii.usersMod < 1) usersMalus /= 1 - sii.usersMod;
         else usersBonus /= sii.usersMod;
         // update resistances

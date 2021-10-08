@@ -11,6 +11,7 @@
 		"users": 100,
 		"reputation": 0.5,
 		"moneyMalus": 5,
+		"moneyBonus": 0,
 		"usersMalus": 1,
 		"usersBonus": 1,
 		"attackUsersMalus": 0,

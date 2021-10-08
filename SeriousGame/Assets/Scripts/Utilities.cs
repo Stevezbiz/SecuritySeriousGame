@@ -123,6 +123,7 @@ public class GameConfig {
     public float users;
     public float reputation;
     public float moneyMalus;
+    public float moneyBonus;
     public float usersMalus;
     public float usersBonus;
     public float attackUsersMalus;
@@ -133,7 +134,7 @@ public class GameConfig {
     public float[] moneyGain;
     public string date;
 
-    public GameConfig(int totalTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel, float money, float users, float reputation, float moneyMalus, float usersMalus, float usersBonus, float attackUsersMalus, float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, string date) {
+    public GameConfig(int totalTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel, float money, float users, float reputation, float moneyMalus, float moneyBonus, float usersMalus, float usersBonus, float attackUsersMalus, float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, string date) {
         this.totalTime = totalTime;
         this.negativeTime = negativeTime;
         this.maxNegative = maxNegative;
@@ -145,6 +146,7 @@ public class GameConfig {
         this.users = users;
         this.reputation = reputation;
         this.moneyMalus = moneyMalus;
+        this.moneyBonus = moneyBonus;
         this.usersMalus = usersMalus;
         this.usersBonus = usersBonus;
         this.attackUsersMalus = attackUsersMalus;
