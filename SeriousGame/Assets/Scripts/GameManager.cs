@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GUI gui;
     [SerializeField] ShopGUI shop;
     [SerializeField] Log logManager;
+    [SerializeField] AttackView attackView;
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
@@ -156,12 +157,12 @@ public class GameManager : MonoBehaviour {
         startTime = Time.time;
         Time.timeScale = 0;
         shop.Init();
-        // load the attacks from the file
+        // load the attacks from the file and initialize the view
         AttacksJSON attacksContent = JsonUtility.FromJson<AttacksJSON>(attacksFileJSON.text);
         foreach (AttackInfo attack in attacksContent.attacks) {
             attacks.Add(attack.id, attack);
         }
-
+        attackView.Init(attacks.Count);
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
             LoadGameData(SaveSystem.LoadGame());
@@ -171,7 +172,11 @@ public class GameManager : MonoBehaviour {
             LoadGameConfig(gameConfigContent.gameConfig);
             // setup attacks, statistics and resistances
             foreach (AttackInfo attack in attacks.Values) {
-                if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0f, 0f, 0f));
+                if (attack.duration == 0) {
+                    if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, -1f, 0f, 0f));
+                } else {
+                    if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0f, 0f, 0f));
+                }
                 attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
             }
             ScheduleAttack((int)AttackCode.DOS, attackSchedule.Count);
@@ -276,10 +281,40 @@ public class GameManager : MonoBehaviour {
     // ATTACKS
 
     /**
+     * <summary>Return the stats of the specified attack</summary>
+     */
+    public AttackStats GetAttackStats(int id) {
+        if (!attackStats.ContainsKey(id)) return null;
+        return attackStats[id];
+    }
+
+    /**
+     * <summary>Return the stats for all the attacks</summary>
+     */
+    public AttackStats GetAttackStatsTotal() {
+        AttackStats stats = new AttackStats(0, 0, 0, 0);
+        foreach(AttackStats s in attackStats.Values) {
+            stats.n += s.n;
+            stats.hit += s.hit;
+            stats.miss += s.miss;
+        }
+        return stats;
+    }
+
+    /**
      * <summary>Return the specified attack</summary>
      */
     public AttackInfo GetAttack(int id) {
+        if (!attacks.ContainsKey(id)) return null;
         return attacks[id];
+    }
+
+    /**
+     * <summary>Return the resistance to the specified attack</summary>
+     */
+    public Resistance GetResistance(int id) {
+        if (!resistances.ContainsKey(id)) return null;
+        return resistances[id];
     }
 
     /**
@@ -376,6 +411,7 @@ public class GameManager : MonoBehaviour {
                 // start/update/end the attack
                 if (!attackSchedule[i].active) {
                     // start the attack
+                    attackStats[attackSchedule[i].id].n++;
                     if (Random.Range(0f, 1f) > GetMiss(attackSchedule[i].id)) {
                         // hit
                         attackStats[attackSchedule[i].id].hit++;
