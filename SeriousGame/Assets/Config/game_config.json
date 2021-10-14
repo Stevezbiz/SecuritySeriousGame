@@ -1,8 +1,9 @@
 {
 	"gameConfig": {
 		"totalTime": 0,
+		"endTime": 1440,
 		"negativeTime": 0,
-		"maxNegative": 60,
+		"maxNegative": 72,
 		"noAttackTime": 0,
 		"noAttackStep": 10,
 		"ongoingAttacks": 0,

@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
     float startTime;
     int updateTime = 1;
     int totalTime;
+    int endTime;
     int negativeTime;
     int maxNegative;
     int noAttackTime;
@@ -144,7 +145,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the data to be saved to resume correctly the game in future</summary>
      */
     public GameSave SaveGame() {
-        return new GameSave(new GameConfig(totalTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
+        return new GameSave(new GameConfig(totalTime, endTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
             money, users, reputation, moneyMalus, moneyBonus, usersMalus, usersBonus, attackUsersMalus, attackMoneyMalus, endurance, miss,
             usersGain, moneyGain, dateTime.ToString()), GetShopItemRecap(), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
             new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), new List<Resistance>(resistances.Values).ToArray());
@@ -181,6 +182,8 @@ public class GameManager : MonoBehaviour {
                 attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
             }
             ScheduleAttack((int)AttackCode.DOS, attackSchedule.Count);
+            ScheduleAttack((int)AttackCode.BRUTE_FORCE, attackSchedule.Count);
+            ScheduleAttack((int)AttackCode.WORM, attackSchedule.Count);
             userLevel = CalculateUserLevel();
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
@@ -257,9 +260,11 @@ public class GameManager : MonoBehaviour {
      * <summary>Checks if the game is over</summary>
      */
     void CheckGameOver() {
+        // game over if the time reaches the end
+        if (totalTime == endTime) GameOver();
         // game over if the money is negative for too long
         if (negativeTime > maxNegative) GameOver();
-        // game over if the reputation reaches 0 %
+        // game over if the reputation reaches 0%
         if (reputation == 0) GameOver();
     }
 
@@ -333,7 +338,33 @@ public class GameManager : MonoBehaviour {
      */
     void ActivateAttacks() {
         switch (totalTime) {
-            
+            case 120: // day 5
+                ScheduleAttack((int)AttackCode.MITM, attackSchedule.Count);
+                break;
+            case 168: // day 7
+                ScheduleAttack((int)AttackCode.VIRUS, attackSchedule.Count);
+                break;
+            case 240: // day 10
+                ScheduleAttack((int)AttackCode.SOCIAL_ENGINEERING, attackSchedule.Count);
+                break;
+            case 288: // day 12
+                ScheduleAttack((int)AttackCode.API_VULNERABILITY, attackSchedule.Count);
+                break;
+            case 360: // day 15
+                ScheduleAttack((int)AttackCode.DICTIONARY, attackSchedule.Count);
+                break;
+            case 408: // day 17
+                ScheduleAttack((int)AttackCode.PHISHING, attackSchedule.Count);
+                break;
+            case 480: // day 20
+                ScheduleAttack((int)AttackCode.SPYWARE, attackSchedule.Count);
+                break;
+            case 528: // day 22
+                ScheduleAttack((int)AttackCode.RAINBOW_TABLE, attackSchedule.Count);
+                break;
+            case 600: // day 25
+                ScheduleAttack((int)AttackCode.RANSOMWARE, attackSchedule.Count);
+                break;
             default:
                 break;
         }
@@ -478,6 +509,7 @@ public class GameManager : MonoBehaviour {
      */
     void LoadGameConfig(GameConfig gc) {
         totalTime = gc.totalTime;
+        endTime = gc.endTime;
         negativeTime = gc.negativeTime;
         maxNegative = gc.maxNegative;
         noAttackTime = gc.noAttackTime;

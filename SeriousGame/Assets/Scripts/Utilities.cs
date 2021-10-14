@@ -113,6 +113,7 @@ public class LogData {
 [System.Serializable]
 public class GameConfig {
     public int totalTime;
+    public int endTime;
     public int negativeTime;
     public int maxNegative;
     public int noAttackTime;
@@ -134,8 +135,9 @@ public class GameConfig {
     public float[] moneyGain;
     public string date;
 
-    public GameConfig(int totalTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel, float money, float users, float reputation, float moneyMalus, float moneyBonus, float usersMalus, float usersBonus, float attackUsersMalus, float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, string date) {
+    public GameConfig(int totalTime, int endTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel, float money, float users, float reputation, float moneyMalus, float moneyBonus, float usersMalus, float usersBonus, float attackUsersMalus, float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, string date) {
         this.totalTime = totalTime;
+        this.endTime = endTime;
         this.negativeTime = negativeTime;
         this.maxNegative = maxNegative;
         this.noAttackTime = noAttackTime;
