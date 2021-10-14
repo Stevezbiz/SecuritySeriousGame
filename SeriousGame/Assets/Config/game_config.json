@@ -16,7 +16,7 @@
 		"usersMalus": 1,
 		"usersBonus": 1,
 		"attackUsersMalus": 0,
-		"attackMoneyMalus": 1,
+		"attackMoneyMalus": 0,
 		"endurance": 1,
 		"miss": 0,
 		"usersGain": [0.1, 0.05, 0.03, 0.02, 0.01, 0.005],

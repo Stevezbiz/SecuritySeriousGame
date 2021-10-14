@@ -24,7 +24,7 @@ public class MoneyView : MonoBehaviour {
         float val;
         // set the money part
         moneyGainText.SetText(gameManager.GetMoneyGain().ToString());
-        val = (1 - gameManager.GetAttackMoneyMalus()) * 100;
+        val = gameManager.GetAttackMoneyMalus() * 100;
         attackMoneyMalusText.SetText("- " + val.ToString("0.##"));
         moneyMalusText.SetText("- " + gameManager.GetMoneyMalus().ToString());
         val = gameManager.GetActualMoneyGain();
