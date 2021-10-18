@@ -9,7 +9,7 @@ public class Shop : MonoBehaviour {
     [SerializeField] ShopItemDetail details;
     [SerializeField] GameManager gameManager;
 
-    List<int> indexes = new List<int>();
+    List<ShopItemCode> indexes = new List<ShopItemCode>();
 
     /**
      * <summary>Initialize the data structures</summary>
@@ -27,7 +27,7 @@ public class Shop : MonoBehaviour {
      * <summary>Load all the items in the list</summary>
      */
     public void Load() {
-        foreach (int id in indexes) {
+        foreach (ShopItemCode id in indexes) {
             AddShopRecord(gameManager.GetShopItem(id));
         }
     }

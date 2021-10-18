@@ -2,7 +2,7 @@
 	"powerUps":
 	[
 		{
-			"id": 0,
+			"id": 4,
 			"name": "Limite di password errate",
 			"description": "Inserire un limite ai tentativi di autenticazione fornisce una maggiore resistenza agli attacchi di brute-force e a quelli basati sui dizionari.",
 			"cost": 100,
@@ -33,7 +33,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 5,
 			"name": "Attesa dopo password errata",
 			"description": "Se un utente sbaglia password deve attendere un breve lasso di tempo prima di fare un nuovo tentativo. Può spazientire gli utenti più frettolosi ma è utile a prevenire attacchi di brute-force e anche attacchi basati su dizionari.",
 			"cost": 100,
@@ -64,7 +64,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 6,
 			"name": "Cambio password",
 			"description": "Obbligare gli utenti a cambiare password dopo un certo periodo di tempo può essere una seccatura, ma è necessario a prevenire attacchi di brute-force.",
 			"cost": 100,
@@ -95,7 +95,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 7,
 			"name": "Password complesse",
 			"description": "Obbligare gli utenti ad utilizzare password complesse può essere una seccatura, ma è necessario a prevenire attacchi di brute-force e attacchi basati su dizionari.",
 			"cost": 100,
@@ -126,7 +126,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 8,
 			"name": "Autenticazione a 2 fattori",
 			"description": "Aggiungere un passaggio all'autenticazione può spazientire gli utenti, ma il risultato è una maggiore resistenza ad attacchi MITM, brute-force e attacchi basati su dizionari.",
 			"cost": 500,
@@ -163,7 +163,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 9,
 			"name": "Utilizzare hash",
 			"description": "Utilizzare funzioni di hash per manipolare le password è una tecnica necessaria per contrastare attacchi brute-force e attacchi basati su dizionari.",
 			"cost": 200,
@@ -194,7 +194,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 10,
 			"name": "Utilizzare CAPTCHA",
 			"description": "Aggiungere un passaggio all'autenticazione degli utenti può essere una seccatura, ma è necessario a prevenire attacchi di brute-force e attacchi basati su dizionari.",
 			"cost": 200,

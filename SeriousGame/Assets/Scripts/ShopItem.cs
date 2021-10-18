@@ -10,7 +10,7 @@ public class ShopItem : MonoBehaviour {
     [SerializeField] GameObject pausedImage;
 
     ShopItemDetail details;
-    int id;
+    ShopItemCode id;
 
     /**
      * <summary>Populate the item of the shop with all the elements to show</summary>

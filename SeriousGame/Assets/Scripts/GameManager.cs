@@ -44,8 +44,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<int, AttackInfo> attacks = new Dictionary<int, AttackInfo>();
     Dictionary<int, Resistance> resistances = new Dictionary<int, Resistance>();
     Dictionary<int, AttackStats> attackStats = new Dictionary<int, AttackStats>();
-    Dictionary<int, ShopItemInfo> shopItems = new Dictionary<int, ShopItemInfo>();
-    int shopItemsId = 0;
+    Dictionary<ShopItemCode, ShopItemInfo> shopItems = new Dictionary<ShopItemCode, ShopItemInfo>();
 
     // Start is called before the first frame update
     void Start() {
@@ -490,7 +489,6 @@ public class GameManager : MonoBehaviour {
      * <summary>Inserts an item of the shop in the collection</summary>
      */
     public void AddToShopItems(ShopItemInfo sii) {
-        sii.id = shopItemsId++;
         if (shopItems.ContainsKey(sii.id)) shopItems[sii.id] = sii;
         else shopItems.Add(sii.id, sii);
     }
@@ -498,7 +496,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Return the specified item of the shop</summary>
      */
-    public ShopItemInfo GetShopItem(int id) {
+    public ShopItemInfo GetShopItem(ShopItemCode id) {
         return shopItems[id];
     }
 
@@ -566,7 +564,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Applies the effects of buying an item in the shop</summary>
      */
-    public void Purchase(int id) {
+    public void Purchase(ShopItemCode id) {
         shopItems[id].owned = true;
         money -= shopItems[id].cost;
         gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
@@ -575,7 +573,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Applies the effects of enabling an item in the shop</summary>
      */
-    public void EnableShopItem(int id) {
+    public void EnableShopItem(ShopItemCode id) {
         shopItems[id].on = true;
         ShopItemInfo sii = shopItems[id];
         if (sii.moneyMalus >= 0) moneyMalus += sii.moneyMalus;
@@ -594,7 +592,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Applies the effects of disabling an item in the shop</summary>
      */
-    public void DisableShopItem(int id) {
+    public void DisableShopItem(ShopItemCode id) {
         shopItems[id].on = false;
         ShopItemInfo sii = shopItems[id];
         if (sii.moneyMalus >= 0) moneyMalus -= sii.moneyMalus;

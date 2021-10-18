@@ -19,7 +19,7 @@ public class Resistance {
 
 [System.Serializable]
 public class ShopItemInfo {
-    public int id;
+    public ShopItemCode id;
     public string name;
     public string description;
     public int cost;
@@ -56,11 +56,11 @@ public class AttacksJSON {
 
 [System.Serializable]
 public class ShopItemRecap {
-    public int id;
+    public ShopItemCode id;
     public bool owned;
     public bool on;
 
-    public ShopItemRecap(int id, bool owned, bool on) {
+    public ShopItemRecap(ShopItemCode id, bool owned, bool on) {
         this.id = id;
         this.owned = owned;
         this.on = on;
@@ -225,6 +225,29 @@ public enum AttackCode {
     VIRUS,
     SPYWARE,
     RANSOMWARE
+}
+
+public enum ShopItemCode {
+    CONN_TIME_RED,
+    CONN_QUEUE_CIRC,
+    FIREWALL,
+    DNSSEC,
+    ERR_PASS_LIMIT,
+    ERR_PASS_WAIT,
+    CHANGE_PASS,
+    COMPLEX_PASS,
+    TWO_F_A,
+    HASH,
+    CAPTCHA,
+    IDS,
+    SOFTWARE_UPDATES,
+    ANTIVIRUS,
+    AUTH_SOFTWARE,
+    USER_AWARENESS,
+    USER_SUPPORT,
+    SERVER_UPGRADE,
+    SEC_TRAINING,
+    BACK_UP
 }
 
 public static class COLOR {

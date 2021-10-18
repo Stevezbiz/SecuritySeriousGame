@@ -15,7 +15,7 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] Log logManager;
 
     ShopItem parent;
-    int id;
+    ShopItemCode id;
 
     /**
      * <summary>Compose all the details of the item</summary>
@@ -49,7 +49,7 @@ public class ShopItemDetail : MonoBehaviour {
     /**
      * <summary>Populate the item of the shop with all the elements to show</summary>
      */
-    public void Load(int id, ShopItem parent) {
+    public void Load(ShopItemCode id, ShopItem parent) {
         this.id = id;
         this.parent = parent;
         ShopItemInfo sii = gameManager.GetShopItem(id);
