@@ -74,7 +74,7 @@ public class ShopItemDetail : MonoBehaviour {
         parent.Purchase();
         purchaseButton.SetActive(false);
         // print in the log
-        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.PURCHASE);
+        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.PURCHASE_ITEM);
         // enable automatically after purchase
         EnableItem();
     }
@@ -88,7 +88,7 @@ public class ShopItemDetail : MonoBehaviour {
         disableButton.SetActive(true);
         enableButton.SetActive(false);
         // print in the log
-        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.ENABLE);
+        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.ENABLE_ITEM);
     }
 
     /**
@@ -100,7 +100,7 @@ public class ShopItemDetail : MonoBehaviour {
         enableButton.SetActive(true);
         disableButton.SetActive(false);
         // print in the log
-        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.DISABLE);
+        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.DISABLE_ITEM);
     }
 
     /**

@@ -205,9 +205,11 @@ public enum ECode {
 
 
 public enum ActionCode {
-    PURCHASE,
-    ENABLE,
-    DISABLE
+    GAME_OVER,
+    CONTINUE,
+    PURCHASE_ITEM,
+    ENABLE_ITEM,
+    DISABLE_ITEM
 }
 
 public enum AttackCode {

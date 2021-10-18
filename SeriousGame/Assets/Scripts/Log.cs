@@ -73,13 +73,13 @@ public class Log : MonoBehaviour {
         string desc;
         // select the content of the log line
         switch (action) {
-            case ActionCode.PURCHASE:
+            case ActionCode.PURCHASE_ITEM:
                 desc = "Acquistato " + item;
                 break;
-            case ActionCode.ENABLE:
+            case ActionCode.ENABLE_ITEM:
                 desc = "Abilitato " + item;
                 break;
-            case ActionCode.DISABLE:
+            case ActionCode.DISABLE_ITEM:
                 desc = "Disabilitato " + item;
                 break;
             default:

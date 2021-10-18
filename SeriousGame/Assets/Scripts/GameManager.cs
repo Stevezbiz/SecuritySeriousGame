@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         Load();
+        DebugPrint();
     }
 
     // Update is called once per frame
@@ -139,7 +140,6 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the malus to users caused by the active attacks</summary>
      */
     public float GetAttackUsersMalus() {
-        Debug.Log("attackUsersMalus: " + attackUsersMalus);
         return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * Math.Round(attackUsersMalus, 2));
     }
 
@@ -184,11 +184,11 @@ public class GameManager : MonoBehaviour {
                 attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
             }
             ScheduleAttack((int)AttackCode.DOS, attackSchedule.Count);
-            DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.DOS].name);
+            DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.DOS].name, ActionCode.CONTINUE);
             ScheduleAttack((int)AttackCode.BRUTE_FORCE, attackSchedule.Count);
-            DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.BRUTE_FORCE].name);
+            DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.BRUTE_FORCE].name, ActionCode.CONTINUE);
             ScheduleAttack((int)AttackCode.WORM, attackSchedule.Count);
-            DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.WORM].name);
+            DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.WORM].name, ActionCode.CONTINUE);
             userLevel = CalculateUserLevel();
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
@@ -256,7 +256,7 @@ public class GameManager : MonoBehaviour {
      */
     void GameOver() {
         Time.timeScale = 0;
-        DisplayMessage("GAME OVER");
+        DisplayMessage("GAME OVER", ActionCode.GAME_OVER);
     }
 
     /**
@@ -343,39 +343,39 @@ public class GameManager : MonoBehaviour {
         switch (totalTime) {
             case 120: // day 5
                 ScheduleAttack((int)AttackCode.MITM, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.MITM].name);
+                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.MITM].name, ActionCode.CONTINUE);
                 break;
             case 168: // day 7
                 ScheduleAttack((int)AttackCode.VIRUS, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.VIRUS].name);
+                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.VIRUS].name, ActionCode.CONTINUE);
                 break;
             case 240: // day 10
                 ScheduleAttack((int)AttackCode.SOCIAL_ENGINEERING, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.SOCIAL_ENGINEERING].name);
+                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE);
                 break;
             case 288: // day 12
                 ScheduleAttack((int)AttackCode.API_VULNERABILITY, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.API_VULNERABILITY].name);
+                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE);
                 break;
             case 360: // day 15
                 ScheduleAttack((int)AttackCode.DICTIONARY, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.DICTIONARY].name);
+                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.DICTIONARY].name, ActionCode.CONTINUE);
                 break;
             case 408: // day 17
                 ScheduleAttack((int)AttackCode.PHISHING, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.PHISHING].name);
+                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.PHISHING].name, ActionCode.CONTINUE);
                 break;
             case 480: // day 20
                 ScheduleAttack((int)AttackCode.SPYWARE, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.SPYWARE].name);
+                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.SPYWARE].name, ActionCode.CONTINUE);
                 break;
             case 528: // day 22
                 ScheduleAttack((int)AttackCode.RAINBOW_TABLE, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.RAINBOW_TABLE].name);
+                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE);
                 break;
             case 600: // day 25
                 ScheduleAttack((int)AttackCode.RANSOMWARE, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.RANSOMWARE].name);
+                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.RANSOMWARE].name, ActionCode.CONTINUE);
                 break;
             default:
                 break;
@@ -400,7 +400,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the endurance against the specified attack</summary>
      */
     float GetEndurance(int id) {
-        return endurance + resistances[id].endurance;
+        return endurance + resistances[id].endurance + 0.5f * (1 - reputation);
     }
 
     /**
@@ -415,7 +415,7 @@ public class GameManager : MonoBehaviour {
         attackMoneyMalus += attacks[id].moneyMalus;
         reputation -= attacks[id].reputationMalus;
         // generate a message
-        DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description);
+        DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE);
     }
 
     /**
@@ -433,9 +433,9 @@ public class GameManager : MonoBehaviour {
      */
     void MissedAttack(int id) {
         // increment the reputation
-        reputation += 0.01f;
+        reputation += 0.02f;
         // generate a message
-        DisplayMessage("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name);
+        DisplayMessage("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name, ActionCode.CONTINUE);
     }
 
     /**
@@ -456,6 +456,7 @@ public class GameManager : MonoBehaviour {
                         attackStats[attackSchedule[i].id].hit++;
                         attackSchedule[i].active = true;
                         StartAttack(attackSchedule[i].id);
+                        miss += 0.1f;
                         // log print hit
                         logManager.LogPrintAttack(attacks[attackSchedule[i].id].name, true);
                     } else {
@@ -463,6 +464,7 @@ public class GameManager : MonoBehaviour {
                         attackStats[attackSchedule[i].id].miss++;
                         MissedAttack(attackSchedule[i].id);
                         ScheduleAttack(attackSchedule[i].id, i);
+                        miss = 0f;
                         // log print miss
                         logManager.LogPrintAttack(attacks[attackSchedule[i].id].name, false);
                     }
@@ -607,9 +609,30 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void DisplayMessage(string message) {
+    void DisplayMessage(string message, ActionCode action) {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load(message);
+        newWindow.GetComponent<WindowPopUp>().Load(message, action);
+    }
+
+    void DebugPrint() {
+        Dictionary<int, Resistance> res = new Dictionary<int, Resistance>();
+        foreach (ShopItemInfo sii in shopItems.Values) {
+            foreach(Resistance r in sii.resistances) {
+                if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 0f, 0f, 0f));
+                else {
+                    res[r.id].miss += r.miss;
+                    res[r.id].duration += r.duration;
+                    res[r.id].endurance += r.endurance;
+                }
+            }
+        }
+        foreach(Resistance r in res.Values) {
+            Debug.Log("attack: " + attacks[r.id].name + "\n" +
+            "tot duration: " + r.duration + "\n" +
+            "tot miss: " + r.miss + "\n" +
+            "tot endurance: " + r.endurance + "\n" +
+            "max time: " + attacks[r.id].maxTime);
+        }
     }
 }

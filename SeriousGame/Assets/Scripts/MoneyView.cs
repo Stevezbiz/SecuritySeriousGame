@@ -25,16 +25,16 @@ public class MoneyView : MonoBehaviour {
         // set the money part
         moneyGainText.SetText(gameManager.GetMoneyGain().ToString());
         val = gameManager.GetAttackMoneyMalus() * 100;
-        attackMoneyMalusText.SetText("- " + val.ToString("0.##"));
+        attackMoneyMalusText.SetText("- " + val.ToString("0."));
         moneyMalusText.SetText("- " + gameManager.GetMoneyMalus().ToString());
         val = gameManager.GetActualMoneyGain();
-        if (val >= 0) actualMoneyGainText.SetText(val.ToString("0.##"));
-        else actualMoneyGainText.SetText("- " + (-val).ToString("0.##"));
+        if (val >= 0) actualMoneyGainText.SetText(val.ToString("0."));
+        else actualMoneyGainText.SetText("- " + (-val).ToString("0."));
         // set the users part
         usersGainText.SetText(gameManager.GetUsersGain().ToString());
         val = (gameManager.GetUsersMod() - 1) * 100;
-        if (val >= 0) usersModText.SetText("+ " + val.ToString("0.##"));
-        else usersModText.SetText("- " + (-val).ToString("0.##"));
+        if (val >= 0) usersModText.SetText("+ " + val.ToString("0."));
+        else usersModText.SetText("- " + (-val).ToString("0."));
         attackUsersMalusText.SetText("- " + gameManager.GetAttackUsersMalus().ToString());
         val = gameManager.GetActualUsersGain();
         if (val >= 0) actualUsersGainText.SetText(val.ToString());
@@ -65,7 +65,7 @@ public class MoneyView : MonoBehaviour {
     public void MoneyGainButton() {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load("Guadagno utenti: numero di fondi guadagnati in base al numero di utenti che utilizzano il servizio");
+        newWindow.GetComponent<WindowPopUp>().Load("Guadagno utenti: numero di fondi guadagnati in base al numero di utenti che utilizzano il servizio", ActionCode.CONTINUE);
     }
 
     /**
@@ -74,7 +74,7 @@ public class MoneyView : MonoBehaviour {
     public void MoneyMalusButton() {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load("Costi: fondi spesi per mantenere attivi servizi e difese");
+        newWindow.GetComponent<WindowPopUp>().Load("Costi: fondi spesi per mantenere attivi servizi e difese", ActionCode.CONTINUE);
     }
 
     /**
@@ -83,7 +83,7 @@ public class MoneyView : MonoBehaviour {
     public void AttackMoneyMalusButton() {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load("Malus attacchi: riduzione applicata al guadagno utenti, dovuta agli attacchi in corso");
+        newWindow.GetComponent<WindowPopUp>().Load("Malus attacchi: riduzione applicata al guadagno utenti, dovuta agli attacchi in corso", ActionCode.CONTINUE);
     }
 
     /**
@@ -92,7 +92,7 @@ public class MoneyView : MonoBehaviour {
     public void UsersGainButton() {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load("Nuovi utenti: numero di nuovi utenti che si iscrivono al servizio");
+        newWindow.GetComponent<WindowPopUp>().Load("Nuovi utenti: numero di nuovi utenti che si iscrivono al servizio", ActionCode.CONTINUE);
     }
 
     /**
@@ -101,7 +101,7 @@ public class MoneyView : MonoBehaviour {
     public void UsersModButton() {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load("Modificatore usabilità: modificatore applicato al numero di nuovi utenti. Indica il grado di semplicità/difficoltà che gli utenti incontrano nell'utilizzare il servizio");
+        newWindow.GetComponent<WindowPopUp>().Load("Modificatore usabilità: modificatore applicato al numero di nuovi utenti. Indica il grado di semplicità/difficoltà che gli utenti incontrano nell'utilizzare il servizio", ActionCode.CONTINUE);
     }
 
     /**
@@ -110,6 +110,6 @@ public class MoneyView : MonoBehaviour {
     public void AttackUsersMalusButton() {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load("Malus attacchi: riduzione applicata al numero di nuovi utenti, dovuta agli attacchi in corso");
+        newWindow.GetComponent<WindowPopUp>().Load("Malus attacchi: riduzione applicata al numero di nuovi utenti, dovuta agli attacchi in corso", ActionCode.CONTINUE);
     }
 }

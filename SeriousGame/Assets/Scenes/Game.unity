@@ -22692,6 +22692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 709143596}
+  windowPopUp: {fileID: 7429000584695828995, guid: 2fa7e241c74cfd14683799803d5d6f00, type: 3}
 --- !u!114 &1784087731
 MonoBehaviour:
   m_ObjectHideFlags: 0
