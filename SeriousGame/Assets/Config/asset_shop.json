@@ -10,6 +10,7 @@
 			"usersMod": 2,
 			"owned": false,
 			"on": false,
+			"locked": false,
 			"resistances":
 			[
 				{
@@ -18,7 +19,8 @@
 					"miss": 0.1,
 					"endurance": 0.2
 				}
-			]
+			],
+			"requirements": []
 		},
 		{
 			"id": 18,
@@ -29,6 +31,7 @@
 			"usersMod": 0,
 			"owned": false,
 			"on": false,
+			"locked": false,
 			"resistances":
 			[
 				{
@@ -61,7 +64,8 @@
 					"miss": 0.2,
 					"endurance": 0.3
 				}
-			]
+			],
+			"requirements": []
 		},
 		{
 			"id": 19,
@@ -72,6 +76,7 @@
 			"usersMod": 0,
 			"owned": false,
 			"on": false,
+			"locked": false,
 			"resistances":
 			[
 				{
@@ -86,7 +91,8 @@
 					"miss": 0,
 					"endurance": 0
 				}
-			]
+			],
+			"requirements": []
 		}
 	]
 }

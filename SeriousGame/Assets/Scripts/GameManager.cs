@@ -507,7 +507,7 @@ public class GameManager : MonoBehaviour {
         List<ShopItemRecap> sir = new List<ShopItemRecap>();
 
         foreach (ShopItemInfo sii in shopItems.Values) {
-            sir.Add(new ShopItemRecap(sii.id, sii.owned, sii.on));
+            sir.Add(new ShopItemRecap(sii.id, sii.owned, sii.on, sii.locked));
         }
 
         return sir.ToArray();
@@ -551,6 +551,7 @@ public class GameManager : MonoBehaviour {
         foreach (ShopItemRecap s in gameSave.sir) {
             shopItems[s.id].owned = s.owned;
             shopItems[s.id].on = s.on;
+            shopItems[s.id].locked = s.locked;
         }
         // load the logs
         logs = new List<LogLine>(gameSave.logs.lines);
@@ -607,6 +608,20 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary>Returns true if the specified item of the shop is owned</summary>
+     */
+    public bool ShopItemIsOwned(ShopItemCode id) {
+        return shopItems[id].owned;
+    }
+
+    /**
+     * <summary>Unlocks the item of the shop</summary>
+     */
+    public void ShopItemUnlock(ShopItemCode id) {
+        shopItems[id].locked = false;
+    }
+
     void DisplayMessage(string message, ActionCode action) {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
@@ -618,11 +633,9 @@ public class GameManager : MonoBehaviour {
         foreach (ShopItemInfo sii in shopItems.Values) {
             foreach(Resistance r in sii.resistances) {
                 if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 0f, 0f, 0f));
-                else {
-                    res[r.id].miss += r.miss;
-                    res[r.id].duration += r.duration;
-                    res[r.id].endurance += r.endurance;
-                }
+                res[r.id].miss += r.miss;
+                res[r.id].duration += r.duration;
+                res[r.id].endurance += r.endurance;
             }
         }
         foreach(Resistance r in res.Values) {

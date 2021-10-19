@@ -7,10 +7,15 @@ using UnityEngine.UI;
 public class ShopItemDetail : MonoBehaviour {
     [SerializeField] TextMeshProUGUI titleText;
     [SerializeField] TextMeshProUGUI descriptionText;
-    [SerializeField] TextMeshProUGUI detailsText;
+    [SerializeField] TextMeshProUGUI requirementsText;
+    [SerializeField] TextMeshProUGUI resistancesText;
+    [SerializeField] TextMeshProUGUI costsText;
     [SerializeField] GameObject purchaseButton;
     [SerializeField] GameObject enableButton;
     [SerializeField] GameObject disableButton;
+    [SerializeField] GameObject lockImage;
+    [SerializeField] TextMeshProUGUI purchaseText;
+    [SerializeField] Outline purchaseOutline;
     [SerializeField] GameManager gameManager;
     [SerializeField] Log logManager;
 
@@ -23,27 +28,34 @@ public class ShopItemDetail : MonoBehaviour {
     void ComposeDetails(ShopItemInfo sii) {
         titleText.SetText(sii.name + "\n" + sii.cost.ToString() + " Fondi");
         descriptionText.SetText(sii.description);
+        // set the technical details about requirements
+        string requirements = "";
+        if (sii.locked) {
+            requirements += "Per sbloccare questo potenziamento devi prima acquistare:\n";
+            foreach (ShopItemCode code in sii.requirements) {
+                requirements += "    " + gameManager.GetShopItem(code).name + "\n";
+            }
+        }
+        requirementsText.SetText(requirements);
         // set the technical details about resistances
-        string details = "Resistenze:\n";
+        string resistances = "";
+        resistances += "Resistenze:\n";
         foreach (Resistance res in sii.resistances) {
-            details += "    " + gameManager.GetAttack(res.id).name + "\n";
-            if (res.duration != 0) details += "        durata dell'attacco -" + (res.duration * 100) + "%\n";
-            if (res.miss != 0) details += "        probabilità di bloccare l'attacco +" + (res.miss * 100) + "%\n";
-            if (res.endurance != 0) details += "        tempo medio tra 2 attacchi consecutivi +" + (res.endurance * 100) + "%\n";
+            resistances += "    " + gameManager.GetAttack(res.id).name + "\n";
+            if (res.duration != 0) resistances += "        durata dell'attacco -" + (res.duration * 100) + "%\n";
+            if (res.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (res.miss * 100) + "%\n";
+            if (res.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (res.endurance * 100) + "%\n";
         }
-        if (sii.resistances.Length == 0) details += "nessuna\n";
+        if (sii.resistances.Length == 0) resistances += "nessuna\n";
+        if (sii.moneyMalus < 0) resistances += "Guadagno aggiuntivo: " + (-sii.moneyMalus) + " F/h\n";
+        if (sii.usersMod > 1) resistances += "Prestazioni e usabilità: +" + ((sii.usersMod - 1) * 100) + "%\n";
+        resistancesText.SetText(resistances);
         // set the technical details about costs and usability
-        if (sii.moneyMalus < 0) {
-            details += "Costo: 0 F/h";
-            details += "\nGuadagno aggiuntivo: " + (-sii.moneyMalus) + " F/h";
-        } else {
-            details += "Costo: " + sii.moneyMalus + " F/h";
-        }
-        if (sii.usersMod != 0) {
-            if (sii.usersMod < 1) details += "\nPrestazioni e usabilità: -" + (sii.usersMod * 100) + "%\n";
-            else details += "\nPrestazioni e usabilità: +" + ((sii.usersMod - 1) * 100) + "%\n";
-        }
-        detailsText.SetText(details);
+        string costs = "";
+        if (sii.moneyMalus < 0) costs += "Costo: 0 F/h\n";
+        else costs += "Costo: " + sii.moneyMalus + " F/h\n";
+        if (sii.usersMod != 0 && sii.usersMod < 1) costs += "Prestazioni e usabilità: -" + (sii.usersMod * 100) + "%\n";
+        costsText.SetText(costs);
     }
 
     /**
@@ -53,15 +65,32 @@ public class ShopItemDetail : MonoBehaviour {
         this.id = id;
         this.parent = parent;
         ShopItemInfo sii = gameManager.GetShopItem(id);
+        if (sii.locked) {
+            bool ok = true;
+            foreach (ShopItemCode code in sii.requirements) {
+                if (!gameManager.ShopItemIsOwned(code)) ok = false;
+            }
+            if (ok) gameManager.ShopItemUnlock(id);
+        }
         ComposeDetails(sii);
         // set the visual aspect
         purchaseButton.SetActive(false);
         enableButton.SetActive(false);
         disableButton.SetActive(false);
+        purchaseButton.GetComponentInChildren<Button>().interactable = true;
+        purchaseText.color = new Color(0f, 1f, 0f, 1f);
+        purchaseOutline.effectColor = new Color(0f, 1f, 0f, 1f);
+        lockImage.SetActive(false);
         if (sii.owned) {
             if (sii.on) disableButton.SetActive(true);
             else enableButton.SetActive(true);
         } else {
+            if (sii.locked) {
+                purchaseButton.GetComponentInChildren<Button>().interactable = false;
+                purchaseText.color = new Color(0f, 1f, 0f, .4f);
+                purchaseOutline.effectColor = new Color(0f, 1f, 0f, .4f);
+                lockImage.SetActive(true);
+            }
             purchaseButton.SetActive(true);
         }
     }

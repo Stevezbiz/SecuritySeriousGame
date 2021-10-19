@@ -27,7 +27,9 @@ public class ShopItemInfo {
     public float usersMod;
     public bool owned;
     public bool on;
+    public bool locked;
     public Resistance[] resistances;
+    public ShopItemCode[] requirements;
 }
 
 [System.Serializable]
@@ -59,11 +61,13 @@ public class ShopItemRecap {
     public ShopItemCode id;
     public bool owned;
     public bool on;
+    public bool locked;
 
-    public ShopItemRecap(ShopItemCode id, bool owned, bool on) {
+    public ShopItemRecap(ShopItemCode id, bool owned, bool on, bool locked) {
         this.id = id;
         this.owned = owned;
         this.on = on;
+        this.locked = locked;
     }
 }
 
