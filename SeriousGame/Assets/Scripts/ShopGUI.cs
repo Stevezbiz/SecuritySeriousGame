@@ -9,6 +9,7 @@ public class ShopGUI : MonoBehaviour {
     [SerializeField] GameObject assetShop;
     [SerializeField] GameObject servicesShop;
     [SerializeField] GameObject details;
+    [SerializeField] GameObject bottomPanel;
 
     float oldTimeScale = 1f;
 
@@ -40,6 +41,7 @@ public class ShopGUI : MonoBehaviour {
     public void OpenShop() {
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0;
+        bottomPanel.SetActive(false);
         gameObject.SetActive(true);
     }
 
@@ -55,5 +57,6 @@ public class ShopGUI : MonoBehaviour {
         assetShop.SetActive(false);
         servicesShop.SetActive(false);
         details.SetActive(false);
+        bottomPanel.SetActive(true);
     }
 }

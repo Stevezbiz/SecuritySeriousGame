@@ -9,6 +9,7 @@ public class Log : MonoBehaviour {
     [SerializeField] RectTransform content;
     [SerializeField] GameObject next;
     [SerializeField] GameObject previous;
+    [SerializeField] GameObject bottomPanel;
 
     float oldTimeScale;
     int nLines = 0;
@@ -105,6 +106,7 @@ public class Log : MonoBehaviour {
         PrintCurrentPage();
         // set the aspect of the navigation elements
         if (currentPage > 1) previous.SetActive(true);
+        bottomPanel.SetActive(false);
         gameObject.SetActive(true);
     }
 
@@ -116,6 +118,7 @@ public class Log : MonoBehaviour {
         gameObject.SetActive(false);
         previous.SetActive(false);
         next.SetActive(false);
+        bottomPanel.SetActive(true);
     }
 
     /**

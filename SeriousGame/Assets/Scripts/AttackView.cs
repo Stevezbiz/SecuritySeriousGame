@@ -13,6 +13,7 @@ public class AttackView : MonoBehaviour {
     [SerializeField] TextMeshProUGUI durationText;
     [SerializeField] TextMeshProUGUI missText;
     [SerializeField] TextMeshProUGUI enduranceText;
+    [SerializeField] GameObject bottomPanel;
 
     float oldTimeScale = 1f;
 
@@ -76,6 +77,7 @@ public class AttackView : MonoBehaviour {
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0;
         Load();
+        bottomPanel.SetActive(false);
         gameObject.SetActive(true);
     }
 
@@ -85,5 +87,6 @@ public class AttackView : MonoBehaviour {
     public void CloseView() {
         Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);
+        bottomPanel.SetActive(true);
     }
 }
