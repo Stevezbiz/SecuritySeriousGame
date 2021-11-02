@@ -9,6 +9,7 @@ public class EmployeeItem : MonoBehaviour {
 
     EmployeeCode id;
     EmployeeView parent;
+
     /**
      * <summary>Populate the item with all the elements to show</summary>
      */
@@ -25,5 +26,19 @@ public class EmployeeItem : MonoBehaviour {
      */
     public void OnClick() {
         parent.ComposeDetails(id);
+    }
+
+    /**
+     * <summary>Applies the effects of hiring an employee</summary>
+     */
+    public void Hire() {
+        statusText.SetText("ASSUNTO");
+    }
+
+    /**
+     * <summary>Applies the effects of firing an employee</summary>
+     */
+    public void Fire() {
+        statusText.SetText("DISPONIBILE");
     }
 }

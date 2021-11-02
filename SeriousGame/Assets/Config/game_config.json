@@ -8,6 +8,8 @@
 		"noAttackStep": 10,
 		"ongoingAttacks": 0,
 		"userLevel": 0,
+		"totalEmployees": 1,
+		"hiredEmployees": 1,
 		"money": 700,
 		"users": 100,
 		"reputation": 0.5,
@@ -21,6 +23,7 @@
 		"miss": 0,
 		"usersGain": [0.1, 0.05, 0.03, 0.02, 0.01, 0.005],
 		"moneyGain": [20, 30, 40, 50, 60, 70],
+		"employeeGoals": [0, 2000, 60000, 2000000],
 		"date": "1/1/2000"
 	}
 }

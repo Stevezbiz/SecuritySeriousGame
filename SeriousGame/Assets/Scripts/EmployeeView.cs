@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Image = UnityEngine.UI.Image;
 
 public class EmployeeView : MonoBehaviour {
     [SerializeField] TextAsset employeesFileJSON;
@@ -13,13 +14,17 @@ public class EmployeeView : MonoBehaviour {
     [SerializeField] TextMeshProUGUI descriptionText;
     [SerializeField] TextMeshProUGUI statsText;
     [SerializeField] TextMeshProUGUI costText;
+    [SerializeField] TextMeshProUGUI countText;
     [SerializeField] GameObject notAvailable;
     [SerializeField] GameObject hireButton;
     [SerializeField] GameObject fireButton;
+    [SerializeField] Image employeeIcon;
 
     float oldTimeScale = 1f;
+    bool full = false;
     EmployeeCode current = EmployeeCode.GIGI;
     List<EmployeeCode> indexes = new List<EmployeeCode>();
+    Dictionary<EmployeeCode, EmployeeItem> employees = new Dictionary<EmployeeCode, EmployeeItem>();
 
     /**
      * <summary>Initialize the data structures</summary>
@@ -49,6 +54,7 @@ public class EmployeeView : MonoBehaviour {
         GameObject newRecord = Instantiate(employeeItem);
         newRecord.transform.SetParent(content, false);
         newRecord.GetComponent<EmployeeItem>().Load(e, this);
+        employees[e.id] = newRecord.GetComponent<EmployeeItem>();
     }
 
     /**
@@ -82,14 +88,27 @@ public class EmployeeView : MonoBehaviour {
         descriptionText.SetText(e.description);
         statsText.SetText("");
         costText.SetText("Costo: " + e.cost + " F/h");
+        int tot = gameManager.GetTotalEmployees();
+        int hired = gameManager.GetHiredEmployees();
+        if (tot == hired) full = true;
+        else full = false;
+        countText.SetText(hired + "/" + tot);
+        if (full) {
+            countText.color = COLOR.YELLOW;
+            employeeIcon.color = COLOR.YELLOW;
+            notAvailable.SetActive(true);
+            hireButton.SetActive(false);
+        } else {
+            countText.color = COLOR.GREEN;
+            employeeIcon.color = COLOR.GREEN;
+            notAvailable.SetActive(false);
+            hireButton.SetActive(true);
+        }
+        fireButton.SetActive(false);
         if (e.owned) {
             notAvailable.SetActive(false);
             hireButton.SetActive(false);
             fireButton.SetActive(true);
-        } else {
-            notAvailable.SetActive(true);
-            hireButton.SetActive(true);
-            fireButton.SetActive(false);
         }
     }
 
@@ -98,6 +117,7 @@ public class EmployeeView : MonoBehaviour {
      */
     public void Hire() {
         gameManager.HireEmployee(current);
+        employees[current].Hire();
         ComposeDetails(current);
     }
 
@@ -106,6 +126,7 @@ public class EmployeeView : MonoBehaviour {
      */
     public void Fire() {
         gameManager.FireEmployee(current);
+        employees[current].Fire();
         ComposeDetails(current);
     }
 }

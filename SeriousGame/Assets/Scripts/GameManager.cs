@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour {
     int noAttackStep;
     int ongoingAttacks;
     int userLevel;
+    int totalEmployees;
+    int hiredEmployees;
     float money;
     float users;
     float reputation;
@@ -38,6 +40,7 @@ public class GameManager : MonoBehaviour {
     float miss;
     float[] usersGain;
     float[] moneyGain;
+    float[] employeeGoals;
     DateTime dateTime;
 
     List<LogLine> logs = new List<LogLine>();
@@ -71,6 +74,7 @@ public class GameManager : MonoBehaviour {
             money = CalculateMoney();
             users = CalculateUsers();
             reputation = CalculateReputation();
+            totalEmployees = CalculateNEmployees();
             // refresh
             gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
             // game over check
@@ -88,8 +92,9 @@ public class GameManager : MonoBehaviour {
      */
     public GameSave SaveGame() {
         return new GameSave(new GameConfig(totalTime, endTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
-            money, users, reputation, moneyMalus, moneyBonus, usersMalus, usersBonus, attackUsersMalus, attackMoneyMalus, endurance, miss,
-            usersGain, moneyGain, dateTime.ToString()), ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
+            totalEmployees, hiredEmployees, money, users, reputation, moneyMalus, moneyBonus, usersMalus, usersBonus, attackUsersMalus,
+            attackMoneyMalus, endurance, miss, usersGain, moneyGain, employeeGoals, dateTime.ToString()), ShopUtils.GetShopItemRecap(shopItems),
+            EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
             new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
 
@@ -144,6 +149,8 @@ public class GameManager : MonoBehaviour {
         noAttackStep = gc.noAttackStep;
         ongoingAttacks = gc.ongoingAttacks;
         userLevel = gc.userLevel;
+        totalEmployees = gc.totalEmployees;
+        hiredEmployees = gc.hiredEmployees;
         money = gc.money;
         users = gc.users;
         reputation = gc.reputation;
@@ -157,6 +164,7 @@ public class GameManager : MonoBehaviour {
         miss = gc.miss;
         usersGain = gc.usersGain;
         moneyGain = gc.moneyGain;
+        employeeGoals = gc.employeeGoals;
         dateTime = DateTime.Parse(gc.date);
     }
 
@@ -482,6 +490,7 @@ public class GameManager : MonoBehaviour {
      */
     public void HireEmployee(EmployeeCode id) {
         employees[id].owned = true;
+        hiredEmployees++;
     }
 
     /**
@@ -489,6 +498,7 @@ public class GameManager : MonoBehaviour {
      */
     public void FireEmployee(EmployeeCode id) {
         employees[id].owned = false;
+        hiredEmployees--;
     }
 
     // MISC
@@ -556,6 +566,14 @@ public class GameManager : MonoBehaviour {
         return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * Math.Round(attackUsersMalus, 2));
     }
 
+    public int GetTotalEmployees() {
+        return totalEmployees;
+    }
+
+    public int GetHiredEmployees() {
+        return hiredEmployees;
+    }
+
     /**
      * <summary>Return the money updated</summary>
      */
@@ -605,6 +623,11 @@ public class GameManager : MonoBehaviour {
         // normalize the reputation in [0, 1]
         if (rep > 1f) return 1f;
         else return rep;
+    }
+
+    int CalculateNEmployees() {
+        if (employeeGoals[totalEmployees] >= users) return totalEmployees + 1;
+        return totalEmployees;
     }
 
     /**

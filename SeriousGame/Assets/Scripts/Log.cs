@@ -52,10 +52,10 @@ public class Log : MonoBehaviour {
         // select the content and the aspect of the log line
         if (hit) {
             desc = "Individuato attacco " + attack;
-            color = COLOR.LOG_RED;
+            color = COLOR.RED;
         } else {
             desc = "Sventato attacco " + attack;
-            color = COLOR.LOG_BLUE;
+            color = COLOR.BLUE;
         }
         // add the line to logs
         gameManager.AddToLogs(new LogLine(dateTime + desc, Serialize(color)));
@@ -87,7 +87,7 @@ public class Log : MonoBehaviour {
                 return;
         }
         // add the line to logs
-        gameManager.AddToLogs(new LogLine(dateTime + desc, Serialize(COLOR.LOG_GREEN)));
+        gameManager.AddToLogs(new LogLine(dateTime + desc, Serialize(COLOR.GREEN)));
         if (nLines == nLinesStep) {
             nLines = 0;
             nPages++;

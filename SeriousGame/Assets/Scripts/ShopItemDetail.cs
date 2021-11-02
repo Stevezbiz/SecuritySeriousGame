@@ -78,8 +78,8 @@ public class ShopItemDetail : MonoBehaviour {
         enableButton.SetActive(false);
         disableButton.SetActive(false);
         purchaseButton.GetComponentInChildren<Button>().interactable = true;
-        purchaseText.color = new Color(0f, 1f, 0f, 1f);
-        purchaseOutline.effectColor = new Color(0f, 1f, 0f, 1f);
+        purchaseText.color = COLOR.GREEN;
+        purchaseOutline.effectColor = COLOR.GREEN;
         lockImage.SetActive(false);
         if (sii.owned) {
             if (sii.on) disableButton.SetActive(true);
@@ -87,8 +87,8 @@ public class ShopItemDetail : MonoBehaviour {
         } else {
             if (sii.locked) {
                 purchaseButton.GetComponentInChildren<Button>().interactable = false;
-                purchaseText.color = new Color(0f, 1f, 0f, .4f);
-                purchaseOutline.effectColor = new Color(0f, 1f, 0f, .4f);
+                purchaseText.color = COLOR.GREEN_DISABLED;
+                purchaseOutline.effectColor = COLOR.GREEN_DISABLED;
                 lockImage.SetActive(true);
             }
             purchaseButton.SetActive(true);

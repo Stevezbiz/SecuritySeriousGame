@@ -15,8 +15,8 @@ public class MainMenu : MonoBehaviour {
         string path = Application.persistentDataPath + "/savedata.data";
         if (!System.IO.File.Exists(path)) {
             loadButton.interactable = false;
-            loadText.color = new Color(0f, 1f, 0f, .4f);
-            loadOutline.effectColor = new Color(0f, 1f, 0f, .4f);
+            loadText.color = COLOR.GREEN_DISABLED;
+            loadOutline.effectColor = COLOR.GREEN_DISABLED;
         }
     }
 

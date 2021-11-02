@@ -57,6 +57,8 @@ public class GameConfig {
     public int noAttackStep;
     public int ongoingAttacks;
     public int userLevel;
+    public int totalEmployees;
+    public int hiredEmployees;
     public float money;
     public float users;
     public float reputation;
@@ -70,9 +72,12 @@ public class GameConfig {
     public float miss;
     public float[] usersGain;
     public float[] moneyGain;
+    public float[] employeeGoals;
     public string date;
 
-    public GameConfig(int totalTime, int endTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel, float money, float users, float reputation, float moneyMalus, float moneyBonus, float usersMalus, float usersBonus, float attackUsersMalus, float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, string date) {
+    public GameConfig(int totalTime, int endTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel,
+        int totalEmployees, int hiredEmployees, float money, float users, float reputation, float moneyMalus, float moneyBonus, float usersMalus, float usersBonus, float attackUsersMalus,
+        float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, float[] employeeGoals, string date) {
         this.totalTime = totalTime;
         this.endTime = endTime;
         this.negativeTime = negativeTime;
@@ -81,6 +86,8 @@ public class GameConfig {
         this.noAttackStep = noAttackStep;
         this.ongoingAttacks = ongoingAttacks;
         this.userLevel = userLevel;
+        this.totalEmployees = totalEmployees;
+        this.hiredEmployees = hiredEmployees;
         this.money = money;
         this.users = users;
         this.reputation = reputation;
@@ -94,6 +101,7 @@ public class GameConfig {
         this.miss = miss;
         this.usersGain = usersGain;
         this.moneyGain = moneyGain;
+        this.employeeGoals = employeeGoals;
         this.date = date;
     }
 }
@@ -119,7 +127,9 @@ public enum ActionCode {
 }
 
 public static class COLOR {
-    public static Color LOG_RED = new Color(1f, .25f, .0f, 1f);
-    public static Color LOG_BLUE = new Color(.0f, 1f, 1f, 1f);
-    public static Color LOG_GREEN = new Color(.0f, 1f, .0f, 1f);
+    public static Color RED = new Color(1f, .25f, .0f, 1f);
+    public static Color BLUE = new Color(.0f, 1f, 1f, 1f);
+    public static Color GREEN = new Color(.0f, 1f, .0f, 1f);
+    public static Color YELLOW = new Color(1f, .8f, .0f, 1f);
+    public static Color GREEN_DISABLED = new Color(.0f, 1f, .0f, .4f);
 }
