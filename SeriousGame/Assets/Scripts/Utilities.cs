@@ -3,96 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Resistance {
-    public AttackCode id;
-    public float duration;
-    public float miss;
-    public float endurance;
+public class LogLine {
+    public string line;
+    public float[] color;
 
-    public Resistance(AttackCode id, float duration, float miss, float endurance) {
-        this.id = id;
-        this.duration = duration;
-        this.miss = miss;
-        this.endurance = endurance;
+    public LogLine(string line, float[] color) {
+        this.line = line;
+        this.color = color;
     }
 }
 
 [System.Serializable]
-public class ShopItemInfo {
-    public ShopItemCode id;
-    public string name;
-    public string description;
-    public int cost;
-    public float moneyMalus;
-    public float usersMod;
-    public bool owned;
-    public bool on;
-    public bool locked;
-    public Resistance[] resistances;
-    public ShopItemCode[] requirements;
-}
+public class LogData {
+    public LogLine[] lines;
+    public int nLines;
+    public int nPages;
 
-[System.Serializable]
-public class ShopJSON {
-    public ShopItemInfo[] powerUps;
-}
-
-[System.Serializable]
-public class EmployeeInfo {
-    public EmployeeCode id;
-    public string name;
-    public string description;
-    public int cost;
-    public bool owned;
-}
-
-[System.Serializable]
-public class EmployeesJSON {
-    public EmployeeInfo[] employees;
-}
-
-[System.Serializable]
-public class EmployeeRecap {
-    public EmployeeCode id;
-    public bool owned;
-
-    public EmployeeRecap(EmployeeCode id, bool owned) {
-        this.id = id;
-        this.owned = owned;
-    }
-}
-
-[System.Serializable]
-public class AttackInfo {
-    public AttackCode id;
-    public string name;
-    public string description;
-    public float moneyLoss;
-    public float usersLoss;
-    public float moneyMalus;
-    public float usersMalus;
-    public float reputationMalus;
-    public float maxTime;
-    public float duration;
-}
-
-[System.Serializable]
-public class AttacksJSON {
-    public AttackInfo[] attacks;
-}
-
-[System.Serializable]
-public class ShopItemRecap {
-    public ShopItemCode id;
-    public bool owned;
-    public bool on;
-    public bool locked;
-
-    public ShopItemRecap(ShopItemCode id, bool owned, bool on, bool locked) {
-        this.id = id;
-        this.owned = owned;
-        this.on = on;
-        this.locked = locked;
+    public LogData(LogLine[] lines, int nLines, int nPages) {
+        this.lines = lines;
+        this.nLines = nLines;
+        this.nPages = nPages;
     }
 }
 
@@ -114,30 +44,6 @@ public class GameSave {
         this.aStats = aStats;
         this.aSchedule = aSchedule;
         this.res = res;
-    }
-}
-
-[System.Serializable]
-public class LogLine {
-    public string line;
-    public float[] color;
-
-    public LogLine(string line, float[] color) {
-        this.line = line;
-        this.color = color;
-    }
-}
-
-[System.Serializable]
-public class LogData {
-    public LogLine[] lines;
-    public int nLines;
-    public int nPages;
-
-    public LogData(LogLine[] lines, int nLines, int nPages) {
-        this.lines = lines;
-        this.nLines = nLines;
-        this.nPages = nPages;
     }
 }
 
@@ -197,36 +103,6 @@ public class GameConfigJSON {
     public GameConfig gameConfig;
 }
 
-[System.Serializable]
-public class AttackRecap {
-    public AttackCode id;
-    public int duration;
-    public bool active;
-    public int timer;
-
-    public AttackRecap(AttackCode id, int duration, bool active, int timer) {
-        this.id = id;
-        this.duration = duration;
-        this.active = active;
-        this.timer = timer;
-    }
-}
-
-[System.Serializable]
-public class AttackStats {
-    public AttackCode id;
-    public int n;
-    public int hit;
-    public int miss;
-
-    public AttackStats(AttackCode id, int n, int hit, int miss) {
-        this.id = id;
-        this.n = n;
-        this.hit = hit;
-        this.miss = miss;
-    }
-}
-
 // error codes used in the project
 public enum ECode {
     OK, // no error
@@ -234,58 +110,12 @@ public enum ECode {
     INSUFFICIENT_MONEY // insufficient money to do a purchase
 };
 
-
 public enum ActionCode {
     GAME_OVER,
     CONTINUE,
     PURCHASE_ITEM,
     ENABLE_ITEM,
     DISABLE_ITEM
-}
-
-public enum AttackCode {
-    DOS,
-    MITM,
-    BRUTE_FORCE,
-    DICTIONARY,
-    RAINBOW_TABLE,
-    API_VULNERABILITY,
-    SOCIAL_ENGINEERING,
-    PHISHING,
-    WORM,
-    VIRUS,
-    SPYWARE,
-    RANSOMWARE
-}
-
-public enum ShopItemCode {
-    CONN_TIME_RED,
-    CONN_QUEUE_CIRC,
-    FIREWALL,
-    DNSSEC,
-    ERR_PASS_LIMIT,
-    ERR_PASS_WAIT,
-    CHANGE_PASS,
-    COMPLEX_PASS,
-    TWO_F_A,
-    HASH,
-    CAPTCHA,
-    IDS,
-    SOFTWARE_UPDATES,
-    ANTIVIRUS,
-    AUTH_SOFTWARE,
-    USER_AWARENESS,
-    USER_SUPPORT,
-    SERVER_UPGRADE,
-    SEC_TRAINING,
-    BACK_UP
-}
-
-public enum EmployeeCode {
-    GIGI,
-    ANTONIO,
-    SARA,
-    GIULIA
 }
 
 public static class COLOR {

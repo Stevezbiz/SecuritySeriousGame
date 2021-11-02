@@ -81,68 +81,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    /**
-     * <summary>Return a string containing the date in the format 'dd-MMM-yyyy-HH:mm'</summary>
-     */
-    public string GetDateTime() {
-        return dateTime.ToString("dd-MMM-yyyy-HH:mm");
-    }
-
-    /**
-     * <summary>Return the actual gain of money</summary>
-     */
-    public float GetActualMoneyGain() {
-        return (moneyGain[userLevel] + moneyBonus) * (1 - attackMoneyMalus) - moneyMalus;
-    }
-
-    /**
-     * <summary>Return the gain of money based on the number of users</summary>
-     */
-    public float GetMoneyGain() {
-        return moneyGain[userLevel] + moneyBonus;
-    }
-
-    /**
-     * <summary>Return the malus to money caused by the active defences and services</summary>
-     */
-    public float GetMoneyMalus() {
-        return moneyMalus;
-    }
-
-    /**
-     * <summary>Return the malus to money caused by the active attacks</summary>
-     */
-    public float GetAttackMoneyMalus() {
-        return (float)Math.Round(attackMoneyMalus, 2);
-    }
-
-    /**
-     * <summary>Return the actual gain of users</summary>
-     */
-    public float GetActualUsersGain() {
-        return (float)Math.Round(usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * Math.Round(users));
-    }
-
-    /**
-     * <summary>Return the gain of users without malus and bonus</summary>
-     */
-    public float GetUsersGain() {
-        return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * 0.5f * (1 + reputation));
-    }
-
-    /**
-     * <summary>Return the modifier of the gain of users caused by defences and services</summary>
-     */
-    public float GetUsersMod() {
-        return usersMalus * usersBonus;
-    }
-
-    /**
-     * <summary>Return the malus to users caused by the active attacks</summary>
-     */
-    public float GetAttackUsersMalus() {
-        return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * Math.Round(attackUsersMalus, 2));
-    }
+    // LOAD-SAVE GAME
 
     /**
      * <summary>Return the data to be saved to resume correctly the game in future</summary>
@@ -150,7 +89,7 @@ public class GameManager : MonoBehaviour {
     public GameSave SaveGame() {
         return new GameSave(new GameConfig(totalTime, endTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
             money, users, reputation, moneyMalus, moneyBonus, usersMalus, usersBonus, attackUsersMalus, attackMoneyMalus, endurance, miss,
-            usersGain, moneyGain, dateTime.ToString()), GetShopItemRecap(), GetEmployeeRecap(), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
+            usersGain, moneyGain, dateTime.ToString()), ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
             new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
 
@@ -164,10 +103,7 @@ public class GameManager : MonoBehaviour {
         shop.Init();
         employeeView.Init();
         // load the attacks from the file and initialize the view
-        AttacksJSON attacksContent = JsonUtility.FromJson<AttacksJSON>(attacksFileJSON.text);
-        foreach (AttackInfo attack in attacksContent.attacks) {
-            attacks.Add(attack.id, attack);
-        }
+        attacks = AttackUtils.LoadFromFile(attacksFileJSON);
         attackView.Init(attacks.Count);
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
@@ -177,14 +113,7 @@ public class GameManager : MonoBehaviour {
             GameConfigJSON gameConfigContent = JsonUtility.FromJson<GameConfigJSON>(gameConfigJSON.text);
             LoadGameConfig(gameConfigContent.gameConfig);
             // setup attacks, statistics and resistances
-            foreach (AttackInfo attack in attacks.Values) {
-                if (attack.duration == 0) {
-                    if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, -1f, 0f, 0f));
-                } else {
-                    if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0f, 0f, 0f));
-                }
-                attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
-            }
+            AttackUtils.SetupAll(attacks, resistances, attackStats);
             ScheduleAttack(AttackCode.DOS, attackSchedule.Count);
             DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DOS].name, ActionCode.CONTINUE);
             ScheduleAttack(AttackCode.BRUTE_FORCE, attackSchedule.Count);
@@ -238,92 +167,14 @@ public class GameManager : MonoBehaviour {
         // load the basic config
         LoadGameConfig(gameSave.gc);
         // update the status of the items in the shop
-        foreach (ShopItemRecap s in gameSave.sir) {
-            shopItems[s.id].owned = s.owned;
-            shopItems[s.id].on = s.on;
-            shopItems[s.id].locked = s.locked;
-        }
-        foreach (EmployeeRecap e in gameSave.er) {
-            employees[e.id].owned = e.owned;
-        }
+        ShopUtils.UpdateShopItems(shopItems, gameSave.sir);
+        EmployeeUtils.UpdateEmployees(employees, gameSave.er);
         // load the logs
         logs = new List<LogLine>(gameSave.logs.lines);
         logManager.LoadGameData(gameSave.logs.nLines, gameSave.logs.nPages);
         // load the data structures
-        foreach (AttackStats aStat in gameSave.aStats) attackStats.Add(aStat.id, aStat);
-        foreach (Resistance res in gameSave.res) resistances.Add(res.id, res);
+        AttackUtils.UpdateAll(resistances, attackStats, gameSave.res, gameSave.aStats);
         attackSchedule = new List<AttackRecap>(gameSave.aSchedule);
-    }
-
-    /**
-     * <summary>Return the money updated</summary>
-     */
-    float CalculateMoney() {
-        return money + (moneyGain[userLevel] + moneyBonus) * (1 - attackMoneyMalus) - moneyMalus;
-    }
-
-    /**
-     * <summary>Return the number of users updated</summary>
-     */
-    float CalculateUsers() {
-        return users + usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * (float)Math.Round(users);
-    }
-
-    /**
-     * <summary>Return the current level of users</summary>
-     */
-    int CalculateUserLevel() {
-        int i;
-        if (users < 100) i = 0;
-        else if (users < 1000) i = 1;
-        else if (users < 10000) i = 2;
-        else if (users < 100000) i = 3;
-        else if (users < 1000000) i = 4;
-        else i = 5;
-        return i;
-    }
-
-    /**
-     * <summary>Return the reputation updated</summary>
-     */
-    float CalculateReputation() {
-        // increment the reputation every step
-        float rep = reputation + 0.0005f;
-        if (ongoingAttacks == 0) {
-            // increment the time without attacks
-            noAttackTime++;
-            if (noAttackTime == noAttackStep) {
-                // increment the reputation for avoiding attacks
-                noAttackTime = 0;
-                rep += 0.01f;
-            }
-        } else {
-            // reset the time without attacks
-            noAttackTime = 0;
-        }
-        // normalize the reputation in [0, 1]
-        if (rep > 1f) return 1f;
-        else return rep;
-    }
-
-    /**
-     * <summary>Shows the game over</summary>
-     */
-    void GameOver() {
-        Time.timeScale = 0;
-        DisplayMessage("GAME OVER", ActionCode.GAME_OVER);
-    }
-
-    /**
-     * <summary>Checks if the game is over</summary>
-     */
-    void CheckGameOver() {
-        // game over if the time reaches the end
-        if (totalTime == endTime) GameOver();
-        // game over if the money is negative for too long
-        if (negativeTime > maxNegative) GameOver();
-        // game over if the reputation reaches 0%
-        if (reputation == 0) GameOver();
     }
 
     // LOG
@@ -385,7 +236,6 @@ public class GameManager : MonoBehaviour {
      * <summary>Insert an instance of the specified attack among the scheduled ones</summary>
      */
     void ScheduleAttack(AttackCode id, int i) {
-        int id_int = (int)id;
         float maxTime = attacks[id].maxTime * GetEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
         if (i != attackSchedule.Count) attackSchedule[i] = new AttackRecap(id, Mathf.CeilToInt(GetDuration(id)), false, Mathf.CeilToInt(nextTime));
@@ -558,19 +408,6 @@ public class GameManager : MonoBehaviour {
     }
 
     /**
-     * <summary>Return a recap of the status of all the items in the shop</summary>
-     */
-    ShopItemRecap[] GetShopItemRecap() {
-        List<ShopItemRecap> sir = new List<ShopItemRecap>();
-
-        foreach (ShopItemInfo sii in shopItems.Values) {
-            sir.Add(new ShopItemRecap(sii.id, sii.owned, sii.on, sii.locked));
-        }
-
-        return sir.ToArray();
-    }
-
-    /**
      * <summary>Applies the effects of buying an item in the shop</summary>
      */
     public void PurchaseShopItem(ShopItemCode id) {
@@ -630,14 +467,7 @@ public class GameManager : MonoBehaviour {
         shopItems[id].locked = false;
     }
 
-    /**
-     * <summary>Creates a pop-up window message</summary>
-     */
-    void DisplayMessage(string message, ActionCode action) {
-        GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
-        newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load(message, action);
-    }
+    // EMPLOYEES
 
     public void AddToEmployees(EmployeeInfo e) {
         employees.Add(e.id, e);
@@ -645,19 +475,6 @@ public class GameManager : MonoBehaviour {
 
     public EmployeeInfo GetEmployee(EmployeeCode id) {
         return employees[id];
-    }
-
-    /**
-     * <summary>Return a recap of the status of all the employees in the shop</summary>
-     */
-    EmployeeRecap[] GetEmployeeRecap() {
-        List<EmployeeRecap> er = new List<EmployeeRecap>();
-
-        foreach (EmployeeInfo e in employees.Values) {
-            er.Add(new EmployeeRecap(e.id, e.owned));
-        }
-
-        return er.ToArray();
     }
 
     /**
@@ -672,6 +489,151 @@ public class GameManager : MonoBehaviour {
      */
     public void FireEmployee(EmployeeCode id) {
         employees[id].owned = false;
+    }
+
+    // MISC
+
+    /**
+ * <summary>Return a string containing the date in the format 'dd-MMM-yyyy-HH:mm'</summary>
+ */
+    public string GetDateTime() {
+        return dateTime.ToString("dd-MMM-yyyy-HH:mm");
+    }
+
+    /**
+     * <summary>Return the actual gain of money</summary>
+     */
+    public float GetActualMoneyGain() {
+        return (moneyGain[userLevel] + moneyBonus) * (1 - attackMoneyMalus) - moneyMalus;
+    }
+
+    /**
+     * <summary>Return the gain of money based on the number of users</summary>
+     */
+    public float GetMoneyGain() {
+        return moneyGain[userLevel] + moneyBonus;
+    }
+
+    /**
+     * <summary>Return the malus to money caused by the active defences and services</summary>
+     */
+    public float GetMoneyMalus() {
+        return moneyMalus;
+    }
+
+    /**
+     * <summary>Return the malus to money caused by the active attacks</summary>
+     */
+    public float GetAttackMoneyMalus() {
+        return (float)Math.Round(attackMoneyMalus, 2);
+    }
+
+    /**
+     * <summary>Return the actual gain of users</summary>
+     */
+    public float GetActualUsersGain() {
+        return (float)Math.Round(usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * Math.Round(users));
+    }
+
+    /**
+     * <summary>Return the gain of users without malus and bonus</summary>
+     */
+    public float GetUsersGain() {
+        return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * 0.5f * (1 + reputation));
+    }
+
+    /**
+     * <summary>Return the modifier of the gain of users caused by defences and services</summary>
+     */
+    public float GetUsersMod() {
+        return usersMalus * usersBonus;
+    }
+
+    /**
+     * <summary>Return the malus to users caused by the active attacks</summary>
+     */
+    public float GetAttackUsersMalus() {
+        return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * Math.Round(attackUsersMalus, 2));
+    }
+
+    /**
+     * <summary>Return the money updated</summary>
+     */
+    float CalculateMoney() {
+        return money + (moneyGain[userLevel] + moneyBonus) * (1 - attackMoneyMalus) - moneyMalus;
+    }
+
+    /**
+     * <summary>Return the number of users updated</summary>
+     */
+    float CalculateUsers() {
+        return users + usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * (float)Math.Round(users);
+    }
+
+    /**
+     * <summary>Return the current level of users</summary>
+     */
+    int CalculateUserLevel() {
+        int i;
+        if (users < 100) i = 0;
+        else if (users < 1000) i = 1;
+        else if (users < 10000) i = 2;
+        else if (users < 100000) i = 3;
+        else if (users < 1000000) i = 4;
+        else i = 5;
+        return i;
+    }
+
+    /**
+     * <summary>Return the reputation updated</summary>
+     */
+    float CalculateReputation() {
+        // increment the reputation every step
+        float rep = reputation + 0.0005f;
+        if (ongoingAttacks == 0) {
+            // increment the time without attacks
+            noAttackTime++;
+            if (noAttackTime == noAttackStep) {
+                // increment the reputation for avoiding attacks
+                noAttackTime = 0;
+                rep += 0.01f;
+            }
+        } else {
+            // reset the time without attacks
+            noAttackTime = 0;
+        }
+        // normalize the reputation in [0, 1]
+        if (rep > 1f) return 1f;
+        else return rep;
+    }
+
+    /**
+     * <summary>Shows the game over</summary>
+     */
+    void GameOver() {
+        Time.timeScale = 0;
+        DisplayMessage("GAME OVER", ActionCode.GAME_OVER);
+    }
+
+    /**
+     * <summary>Checks if the game is over</summary>
+     */
+    void CheckGameOver() {
+        // game over if the time reaches the end
+        if (totalTime == endTime) GameOver();
+        // game over if the money is negative for too long
+        if (negativeTime > maxNegative) GameOver();
+        // game over if the reputation reaches 0%
+        if (reputation == 0) GameOver();
+    }
+
+    /**
+     * <summary>Creates a pop-up window message</summary>
+     */
+    void DisplayMessage(string message, ActionCode action) {
+        GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
+        newWindow.transform.SetParent(gameObject.transform, false);
+        newWindow.GetComponent<WindowPopUp>().Load(message, action);
     }
 
     void DebugPrint() {
