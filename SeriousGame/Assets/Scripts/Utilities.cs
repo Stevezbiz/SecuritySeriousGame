@@ -4,12 +4,12 @@ using UnityEngine;
 
 [System.Serializable]
 public class Resistance {
-    public int id;
+    public AttackCode id;
     public float duration;
     public float miss;
     public float endurance;
 
-    public Resistance(int id, float duration, float miss, float endurance) {
+    public Resistance(AttackCode id, float duration, float miss, float endurance) {
         this.id = id;
         this.duration = duration;
         this.miss = miss;
@@ -38,8 +38,33 @@ public class ShopJSON {
 }
 
 [System.Serializable]
+public class EmployeeInfo {
+    public EmployeeCode id;
+    public string name;
+    public string description;
+    public int cost;
+    public bool owned;
+}
+
+[System.Serializable]
+public class EmployeesJSON {
+    public EmployeeInfo[] employees;
+}
+
+[System.Serializable]
+public class EmployeeRecap {
+    public EmployeeCode id;
+    public bool owned;
+
+    public EmployeeRecap(EmployeeCode id, bool owned) {
+        this.id = id;
+        this.owned = owned;
+    }
+}
+
+[System.Serializable]
 public class AttackInfo {
-    public int id;
+    public AttackCode id;
     public string name;
     public string description;
     public float moneyLoss;
@@ -75,14 +100,16 @@ public class ShopItemRecap {
 public class GameSave {
     public GameConfig gc;
     public ShopItemRecap[] sir;
+    public EmployeeRecap[] er;
     public LogData logs;
     public AttackStats[] aStats;
     public AttackRecap[] aSchedule;
     public Resistance[] res;
 
-    public GameSave(GameConfig gc, ShopItemRecap[] sir, LogData logs, AttackStats[] aStats, AttackRecap[] aSchedule, Resistance[] res) {
+    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackRecap[] aSchedule, Resistance[] res) {
         this.gc = gc;
         this.sir = sir;
+        this.er = er;
         this.logs = logs;
         this.aStats = aStats;
         this.aSchedule = aSchedule;
@@ -172,12 +199,12 @@ public class GameConfigJSON {
 
 [System.Serializable]
 public class AttackRecap {
-    public int id;
+    public AttackCode id;
     public int duration;
     public bool active;
     public int timer;
 
-    public AttackRecap(int id, int duration, bool active, int timer) {
+    public AttackRecap(AttackCode id, int duration, bool active, int timer) {
         this.id = id;
         this.duration = duration;
         this.active = active;
@@ -187,12 +214,12 @@ public class AttackRecap {
 
 [System.Serializable]
 public class AttackStats {
-    public int id;
+    public AttackCode id;
     public int n;
     public int hit;
     public int miss;
 
-    public AttackStats(int id, int n, int hit, int miss) {
+    public AttackStats(AttackCode id, int n, int hit, int miss) {
         this.id = id;
         this.n = n;
         this.hit = hit;
@@ -252,6 +279,13 @@ public enum ShopItemCode {
     SERVER_UPGRADE,
     SEC_TRAINING,
     BACK_UP
+}
+
+public enum EmployeeCode {
+    GIGI,
+    ANTONIO,
+    SARA,
+    GIULIA
 }
 
 public static class COLOR {

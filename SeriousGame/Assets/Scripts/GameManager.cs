@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Math = System.Math;
 using DateTime = System.DateTime;
 using DateTimeKind = System.DateTimeKind;
+using Math = System.Math;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] GUI gui;
     [SerializeField] ShopGUI shop;
     [SerializeField] Log logManager;
     [SerializeField] AttackView attackView;
+    [SerializeField] EmployeeView employeeView;
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
@@ -41,10 +42,11 @@ public class GameManager : MonoBehaviour {
 
     List<LogLine> logs = new List<LogLine>();
     List<AttackRecap> attackSchedule = new List<AttackRecap>();
-    Dictionary<int, AttackInfo> attacks = new Dictionary<int, AttackInfo>();
-    Dictionary<int, Resistance> resistances = new Dictionary<int, Resistance>();
-    Dictionary<int, AttackStats> attackStats = new Dictionary<int, AttackStats>();
+    Dictionary<AttackCode, AttackInfo> attacks = new Dictionary<AttackCode, AttackInfo>();
+    Dictionary<AttackCode, Resistance> resistances = new Dictionary<AttackCode, Resistance>();
+    Dictionary<AttackCode, AttackStats> attackStats = new Dictionary<AttackCode, AttackStats>();
     Dictionary<ShopItemCode, ShopItemInfo> shopItems = new Dictionary<ShopItemCode, ShopItemInfo>();
+    Dictionary<EmployeeCode, EmployeeInfo> employees = new Dictionary<EmployeeCode, EmployeeInfo>();
 
     // Start is called before the first frame update
     void Start() {
@@ -148,7 +150,7 @@ public class GameManager : MonoBehaviour {
     public GameSave SaveGame() {
         return new GameSave(new GameConfig(totalTime, endTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
             money, users, reputation, moneyMalus, moneyBonus, usersMalus, usersBonus, attackUsersMalus, attackMoneyMalus, endurance, miss,
-            usersGain, moneyGain, dateTime.ToString()), GetShopItemRecap(), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
+            usersGain, moneyGain, dateTime.ToString()), GetShopItemRecap(), GetEmployeeRecap(), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
             new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
 
@@ -160,6 +162,7 @@ public class GameManager : MonoBehaviour {
         startTime = Time.time;
         Time.timeScale = 0;
         shop.Init();
+        employeeView.Init();
         // load the attacks from the file and initialize the view
         AttacksJSON attacksContent = JsonUtility.FromJson<AttacksJSON>(attacksFileJSON.text);
         foreach (AttackInfo attack in attacksContent.attacks) {
@@ -182,12 +185,12 @@ public class GameManager : MonoBehaviour {
                 }
                 attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
             }
-            ScheduleAttack((int)AttackCode.DOS, attackSchedule.Count);
-            DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.DOS].name, ActionCode.CONTINUE);
-            ScheduleAttack((int)AttackCode.BRUTE_FORCE, attackSchedule.Count);
-            DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.BRUTE_FORCE].name, ActionCode.CONTINUE);
-            ScheduleAttack((int)AttackCode.WORM, attackSchedule.Count);
-            DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.WORM].name, ActionCode.CONTINUE);
+            ScheduleAttack(AttackCode.DOS, attackSchedule.Count);
+            DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DOS].name, ActionCode.CONTINUE);
+            ScheduleAttack(AttackCode.BRUTE_FORCE, attackSchedule.Count);
+            DisplayMessage("Nuovo attacco: " + attacks[AttackCode.BRUTE_FORCE].name, ActionCode.CONTINUE);
+            ScheduleAttack(AttackCode.WORM, attackSchedule.Count);
+            DisplayMessage("Nuovo attacco: " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE);
             userLevel = CalculateUserLevel();
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
@@ -195,8 +198,61 @@ public class GameManager : MonoBehaviour {
         }
         // generate all the objects in the shop
         shop.Load();
+        employeeView.Load();
         // refresh the GUI for the first time
         gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
+    }
+
+    /**
+     * <summary>Load the basic configuration of the game</summary>
+     */
+    void LoadGameConfig(GameConfig gc) {
+        totalTime = gc.totalTime;
+        endTime = gc.endTime;
+        negativeTime = gc.negativeTime;
+        maxNegative = gc.maxNegative;
+        noAttackTime = gc.noAttackTime;
+        noAttackStep = gc.noAttackStep;
+        ongoingAttacks = gc.ongoingAttacks;
+        userLevel = gc.userLevel;
+        money = gc.money;
+        users = gc.users;
+        reputation = gc.reputation;
+        moneyMalus = gc.moneyMalus;
+        moneyBonus = gc.moneyBonus;
+        usersMalus = gc.usersMalus;
+        usersBonus = gc.usersBonus;
+        attackUsersMalus = gc.attackUsersMalus;
+        attackMoneyMalus = gc.attackMoneyMalus;
+        endurance = gc.endurance;
+        miss = gc.miss;
+        usersGain = gc.usersGain;
+        moneyGain = gc.moneyGain;
+        dateTime = DateTime.Parse(gc.date);
+    }
+
+    /**
+     * <summary>Load the game data needed to resume a previously saved run</summary>
+     */
+    void LoadGameData(GameSave gameSave) {
+        // load the basic config
+        LoadGameConfig(gameSave.gc);
+        // update the status of the items in the shop
+        foreach (ShopItemRecap s in gameSave.sir) {
+            shopItems[s.id].owned = s.owned;
+            shopItems[s.id].on = s.on;
+            shopItems[s.id].locked = s.locked;
+        }
+        foreach (EmployeeRecap e in gameSave.er) {
+            employees[e.id].owned = e.owned;
+        }
+        // load the logs
+        logs = new List<LogLine>(gameSave.logs.lines);
+        logManager.LoadGameData(gameSave.logs.nLines, gameSave.logs.nPages);
+        // load the data structures
+        foreach (AttackStats aStat in gameSave.aStats) attackStats.Add(aStat.id, aStat);
+        foreach (Resistance res in gameSave.res) resistances.Add(res.id, res);
+        attackSchedule = new List<AttackRecap>(gameSave.aSchedule);
     }
 
     /**
@@ -291,7 +347,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Return the stats of the specified attack</summary>
      */
-    public AttackStats GetAttackStats(int id) {
+    public AttackStats GetAttackStats(AttackCode id) {
         if (!attackStats.ContainsKey(id)) return null;
         return attackStats[id];
     }
@@ -301,7 +357,7 @@ public class GameManager : MonoBehaviour {
      */
     public AttackStats GetAttackStatsTotal() {
         AttackStats stats = new AttackStats(0, 0, 0, 0);
-        foreach(AttackStats s in attackStats.Values) {
+        foreach (AttackStats s in attackStats.Values) {
             stats.n += s.n;
             stats.hit += s.hit;
             stats.miss += s.miss;
@@ -312,7 +368,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Return the specified attack</summary>
      */
-    public AttackInfo GetAttack(int id) {
+    public AttackInfo GetAttack(AttackCode id) {
         if (!attacks.ContainsKey(id)) return null;
         return attacks[id];
     }
@@ -320,7 +376,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Return the resistance to the specified attack</summary>
      */
-    public Resistance GetResistance(int id) {
+    public Resistance GetResistance(AttackCode id) {
         if (!resistances.ContainsKey(id)) return null;
         return resistances[id];
     }
@@ -328,7 +384,8 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Insert an instance of the specified attack among the scheduled ones</summary>
      */
-    void ScheduleAttack(int id, int i) {
+    void ScheduleAttack(AttackCode id, int i) {
+        int id_int = (int)id;
         float maxTime = attacks[id].maxTime * GetEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
         if (i != attackSchedule.Count) attackSchedule[i] = new AttackRecap(id, Mathf.CeilToInt(GetDuration(id)), false, Mathf.CeilToInt(nextTime));
@@ -341,40 +398,40 @@ public class GameManager : MonoBehaviour {
     void ActivateAttacks() {
         switch (totalTime) {
             case 120: // day 5
-                ScheduleAttack((int)AttackCode.MITM, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.MITM].name, ActionCode.CONTINUE);
+                ScheduleAttack(AttackCode.MITM, attackSchedule.Count);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE);
                 break;
             case 168: // day 7
-                ScheduleAttack((int)AttackCode.VIRUS, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.VIRUS].name, ActionCode.CONTINUE);
+                ScheduleAttack(AttackCode.VIRUS, attackSchedule.Count);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.VIRUS].name, ActionCode.CONTINUE);
                 break;
             case 240: // day 10
-                ScheduleAttack((int)AttackCode.SOCIAL_ENGINEERING, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE);
+                ScheduleAttack(AttackCode.SOCIAL_ENGINEERING, attackSchedule.Count);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE);
                 break;
             case 288: // day 12
-                ScheduleAttack((int)AttackCode.API_VULNERABILITY, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE);
+                ScheduleAttack(AttackCode.API_VULNERABILITY, attackSchedule.Count);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE);
                 break;
             case 360: // day 15
-                ScheduleAttack((int)AttackCode.DICTIONARY, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.DICTIONARY].name, ActionCode.CONTINUE);
+                ScheduleAttack(AttackCode.DICTIONARY, attackSchedule.Count);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DICTIONARY].name, ActionCode.CONTINUE);
                 break;
             case 408: // day 17
-                ScheduleAttack((int)AttackCode.PHISHING, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.PHISHING].name, ActionCode.CONTINUE);
+                ScheduleAttack(AttackCode.PHISHING, attackSchedule.Count);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.PHISHING].name, ActionCode.CONTINUE);
                 break;
             case 480: // day 20
-                ScheduleAttack((int)AttackCode.SPYWARE, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.SPYWARE].name, ActionCode.CONTINUE);
+                ScheduleAttack(AttackCode.SPYWARE, attackSchedule.Count);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SPYWARE].name, ActionCode.CONTINUE);
                 break;
             case 528: // day 22
-                ScheduleAttack((int)AttackCode.RAINBOW_TABLE, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE);
+                ScheduleAttack(AttackCode.RAINBOW_TABLE, attackSchedule.Count);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE);
                 break;
             case 600: // day 25
-                ScheduleAttack((int)AttackCode.RANSOMWARE, attackSchedule.Count);
-                DisplayMessage("Nuovo attacco: " + attacks[(int)AttackCode.RANSOMWARE].name, ActionCode.CONTINUE);
+                ScheduleAttack(AttackCode.RANSOMWARE, attackSchedule.Count);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RANSOMWARE].name, ActionCode.CONTINUE);
                 break;
             default:
                 break;
@@ -384,28 +441,28 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Return the miss ratio for the specified attack</summary>
      */
-    float GetMiss(int id) {
+    float GetMiss(AttackCode id) {
         return miss + resistances[id].miss;
     }
 
     /**
      * <summary>Return the duration for the specified attack</summary>
      */
-    float GetDuration(int id) {
+    float GetDuration(AttackCode id) {
         return (1 - resistances[id].duration) * attacks[id].duration;
     }
 
     /**
      * <summary>Return the endurance against the specified attack</summary>
      */
-    float GetEndurance(int id) {
+    float GetEndurance(AttackCode id) {
         return endurance + resistances[id].endurance + 0.5f * (1 - reputation);
     }
 
     /**
      * <summary>Applies the effects of the specified attack</summary>
      */
-    void StartAttack(int id) {
+    void StartAttack(AttackCode id) {
         ongoingAttacks++;
         // apply the maluses
         money -= attacks[id].moneyLoss;
@@ -420,7 +477,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Removes the effects of the specified attack</summary>
      */
-    void StopAttack(int id) {
+    void StopAttack(AttackCode id) {
         // remove the maluses
         ongoingAttacks--;
         attackUsersMalus -= attacks[id].usersMalus;
@@ -430,7 +487,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Applies the effects of avoiding an attack</summary>
      */
-    void MissedAttack(int id) {
+    void MissedAttack(AttackCode id) {
         // increment the reputation
         reputation += 0.02f;
         // generate a message
@@ -441,7 +498,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Updates the scheduled attacks</summary>
      */
     void UpdateAttacks() {
-        for(int i = 0; i < attackSchedule.Count; i++) {
+        for (int i = 0; i < attackSchedule.Count; i++) {
             // check the attack status
             if (attackSchedule[i].timer > 0) {
                 // decrement the timer
@@ -514,58 +571,9 @@ public class GameManager : MonoBehaviour {
     }
 
     /**
-     * <summary>Load the basic configuration of the game</summary>
-     */
-    void LoadGameConfig(GameConfig gc) {
-        totalTime = gc.totalTime;
-        endTime = gc.endTime;
-        negativeTime = gc.negativeTime;
-        maxNegative = gc.maxNegative;
-        noAttackTime = gc.noAttackTime;
-        noAttackStep = gc.noAttackStep;
-        ongoingAttacks = gc.ongoingAttacks;
-        userLevel = gc.userLevel;
-        money = gc.money;
-        users = gc.users;
-        reputation = gc.reputation;
-        moneyMalus = gc.moneyMalus;
-        moneyBonus = gc.moneyBonus;
-        usersMalus = gc.usersMalus;
-        usersBonus = gc.usersBonus;
-        attackUsersMalus = gc.attackUsersMalus;
-        attackMoneyMalus = gc.attackMoneyMalus;
-        endurance = gc.endurance;
-        miss = gc.miss;
-        usersGain = gc.usersGain;
-        moneyGain = gc.moneyGain;
-        dateTime = DateTime.Parse(gc.date);
-    }
-
-    /**
-     * <summary>Load the game data needed to resume a previously saved run</summary>
-     */
-    void LoadGameData(GameSave gameSave) {
-        // load the basic config
-        LoadGameConfig(gameSave.gc);
-        // update the status of the items in the shop
-        foreach (ShopItemRecap s in gameSave.sir) {
-            shopItems[s.id].owned = s.owned;
-            shopItems[s.id].on = s.on;
-            shopItems[s.id].locked = s.locked;
-        }
-        // load the logs
-        logs = new List<LogLine>(gameSave.logs.lines);
-        logManager.LoadGameData(gameSave.logs.nLines, gameSave.logs.nPages);
-        // load the data structures
-        foreach(AttackStats aStat in gameSave.aStats) attackStats.Add(aStat.id, aStat);
-        foreach(Resistance res in gameSave.res) resistances.Add(res.id, res);
-        attackSchedule = new List<AttackRecap>(gameSave.aSchedule);
-    }
-
-    /**
      * <summary>Applies the effects of buying an item in the shop</summary>
      */
-    public void Purchase(ShopItemCode id) {
+    public void PurchaseShopItem(ShopItemCode id) {
         shopItems[id].owned = true;
         money -= shopItems[id].cost;
         gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
@@ -622,23 +630,61 @@ public class GameManager : MonoBehaviour {
         shopItems[id].locked = false;
     }
 
+    /**
+     * <summary>Creates a pop-up window message</summary>
+     */
     void DisplayMessage(string message, ActionCode action) {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
         newWindow.GetComponent<WindowPopUp>().Load(message, action);
     }
 
+    public void AddToEmployees(EmployeeInfo e) {
+        employees.Add(e.id, e);
+    }
+
+    public EmployeeInfo GetEmployee(EmployeeCode id) {
+        return employees[id];
+    }
+
+    /**
+     * <summary>Return a recap of the status of all the employees in the shop</summary>
+     */
+    EmployeeRecap[] GetEmployeeRecap() {
+        List<EmployeeRecap> er = new List<EmployeeRecap>();
+
+        foreach (EmployeeInfo e in employees.Values) {
+            er.Add(new EmployeeRecap(e.id, e.owned));
+        }
+
+        return er.ToArray();
+    }
+
+    /**
+     * <summary>Applies the effects of hiring an employee</summary>
+     */
+    public void HireEmployee(EmployeeCode id) {
+        employees[id].owned = true;
+    }
+
+    /**
+     * <summary>Applies the effects of firing an employee</summary>
+     */
+    public void FireEmployee(EmployeeCode id) {
+        employees[id].owned = false;
+    }
+
     void DebugPrint() {
-        Dictionary<int, Resistance> res = new Dictionary<int, Resistance>();
+        Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         foreach (ShopItemInfo sii in shopItems.Values) {
-            foreach(Resistance r in sii.resistances) {
+            foreach (Resistance r in sii.resistances) {
                 if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 0f, 0f, 0f));
                 res[r.id].miss += r.miss;
                 res[r.id].duration += r.duration;
                 res[r.id].endurance += r.endurance;
             }
         }
-        foreach(Resistance r in res.Values) {
+        foreach (Resistance r in res.Values) {
             Debug.Log("attack: " + attacks[r.id].name + "\n" +
             "tot duration: " + r.duration + "\n" +
             "tot miss: " + r.miss + "\n" +

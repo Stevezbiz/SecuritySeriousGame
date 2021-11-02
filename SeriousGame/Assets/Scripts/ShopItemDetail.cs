@@ -99,7 +99,7 @@ public class ShopItemDetail : MonoBehaviour {
      * <summary>Applies the effects of buying an item of the shop</summary>
      */
     public void ConfirmPurchase() {
-        gameManager.Purchase(id);
+        gameManager.PurchaseShopItem(id);
         parent.Purchase();
         purchaseButton.SetActive(false);
         // print in the log

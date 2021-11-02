@@ -1,0 +1,33 @@
+{
+	"employees":
+	[
+		{
+			"id": 0,
+			"name": "Gigi",
+			"description": "Il suo nome è Gigi",
+			"cost": 1,
+			"owned": true
+		},
+		{
+			"id": 1,
+			"name": "Antonio",
+			"description": "Il suo nome è Antonio",
+			"cost": 1,
+			"owned": false
+		},
+		{
+			"id": 2,
+			"name": "Sara",
+			"description": "Il suo nome è Sara",
+			"cost": 1,
+			"owned": false
+		},
+		{
+			"id": 3,
+			"name": "Giulia",
+			"description": "Il suo nome è Giulia",
+			"cost": 1,
+			"owned": false
+		}
+	]
+}

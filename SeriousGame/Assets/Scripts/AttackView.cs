@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class AttackView : MonoBehaviour {
     [SerializeField] GameManager gameManager;
@@ -24,7 +24,7 @@ public class AttackView : MonoBehaviour {
         // fill the options of the attack dropdown
         List<string> options = new List<string>();
         for (int i = 0; i < n; i++) {
-            options.Add(gameManager.GetAttack(i).name);
+            options.Add(gameManager.GetAttack((AttackCode)i).name);
         }
         options.Add("tutti");
         attackDropdown.AddOptions(options);
@@ -35,15 +35,15 @@ public class AttackView : MonoBehaviour {
      */
     public void Load() {
         attackDropdown.value = attackDropdown.options.Count - 1;
-        DisplayStats(0);
+        DisplayStats();
     }
 
     /**
      * <summary>Populate the view with the values to show</summary>
      */
-    public void DisplayStats(int err) {
+    void DisplayStats() {
         // retrieve the stats
-        AttackStats stats = gameManager.GetAttackStats(attackDropdown.value);
+        AttackStats stats = gameManager.GetAttackStats((AttackCode)attackDropdown.value);
         if (stats == null) {
             // the "all" selector is active
             stats = gameManager.GetAttackStatsTotal();
@@ -56,7 +56,7 @@ public class AttackView : MonoBehaviour {
         if (stats.n != 0) missPercent.SetText("(" + (100 * (float)stats.miss / stats.n).ToString("0.") + " %)");
         else missPercent.SetText("(- %)");
         // retrieve and display the resistances
-        Resistance res = gameManager.GetResistance(attackDropdown.value);
+        Resistance res = gameManager.GetResistance((AttackCode)attackDropdown.value);
         if (res == null) {
             // the "all" selector is active
             durationText.SetText("- %");

@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using Image = UnityEngine.UI.Image;
+using UnityEngine;
 using DateTime = System.DateTime;
+using Image = UnityEngine.UI.Image;
 
 public class GUI : MonoBehaviour {
     [SerializeField] GameManager gameManager;

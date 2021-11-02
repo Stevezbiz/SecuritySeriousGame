@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
-using TMPro;
 
 public class Message : MonoBehaviour {
     [SerializeField] Image image;
