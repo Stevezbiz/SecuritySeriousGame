@@ -14,8 +14,9 @@ public class EmployeeInfo {
     public EmployeeCode id;
     public string name;
     public string description;
-    public int cost;
+    public float moneyGain;
     public bool owned;
+    public EmployeeAbility[] abilities;
 }
 
 [System.Serializable]
@@ -27,6 +28,12 @@ public class EmployeeRecap {
         this.id = id;
         this.owned = owned;
     }
+}
+
+[System.Serializable]
+public class EmployeeAbility {
+    public ShopItemCategory category;
+    public int level;
 }
 
 [System.Serializable]
@@ -49,5 +56,15 @@ public static class EmployeeUtils {
         }
 
         return er.ToArray();
+    }
+
+    public static Dictionary<ShopItemCategory, float> GetAbilities(EmployeeAbility[] a) {
+        Dictionary<ShopItemCategory, float> abilities = new Dictionary<ShopItemCategory, float>();
+
+        foreach (EmployeeAbility ability in a) {
+            abilities.Add(ability.category, ability.level);
+        }
+
+        return abilities;
     }
 }

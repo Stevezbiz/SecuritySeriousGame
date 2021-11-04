@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Image = UnityEngine.UI.Image;
+using Outline = UnityEngine.UI.Outline;
+using Button = UnityEngine.UI.Button;
 
 public class EmployeeView : MonoBehaviour {
     [SerializeField] TextAsset employeesFileJSON;
@@ -12,13 +14,17 @@ public class EmployeeView : MonoBehaviour {
     [SerializeField] RectTransform content;
     [SerializeField] TextMeshProUGUI titleText;
     [SerializeField] TextMeshProUGUI descriptionText;
-    [SerializeField] TextMeshProUGUI statsText;
-    [SerializeField] TextMeshProUGUI costText;
+    [SerializeField] TextMeshProUGUI moneyGainText;
     [SerializeField] TextMeshProUGUI countText;
     [SerializeField] GameObject notAvailable;
     [SerializeField] GameObject hireButton;
-    [SerializeField] GameObject fireButton;
     [SerializeField] Image employeeIcon;
+    [SerializeField] Image networkBar;
+    [SerializeField] Image accessBar;
+    [SerializeField] Image softwareBar;
+    [SerializeField] Image assetBar;
+    [SerializeField] Image servicesBar;
+    [SerializeField] TextMeshProUGUI hireText;
 
     float oldTimeScale = 1f;
     bool full = false;
@@ -84,10 +90,17 @@ public class EmployeeView : MonoBehaviour {
     public void ComposeDetails(EmployeeCode id) {
         EmployeeInfo e = gameManager.GetEmployee(id);
         current = id;
+        // set the description fields
         titleText.SetText(e.name);
         descriptionText.SetText(e.description);
-        statsText.SetText("");
-        costText.SetText("Costo: " + e.cost + " F/h");
+        Dictionary<ShopItemCategory, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
+        networkBar.fillAmount = abilities[ShopItemCategory.NETWORK] / 10;
+        accessBar.fillAmount = abilities[ShopItemCategory.ACCESS] / 10;
+        softwareBar.fillAmount = abilities[ShopItemCategory.SOFTWARE] / 10;
+        assetBar.fillAmount = abilities[ShopItemCategory.ASSET] / 10;
+        servicesBar.fillAmount = abilities[ShopItemCategory.SERVICES] / 10;
+        moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
+        // set the graphic aspect
         int tot = gameManager.GetTotalEmployees();
         int hired = gameManager.GetHiredEmployees();
         if (tot == hired) full = true;
@@ -97,18 +110,22 @@ public class EmployeeView : MonoBehaviour {
             countText.color = COLOR.YELLOW;
             employeeIcon.color = COLOR.YELLOW;
             notAvailable.SetActive(true);
-            hireButton.SetActive(false);
+            hireButton.GetComponent<Outline>().effectColor = COLOR.GREEN_DISABLED;
+            hireButton.SetActive(true);
+            hireButton.GetComponentInChildren<Button>().interactable = false;
+            hireText.color = COLOR.GREEN_DISABLED;
         } else {
             countText.color = COLOR.GREEN;
             employeeIcon.color = COLOR.GREEN;
             notAvailable.SetActive(false);
+            hireButton.GetComponent<Outline>().effectColor = COLOR.GREEN;
             hireButton.SetActive(true);
+            hireButton.GetComponentInChildren<Button>().interactable = true;
+            hireText.color = COLOR.GREEN;
         }
-        fireButton.SetActive(false);
         if (e.owned) {
             notAvailable.SetActive(false);
             hireButton.SetActive(false);
-            fireButton.SetActive(true);
         }
     }
 
@@ -118,15 +135,6 @@ public class EmployeeView : MonoBehaviour {
     public void Hire() {
         gameManager.HireEmployee(current);
         employees[current].Hire();
-        ComposeDetails(current);
-    }
-
-    /**
-     * <summary>Applies the effects of firing an employee</summary>
-     */
-    public void Fire() {
-        gameManager.FireEmployee(current);
-        employees[current].Fire();
         ComposeDetails(current);
     }
 }

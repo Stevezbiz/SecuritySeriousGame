@@ -6,7 +6,6 @@ using DateTime = System.DateTime;
 using Image = UnityEngine.UI.Image;
 
 public class GUI : MonoBehaviour {
-    [SerializeField] GameManager gameManager;
     [SerializeField] TextMeshProUGUI moneyText;
     [SerializeField] TextMeshProUGUI usersText;
     [SerializeField] TextMeshProUGUI reputationText;

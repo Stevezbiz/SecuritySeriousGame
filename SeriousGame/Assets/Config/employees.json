@@ -5,29 +5,121 @@
 			"id": 0,
 			"name": "Luigi",
 			"description": "Il suo nome è Luigi",
-			"cost": 1,
-			"owned": true
+			"moneyGain": 10,
+			"owned": true,
+			"abilities":
+			[
+				{
+					"category": 0,
+					"level": 1
+				},
+				{
+					"category": 1,
+					"level": 3
+				},
+				{
+					"category": 2,
+					"level": 9
+				},
+				{
+					"category": 3,
+					"level": 10
+				},
+				{
+					"category": 4,
+					"level": 6
+				}
+			]
 		},
 		{
 			"id": 1,
 			"name": "Antonio",
 			"description": "Il suo nome è Antonio",
-			"cost": 1,
-			"owned": false
+			"moneyGain": 10,
+			"owned": false,
+			"abilities":
+			[
+				{
+					"category": 0,
+					"level": 1
+				},
+				{
+					"category": 1,
+					"level": 1
+				},
+				{
+					"category": 2,
+					"level": 1
+				},
+				{
+					"category": 3,
+					"level": 1
+				},
+				{
+					"category": 4,
+					"level": 1
+				}
+			]
 		},
 		{
 			"id": 2,
 			"name": "Sara",
 			"description": "Il suo nome è Sara",
-			"cost": 1,
-			"owned": false
+			"moneyGain": 10,
+			"owned": false,
+			"abilities":
+			[
+				{
+					"category": 0,
+					"level": 1
+				},
+				{
+					"category": 1,
+					"level": 1
+				},
+				{
+					"category": 2,
+					"level": 1
+				},
+				{
+					"category": 3,
+					"level": 1
+				},
+				{
+					"category": 4,
+					"level": 1
+				}
+			]
 		},
 		{
 			"id": 3,
 			"name": "Giulia",
 			"description": "Il suo nome è Giulia",
-			"cost": 1,
-			"owned": false
+			"moneyGain": 10,
+			"owned": false,
+			"abilities":
+			[
+				{
+					"category": 0,
+					"level": 1
+				},
+				{
+					"category": 1,
+					"level": 1
+				},
+				{
+					"category": 2,
+					"level": 1
+				},
+				{
+					"category": 3,
+					"level": 1
+				},
+				{
+					"category": 4,
+					"level": 1
+				}
+			]
 		}
 	]
 }

@@ -490,15 +490,8 @@ public class GameManager : MonoBehaviour {
      */
     public void HireEmployee(EmployeeCode id) {
         employees[id].owned = true;
+        moneyBonus += employees[id].moneyGain;
         hiredEmployees++;
-    }
-
-    /**
-     * <summary>Applies the effects of firing an employee</summary>
-     */
-    public void FireEmployee(EmployeeCode id) {
-        employees[id].owned = false;
-        hiredEmployees--;
     }
 
     // MISC
