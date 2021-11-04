@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour {
             money = CalculateMoney();
             users = CalculateUsers();
             reputation = CalculateReputation();
-            totalEmployees = CalculateNEmployees();
+            totalEmployees = CalculateEmployees();
             // refresh
             gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
             // game over check
@@ -625,8 +625,11 @@ public class GameManager : MonoBehaviour {
         else return rep;
     }
 
-    int CalculateNEmployees() {
-        if (employeeGoals[totalEmployees] >= users) return totalEmployees + 1;
+    int CalculateEmployees() {
+        if (totalEmployees < employeeGoals.Length && employeeGoals[totalEmployees] >= users) {
+            DisplayMessage("Hai raggiunto " + employeeGoals[totalEmployees] + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
+            return totalEmployees + 1;
+        }
         return totalEmployees;
     }
 

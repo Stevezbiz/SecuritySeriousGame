@@ -22,7 +22,7 @@ public class EmployeeView : MonoBehaviour {
 
     float oldTimeScale = 1f;
     bool full = false;
-    EmployeeCode current = EmployeeCode.GIGI;
+    EmployeeCode current = EmployeeCode.LUIGI;
     List<EmployeeCode> indexes = new List<EmployeeCode>();
     Dictionary<EmployeeCode, EmployeeItem> employees = new Dictionary<EmployeeCode, EmployeeItem>();
 
@@ -66,7 +66,7 @@ public class EmployeeView : MonoBehaviour {
         // set the aspect of the navigation elements
         bottomPanel.SetActive(false);
         gameObject.SetActive(true);
-        ComposeDetails(EmployeeCode.GIGI);
+        ComposeDetails(EmployeeCode.LUIGI);
     }
 
     /**

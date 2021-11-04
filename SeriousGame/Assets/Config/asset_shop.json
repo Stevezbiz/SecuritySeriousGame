@@ -3,6 +3,7 @@
 	[
 		{
 			"id": 17,
+			"category": 3,
 			"name": "Server più potenti",
 			"description": "Sostituire i server è un'operazione costosa, ma permette di servire più clienti più velocemente. Sono anche più resistenti ai tentativi di attacco DoS",
 			"cost": 500,
@@ -24,6 +25,7 @@
 		},
 		{
 			"id": 18,
+			"category": 3,
 			"name": "Training di sicurezza",
 			"description": "Istruire adeguatamente i dipendenti riguardo le minacce alla sicurezza che devono affrontare ogni giorno è un passo fondamentale per garantire un adeguato livello di sicurezza all'interno di un'azienda. Il training insegna ai dipendenti a mettere in atto comportamenti più consapevoli, con l'obiettivo di limitare l'impatto di attacchi di phishing e per mezzo di malware.",
 			"cost": 300,
@@ -69,6 +71,7 @@
 		},
 		{
 			"id": 19,
+			"category": 3,
 			"name": "Back-up efficiente",
 			"description": "Una policy di back-up efficiente e sicura non rappresenta solo un costo da sostenere, ma si rivela una grande risorsa in caso di infezione da ransomware o compromissione del sistema",
 			"cost": 200,

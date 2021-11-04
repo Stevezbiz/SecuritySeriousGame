@@ -3,6 +3,7 @@
 	[
 		{
 			"id": 15,
+			"category": 4,
 			"name": "Sensibilizzare gli utenti",
 			"description": "Una campagna di sensibilizzazione sui rischi legati ai servizi online per i clienti. Permette di ridurre il rischio che questi cadano preda di tentativi di truffa per mezzo di tecniche di social engineering.",
 			"cost": 300,
@@ -24,6 +25,7 @@
 		},
 		{
 			"id": 16,
+			"category": 4,
 			"name": "Sportello di assistenza",
 			"description": "Un servizio di assistenza clienti che permette di aiutare gli utenti in caso di dubbi o difficoltà. Migliora l'esperienza utente del servizio",
 			"cost": 300,

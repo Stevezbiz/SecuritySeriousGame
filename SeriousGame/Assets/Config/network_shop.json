@@ -3,6 +3,7 @@
 	[
 		{
 			"id": 0,
+			"category": 0,
 			"name": "Riduzione del tempo di connessione",
 			"description": "Eliminare le connessioni non completate entro un certo limite di tempo aiuta a contrastare gli attacchi DoS. Purtroppo può capitare di scartare connessioni potenzialmente valide.",
 			"cost": 100,
@@ -24,6 +25,7 @@
 		},
 		{
 			"id": 1,
+			"category": 0,
 			"name": "Coda di connessioni circolare",
 			"description": "Eliminare le connessioni più vecchie non ancora chiuse per far spazio alle nuove può aiutare a contrastare gli attacchi DoS. D'altra parte questa tecnica è soggetta al rischio di eliminare connessioni legittime anche se datate.",
 			"cost": 100,
@@ -45,6 +47,7 @@
 		},
 		{
 			"id": 2,
+			"category": 0,
 			"name": "Firewall",
 			"description": "L'adozione di un firewall ben configurato garantisce una prima linea di difesa contro gli attacchi DoS meno sofisticati e permette di scartare le connessioni a siti ritenuti poco sicuri, in modo da limitare le possibilità di contagio da malware.",
 			"cost": 300,
@@ -96,6 +99,7 @@
 		},
 		{
 			"id": 3,
+			"category": 0,
 			"name": "DNSSEC",
 			"description": "L'adozione di DNSSEC comporta un ulteriore livello di difesa da attacchi MITM e mitiga l'efficacia degli attacchi DoS.",
 			"cost": 400,

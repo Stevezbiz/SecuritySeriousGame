@@ -3,6 +3,7 @@
 	[
 		{
 			"id": 11,
+			"category": 2,
 			"name": "Intrusion Detection Systems (IDS)",
 			"description": "L'utilizzo di IDS permette di analizzare anomalie nel traffico e aiuta a prevenire gli attacchi DoS. Può identificare comportamenti insoliti, spesso riconducibili all'opera di malware o accessi non autorizzati.",
 			"cost": 500,
@@ -60,6 +61,7 @@
 		},
 		{
 			"id": 12,
+			"category": 2,
 			"name": "Aggiornamenti programmati",
 			"description": "Applicare prontamente le nuove patch permette di eliminare alcune vulnerabilità dal software utilizzato, rendendo più difficile sfruttare eventuali falle del codice ai malware e ai malintenzionati che cercano di sabotare le API.",
 			"cost": 100,
@@ -111,6 +113,7 @@
 		},
 		{
 			"id": 13,
+			"category": 2,
 			"name": "Antivirus",
 			"description": "Un antivirus può rallentare il lavoro di un dipendente, ma è un agente che contribuisce in maniera determinante alla sicurezza del sistema grazie alla capacità di individuare un gran numero di malware, prima che questi danneggino il sistema.",
 			"cost": 400,
@@ -150,6 +153,7 @@
 		},
 		{
 			"id": 14,
+			"category": 2,
 			"name": "Solo software autorizzato",
 			"description": "Utilizzare solo software autorizzato sui computer aziendali può essere limitante per un dipendente, ma con questa misura di sicurezza si evita di introdurre nuove vulnerabilità nel sistema, contrastando l'opera dei malware.",
 			"cost": 100,

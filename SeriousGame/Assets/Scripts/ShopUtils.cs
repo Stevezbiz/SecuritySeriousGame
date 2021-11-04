@@ -25,9 +25,18 @@ public enum ShopItemCode {
     BACK_UP
 }
 
+public enum ShopItemCategory {
+    NETWORK,
+    ACCESS,
+    SOFTWARE,
+    ASSET,
+    SERVICES
+}
+
 [System.Serializable]
 public class ShopItemInfo {
     public ShopItemCode id;
+    public ShopItemCategory category;
     public string name;
     public string description;
     public int cost;
