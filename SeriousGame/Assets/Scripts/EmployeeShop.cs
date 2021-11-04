@@ -6,11 +6,10 @@ using Image = UnityEngine.UI.Image;
 using Outline = UnityEngine.UI.Outline;
 using Button = UnityEngine.UI.Button;
 
-public class EmployeeView : MonoBehaviour {
+public class EmployeeShop : MonoBehaviour {
     [SerializeField] TextAsset employeesFileJSON;
     [SerializeField] GameManager gameManager;
     [SerializeField] GameObject employeeItem;
-    [SerializeField] GameObject bottomPanel;
     [SerializeField] RectTransform content;
     [SerializeField] TextMeshProUGUI titleText;
     [SerializeField] TextMeshProUGUI descriptionText;
@@ -26,7 +25,6 @@ public class EmployeeView : MonoBehaviour {
     [SerializeField] Image servicesBar;
     [SerializeField] TextMeshProUGUI hireText;
 
-    float oldTimeScale = 1f;
     bool full = false;
     EmployeeCode current = EmployeeCode.LUIGI;
     List<EmployeeCode> indexes = new List<EmployeeCode>();
@@ -67,21 +65,9 @@ public class EmployeeView : MonoBehaviour {
      * <summary>Open the view</summary>
      */
     public void OpenView() {
-        oldTimeScale = Time.timeScale;
-        Time.timeScale = 0;
         // set the aspect of the navigation elements
-        bottomPanel.SetActive(false);
         gameObject.SetActive(true);
-        ComposeDetails(EmployeeCode.LUIGI);
-    }
-
-    /**
-     * <summary>Close the view</summary>
-     */
-    public void CloseView() {
-        Time.timeScale = oldTimeScale;
-        gameObject.SetActive(false);
-        bottomPanel.SetActive(true);
+        ComposeDetails(0);
     }
 
     /**

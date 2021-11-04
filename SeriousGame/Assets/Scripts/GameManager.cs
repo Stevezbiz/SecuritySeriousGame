@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour {
     [SerializeField] ShopGUI shop;
     [SerializeField] Log logManager;
     [SerializeField] AttackView attackView;
-    [SerializeField] EmployeeView employeeView;
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
@@ -106,7 +105,6 @@ public class GameManager : MonoBehaviour {
         startTime = Time.time;
         Time.timeScale = 0;
         shop.Init();
-        employeeView.Init();
         // load the attacks from the file and initialize the view
         attacks = AttackUtils.LoadFromFile(attacksFileJSON);
         attackView.Init(attacks.Count);
@@ -132,7 +130,6 @@ public class GameManager : MonoBehaviour {
         }
         // generate all the objects in the shop
         shop.Load();
-        employeeView.Load();
         // refresh the GUI for the first time
         gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
     }

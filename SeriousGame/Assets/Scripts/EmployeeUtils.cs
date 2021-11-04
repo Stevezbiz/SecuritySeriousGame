@@ -9,6 +9,13 @@ public enum EmployeeCode {
     GIULIA
 }
 
+public enum EmployeeStatus {
+    WORKING,
+    PREVENTION,
+    REPAIR,
+    UPGRADING
+}
+
 [System.Serializable]
 public class EmployeeInfo {
     public EmployeeCode id;
@@ -16,6 +23,7 @@ public class EmployeeInfo {
     public string description;
     public float moneyGain;
     public bool owned;
+    public EmployeeStatus status;
     public EmployeeAbility[] abilities;
 }
 
@@ -23,10 +31,12 @@ public class EmployeeInfo {
 public class EmployeeRecap {
     public EmployeeCode id;
     public bool owned;
+    public EmployeeStatus status;
 
-    public EmployeeRecap(EmployeeCode id, bool owned) {
+    public EmployeeRecap(EmployeeCode id, bool owned, EmployeeStatus status) {
         this.id = id;
         this.owned = owned;
+        this.status = status;
     }
 }
 
@@ -45,6 +55,7 @@ public static class EmployeeUtils {
     public static void UpdateEmployees(Dictionary<EmployeeCode, EmployeeInfo> employees, EmployeeRecap[] er) {
         foreach (EmployeeRecap e in er) {
             employees[e.id].owned = e.owned;
+            employees[e.id].status = e.status;
         }
     }
 
@@ -52,7 +63,7 @@ public static class EmployeeUtils {
         List<EmployeeRecap> er = new List<EmployeeRecap>();
 
         foreach (EmployeeInfo e in employees.Values) {
-            er.Add(new EmployeeRecap(e.id, e.owned));
+            er.Add(new EmployeeRecap(e.id, e.owned, e.status));
         }
 
         return er.ToArray();

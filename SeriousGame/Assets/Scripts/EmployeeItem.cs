@@ -8,12 +8,12 @@ public class EmployeeItem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI statusText;
 
     EmployeeCode id;
-    EmployeeView parent;
+    EmployeeShop parent;
 
     /**
      * <summary>Populate the item with all the elements to show</summary>
      */
-    public void Load(EmployeeInfo e, EmployeeView parent) {
+    public void Load(EmployeeInfo e, EmployeeShop parent) {
         this.id = e.id;
         this.parent = parent;
         nameText.SetText(e.name);
