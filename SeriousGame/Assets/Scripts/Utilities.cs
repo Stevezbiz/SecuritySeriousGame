@@ -71,13 +71,13 @@ public class GameConfig {
     public float endurance;
     public float miss;
     public float[] usersGain;
-    public float[] moneyGain;
+    public float[] usersGoals;
     public float[] employeeGoals;
     public string date;
 
     public GameConfig(int totalTime, int endTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel,
         int totalEmployees, int hiredEmployees, float money, float users, float reputation, float moneyMalus, float moneyBonus, float usersMalus, float usersBonus, float attackUsersMalus,
-        float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] moneyGain, float[] employeeGoals, string date) {
+        float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] usersGoals, float[] employeeGoals, string date) {
         this.totalTime = totalTime;
         this.endTime = endTime;
         this.negativeTime = negativeTime;
@@ -100,7 +100,7 @@ public class GameConfig {
         this.endurance = endurance;
         this.miss = miss;
         this.usersGain = usersGain;
-        this.moneyGain = moneyGain;
+        this.usersGoals = usersGoals;
         this.employeeGoals = employeeGoals;
         this.date = date;
     }

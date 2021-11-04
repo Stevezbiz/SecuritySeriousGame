@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour {
     float endurance;
     float miss;
     float[] usersGain;
-    float[] moneyGain;
+    float[] usersGoals;
     float[] employeeGoals;
     DateTime dateTime;
 
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour {
     public GameSave SaveGame() {
         return new GameSave(new GameConfig(totalTime, endTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
             totalEmployees, hiredEmployees, money, users, reputation, moneyMalus, moneyBonus, usersMalus, usersBonus, attackUsersMalus,
-            attackMoneyMalus, endurance, miss, usersGain, moneyGain, employeeGoals, dateTime.ToString()), ShopUtils.GetShopItemRecap(shopItems),
+            attackMoneyMalus, endurance, miss, usersGain, usersGoals, employeeGoals, dateTime.ToString()), ShopUtils.GetShopItemRecap(shopItems),
             EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
             new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
@@ -163,7 +163,7 @@ public class GameManager : MonoBehaviour {
         endurance = gc.endurance;
         miss = gc.miss;
         usersGain = gc.usersGain;
-        moneyGain = gc.moneyGain;
+        usersGoals = gc.usersGoals;
         employeeGoals = gc.employeeGoals;
         dateTime = DateTime.Parse(gc.date);
     }
@@ -507,14 +507,14 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the actual gain of money</summary>
      */
     public float GetActualMoneyGain() {
-        return (moneyGain[userLevel] + moneyBonus) * (1 - attackMoneyMalus) - moneyMalus;
+        return moneyBonus * (1 - attackMoneyMalus) - moneyMalus;
     }
 
     /**
      * <summary>Return the gain of money based on the number of users</summary>
      */
     public float GetMoneyGain() {
-        return moneyGain[userLevel] + moneyBonus;
+        return moneyBonus;
     }
 
     /**
@@ -571,7 +571,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the money updated</summary>
      */
     float CalculateMoney() {
-        return money + (moneyGain[userLevel] + moneyBonus) * (1 - attackMoneyMalus) - moneyMalus;
+        return money + moneyBonus * (1 - attackMoneyMalus) - moneyMalus;
     }
 
     /**
@@ -585,14 +585,9 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the current level of users</summary>
      */
     int CalculateUserLevel() {
-        int i;
-        if (users < 100) i = 0;
-        else if (users < 1000) i = 1;
-        else if (users < 10000) i = 2;
-        else if (users < 100000) i = 3;
-        else if (users < 1000000) i = 4;
-        else i = 5;
-        return i;
+        if (userLevel < usersGoals.Length && users > usersGoals[userLevel]) return userLevel + 1;
+        if (userLevel > 0 && users < usersGoals[userLevel - 1]) return userLevel - 1;
+        return userLevel;
     }
 
     /**
@@ -619,7 +614,7 @@ public class GameManager : MonoBehaviour {
     }
 
     int CalculateEmployees() {
-        if (totalEmployees < employeeGoals.Length && employeeGoals[totalEmployees] >= users) {
+        if (totalEmployees < employeeGoals.Length && employeeGoals[totalEmployees - 2] >= users) {
             DisplayMessage("Hai raggiunto " + employeeGoals[totalEmployees] + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
             return totalEmployees + 1;
         }

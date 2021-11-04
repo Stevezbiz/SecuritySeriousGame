@@ -13,8 +13,8 @@
 		"money": 700,
 		"users": 100,
 		"reputation": 0.5,
-		"moneyMalus": 5,
-		"moneyBonus": 0,
+		"moneyMalus": 0,
+		"moneyBonus": 10,
 		"usersMalus": 1,
 		"usersBonus": 1,
 		"attackUsersMalus": 0,
@@ -22,8 +22,8 @@
 		"endurance": 1,
 		"miss": 0,
 		"usersGain": [0.1, 0.05, 0.03, 0.02, 0.01, 0.005],
-		"moneyGain": [20, 30, 40, 50, 60, 70],
-		"employeeGoals": [0, 2000, 60000, 2000000],
+		"usersGoals": [100, 1000, 10000, 100000, 1000000, 10000000],
+		"employeeGoals": [1000, 10000, 100000, 1000000, 10000000],
 		"date": "1/1/2000"
 	}
 }
