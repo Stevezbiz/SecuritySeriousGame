@@ -15,6 +15,10 @@ public static class SceneLoader {
      * <summary>Close the game</summary>
      */
     public static void ExitGame() {
-        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.OpenURL("about:blank");
+#endif
     }
 }

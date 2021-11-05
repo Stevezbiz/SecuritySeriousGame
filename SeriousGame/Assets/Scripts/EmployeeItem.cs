@@ -34,11 +34,4 @@ public class EmployeeItem : MonoBehaviour {
     public void Hire() {
         statusText.SetText("ASSUNTO");
     }
-
-    /**
-     * <summary>Applies the effects of firing an employee</summary>
-     */
-    public void Fire() {
-        statusText.SetText("DISPONIBILE");
-    }
 }

@@ -556,12 +556,16 @@ public class GameManager : MonoBehaviour {
         return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * Math.Round(attackUsersMalus, 2));
     }
 
-    public int GetTotalEmployees() {
+    public int GetTotalEmployeesN() {
         return totalEmployees;
     }
 
-    public int GetHiredEmployees() {
+    public int GetHiredEmployeesN() {
         return hiredEmployees;
+    }
+
+    public List<EmployeeInfo> GetHiredEmployees() {
+        return EmployeeUtils.GetHiredEmployees(employees);
     }
 
     /**
@@ -611,7 +615,7 @@ public class GameManager : MonoBehaviour {
     }
 
     int CalculateEmployees() {
-        if (totalEmployees < employeeGoals.Length && employeeGoals[totalEmployees - 2] >= users) {
+        if (totalEmployees < employeeGoals.Length + 2 && users >= employeeGoals[totalEmployees - 2]) {
             DisplayMessage("Hai raggiunto " + employeeGoals[totalEmployees] + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
             return totalEmployees + 1;
         }

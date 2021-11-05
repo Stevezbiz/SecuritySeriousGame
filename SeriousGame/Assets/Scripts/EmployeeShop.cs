@@ -87,8 +87,8 @@ public class EmployeeShop : MonoBehaviour {
         servicesBar.fillAmount = abilities[ShopItemCategory.SERVICES] / 10;
         moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
         // set the graphic aspect
-        int tot = gameManager.GetTotalEmployees();
-        int hired = gameManager.GetHiredEmployees();
+        int tot = gameManager.GetTotalEmployeesN();
+        int hired = gameManager.GetHiredEmployeesN();
         if (tot == hired) full = true;
         else full = false;
         countText.SetText(hired + "/" + tot);
