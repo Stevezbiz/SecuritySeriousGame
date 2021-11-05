@@ -45,6 +45,7 @@ public class ShopItemInfo {
     public bool owned;
     public bool on;
     public bool locked;
+    public int upgradeTime;
     public Resistance[] resistances;
     public ShopItemCode[] requirements;
 }

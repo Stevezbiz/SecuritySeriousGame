@@ -82,8 +82,25 @@ public static class EmployeeUtils {
     public static List<EmployeeInfo> GetHiredEmployees(Dictionary<EmployeeCode, EmployeeInfo> e) {
         List<EmployeeInfo> employees = new List<EmployeeInfo>();
 
-        foreach(EmployeeInfo el in e.Values) {
+        foreach (EmployeeInfo el in e.Values) {
             if (el.owned) employees.Add(el);
+        }
+
+        return employees;
+    }
+
+    public static bool CheckEmployeeAvailability(Dictionary<EmployeeCode, EmployeeInfo> employees) {
+        foreach (EmployeeInfo e in employees.Values) {
+            if (e.owned && e.status == EmployeeStatus.WORKING) return true;
+        }
+        return false;
+    }
+
+    public static List<EmployeeInfo> GetAvailableEmployees(Dictionary<EmployeeCode, EmployeeInfo> e) {
+        List<EmployeeInfo> employees = new List<EmployeeInfo>();
+
+        foreach(EmployeeInfo el in e.Values) {
+            if (el.owned && el.status == EmployeeStatus.WORKING) employees.Add(el);
         }
 
         return employees;

@@ -18,6 +18,7 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] Outline purchaseOutline;
     [SerializeField] GameManager gameManager;
     [SerializeField] Log logManager;
+    [SerializeField] EmployeeChoice employeeChoice;
 
     ShopItem parent;
     ShopItemCode id;
@@ -35,6 +36,9 @@ public class ShopItemDetail : MonoBehaviour {
             foreach (ShopItemCode code in sii.requirements) {
                 requirements += "    " + gameManager.GetShopItem(code).name + "\n";
             }
+        }
+        if (!gameManager.CheckEmployeeAvailability()) {
+            requirements += "Non hai dipendenti disponibili\n";
         }
         requirementsText.SetText(requirements);
         // set the technical details about resistances
@@ -85,7 +89,7 @@ public class ShopItemDetail : MonoBehaviour {
             if (sii.on) disableButton.SetActive(true);
             else enableButton.SetActive(true);
         } else {
-            if (sii.locked) {
+            if (sii.locked || !gameManager.CheckEmployeeAvailability()) {
                 purchaseButton.GetComponentInChildren<Button>().interactable = false;
                 purchaseText.color = COLOR.GREEN_DISABLED;
                 purchaseOutline.effectColor = COLOR.GREEN_DISABLED;
@@ -98,12 +102,12 @@ public class ShopItemDetail : MonoBehaviour {
     /**
      * <summary>Applies the effects of buying an item of the shop</summary>
      */
-    public void ConfirmPurchase() {
-        gameManager.PurchaseShopItem(id);
-        parent.Purchase();
-        purchaseButton.SetActive(false);
+    public void PurchaseItem(EmployeeCode eid) {
         // print in the log
         logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.PURCHASE_ITEM);
+        gameManager.PurchaseShopItem(id, eid);
+        parent.Purchase();
+        purchaseButton.SetActive(false);
         // enable automatically after purchase
         EnableItem();
     }
@@ -137,5 +141,10 @@ public class ShopItemDetail : MonoBehaviour {
      */
     public void Back() {
         gameObject.SetActive(false);
+    }
+
+    public void OpenEmployeeChoice() {
+        employeeChoice.Load();
+        employeeChoice.gameObject.SetActive(true);
     }
 }

@@ -80,7 +80,7 @@ public class AttackStats {
 public class AttacksJSON {
     public AttackInfo[] attacks;
 
-    
+
 }
 
 public static class AttackUtils {

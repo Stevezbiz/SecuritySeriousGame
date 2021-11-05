@@ -415,7 +415,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Applies the effects of buying an item in the shop</summary>
      */
-    public void PurchaseShopItem(ShopItemCode id) {
+    public void PurchaseShopItem(ShopItemCode id, EmployeeCode eid) {
         shopItems[id].owned = true;
         money -= shopItems[id].cost;
         gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
@@ -489,6 +489,14 @@ public class GameManager : MonoBehaviour {
         employees[id].owned = true;
         moneyBonus += employees[id].moneyGain;
         hiredEmployees++;
+    }
+
+    public bool CheckEmployeeAvailability() {
+        return EmployeeUtils.CheckEmployeeAvailability(employees);
+    }
+
+    public List<EmployeeInfo> GetAvailableEmployees() {
+        return EmployeeUtils.GetAvailableEmployees(employees);
     }
 
     // MISC

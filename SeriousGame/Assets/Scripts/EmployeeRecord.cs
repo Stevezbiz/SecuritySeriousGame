@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using Button = UnityEngine.UI.Button;
 
 public class EmployeeRecord : MonoBehaviour {
@@ -11,15 +11,13 @@ public class EmployeeRecord : MonoBehaviour {
 
     EmployeeInfo employee;
     GameManager gameManager;
-    EmployeeView parent;
 
     /**
      * <summary>Populate the item with all the elements to show</summary>
      */
-    public void Load(EmployeeInfo e, GameManager gameManager, EmployeeView parent) {
+    public void Load(EmployeeInfo e, GameManager gameManager) {
         this.employee = e;
         this.gameManager = gameManager;
-        this.parent = parent;
         nameText.SetText(e.name);
         if (e.status == EmployeeStatus.WORKING) statusText.SetText("DISPONIBILE");
         else statusText.SetText("OCCUPATO");
@@ -31,7 +29,6 @@ public class EmployeeRecord : MonoBehaviour {
     public void OnClick() {
         if (employee.status == EmployeeStatus.WORKING) {
             gameObject.GetComponent<Button>().Select();
-            parent.Select(employee.id);
         }
     }
 

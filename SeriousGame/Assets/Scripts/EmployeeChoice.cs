@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using Image = UnityEngine.UI.Image;
 
-public class EmployeeCard : MonoBehaviour {
-    [SerializeField] TextMeshProUGUI titleText;
+public class EmployeeChoice : MonoBehaviour {
+    [SerializeField] GameManager gameManager;
+    [SerializeField] ShopItemDetail shopItemDetail;
+    [SerializeField] TMP_Dropdown employeeDropdown;
     [SerializeField] TextMeshProUGUI descriptionText;
     [SerializeField] TextMeshProUGUI moneyGainText;
     [SerializeField] Image networkBar;
@@ -14,8 +16,18 @@ public class EmployeeCard : MonoBehaviour {
     [SerializeField] Image assetBar;
     [SerializeField] Image servicesBar;
 
-    public void Load(EmployeeInfo e) {
-        titleText.SetText(e.name);
+    List<EmployeeInfo> employees;
+
+    public void Load() {
+        // fill the options of the dropdown element
+        employees = gameManager.GetAvailableEmployees();
+        List<string> options = new List<string>();
+        foreach(EmployeeInfo el in employees) {
+            options.Add(el.name);
+        }
+        employeeDropdown.AddOptions(options);
+        employeeDropdown.value = 0;
+        EmployeeInfo e = employees[employeeDropdown.value];
         descriptionText.SetText(e.description);
         Dictionary<ShopItemCategory, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
         networkBar.fillAmount = abilities[ShopItemCategory.NETWORK] / 10;
@@ -26,7 +38,12 @@ public class EmployeeCard : MonoBehaviour {
         moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
     }
 
+    public void Purchase() {
+        shopItemDetail.PurchaseItem(employees[employeeDropdown.value].id);
+        gameObject.SetActive(false);
+    }
+
     public void Close() {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

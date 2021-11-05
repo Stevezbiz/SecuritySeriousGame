@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using Image = UnityEngine.UI.Image;
-using Outline = UnityEngine.UI.Outline;
-using Button = UnityEngine.UI.Button;
 
 public class EmployeeShop : MonoBehaviour {
     [SerializeField] TextAsset employeesFileJSON;
@@ -23,7 +21,6 @@ public class EmployeeShop : MonoBehaviour {
     [SerializeField] Image softwareBar;
     [SerializeField] Image assetBar;
     [SerializeField] Image servicesBar;
-    [SerializeField] TextMeshProUGUI hireText;
 
     bool full = false;
     EmployeeCode current = EmployeeCode.LUIGI;
@@ -71,6 +68,14 @@ public class EmployeeShop : MonoBehaviour {
     }
 
     /**
+     * <summary>Close the view</summary>
+     */
+    public void CloseView() {
+        // set the aspect of the navigation elements
+        gameObject.SetActive(false);
+    }
+
+    /**
      * <summary>Compose all the details of the employee</summary>
      */
     public void ComposeDetails(EmployeeCode id) {
@@ -96,18 +101,12 @@ public class EmployeeShop : MonoBehaviour {
             countText.color = COLOR.YELLOW;
             employeeIcon.color = COLOR.YELLOW;
             notAvailable.SetActive(true);
-            hireButton.GetComponent<Outline>().effectColor = COLOR.GREEN_DISABLED;
-            hireButton.SetActive(true);
-            hireButton.GetComponentInChildren<Button>().interactable = false;
-            hireText.color = COLOR.GREEN_DISABLED;
+            hireButton.SetActive(false);
         } else {
             countText.color = COLOR.GREEN;
             employeeIcon.color = COLOR.GREEN;
             notAvailable.SetActive(false);
-            hireButton.GetComponent<Outline>().effectColor = COLOR.GREEN;
             hireButton.SetActive(true);
-            hireButton.GetComponentInChildren<Button>().interactable = true;
-            hireText.color = COLOR.GREEN;
         }
         if (e.owned) {
             notAvailable.SetActive(false);
