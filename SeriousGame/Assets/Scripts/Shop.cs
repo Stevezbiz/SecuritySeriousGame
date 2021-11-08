@@ -10,6 +10,7 @@ public class Shop : MonoBehaviour {
     [SerializeField] GameManager gameManager;
 
     List<ShopItemCode> indexes = new List<ShopItemCode>();
+    List<GameObject> shopItems = new List<GameObject>();
 
     /**
      * <summary>Initialize the data structures</summary>
@@ -27,6 +28,10 @@ public class Shop : MonoBehaviour {
      * <summary>Load all the items in the list</summary>
      */
     public void Load() {
+        foreach (GameObject obj in shopItems) {
+            Destroy(obj);
+        }
+        shopItems.Clear();
         foreach (ShopItemCode id in indexes) {
             AddShopRecord(gameManager.GetShopItem(id));
         }
@@ -40,12 +45,14 @@ public class Shop : MonoBehaviour {
         GameObject newRecord = Instantiate(shopItem);
         newRecord.transform.SetParent(content, false);
         newRecord.GetComponent<ShopItem>().Load(sii, details);
+        shopItems.Add(newRecord);
     }
 
     /**
      * <summary>Open the list of items</summary>
      */
     public void OpenList() {
+        Load();
         gameObject.SetActive(true);
     }
 

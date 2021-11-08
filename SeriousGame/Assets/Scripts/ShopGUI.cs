@@ -30,11 +30,6 @@ public class ShopGUI : MonoBehaviour {
      * <summary>Load all the items in the shop</summary>
      */
     public void Load() {
-        networkShop.GetComponent<Shop>().Load();
-        accessShop.GetComponent<Shop>().Load();
-        softwareShop.GetComponent<Shop>().Load();
-        assetShop.GetComponent<Shop>().Load();
-        servicesShop.GetComponent<Shop>().Load();
         employeeView.GetComponent<EmployeeShop>().Load();
     }
 

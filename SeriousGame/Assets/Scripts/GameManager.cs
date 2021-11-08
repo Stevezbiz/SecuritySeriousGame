@@ -29,12 +29,6 @@ public class GameManager : MonoBehaviour {
     float money;
     float users;
     float reputation;
-    float moneyMalus;
-    float moneyBonus;
-    float usersMalus;
-    float usersBonus;
-    float attackUsersMalus;
-    float attackMoneyMalus;
     float endurance;
     float miss;
     float[] usersGain;
@@ -73,8 +67,8 @@ public class GameManager : MonoBehaviour {
             UpdateTasks();
             // update values
             userLevel = CalculateUserLevel();
-            money = CalculateMoney();
-            users = CalculateUsers();
+            money += GetActualMoneyGain();
+            users += GetActualUsersGain();
             reputation = CalculateReputation();
             totalEmployees = CalculateEmployees();
             // refresh
@@ -94,10 +88,10 @@ public class GameManager : MonoBehaviour {
      */
     public GameSave SaveGame() {
         return new GameSave(new GameConfig(totalTime, endTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
-            totalEmployees, hiredEmployees, money, users, reputation, moneyMalus, moneyBonus, usersMalus, usersBonus, attackUsersMalus,
-            attackMoneyMalus, endurance, miss, usersGain, usersGoals, employeeGoals, dateTime.ToString()), ShopUtils.GetShopItemRecap(shopItems),
-            EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
-            new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), tasks.ToArray(), new List<Resistance>(resistances.Values).ToArray());
+            totalEmployees, hiredEmployees, money, users, reputation, endurance, miss, usersGain, usersGoals, employeeGoals, dateTime.ToString()),
+            ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(), logManager.GetNLines(),
+            logManager.GetNPages()), new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), tasks.ToArray(),
+            new List<Resistance>(resistances.Values).ToArray());
     }
 
     /**
@@ -154,12 +148,6 @@ public class GameManager : MonoBehaviour {
         money = gc.money;
         users = gc.users;
         reputation = gc.reputation;
-        moneyMalus = gc.moneyMalus;
-        moneyBonus = gc.moneyBonus;
-        usersMalus = gc.usersMalus;
-        usersBonus = gc.usersBonus;
-        attackUsersMalus = gc.attackUsersMalus;
-        attackMoneyMalus = gc.attackMoneyMalus;
         endurance = gc.endurance;
         miss = gc.miss;
         usersGain = gc.usersGain;
@@ -326,8 +314,6 @@ public class GameManager : MonoBehaviour {
         // apply the maluses
         money -= attacks[id].moneyLoss;
         users -= attacks[id].usersLoss * users;
-        attackUsersMalus += attacks[id].usersMalus;
-        attackMoneyMalus += attacks[id].moneyMalus;
         reputation -= attacks[id].reputationMalus;
         // generate a message
         DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE);
@@ -339,8 +325,6 @@ public class GameManager : MonoBehaviour {
     void StopAttack(AttackCode id) {
         // remove the maluses
         ongoingAttacks--;
-        attackUsersMalus -= attacks[id].usersMalus;
-        attackMoneyMalus -= attacks[id].moneyMalus;
     }
 
     /**
@@ -427,7 +411,6 @@ public class GameManager : MonoBehaviour {
             case TaskType.UPGRADE:
                 employees[tasks[i].executor].status = EmployeeStatus.WORK;
                 EnableShopItem(tasks[i].shopItem);
-                moneyBonus += employees[tasks[i].executor].moneyGain * 0.5f;
                 tasks.RemoveAt(i);
                 break;
             default:
@@ -472,13 +455,8 @@ public class GameManager : MonoBehaviour {
      */
     public void EnableShopItem(ShopItemCode id) {
         shopItems[id].status = ShopItemStatus.ACTIVE;
-        ShopItemInfo sii = shopItems[id];
-        if (sii.moneyMalus >= 0) moneyMalus += sii.moneyMalus;
-        else moneyBonus -= sii.moneyMalus;
-        if (sii.usersMod < 1) usersMalus *= 1 - sii.usersMod;
-        else usersBonus *= sii.usersMod;
         // update resistances
-        foreach (Resistance r in sii.resistances) {
+        foreach (Resistance r in shopItems[id].resistances) {
             if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 0f, 0f, 0f));
             resistances[r.id].miss += r.miss;
             resistances[r.id].duration += r.duration;
@@ -491,13 +469,8 @@ public class GameManager : MonoBehaviour {
      */
     public void DisableShopItem(ShopItemCode id) {
         shopItems[id].status = ShopItemStatus.INACTIVE;
-        ShopItemInfo sii = shopItems[id];
-        if (sii.moneyMalus >= 0) moneyMalus -= sii.moneyMalus;
-        else moneyBonus += sii.moneyMalus;
-        if (sii.usersMod < 1) usersMalus /= 1 - sii.usersMod;
-        else usersBonus /= sii.usersMod;
         // update resistances
-        foreach (Resistance r in sii.resistances) {
+        foreach (Resistance r in shopItems[id].resistances) {
             resistances[r.id].miss -= r.miss;
             resistances[r.id].duration -= r.duration;
             resistances[r.id].endurance -= r.endurance;
@@ -533,7 +506,6 @@ public class GameManager : MonoBehaviour {
      */
     public void HireEmployee(EmployeeCode id) {
         employees[id].owned = true;
-        moneyBonus += employees[id].moneyGain;
         hiredEmployees++;
     }
 
@@ -551,7 +523,6 @@ public class GameManager : MonoBehaviour {
             case TaskType.UPGRADE:
                 duration = GetUpgradeDuration(id, t.shopItem);
                 employees[id].status = EmployeeStatus.UPGRADE;
-                moneyBonus -= employees[id].moneyGain * 0.5f;
                 t.AssignEmployee(id, duration);
                 tasks.Add(t);
                 break;
@@ -574,6 +545,40 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the actual gain of money</summary>
      */
     public float GetActualMoneyGain() {
+        float moneyBonus = 0f;
+        float moneyMalus = 0f;
+        float attackMoneyMalus = 0f;
+        // the revenue from the employees work
+        foreach (EmployeeInfo e in employees.Values) {
+            if (e.owned) {
+                switch (e.status) {
+                    case EmployeeStatus.WORK:
+                        moneyBonus += e.moneyGain;
+                        break;
+                    case EmployeeStatus.UPGRADE:
+                        moneyBonus += 0.5f * e.moneyGain;
+                        break;
+                    case EmployeeStatus.REPAIR:
+                        break;
+                    case EmployeeStatus.PREVENTION:
+                        break;
+                    default:
+                        Debug.Log("Error: undefined employeeStatus");
+                        break;
+                }
+            }
+        }
+        // the costs for the active items
+        foreach(ShopItemInfo sii in shopItems.Values) {
+            if (sii.status == ShopItemStatus.ACTIVE) {
+                if (sii.moneyMalus < 0) moneyBonus -= sii.moneyMalus;
+                else moneyMalus += sii.moneyMalus;
+            }
+        }
+        // the malus for the active attacks
+        foreach(AttackRecap a in attackSchedule) {
+            if (a.active) attackMoneyMalus += attacks[a.id].moneyMalus;
+        }
         return moneyBonus * (1 - attackMoneyMalus) - moneyMalus;
     }
 
@@ -581,6 +586,31 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the gain of money based on the number of users</summary>
      */
     public float GetMoneyGain() {
+        float moneyBonus = 0f;
+        // the revenue from the employees work
+        foreach (EmployeeInfo e in employees.Values) {
+            if (e.owned) {
+                switch (e.status) {
+                    case EmployeeStatus.WORK:
+                        moneyBonus += e.moneyGain;
+                        break;
+                    case EmployeeStatus.UPGRADE:
+                        moneyBonus += 0.5f * e.moneyGain;
+                        break;
+                    case EmployeeStatus.REPAIR:
+                        break;
+                    case EmployeeStatus.PREVENTION:
+                        break;
+                    default:
+                        Debug.Log("Error: undefined employeeStatus");
+                        break;
+                }
+            }
+        }
+        // the gain from the active items
+        foreach (ShopItemInfo sii in shopItems.Values) {
+            if (sii.status == ShopItemStatus.ACTIVE && sii.moneyMalus < 0) moneyBonus -= sii.moneyMalus;
+        }
         return moneyBonus;
     }
 
@@ -588,6 +618,13 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the malus to money caused by the active defences and services</summary>
      */
     public float GetMoneyMalus() {
+        float moneyMalus = 0f;
+        // the costs for the active items
+        foreach (ShopItemInfo sii in shopItems.Values) {
+            if (sii.status == ShopItemStatus.ACTIVE && sii.moneyMalus > 0) {
+                moneyMalus += sii.moneyMalus;
+            }
+        }
         return moneyMalus;
     }
 
@@ -595,6 +632,11 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the malus to money caused by the active attacks</summary>
      */
     public float GetAttackMoneyMalus() {
+        float attackMoneyMalus = 0f;
+        // the malus for the active attacks
+        foreach (AttackRecap a in attackSchedule) {
+            if (a.active) attackMoneyMalus += attacks[a.id].moneyMalus;
+        }
         return (float)Math.Round(attackMoneyMalus, 2);
     }
 
@@ -602,6 +644,20 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the actual gain of users</summary>
      */
     public float GetActualUsersGain() {
+        float usersMalus = 1f;
+        float usersBonus = 1f;
+        float attackUsersMalus = 0f;
+        // the user modifier for the active items
+        foreach (ShopItemInfo sii in shopItems.Values) {
+            if (sii.status == ShopItemStatus.ACTIVE) {
+                if (sii.usersMod < 1) usersMalus *= 1 - sii.usersMod;
+                else usersBonus *= sii.usersMod;
+            }
+        }
+        // the malus for the active attacks
+        foreach (AttackRecap a in attackSchedule) {
+            if (a.active) attackUsersMalus += attacks[a.id].usersMalus;
+        }
         return (float)Math.Round(usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * Math.Round(users));
     }
 
@@ -616,6 +672,15 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the modifier of the gain of users caused by defences and services</summary>
      */
     public float GetUsersMod() {
+        float usersMalus = 1f;
+        float usersBonus = 1f;
+        // the user modifier for the active items
+        foreach (ShopItemInfo sii in shopItems.Values) {
+            if (sii.status == ShopItemStatus.ACTIVE) {
+                if (sii.usersMod < 1) usersMalus *= 1 - sii.usersMod;
+                else usersBonus *= sii.usersMod;
+            }
+        }
         return usersMalus * usersBonus;
     }
 
@@ -623,6 +688,11 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the malus to users caused by the active attacks</summary>
      */
     public float GetAttackUsersMalus() {
+        float attackUsersMalus = 0f;
+        // the malus for the active attacks
+        foreach (AttackRecap a in attackSchedule) {
+            if (a.active) attackUsersMalus += attacks[a.id].usersMalus;
+        }
         return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * Math.Round(attackUsersMalus, 2));
     }
 
@@ -636,20 +706,6 @@ public class GameManager : MonoBehaviour {
 
     public List<EmployeeInfo> GetHiredEmployees() {
         return EmployeeUtils.GetHiredEmployees(employees);
-    }
-
-    /**
-     * <summary>Return the money updated</summary>
-     */
-    float CalculateMoney() {
-        return money + moneyBonus * (1 - attackMoneyMalus) - moneyMalus;
-    }
-
-    /**
-     * <summary>Return the number of users updated</summary>
-     */
-    float CalculateUsers() {
-        return users + usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * (float)Math.Round(users);
     }
 
     /**

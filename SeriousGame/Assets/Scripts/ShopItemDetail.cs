@@ -119,7 +119,7 @@ public class ShopItemDetail : MonoBehaviour {
         // print in the log
         logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.PURCHASE_ITEM);
         gameManager.PurchaseShopItem(id, eid);
-        parent.Purchase();
+        parent.Upgrade();
         purchaseButton.SetActive(false);
         upgradingButton.SetActive(true);
     }

@@ -64,12 +64,6 @@ public class GameConfig {
     public float money;
     public float users;
     public float reputation;
-    public float moneyMalus;
-    public float moneyBonus;
-    public float usersMalus;
-    public float usersBonus;
-    public float attackUsersMalus;
-    public float attackMoneyMalus;
     public float endurance;
     public float miss;
     public float[] usersGain;
@@ -77,9 +71,9 @@ public class GameConfig {
     public float[] employeeGoals;
     public string date;
 
-    public GameConfig(int totalTime, int endTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks, int userLevel,
-        int totalEmployees, int hiredEmployees, float money, float users, float reputation, float moneyMalus, float moneyBonus, float usersMalus, float usersBonus, float attackUsersMalus,
-        float attackMoneyMalus, float endurance, float miss, float[] usersGain, float[] usersGoals, float[] employeeGoals, string date) {
+    public GameConfig(int totalTime, int endTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks,
+        int userLevel, int totalEmployees, int hiredEmployees, float money, float users, float reputation, float endurance, float miss,
+        float[] usersGain, float[] usersGoals, float[] employeeGoals, string date) {
         this.totalTime = totalTime;
         this.endTime = endTime;
         this.negativeTime = negativeTime;
@@ -93,12 +87,6 @@ public class GameConfig {
         this.money = money;
         this.users = users;
         this.reputation = reputation;
-        this.moneyMalus = moneyMalus;
-        this.moneyBonus = moneyBonus;
-        this.usersMalus = usersMalus;
-        this.usersBonus = usersBonus;
-        this.attackUsersMalus = attackUsersMalus;
-        this.attackMoneyMalus = attackMoneyMalus;
         this.endurance = endurance;
         this.miss = miss;
         this.usersGain = usersGain;
@@ -133,5 +121,5 @@ public static class COLOR {
     public static Color BLUE = new Color(.0f, 1f, 1f, 1f);
     public static Color GREEN = new Color(.0f, 1f, .0f, 1f);
     public static Color YELLOW = new Color(1f, .8f, .0f, 1f);
-    public static Color GREEN_DISABLED = new Color(.0f, 1f, .0f, .4f);
+    public static Color GREEN_DISABLED = new Color(.0f, .4f, .0f, 1f);
 }
