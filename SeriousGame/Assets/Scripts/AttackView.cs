@@ -35,13 +35,13 @@ public class AttackView : MonoBehaviour {
      */
     public void Load() {
         attackDropdown.value = attackDropdown.options.Count - 1;
-        DisplayStats();
+        DisplayStats(0);
     }
 
     /**
      * <summary>Populate the view with the values to show</summary>
      */
-    void DisplayStats() {
+    void DisplayStats(int err) {
         // retrieve the stats
         AttackStats stats = gameManager.GetAttackStats((AttackCode)attackDropdown.value);
         if (stats == null) {

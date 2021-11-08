@@ -25,8 +25,13 @@ public class EmployeeChoice : MonoBehaviour {
         foreach(EmployeeInfo el in employees) {
             options.Add(el.name);
         }
+        employeeDropdown.ClearOptions();
         employeeDropdown.AddOptions(options);
         employeeDropdown.value = 0;
+        Display(0);
+    }
+
+    public void Display(int err) {
         EmployeeInfo e = employees[employeeDropdown.value];
         descriptionText.SetText(e.description);
         Dictionary<ShopItemCategory, float> abilities = EmployeeUtils.GetAbilities(e.abilities);

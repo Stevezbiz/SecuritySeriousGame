@@ -20462,9 +20462,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 555893436}
-        m_TargetAssemblyTypeName: AttackView, Assembly-CSharp
-        m_MethodName: DisplayStats
+      - m_Target: {fileID: 32990030}
+        m_TargetAssemblyTypeName: EmployeeChoice, Assembly-CSharp
+        m_MethodName: Display
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
