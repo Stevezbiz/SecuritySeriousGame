@@ -33,6 +33,13 @@ public enum ShopItemCategory {
     SERVICES
 }
 
+public enum ShopItemStatus {
+    NOT_OWNED,
+    UPGRADING,
+    ACTIVE,
+    INACTIVE
+}
+
 [System.Serializable]
 public class ShopItemInfo {
     public ShopItemCode id;
@@ -42,8 +49,7 @@ public class ShopItemInfo {
     public int cost;
     public float moneyMalus;
     public float usersMod;
-    public bool owned;
-    public bool on;
+    public ShopItemStatus status;
     public bool locked;
     public int upgradeTime;
     public Resistance[] resistances;
@@ -53,14 +59,12 @@ public class ShopItemInfo {
 [System.Serializable]
 public class ShopItemRecap {
     public ShopItemCode id;
-    public bool owned;
-    public bool on;
+    public ShopItemStatus status;
     public bool locked;
 
-    public ShopItemRecap(ShopItemCode id, bool owned, bool on, bool locked) {
+    public ShopItemRecap(ShopItemCode id, ShopItemStatus status, bool locked) {
         this.id = id;
-        this.owned = owned;
-        this.on = on;
+        this.status = status;
         this.locked = locked;
     }
 }
@@ -75,8 +79,7 @@ public static class ShopUtils {
 
     public static void UpdateShopItems(Dictionary<ShopItemCode, ShopItemInfo> shopItems, ShopItemRecap[] sir) {
         foreach (ShopItemRecap s in sir) {
-            shopItems[s.id].owned = s.owned;
-            shopItems[s.id].on = s.on;
+            shopItems[s.id].status = s.status;
             shopItems[s.id].locked = s.locked;
         }
     }
@@ -85,7 +88,7 @@ public static class ShopUtils {
         List<ShopItemRecap> sir = new List<ShopItemRecap>();
 
         foreach (ShopItemInfo sii in shopItems.Values) {
-            sir.Add(new ShopItemRecap(sii.id, sii.owned, sii.on, sii.locked));
+            sir.Add(new ShopItemRecap(sii.id, sii.status, sii.locked));
         }
 
         return sir.ToArray();

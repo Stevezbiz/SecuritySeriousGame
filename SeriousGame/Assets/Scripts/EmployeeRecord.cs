@@ -19,7 +19,7 @@ public class EmployeeRecord : MonoBehaviour {
         this.employee = e;
         this.gameManager = gameManager;
         nameText.SetText(e.name);
-        if (e.status == EmployeeStatus.WORKING) statusText.SetText("DISPONIBILE");
+        if (e.status == EmployeeStatus.WORK) statusText.SetText("DISPONIBILE");
         else statusText.SetText("OCCUPATO");
     }
 
@@ -27,7 +27,7 @@ public class EmployeeRecord : MonoBehaviour {
      * <summary>Function called when the element is clicked</summary>
      */
     public void OnClick() {
-        if (employee.status == EmployeeStatus.WORKING) {
+        if (employee.status == EmployeeStatus.WORK) {
             gameObject.GetComponent<Button>().Select();
         }
     }

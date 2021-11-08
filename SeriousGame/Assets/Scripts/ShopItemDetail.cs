@@ -13,6 +13,7 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] GameObject purchaseButton;
     [SerializeField] GameObject enableButton;
     [SerializeField] GameObject disableButton;
+    [SerializeField] GameObject upgradingButton;
     [SerializeField] GameObject lockImage;
     [SerializeField] TextMeshProUGUI purchaseText;
     [SerializeField] Outline purchaseOutline;
@@ -81,21 +82,33 @@ public class ShopItemDetail : MonoBehaviour {
         purchaseButton.SetActive(false);
         enableButton.SetActive(false);
         disableButton.SetActive(false);
+        upgradingButton.SetActive(false);
         purchaseButton.GetComponentInChildren<Button>().interactable = true;
         purchaseText.color = COLOR.GREEN;
         purchaseOutline.effectColor = COLOR.GREEN;
         lockImage.SetActive(false);
-        if (sii.owned) {
-            if (sii.on) disableButton.SetActive(true);
-            else enableButton.SetActive(true);
-        } else {
-            if (sii.locked || !gameManager.CheckEmployeeAvailability()) {
-                purchaseButton.GetComponentInChildren<Button>().interactable = false;
-                purchaseText.color = COLOR.GREEN_DISABLED;
-                purchaseOutline.effectColor = COLOR.GREEN_DISABLED;
-                lockImage.SetActive(true);
-            }
-            purchaseButton.SetActive(true);
+        switch (sii.status) {
+            case ShopItemStatus.NOT_OWNED:
+                if (sii.locked || !gameManager.CheckEmployeeAvailability()) {
+                    purchaseButton.GetComponentInChildren<Button>().interactable = false;
+                    purchaseText.color = COLOR.GREEN_DISABLED;
+                    purchaseOutline.effectColor = COLOR.GREEN_DISABLED;
+                    lockImage.SetActive(true);
+                }
+                purchaseButton.SetActive(true);
+                break;
+            case ShopItemStatus.UPGRADING:
+                upgradingButton.SetActive(true);
+                break;
+            case ShopItemStatus.ACTIVE:
+                disableButton.SetActive(true);
+                break;
+            case ShopItemStatus.INACTIVE:
+                enableButton.SetActive(true);
+                break;
+            default:
+                Debug.Log("Error: undefined shopItemStatus");
+                break;
         }
     }
 
@@ -108,8 +121,7 @@ public class ShopItemDetail : MonoBehaviour {
         gameManager.PurchaseShopItem(id, eid);
         parent.Purchase();
         purchaseButton.SetActive(false);
-        // enable automatically after purchase
-        EnableItem();
+        upgradingButton.SetActive(true);
     }
 
     /**

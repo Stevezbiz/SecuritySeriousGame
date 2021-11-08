@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour {
 
     List<LogLine> logs = new List<LogLine>();
     List<AttackRecap> attackSchedule = new List<AttackRecap>();
+    List<Task> tasks = new List<Task>();
     Dictionary<AttackCode, AttackInfo> attacks = new Dictionary<AttackCode, AttackInfo>();
     Dictionary<AttackCode, Resistance> resistances = new Dictionary<AttackCode, Resistance>();
     Dictionary<AttackCode, AttackStats> attackStats = new Dictionary<AttackCode, AttackStats>();
@@ -68,6 +69,8 @@ public class GameManager : MonoBehaviour {
             ActivateAttacks();
             // update attacks
             UpdateAttacks();
+            // update tasks
+            UpdateTasks();
             // update values
             userLevel = CalculateUserLevel();
             money = CalculateMoney();
@@ -94,7 +97,7 @@ public class GameManager : MonoBehaviour {
             totalEmployees, hiredEmployees, money, users, reputation, moneyMalus, moneyBonus, usersMalus, usersBonus, attackUsersMalus,
             attackMoneyMalus, endurance, miss, usersGain, usersGoals, employeeGoals, dateTime.ToString()), ShopUtils.GetShopItemRecap(shopItems),
             EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(), logManager.GetNLines(), logManager.GetNPages()),
-            new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), new List<Resistance>(resistances.Values).ToArray());
+            new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), tasks.ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
 
     /**
@@ -180,6 +183,7 @@ public class GameManager : MonoBehaviour {
         // load the data structures
         AttackUtils.UpdateAll(resistances, attackStats, gameSave.res, gameSave.aStats);
         attackSchedule = new List<AttackRecap>(gameSave.aSchedule);
+        tasks = new List<Task>(gameSave.tasks);
     }
 
     // LOG
@@ -241,10 +245,10 @@ public class GameManager : MonoBehaviour {
      * <summary>Insert an instance of the specified attack among the scheduled ones</summary>
      */
     void ScheduleAttack(AttackCode id, int i) {
-        float maxTime = attacks[id].maxTime * GetEndurance(id);
+        float maxTime = attacks[id].maxTime * GetAttackEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
-        if (i != attackSchedule.Count) attackSchedule[i] = new AttackRecap(id, Mathf.CeilToInt(GetDuration(id)), false, Mathf.CeilToInt(nextTime));
-        else attackSchedule.Insert(i, new AttackRecap(id, Mathf.CeilToInt(GetDuration(id)), false, Mathf.CeilToInt(nextTime)));
+        if (i != attackSchedule.Count) attackSchedule[i] = new AttackRecap(id, Mathf.CeilToInt(GetAttackDuration(id)), false, Mathf.CeilToInt(nextTime));
+        else attackSchedule.Insert(i, new AttackRecap(id, Mathf.CeilToInt(GetAttackDuration(id)), false, Mathf.CeilToInt(nextTime)));
     }
 
     /**
@@ -296,21 +300,21 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Return the miss ratio for the specified attack</summary>
      */
-    float GetMiss(AttackCode id) {
+    float GetAttackMiss(AttackCode id) {
         return miss + resistances[id].miss;
     }
 
     /**
      * <summary>Return the duration for the specified attack</summary>
      */
-    float GetDuration(AttackCode id) {
+    float GetAttackDuration(AttackCode id) {
         return (1 - resistances[id].duration) * attacks[id].duration;
     }
 
     /**
      * <summary>Return the endurance against the specified attack</summary>
      */
-    float GetEndurance(AttackCode id) {
+    float GetAttackEndurance(AttackCode id) {
         return endurance + resistances[id].endurance + 0.5f * (1 - reputation);
     }
 
@@ -362,7 +366,7 @@ public class GameManager : MonoBehaviour {
                 if (!attackSchedule[i].active) {
                     // start the attack
                     attackStats[attackSchedule[i].id].n++;
-                    if (Random.Range(0f, 1f) > GetMiss(attackSchedule[i].id)) {
+                    if (Random.Range(0f, 1f) > GetAttackMiss(attackSchedule[i].id)) {
                         // hit
                         attackStats[attackSchedule[i].id].hit++;
                         attackSchedule[i].active = true;
@@ -395,6 +399,47 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    // TASK
+    
+    void UpdateTasks() {
+        for (int i = 0; i < tasks.Count; i++) {
+            switch (tasks[i].type) {
+                case TaskType.UPGRADE:
+                    if (tasks[i].assigned) {
+                        if (tasks[i].duration == 0) {
+                            // end task
+                            EndTask(i);
+                            i--;
+                        } else {
+                            tasks[i].duration--;
+                        }
+                    }
+                    break;
+                default:
+                    Debug.Log("Error: undefined taskType");
+                    break;
+            }
+        }
+    }
+
+    void EndTask(int i) {
+        switch (tasks[i].type) {
+            case TaskType.UPGRADE:
+                employees[tasks[i].executor].status = EmployeeStatus.WORK;
+                EnableShopItem(tasks[i].shopItem);
+                moneyBonus += employees[tasks[i].executor].moneyGain * 0.5f;
+                tasks.RemoveAt(i);
+                break;
+            default:
+                Debug.Log("Error: undefined taskType");
+                break;
+        }
+    }
+
+    int GetUpgradeDuration(EmployeeCode id, ShopItemCode shopItem) {
+        return Mathf.CeilToInt(shopItems[shopItem].upgradeTime * (1 - 0.1f * (EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[shopItem].category] - 5)));
+    }
+
     // SHOP
 
     /**
@@ -416,8 +461,9 @@ public class GameManager : MonoBehaviour {
      * <summary>Applies the effects of buying an item in the shop</summary>
      */
     public void PurchaseShopItem(ShopItemCode id, EmployeeCode eid) {
-        shopItems[id].owned = true;
+        shopItems[id].status = ShopItemStatus.UPGRADING;
         money -= shopItems[id].cost;
+        AssignEmployee(eid, new Task(TaskType.UPGRADE, id));
         gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
     }
 
@@ -425,7 +471,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Applies the effects of enabling an item in the shop</summary>
      */
     public void EnableShopItem(ShopItemCode id) {
-        shopItems[id].on = true;
+        shopItems[id].status = ShopItemStatus.ACTIVE;
         ShopItemInfo sii = shopItems[id];
         if (sii.moneyMalus >= 0) moneyMalus += sii.moneyMalus;
         else moneyBonus -= sii.moneyMalus;
@@ -444,7 +490,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Applies the effects of disabling an item in the shop</summary>
      */
     public void DisableShopItem(ShopItemCode id) {
-        shopItems[id].on = false;
+        shopItems[id].status = ShopItemStatus.INACTIVE;
         ShopItemInfo sii = shopItems[id];
         if (sii.moneyMalus >= 0) moneyMalus -= sii.moneyMalus;
         else moneyBonus += sii.moneyMalus;
@@ -462,7 +508,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Returns true if the specified item of the shop is owned</summary>
      */
     public bool ShopItemIsOwned(ShopItemCode id) {
-        return shopItems[id].owned;
+        return shopItems[id].status != ShopItemStatus.NOT_OWNED;
     }
 
     /**
@@ -497,6 +543,22 @@ public class GameManager : MonoBehaviour {
 
     public List<EmployeeInfo> GetAvailableEmployees() {
         return EmployeeUtils.GetAvailableEmployees(employees);
+    }
+
+    void AssignEmployee(EmployeeCode id, Task t) {
+        int duration;
+        switch (t.type) {
+            case TaskType.UPGRADE:
+                duration = GetUpgradeDuration(id, t.shopItem);
+                employees[id].status = EmployeeStatus.UPGRADE;
+                moneyBonus -= employees[id].moneyGain * 0.5f;
+                t.AssignEmployee(id, duration);
+                tasks.Add(t);
+                break;
+            default:
+                Debug.Log("Error: undefined taskType");
+                break;
+        }
     }
 
     // MISC

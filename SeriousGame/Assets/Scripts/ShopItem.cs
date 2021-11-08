@@ -8,6 +8,7 @@ public class ShopItem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI costText;
     [SerializeField] GameObject ownedImage;
     [SerializeField] GameObject pausedImage;
+    [SerializeField] GameObject upgradingImage;
 
     ShopItemDetail details;
     ShopItemCode id;
@@ -21,9 +22,10 @@ public class ShopItem : MonoBehaviour {
         gameObject.name = "ShopItem" + id.ToString();
         itemText.SetText(sii.name);
         costText.SetText(sii.cost.ToString());
-        if (sii.owned) {
+        if (sii.status != ShopItemStatus.NOT_OWNED) {
             Purchase();
-            if (!sii.on) Disable();
+            if (sii.status == ShopItemStatus.ACTIVE) Enable();
+            if (sii.status == ShopItemStatus.INACTIVE) Disable();
         }
     }
 
@@ -40,7 +42,14 @@ public class ShopItem : MonoBehaviour {
      */
     public void Purchase() {
         costText.SetText("");
-        Enable();
+        Upgrade();
+    }
+
+    /**
+    * <summary>Change the aspect of the item of the shop</summary>
+    */
+    public void Upgrade() {
+        upgradingImage.SetActive(true);
     }
 
     /**
@@ -49,6 +58,7 @@ public class ShopItem : MonoBehaviour {
     public void Enable() {
         ownedImage.SetActive(true);
         pausedImage.SetActive(false);
+        upgradingImage.SetActive(false);
     }
 
     /**
@@ -57,5 +67,6 @@ public class ShopItem : MonoBehaviour {
     public void Disable() {
         ownedImage.SetActive(false);
         pausedImage.SetActive(true);
+        upgradingImage.SetActive(false);
     }
 }

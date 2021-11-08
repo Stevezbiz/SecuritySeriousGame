@@ -12,6 +12,7 @@
 			"owned": false,
 			"on": false,
 			"locked": false,
+			"upgrading": false,
 			"resistances":
 			[
 				{
@@ -70,6 +71,7 @@
 			"owned": false,
 			"on": false,
 			"locked": false,
+			"upgrading": false,
 			"resistances":
 			[
 				{
@@ -122,6 +124,7 @@
 			"owned": false,
 			"on": false,
 			"locked": false,
+			"upgrading": false,
 			"resistances":
 			[
 				{
@@ -162,6 +165,7 @@
 			"owned": false,
 			"on": false,
 			"locked": false,
+			"upgrading": false,
 			"resistances":
 			[
 				{

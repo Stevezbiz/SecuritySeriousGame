@@ -10,10 +10,10 @@ public enum EmployeeCode {
 }
 
 public enum EmployeeStatus {
-    WORKING,
+    WORK,
     PREVENTION,
     REPAIR,
-    UPGRADING
+    UPGRADE
 }
 
 [System.Serializable]
@@ -91,7 +91,7 @@ public static class EmployeeUtils {
 
     public static bool CheckEmployeeAvailability(Dictionary<EmployeeCode, EmployeeInfo> employees) {
         foreach (EmployeeInfo e in employees.Values) {
-            if (e.owned && e.status == EmployeeStatus.WORKING) return true;
+            if (e.owned && e.status == EmployeeStatus.WORK) return true;
         }
         return false;
     }
@@ -100,7 +100,7 @@ public static class EmployeeUtils {
         List<EmployeeInfo> employees = new List<EmployeeInfo>();
 
         foreach(EmployeeInfo el in e.Values) {
-            if (el.owned && el.status == EmployeeStatus.WORKING) employees.Add(el);
+            if (el.owned && el.status == EmployeeStatus.WORK) employees.Add(el);
         }
 
         return employees;
