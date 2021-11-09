@@ -186,7 +186,7 @@
 			"moneyMalus": 4,
 			"usersMod": 0,
 			"status": 0,
-			"locked": false,
+			"locked": true,
 			"upgradeTime": 12,
 			"resistances":
 			[

@@ -18,7 +18,6 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] TextMeshProUGUI purchaseText;
     [SerializeField] Outline purchaseOutline;
     [SerializeField] GameManager gameManager;
-    [SerializeField] Log logManager;
     [SerializeField] EmployeeChoice employeeChoice;
 
     ShopItem parent;
@@ -109,8 +108,6 @@ public class ShopItemDetail : MonoBehaviour {
      * <summary>Applies the effects of buying an item of the shop</summary>
      */
     public void PurchaseItem(EmployeeCode eid) {
-        // print in the log
-        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.PURCHASE_ITEM);
         gameManager.PurchaseShopItem(id, eid);
         parent.Upgrade();
         purchaseButton.SetActive(false);
@@ -125,8 +122,6 @@ public class ShopItemDetail : MonoBehaviour {
         parent.Enable();
         disableButton.SetActive(true);
         enableButton.SetActive(false);
-        // print in the log
-        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.ENABLE_ITEM);
     }
 
     /**
@@ -137,8 +132,6 @@ public class ShopItemDetail : MonoBehaviour {
         parent.Disable();
         enableButton.SetActive(true);
         disableButton.SetActive(false);
-        // print in the log
-        logManager.LogPrintItem(gameManager.GetShopItem(id).name, ActionCode.DISABLE_ITEM);
     }
 
     /**

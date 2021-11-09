@@ -409,6 +409,8 @@ public class GameManager : MonoBehaviour {
      * <summary>Applies the effects of buying an item in the shop</summary>
      */
     public void PurchaseShopItem(ShopItemCode id, EmployeeCode eid) {
+        // print in the log
+        logManager.LogPrintItem(shopItems[id].name, ActionCode.PURCHASE_ITEM);
         shopItems[id].status = ShopItemStatus.UPGRADING;
         gc.money -= shopItems[id].cost;
         AssignEmployee(eid, new Task(TaskType.UPGRADE, id));
@@ -419,6 +421,8 @@ public class GameManager : MonoBehaviour {
      * <summary>Applies the effects of enabling an item in the shop</summary>
      */
     public void EnableShopItem(ShopItemCode id) {
+        // print in the log
+        logManager.LogPrintItem(shopItems[id].name, ActionCode.ENABLE_ITEM);
         shopItems[id].status = ShopItemStatus.ACTIVE;
         // update resistances
         foreach (Resistance r in shopItems[id].resistances) {
@@ -433,6 +437,8 @@ public class GameManager : MonoBehaviour {
      * <summary>Applies the effects of disabling an item in the shop</summary>
      */
     public void DisableShopItem(ShopItemCode id) {
+        // print in the log
+        logManager.LogPrintItem(shopItems[id].name, ActionCode.DISABLE_ITEM);
         shopItems[id].status = ShopItemStatus.INACTIVE;
         // update resistances
         foreach (Resistance r in shopItems[id].resistances) {
@@ -714,7 +720,7 @@ public class GameManager : MonoBehaviour {
 
     int CalculateEmployees() {
         if (gc.availableEmployees < gc.employeeGoals.Length + gc.initEmployees && gc.users >= gc.employeeGoals[gc.availableEmployees - gc.initEmployees]) {
-            DisplayMessage("Hai raggiunto " + gc.employeeGoals[gc.availableEmployees] + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
+            DisplayMessage("Hai raggiunto " + gc.employeeGoals[gc.availableEmployees - gc.initEmployees] + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
             return gc.availableEmployees + 1;
         }
         return gc.availableEmployees;
