@@ -9,10 +9,9 @@
 			"cost": 100,
 			"moneyMalus": 0,
 			"usersMod": 0.1,
-			"owned": false,
-			"on": false,
+			"status": 0,
 			"locked": false,
-			"upgrading": false,
+			"upgradeTime": 7,
 			"resistances":
 			[
 				{
@@ -44,10 +43,9 @@
 			"cost": 100,
 			"moneyMalus": 0,
 			"usersMod": 0.1,
-			"owned": false,
-			"on": false,
+			"status": 0,
 			"locked": false,
-			"upgrading": false,
+			"upgradeTime": 7,
 			"resistances":
 			[
 				{
@@ -79,10 +77,9 @@
 			"cost": 100,
 			"moneyMalus": 0,
 			"usersMod": 0.2,
-			"owned": false,
-			"on": false,
+			"status": 0,
 			"locked": false,
-			"upgrading": false,
+			"upgradeTime": 7,
 			"resistances":
 			[
 				{
@@ -114,10 +111,9 @@
 			"cost": 100,
 			"moneyMalus": 0,
 			"usersMod": 0.2,
-			"owned": false,
-			"on": false,
+			"status": 0,
 			"locked": false,
-			"upgrading": false,
+			"upgradeTime": 7,
 			"resistances":
 			[
 				{
@@ -149,10 +145,9 @@
 			"cost": 500,
 			"moneyMalus": 10,
 			"usersMod": 0.3,
-			"owned": false,
-			"on": false,
-			"locked": false,
-			"upgrading": false,
+			"status": 0,
+			"locked": true,
+			"upgradeTime": 24,
 			"resistances":
 			[
 				{
@@ -180,7 +175,7 @@
 					"endurance": 0.5
 				}
 			],
-			"requirements": []
+			"requirements": [9]
 		},
 		{
 			"id": 9,
@@ -190,10 +185,9 @@
 			"cost": 200,
 			"moneyMalus": 4,
 			"usersMod": 0,
-			"owned": false,
-			"on": false,
+			"status": 0,
 			"locked": false,
-			"upgrading": false,
+			"upgradeTime": 12,
 			"resistances":
 			[
 				{
@@ -215,7 +209,7 @@
 					"endurance": 0.3
 				}
 			],
-			"requirements": []
+			"requirements": [6, 7]
 		},
 		{
 			"id": 10,
@@ -225,10 +219,9 @@
 			"cost": 200,
 			"moneyMalus": 3,
 			"usersMod": 0.1,
-			"owned": false,
-			"on": false,
-			"locked": false,
-			"upgrading": false,
+			"status": 0,
+			"locked": true,
+			"upgradeTime": 12,
 			"resistances":
 			[
 				{
@@ -250,7 +243,7 @@
 					"endurance": 0.3
 				}
 			],
-			"requirements": []
+			"requirements": [4, 5]
 		}
 	]
 }

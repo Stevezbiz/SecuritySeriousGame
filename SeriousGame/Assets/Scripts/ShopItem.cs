@@ -72,6 +72,7 @@ public class ShopItem : MonoBehaviour {
         slider.SetActive(true);
         bar.color = COLOR.GREEN;
         handle.color = COLOR.GREEN;
+        slider.GetComponent<Slider>().value = 1;
     }
 
     /**
@@ -83,6 +84,7 @@ public class ShopItem : MonoBehaviour {
         slider.SetActive(true);
         bar.color = COLOR.GREEN_DISABLED;
         handle.color = COLOR.GREEN_DISABLED;
+        slider.GetComponent<Slider>().value = 0;
     }
 
     public void SliderValueChange() {

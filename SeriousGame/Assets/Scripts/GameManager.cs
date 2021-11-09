@@ -16,25 +16,8 @@ public class GameManager : MonoBehaviour {
 
     float startTime;
     int updateTime = 1;
-    int totalTime;
-    int endTime;
-    int negativeTime;
-    int maxNegative;
-    int noAttackTime;
-    int noAttackStep;
-    int ongoingAttacks;
-    int userLevel;
-    int totalEmployees;
-    int hiredEmployees;
-    float money;
-    float users;
-    float reputation;
-    float endurance;
-    float miss;
-    float[] usersGain;
-    float[] usersGoals;
-    float[] employeeGoals;
     DateTime dateTime;
+    GameConfig gc;
 
     List<LogLine> logs = new List<LogLine>();
     List<AttackRecap> attackSchedule = new List<AttackRecap>();
@@ -57,7 +40,7 @@ public class GameManager : MonoBehaviour {
         if (Time.time - startTime >= updateTime) {
             // step up the time
             updateTime++;
-            totalTime++;
+            gc.totalTime++;
             dateTime = dateTime.AddHours(1);
             // schedule new attacks
             ActivateAttacks();
@@ -66,18 +49,18 @@ public class GameManager : MonoBehaviour {
             // update tasks
             UpdateTasks();
             // update values
-            userLevel = CalculateUserLevel();
-            money += GetActualMoneyGain();
-            users += GetActualUsersGain();
-            reputation = CalculateReputation();
-            totalEmployees = CalculateEmployees();
+            gc.userLevel = CalculateUserLevel();
+            gc.money += GetActualMoneyGain();
+            gc.users += GetActualUsersGain();
+            gc.reputation = CalculateReputation();
+            gc.availableEmployees = CalculateEmployees();
             // refresh
-            gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
+            gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
             // game over check
             CheckGameOver();
             // update the stats for possible game over
-            if (money < 0) negativeTime++;
-            else negativeTime = 0;
+            if (gc.money < 0) gc.negativeTime++;
+            else gc.negativeTime = 0;
         }
     }
 
@@ -87,11 +70,10 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the data to be saved to resume correctly the game in future</summary>
      */
     public GameSave SaveGame() {
-        return new GameSave(new GameConfig(totalTime, endTime, negativeTime, maxNegative, noAttackTime, noAttackStep, ongoingAttacks, userLevel,
-            totalEmployees, hiredEmployees, money, users, reputation, endurance, miss, usersGain, usersGoals, employeeGoals, dateTime.ToString()),
-            ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(), logManager.GetNLines(),
-            logManager.GetNPages()), new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(), tasks.ToArray(),
-            new List<Resistance>(resistances.Values).ToArray());
+        gc.date = dateTime.ToString();
+        return new GameSave(gc, ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(),
+            logManager.GetNLines(), logManager.GetNPages()), new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(),
+            tasks.ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
 
     /**
@@ -120,7 +102,7 @@ public class GameManager : MonoBehaviour {
             DisplayMessage("Nuovo attacco: " + attacks[AttackCode.BRUTE_FORCE].name, ActionCode.CONTINUE);
             ScheduleAttack(AttackCode.WORM, attackSchedule.Count);
             DisplayMessage("Nuovo attacco: " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE);
-            userLevel = CalculateUserLevel();
+            gc.userLevel = CalculateUserLevel();
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
             UpdateAttacks();
@@ -128,31 +110,14 @@ public class GameManager : MonoBehaviour {
         // generate all the objects in the shop
         shop.Load();
         // refresh the GUI for the first time
-        gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
+        gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
     }
 
     /**
      * <summary>Load the basic configuration of the game</summary>
      */
     void LoadGameConfig(GameConfig gc) {
-        totalTime = gc.totalTime;
-        endTime = gc.endTime;
-        negativeTime = gc.negativeTime;
-        maxNegative = gc.maxNegative;
-        noAttackTime = gc.noAttackTime;
-        noAttackStep = gc.noAttackStep;
-        ongoingAttacks = gc.ongoingAttacks;
-        userLevel = gc.userLevel;
-        totalEmployees = gc.totalEmployees;
-        hiredEmployees = gc.hiredEmployees;
-        money = gc.money;
-        users = gc.users;
-        reputation = gc.reputation;
-        endurance = gc.endurance;
-        miss = gc.miss;
-        usersGain = gc.usersGain;
-        usersGoals = gc.usersGoals;
-        employeeGoals = gc.employeeGoals;
+        this.gc = gc;
         dateTime = DateTime.Parse(gc.date);
     }
 
@@ -243,7 +208,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Schedule new attacks when the game reaches some checkpoints</summary>
      */
     void ActivateAttacks() {
-        switch (totalTime) {
+        switch (gc.totalTime) {
             case 120: // day 5
                 ScheduleAttack(AttackCode.MITM, attackSchedule.Count);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE);
@@ -289,7 +254,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the miss ratio for the specified attack</summary>
      */
     float GetAttackMiss(AttackCode id) {
-        return miss + resistances[id].miss;
+        return gc.miss + resistances[id].miss;
     }
 
     /**
@@ -303,18 +268,18 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the endurance against the specified attack</summary>
      */
     float GetAttackEndurance(AttackCode id) {
-        return endurance + resistances[id].endurance + 0.5f * (1 - reputation);
+        return gc.endurance + resistances[id].endurance + 0.5f * (1 - gc.reputation);
     }
 
     /**
      * <summary>Applies the effects of the specified attack</summary>
      */
     void StartAttack(AttackCode id) {
-        ongoingAttacks++;
+        gc.ongoingAttacks++;
         // apply the maluses
-        money -= attacks[id].moneyLoss;
-        users -= attacks[id].usersLoss * users;
-        reputation -= attacks[id].reputationMalus;
+        gc.money -= attacks[id].moneyLoss;
+        gc.users -= attacks[id].usersLoss * gc.users;
+        gc.reputation -= attacks[id].reputationMalus;
         // generate a message
         DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE);
     }
@@ -324,7 +289,7 @@ public class GameManager : MonoBehaviour {
      */
     void StopAttack(AttackCode id) {
         // remove the maluses
-        ongoingAttacks--;
+        gc.ongoingAttacks--;
     }
 
     /**
@@ -332,7 +297,7 @@ public class GameManager : MonoBehaviour {
      */
     void MissedAttack(AttackCode id) {
         // increment the reputation
-        reputation += 0.02f;
+        gc.reputation += 0.02f;
         // generate a message
         DisplayMessage("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name, ActionCode.CONTINUE);
     }
@@ -355,7 +320,7 @@ public class GameManager : MonoBehaviour {
                         attackStats[attackSchedule[i].id].hit++;
                         attackSchedule[i].active = true;
                         StartAttack(attackSchedule[i].id);
-                        miss += 0.1f;
+                        gc.miss += 0.1f;
                         // log print hit
                         logManager.LogPrintAttack(attacks[attackSchedule[i].id].name, true);
                     } else {
@@ -363,7 +328,7 @@ public class GameManager : MonoBehaviour {
                         attackStats[attackSchedule[i].id].miss++;
                         MissedAttack(attackSchedule[i].id);
                         ScheduleAttack(attackSchedule[i].id, i);
-                        miss = 0f;
+                        gc.miss = 0f;
                         // log print miss
                         logManager.LogPrintAttack(attacks[attackSchedule[i].id].name, false);
                     }
@@ -445,9 +410,9 @@ public class GameManager : MonoBehaviour {
      */
     public void PurchaseShopItem(ShopItemCode id, EmployeeCode eid) {
         shopItems[id].status = ShopItemStatus.UPGRADING;
-        money -= shopItems[id].cost;
+        gc.money -= shopItems[id].cost;
         AssignEmployee(eid, new Task(TaskType.UPGRADE, id));
-        gui.Refresh(Math.Round(money).ToString(), Math.Round(users).ToString(), reputation, dateTime);
+        gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
     }
 
     /**
@@ -506,7 +471,7 @@ public class GameManager : MonoBehaviour {
      */
     public void HireEmployee(EmployeeCode id) {
         employees[id].owned = true;
-        hiredEmployees++;
+        gc.hiredEmployees++;
     }
 
     public bool CheckEmployeeAvailability() {
@@ -658,14 +623,14 @@ public class GameManager : MonoBehaviour {
         foreach (AttackRecap a in attackSchedule) {
             if (a.active) attackUsersMalus += attacks[a.id].usersMalus;
         }
-        return (float)Math.Round(usersGain[userLevel] * (0.5f * (1 + reputation) * usersMalus * usersBonus - attackUsersMalus) * Math.Round(users));
+        return (float)Math.Round(gc.usersGain[gc.userLevel] * (0.5f * (1 + gc.reputation) * usersMalus * usersBonus - attackUsersMalus) * Math.Round(gc.users));
     }
 
     /**
      * <summary>Return the gain of users without malus and bonus</summary>
      */
     public float GetUsersGain() {
-        return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * 0.5f * (1 + reputation));
+        return (float)Math.Round(gc.usersGain[gc.userLevel] * Math.Round(gc.users) * 0.5f * (1 + gc.reputation));
     }
 
     /**
@@ -693,15 +658,15 @@ public class GameManager : MonoBehaviour {
         foreach (AttackRecap a in attackSchedule) {
             if (a.active) attackUsersMalus += attacks[a.id].usersMalus;
         }
-        return (float)Math.Round(usersGain[userLevel] * Math.Round(users) * Math.Round(attackUsersMalus, 2));
+        return (float)Math.Round(gc.usersGain[gc.userLevel] * Math.Round(gc.users) * Math.Round(attackUsersMalus, 2));
     }
 
     public int GetTotalEmployeesN() {
-        return totalEmployees;
+        return gc.availableEmployees;
     }
 
     public int GetHiredEmployeesN() {
-        return hiredEmployees;
+        return gc.hiredEmployees;
     }
 
     public List<EmployeeInfo> GetHiredEmployees() {
@@ -712,9 +677,9 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the current level of users</summary>
      */
     int CalculateUserLevel() {
-        if (userLevel < usersGoals.Length && users > usersGoals[userLevel]) return userLevel + 1;
-        if (userLevel > 0 && users < usersGoals[userLevel - 1]) return userLevel - 1;
-        return userLevel;
+        if (gc.userLevel < gc.usersGoals.Length && gc.users > gc.usersGoals[gc.userLevel]) return gc.userLevel + 1;
+        if (gc.userLevel > 0 && gc.users < gc.usersGoals[gc.userLevel - 1]) return gc.userLevel - 1;
+        return gc.userLevel;
     }
 
     /**
@@ -722,18 +687,18 @@ public class GameManager : MonoBehaviour {
      */
     float CalculateReputation() {
         // increment the reputation every step
-        float rep = reputation + 0.0005f;
-        if (ongoingAttacks == 0) {
+        float rep = gc.reputation + 0.0005f;
+        if (gc.ongoingAttacks == 0) {
             // increment the time without attacks
-            noAttackTime++;
-            if (noAttackTime == noAttackStep) {
+            gc.noAttackTime++;
+            if (gc.noAttackTime == gc.noAttackStep) {
                 // increment the reputation for avoiding attacks
-                noAttackTime = 0;
+                gc.noAttackTime = 0;
                 rep += 0.01f;
             }
         } else {
             // reset the time without attacks
-            noAttackTime = 0;
+            gc.noAttackTime = 0;
         }
         // normalize the reputation in [0, 1]
         if (rep > 1f) return 1f;
@@ -741,11 +706,11 @@ public class GameManager : MonoBehaviour {
     }
 
     int CalculateEmployees() {
-        if (totalEmployees < employeeGoals.Length + 2 && users >= employeeGoals[totalEmployees - 2]) {
-            DisplayMessage("Hai raggiunto " + employeeGoals[totalEmployees] + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
-            return totalEmployees + 1;
+        if (gc.availableEmployees < gc.employeeGoals.Length + gc.initEmployees && gc.users >= gc.employeeGoals[gc.availableEmployees - gc.initEmployees]) {
+            DisplayMessage("Hai raggiunto " + gc.employeeGoals[gc.availableEmployees] + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
+            return gc.availableEmployees + 1;
         }
-        return totalEmployees;
+        return gc.availableEmployees;
     }
 
     /**
@@ -761,11 +726,11 @@ public class GameManager : MonoBehaviour {
      */
     void CheckGameOver() {
         // game over if the time reaches the end
-        if (totalTime == endTime) GameOver();
+        if (gc.totalTime == gc.endTime) GameOver();
         // game over if the money is negative for too long
-        if (negativeTime > maxNegative) GameOver();
+        if (gc.negativeTime > gc.maxNegative) GameOver();
         // game over if the reputation reaches 0%
-        if (reputation == 0) GameOver();
+        if (gc.reputation == 0) GameOver();
     }
 
     /**

@@ -59,7 +59,8 @@ public class GameConfig {
     public int noAttackStep;
     public int ongoingAttacks;
     public int userLevel;
-    public int totalEmployees;
+    public int initEmployees;
+    public int availableEmployees;
     public int hiredEmployees;
     public float money;
     public float users;
@@ -72,7 +73,7 @@ public class GameConfig {
     public string date;
 
     public GameConfig(int totalTime, int endTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks,
-        int userLevel, int totalEmployees, int hiredEmployees, float money, float users, float reputation, float endurance, float miss,
+        int userLevel, int initEmployees, int availableEmployees, int hiredEmployees, float money, float users, float reputation, float endurance, float miss,
         float[] usersGain, float[] usersGoals, float[] employeeGoals, string date) {
         this.totalTime = totalTime;
         this.endTime = endTime;
@@ -82,7 +83,8 @@ public class GameConfig {
         this.noAttackStep = noAttackStep;
         this.ongoingAttacks = ongoingAttacks;
         this.userLevel = userLevel;
-        this.totalEmployees = totalEmployees;
+        this.initEmployees = initEmployees;
+        this.availableEmployees = availableEmployees;
         this.hiredEmployees = hiredEmployees;
         this.money = money;
         this.users = users;

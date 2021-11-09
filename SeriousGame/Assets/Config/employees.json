@@ -4,9 +4,40 @@
 		{
 			"id": 0,
 			"name": "Luigi",
-			"description": "Il suo nome è Luigi",
-			"moneyGain": 10,
+			"description": "Vanta solide basi di programmazione e gestione delle risorse.",
+			"moneyGain": 14,
 			"owned": true,
+			"status": 0,
+			"abilities":
+			[
+				{
+					"category": 0,
+					"level": 2
+				},
+				{
+					"category": 1,
+					"level": 1
+				},
+				{
+					"category": 2,
+					"level": 7
+				},
+				{
+					"category": 3,
+					"level": 6
+				},
+				{
+					"category": 4,
+					"level": 2
+				}
+			]
+		},
+		{
+			"id": 1,
+			"name": "Antonio",
+			"description": "Si è specializzato nella gestione delle risorse ed è molto competente nell'analisi della user experience.",
+			"moneyGain": 10,
+			"owned": false,
 			"status": 0,
 			"abilities":
 			[
@@ -20,65 +51,34 @@
 				},
 				{
 					"category": 2,
-					"level": 9
+					"level": 2
 				},
 				{
 					"category": 3,
-					"level": 10
-				},
-				{
-					"category": 4,
 					"level": 6
-				}
-			]
-		},
-		{
-			"id": 1,
-			"name": "Antonio",
-			"description": "Il suo nome è Antonio",
-			"moneyGain": 10,
-			"owned": false,
-			"status": 0,
-			"abilities":
-			[
-				{
-					"category": 0,
-					"level": 1
-				},
-				{
-					"category": 1,
-					"level": 1
-				},
-				{
-					"category": 2,
-					"level": 1
-				},
-				{
-					"category": 3,
-					"level": 1
 				},
 				{
 					"category": 4,
-					"level": 1
+					"level": 8
 				}
 			]
 		},
 		{
 			"id": 2,
 			"name": "Sara",
-			"description": "Il suo nome è Sara",
-			"moneyGain": 10,
-			"owned": false,
+			"description": "Ha studiato attentamente i sistemi di rete e nel tempo ha imparato a proteggerli in molti modi.",
+			"moneyGain": 16,
+			"owned": true,
 			"status": 0,
 			"abilities":
 			[
 				{
 					"category": 0,
-					"level": 1
+					"level": 7
 				},
 				{
 					"category": 1,
-					"level": 1
+					"level": 5
 				},
 				{
 					"category": 2,
@@ -86,38 +86,38 @@
 				},
 				{
 					"category": 3,
-					"level": 1
+					"level": 2
 				},
 				{
 					"category": 4,
-					"level": 1
+					"level": 2
 				}
 			]
 		},
 		{
 			"id": 3,
 			"name": "Giulia",
-			"description": "Il suo nome è Giulia",
-			"moneyGain": 10,
-			"owned": false,
+			"description": "Non ha molta esperienza, ma ha maturato con lo studio una buona conoscenza di base in tutti i principali ambiti tecnici.",
+			"moneyGain": 8,
+			"owned": true,
 			"status": 0,
 			"abilities":
 			[
 				{
 					"category": 0,
-					"level": 1
+					"level": 5
 				},
 				{
 					"category": 1,
-					"level": 1
+					"level": 5
 				},
 				{
 					"category": 2,
-					"level": 1
+					"level": 5
 				},
 				{
 					"category": 3,
-					"level": 1
+					"level": 5
 				},
 				{
 					"category": 4,

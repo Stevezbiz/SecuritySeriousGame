@@ -9,10 +9,9 @@
 			"cost": 300,
 			"moneyMalus": 0,
 			"usersMod": 0,
-			"owned": false,
-			"on": false,
-			"locked": false,
-			"upgrading": false,
+			"status": 0,
+			"locked": true,
+			"upgradeTime": 12,
 			"resistances":
 			[
 				{
@@ -22,7 +21,7 @@
 					"endurance": 0.7
 				}
 			],
-			"requirements": []
+			"requirements": [16]
 		},
 		{
 			"id": 16,
@@ -32,10 +31,9 @@
 			"cost": 300,
 			"moneyMalus": 3,
 			"usersMod": 2,
-			"owned": false,
-			"on": false,
+			"status": 0,
 			"locked": false,
-			"upgrading": false,
+			"upgradeTime": 24,
 			"resistances":
 			[
 				{
