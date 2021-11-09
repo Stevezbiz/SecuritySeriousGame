@@ -70,13 +70,6 @@ public class ShopItemDetail : MonoBehaviour {
         this.id = id;
         this.parent = parent;
         ShopItemInfo sii = gameManager.GetShopItem(id);
-        if (sii.locked) {
-            bool ok = true;
-            foreach (ShopItemCode code in sii.requirements) {
-                if (!gameManager.ShopItemIsOwned(code)) ok = false;
-            }
-            if (ok) gameManager.ShopItemUnlock(id);
-        }
         ComposeDetails(sii);
         // set the visual aspect
         purchaseButton.SetActive(false);

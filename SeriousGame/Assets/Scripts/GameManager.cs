@@ -456,6 +456,13 @@ public class GameManager : MonoBehaviour {
         shopItems[id].locked = false;
     }
 
+    /**
+     * <summary>Returns true if the specified item of the shop is installed</summary>
+     */
+    public bool ShopItemIsInstalled(ShopItemCode id) {
+        return ShopItemIsOwned(id) && shopItems[id].status != ShopItemStatus.UPGRADING;
+    }
+
     // EMPLOYEES
 
     public void AddToEmployees(EmployeeInfo e) {

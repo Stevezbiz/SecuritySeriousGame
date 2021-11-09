@@ -44,7 +44,7 @@ public class Shop : MonoBehaviour {
         // create the new item
         GameObject newRecord = Instantiate(shopItem);
         newRecord.transform.SetParent(content, false);
-        newRecord.GetComponent<ShopItem>().Load(sii, details);
+        newRecord.GetComponent<ShopItem>().Load(sii, gameManager, this, details);
         shopItems.Add(newRecord);
     }
 
