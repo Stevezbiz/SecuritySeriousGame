@@ -124,6 +124,130 @@
 					"level": 1
 				}
 			]
+		},
+		{
+			"id": 4,
+			"name": "Mirko",
+			"description": "Un esperto di reti informatiche, molto attento alle politiche di accesso al sistema.",
+			"moneyGain": 12,
+			"owned": false,
+			"status": 0,
+			"abilities":
+			[
+				{
+					"category": 0,
+					"level": 8
+				},
+				{
+					"category": 1,
+					"level": 8
+				},
+				{
+					"category": 2,
+					"level": 3
+				},
+				{
+					"category": 3,
+					"level": 4
+				},
+				{
+					"category": 4,
+					"level": 1
+				}
+			]
+		},
+		{
+			"id": 5,
+			"name": "Melissa",
+			"description": "La sua efficienza sul lavoro compensa le lacune negli ambiti più tecnici della sicurezza.",
+			"moneyGain": 18,
+			"owned": false,
+			"status": 0,
+			"abilities":
+			[
+				{
+					"category": 0,
+					"level": 2
+				},
+				{
+					"category": 1,
+					"level": 2
+				},
+				{
+					"category": 2,
+					"level": 1
+				},
+				{
+					"category": 3,
+					"level": 9
+				},
+				{
+					"category": 4,
+					"level": 7
+				}
+			]
+		},
+		{
+			"id": 6,
+			"name": "Agata",
+			"description": "Un genio della programmazione che non tralascia la sicurezza nei suoi progetti.",
+			"moneyGain": 16,
+			"owned": false,
+			"status": 0,
+			"abilities":
+			[
+				{
+					"category": 0,
+					"level": 4
+				},
+				{
+					"category": 1,
+					"level": 8
+				},
+				{
+					"category": 2,
+					"level": 10
+				},
+				{
+					"category": 3,
+					"level": 2
+				},
+				{
+					"category": 4,
+					"level": 3
+				}
+			]
+		},
+		{
+			"id": 7,
+			"name": "Bruno",
+			"description": "Possiede una conoscenza invidiabile in quasi tutti gli ambiti della sicurezza informatica.",
+			"moneyGain": 12,
+			"owned": false,
+			"status": 0,
+			"abilities":
+			[
+				{
+					"category": 0,
+					"level": 7
+				},
+				{
+					"category": 1,
+					"level": 7
+				},
+				{
+					"category": 2,
+					"level": 7
+				},
+				{
+					"category": 3,
+					"level": 5
+				},
+				{
+					"category": 4,
+					"level": 3
+				}
+			]
 		}
 	]
 }

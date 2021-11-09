@@ -96,12 +96,6 @@ public class GameManager : MonoBehaviour {
             LoadGameConfig(gameConfigContent.gameConfig);
             // setup attacks, statistics and resistances
             AttackUtils.SetupAll(attacks, resistances, attackStats);
-            ScheduleAttack(AttackCode.DOS, attackSchedule.Count);
-            DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DOS].name, ActionCode.CONTINUE);
-            ScheduleAttack(AttackCode.BRUTE_FORCE, attackSchedule.Count);
-            DisplayMessage("Nuovo attacco: " + attacks[AttackCode.BRUTE_FORCE].name, ActionCode.CONTINUE);
-            ScheduleAttack(AttackCode.WORM, attackSchedule.Count);
-            DisplayMessage("Nuovo attacco: " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE);
             gc.userLevel = CalculateUserLevel();
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
@@ -209,6 +203,12 @@ public class GameManager : MonoBehaviour {
      */
     void ActivateAttacks() {
         switch (gc.totalTime) {
+            case 48: // day 2
+                ScheduleAttack(AttackCode.DOS, attackSchedule.Count);
+                ScheduleAttack(AttackCode.BRUTE_FORCE, attackSchedule.Count);
+                ScheduleAttack(AttackCode.WORM, attackSchedule.Count);
+                DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.DOS].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE);
+                break;
             case 120: // day 5
                 ScheduleAttack(AttackCode.MITM, attackSchedule.Count);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE);
