@@ -513,8 +513,8 @@ public class GameManager : MonoBehaviour {
     // MISC
 
     /**
- * <summary>Return a string containing the date in the format 'dd-MMM-yyyy-HH:mm'</summary>
- */
+     * <summary>Return a string containing the date in the format 'dd-MMM-yyyy-HH:mm'</summary>
+     */
     public string GetDateTime() {
         return dateTime.ToString("dd-MMM-yyyy-HH:mm");
     }

@@ -17,6 +17,7 @@ public class ShopItem : MonoBehaviour {
     Shop parent;
     ShopItemDetail details;
     ShopItemCode id;
+    int lastValue;
 
     /**
      * <summary>Populate the item of the shop with all the elements to show</summary>
@@ -48,10 +49,12 @@ public class ShopItem : MonoBehaviour {
                     Upgrade();
                     break;
                 case ShopItemStatus.ACTIVE:
+                    lastValue = 1;
                     slider.GetComponent<Slider>().value = 1;
                     Enable();
                     break;
                 case ShopItemStatus.INACTIVE:
+                    lastValue = 0;
                     slider.GetComponent<Slider>().value = 0;
                     Disable();
                     break;
@@ -118,7 +121,12 @@ public class ShopItem : MonoBehaviour {
 
     public void SliderValueChange() {
         details.Load(id, this);
-        if (slider.GetComponent<Slider>().value == 1) details.EnableItem();
-        else details.DisableItem();
+        int newValue = (int)slider.GetComponent<Slider>().value;
+        if (lastValue != newValue) {
+            lastValue = newValue;
+            if (newValue == 1) details.EnableItem();
+            else details.DisableItem();
+        }
+        
     }
 }
