@@ -84,12 +84,12 @@ public class EmployeeShop : MonoBehaviour {
         // set the description fields
         titleText.SetText(e.name);
         descriptionText.SetText(e.description);
-        Dictionary<ShopItemCategory, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
-        networkBar.fillAmount = abilities[ShopItemCategory.NETWORK] / 10;
-        accessBar.fillAmount = abilities[ShopItemCategory.ACCESS] / 10;
-        softwareBar.fillAmount = abilities[ShopItemCategory.SOFTWARE] / 10;
-        assetBar.fillAmount = abilities[ShopItemCategory.ASSET] / 10;
-        servicesBar.fillAmount = abilities[ShopItemCategory.SERVICES] / 10;
+        Dictionary<Category, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
+        networkBar.fillAmount = abilities[Category.NETWORK] / 10;
+        accessBar.fillAmount = abilities[Category.ACCESS] / 10;
+        softwareBar.fillAmount = abilities[Category.SOFTWARE] / 10;
+        assetBar.fillAmount = abilities[Category.ASSET] / 10;
+        servicesBar.fillAmount = abilities[Category.SERVICES] / 10;
         moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
         // set the graphic aspect
         int tot = gameManager.GetTotalEmployeesN();

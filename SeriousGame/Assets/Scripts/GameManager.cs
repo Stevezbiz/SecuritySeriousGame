@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour {
     GameConfig gc;
 
     List<LogLine> logs = new List<LogLine>();
-    List<AttackRecap> attackSchedule = new List<AttackRecap>();
+    Dictionary<AttackCode, AttackPlan> attackSchedule = new Dictionary<AttackCode, AttackPlan>();
     List<Task> tasks = new List<Task>();
     Dictionary<AttackCode, AttackInfo> attacks = new Dictionary<AttackCode, AttackInfo>();
     Dictionary<AttackCode, Resistance> resistances = new Dictionary<AttackCode, Resistance>();
@@ -44,10 +44,10 @@ public class GameManager : MonoBehaviour {
             dateTime = dateTime.AddHours(1);
             // schedule new attacks
             ActivateAttacks();
-            // update attacks
-            UpdateAttacks();
             // update tasks
             UpdateTasks();
+            // update attacks
+            UpdateAttacks();
             // update values
             gc.userLevel = CalculateUserLevel();
             gc.money += GetActualMoneyGain();
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour {
     public GameSave SaveGame() {
         gc.date = dateTime.ToString();
         return new GameSave(gc, ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(),
-            logManager.GetNLines(), logManager.GetNPages()), new List<AttackStats>(attackStats.Values).ToArray(), attackSchedule.ToArray(),
+            logManager.GetNLines(), logManager.GetNPages()), new List<AttackStats>(attackStats.Values).ToArray(), new List<AttackPlan>(attackSchedule.Values).ToArray(),
             tasks.ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
 
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour {
             GameConfigJSON gameConfigContent = JsonUtility.FromJson<GameConfigJSON>(gameConfigJSON.text);
             LoadGameConfig(gameConfigContent.gameConfig);
             // setup attacks, statistics and resistances
-            AttackUtils.SetupAll(attacks, resistances, attackStats);
+            AttackUtils.SetupAll(attacks, resistances, attackStats, attackSchedule);
             gc.userLevel = CalculateUserLevel();
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
@@ -128,8 +128,7 @@ public class GameManager : MonoBehaviour {
         logs = new List<LogLine>(gameSave.logs.lines);
         logManager.LoadGameData(gameSave.logs.nLines, gameSave.logs.nPages);
         // load the data structures
-        AttackUtils.UpdateAll(resistances, attackStats, gameSave.res, gameSave.aStats);
-        attackSchedule = new List<AttackRecap>(gameSave.aSchedule);
+        AttackUtils.UpdateAll(resistances, attackStats, attackSchedule, gameSave.res, gameSave.aStats, gameSave.aSchedule);
         tasks = new List<Task>(gameSave.tasks);
     }
 
@@ -191,11 +190,10 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Insert an instance of the specified attack among the scheduled ones</summary>
      */
-    void ScheduleAttack(AttackCode id, int i) {
+    void ScheduleAttack(AttackCode id) {
         float maxTime = attacks[id].maxTime * GetAttackEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
-        if (i != attackSchedule.Count) attackSchedule[i] = new AttackRecap(id, Mathf.CeilToInt(GetAttackDuration(id)), false, Mathf.CeilToInt(nextTime));
-        else attackSchedule.Insert(i, new AttackRecap(id, Mathf.CeilToInt(GetAttackDuration(id)), false, Mathf.CeilToInt(nextTime)));
+        attackSchedule[id] = new AttackPlan(id, AttackStatus.PLANNING, Mathf.CeilToInt(nextTime));
     }
 
     /**
@@ -204,45 +202,45 @@ public class GameManager : MonoBehaviour {
     void ActivateAttacks() {
         switch (gc.totalTime) {
             case 48: // day 2
-                ScheduleAttack(AttackCode.DOS, attackSchedule.Count);
-                ScheduleAttack(AttackCode.BRUTE_FORCE, attackSchedule.Count);
-                ScheduleAttack(AttackCode.WORM, attackSchedule.Count);
+                ScheduleAttack(AttackCode.DOS);
+                ScheduleAttack(AttackCode.BRUTE_FORCE);
+                ScheduleAttack(AttackCode.WORM);
                 DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.DOS].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE);
                 break;
             case 120: // day 5
-                ScheduleAttack(AttackCode.MITM, attackSchedule.Count);
+                ScheduleAttack(AttackCode.MITM);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE);
                 break;
             case 168: // day 7
-                ScheduleAttack(AttackCode.VIRUS, attackSchedule.Count);
+                ScheduleAttack(AttackCode.VIRUS);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.VIRUS].name, ActionCode.CONTINUE);
                 break;
             case 240: // day 10
-                ScheduleAttack(AttackCode.SOCIAL_ENGINEERING, attackSchedule.Count);
+                ScheduleAttack(AttackCode.SOCIAL_ENGINEERING);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE);
                 break;
             case 288: // day 12
-                ScheduleAttack(AttackCode.API_VULNERABILITY, attackSchedule.Count);
+                ScheduleAttack(AttackCode.API_VULNERABILITY);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE);
                 break;
             case 360: // day 15
-                ScheduleAttack(AttackCode.DICTIONARY, attackSchedule.Count);
+                ScheduleAttack(AttackCode.DICTIONARY);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DICTIONARY].name, ActionCode.CONTINUE);
                 break;
             case 408: // day 17
-                ScheduleAttack(AttackCode.PHISHING, attackSchedule.Count);
+                ScheduleAttack(AttackCode.PHISHING);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.PHISHING].name, ActionCode.CONTINUE);
                 break;
             case 480: // day 20
-                ScheduleAttack(AttackCode.SPYWARE, attackSchedule.Count);
+                ScheduleAttack(AttackCode.SPYWARE);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SPYWARE].name, ActionCode.CONTINUE);
                 break;
             case 528: // day 22
-                ScheduleAttack(AttackCode.RAINBOW_TABLE, attackSchedule.Count);
+                ScheduleAttack(AttackCode.RAINBOW_TABLE);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE);
                 break;
             case 600: // day 25
-                ScheduleAttack(AttackCode.RANSOMWARE, attackSchedule.Count);
+                ScheduleAttack(AttackCode.RANSOMWARE);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RANSOMWARE].name, ActionCode.CONTINUE);
                 break;
             default:
@@ -260,8 +258,8 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Return the duration for the specified attack</summary>
      */
-    float GetAttackDuration(AttackCode id) {
-        return (1 - resistances[id].duration) * attacks[id].duration;
+    int GetAttackDuration(EmployeeCode id, AttackCode attack) {
+        return Mathf.CeilToInt((1 - resistances[attack].duration) * attacks[attack].duration * EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[attack].category] - 5);
     }
 
     /**
@@ -306,42 +304,31 @@ public class GameManager : MonoBehaviour {
      * <summary>Updates the scheduled attacks</summary>
      */
     void UpdateAttacks() {
-        for (int i = 0; i < attackSchedule.Count; i++) {
-            // check the attack status
-            if (attackSchedule[i].timer > 0) {
-                // decrement the timer
-                attackSchedule[i].timer--;
-            } else {
-                if (!attackSchedule[i].active) {
+        foreach (AttackPlan attack in attackSchedule.Values) {
+            if (attack.status == AttackStatus.PLANNING) {
+                if (attack.timer > 0) {
+                    // decrement the timer
+                    attack.timer--;
+                } else {
                     // start the attack
-                    attackStats[attackSchedule[i].id].n++;
-                    if (Random.Range(0f, 1f) > GetAttackMiss(attackSchedule[i].id)) {
+                    attackStats[attack.id].n++;
+                    if (Random.Range(0f, 1f) > GetAttackMiss(attack.id)) {
                         // hit
-                        attackStats[attackSchedule[i].id].hit++;
-                        attackSchedule[i].active = true;
-                        StartAttack(attackSchedule[i].id);
+                        attack.status = AttackStatus.ACTIVE;
+                        attackStats[attack.id].hit++;
+                        StartAttack(attack.id);
                         gc.miss += 0.1f;
                         // log print hit
-                        logManager.LogPrintAttack(attacks[attackSchedule[i].id].name, true);
+                        logManager.LogPrintAttack(attacks[attack.id].name, true);
+                        tasks.Add(new Task(TaskType.REPAIR, attack.id));
                     } else {
                         // miss
-                        attackStats[attackSchedule[i].id].miss++;
-                        MissedAttack(attackSchedule[i].id);
-                        ScheduleAttack(attackSchedule[i].id, i);
+                        attackStats[attack.id].miss++;
+                        MissedAttack(attack.id);
+                        ScheduleAttack(attack.id);
                         gc.miss = 0f;
                         // log print miss
-                        logManager.LogPrintAttack(attacks[attackSchedule[i].id].name, false);
-                    }
-                }
-                if (attackSchedule[i].active) {
-                    if (attackSchedule[i].duration == 0) {
-                        // end the attack
-                        StopAttack(attackSchedule[i].id);
-                        ScheduleAttack(attackSchedule[i].id, i);
-                        attackSchedule[i].timer--;
-                    } else {
-                        // update the attack
-                        attackSchedule[i].duration--;
+                        logManager.LogPrintAttack(attacks[attack.id].name, false);
                     }
                 }
             }
@@ -352,30 +339,33 @@ public class GameManager : MonoBehaviour {
     
     void UpdateTasks() {
         for (int i = 0; i < tasks.Count; i++) {
-            switch (tasks[i].type) {
-                case TaskType.UPGRADE:
-                    if (tasks[i].assigned) {
-                        if (tasks[i].duration == 0) {
-                            // end task
-                            EndTask(i);
-                            i--;
-                        } else {
-                            tasks[i].duration--;
-                        }
-                    }
-                    break;
-                default:
-                    Debug.Log("Error: undefined taskType");
-                    break;
+            Task task = tasks[i];
+            if (task.assigned) {
+                if (tasks[i].duration == 0) {
+                    // end task
+                    EndTask(i);
+                    i--;
+                } else {
+                    tasks[i].duration--;
+                }
             }
         }
     }
 
     void EndTask(int i) {
-        switch (tasks[i].type) {
+        Task task = tasks[i];
+        switch (task.type) {
             case TaskType.UPGRADE:
-                employees[tasks[i].executor].status = EmployeeStatus.WORK;
-                EnableShopItem(tasks[i].shopItem);
+                employees[task.executor].status = TaskType.NONE;
+                EnableShopItem(task.shopItem);
+                tasks.RemoveAt(i);
+                break;
+            case TaskType.REPAIR:
+                // end the attack
+                employees[task.executor].status = TaskType.NONE;
+                StopAttack(task.attack);
+                ScheduleAttack(task.attack);
+                attackSchedule[task.attack].timer--;
                 tasks.RemoveAt(i);
                 break;
             default:
@@ -385,7 +375,7 @@ public class GameManager : MonoBehaviour {
     }
 
     int GetUpgradeDuration(EmployeeCode id, ShopItemCode shopItem) {
-        return Mathf.CeilToInt(shopItems[shopItem].upgradeTime * (1 - 0.1f * (EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[shopItem].category] - 5)));
+        return Mathf.CeilToInt(shopItems[shopItem].upgradeTime * (1 - 0.1f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[shopItem].category] - 5)));
     }
 
     // SHOP
@@ -426,7 +416,7 @@ public class GameManager : MonoBehaviour {
         shopItems[id].status = ShopItemStatus.ACTIVE;
         // update resistances
         foreach (Resistance r in shopItems[id].resistances) {
-            if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 0f, 0f, 0f));
+            if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
             resistances[r.id].miss += r.miss;
             resistances[r.id].duration += r.duration;
             resistances[r.id].endurance += r.endurance;
@@ -496,12 +486,15 @@ public class GameManager : MonoBehaviour {
     }
 
     void AssignEmployee(EmployeeCode id, Task t) {
-        int duration;
         switch (t.type) {
             case TaskType.UPGRADE:
-                duration = GetUpgradeDuration(id, t.shopItem);
-                employees[id].status = EmployeeStatus.UPGRADE;
-                t.AssignEmployee(id, duration);
+                employees[id].status = TaskType.UPGRADE;
+                t.AssignEmployee(id, GetUpgradeDuration(id, t.shopItem));
+                tasks.Add(t);
+                break;
+            case TaskType.REPAIR:
+                employees[id].status = TaskType.REPAIR;
+                t.AssignEmployee(id, GetAttackDuration(id, t.attack));
                 tasks.Add(t);
                 break;
             default:
@@ -530,15 +523,13 @@ public class GameManager : MonoBehaviour {
         foreach (EmployeeInfo e in employees.Values) {
             if (e.owned) {
                 switch (e.status) {
-                    case EmployeeStatus.WORK:
+                    case TaskType.NONE:
                         moneyBonus += e.moneyGain;
                         break;
-                    case EmployeeStatus.UPGRADE:
+                    case TaskType.UPGRADE:
                         moneyBonus += 0.5f * e.moneyGain;
                         break;
-                    case EmployeeStatus.REPAIR:
-                        break;
-                    case EmployeeStatus.PREVENTION:
+                    case TaskType.REPAIR:
                         break;
                     default:
                         Debug.Log("Error: undefined employeeStatus");
@@ -554,8 +545,8 @@ public class GameManager : MonoBehaviour {
             }
         }
         // the malus for the active attacks
-        foreach(AttackRecap a in attackSchedule) {
-            if (a.active) attackMoneyMalus += attacks[a.id].moneyMalus;
+        foreach(AttackPlan a in attackSchedule.Values) {
+            if (a.status == AttackStatus.ACTIVE) attackMoneyMalus += attacks[a.id].moneyMalus;
         }
         return moneyBonus * (1 - attackMoneyMalus) - moneyMalus;
     }
@@ -569,15 +560,13 @@ public class GameManager : MonoBehaviour {
         foreach (EmployeeInfo e in employees.Values) {
             if (e.owned) {
                 switch (e.status) {
-                    case EmployeeStatus.WORK:
+                    case TaskType.NONE:
                         moneyBonus += e.moneyGain;
                         break;
-                    case EmployeeStatus.UPGRADE:
+                    case TaskType.UPGRADE:
                         moneyBonus += 0.5f * e.moneyGain;
                         break;
-                    case EmployeeStatus.REPAIR:
-                        break;
-                    case EmployeeStatus.PREVENTION:
+                    case TaskType.REPAIR:
                         break;
                     default:
                         Debug.Log("Error: undefined employeeStatus");
@@ -612,8 +601,8 @@ public class GameManager : MonoBehaviour {
     public float GetAttackMoneyMalus() {
         float attackMoneyMalus = 0f;
         // the malus for the active attacks
-        foreach (AttackRecap a in attackSchedule) {
-            if (a.active) attackMoneyMalus += attacks[a.id].moneyMalus;
+        foreach (AttackPlan a in attackSchedule.Values) {
+            if (a.status == AttackStatus.ACTIVE) attackMoneyMalus += attacks[a.id].moneyMalus;
         }
         return (float)Math.Round(attackMoneyMalus, 2);
     }
@@ -633,8 +622,8 @@ public class GameManager : MonoBehaviour {
             }
         }
         // the malus for the active attacks
-        foreach (AttackRecap a in attackSchedule) {
-            if (a.active) attackUsersMalus += attacks[a.id].usersMalus;
+        foreach (AttackPlan a in attackSchedule.Values) {
+            if (a.status == AttackStatus.ACTIVE) attackUsersMalus += attacks[a.id].usersMalus;
         }
         return (float)Math.Round(gc.usersGain[gc.userLevel] * (0.5f * (1 + gc.reputation) * usersMalus * usersBonus - attackUsersMalus) * Math.Round(gc.users));
     }
@@ -668,8 +657,8 @@ public class GameManager : MonoBehaviour {
     public float GetAttackUsersMalus() {
         float attackUsersMalus = 0f;
         // the malus for the active attacks
-        foreach (AttackRecap a in attackSchedule) {
-            if (a.active) attackUsersMalus += attacks[a.id].usersMalus;
+        foreach (AttackPlan a in attackSchedule.Values) {
+            if (a.status == AttackStatus.ACTIVE) attackUsersMalus += attacks[a.id].usersMalus;
         }
         return (float)Math.Round(gc.usersGain[gc.userLevel] * Math.Round(gc.users) * Math.Round(attackUsersMalus, 2));
     }
@@ -759,7 +748,7 @@ public class GameManager : MonoBehaviour {
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         foreach (ShopItemInfo sii in shopItems.Values) {
             foreach (Resistance r in sii.resistances) {
-                if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 0f, 0f, 0f));
+                if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
                 res[r.id].miss += r.miss;
                 res[r.id].duration += r.duration;
                 res[r.id].endurance += r.endurance;

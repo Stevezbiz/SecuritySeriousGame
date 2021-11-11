@@ -9,13 +9,6 @@ public enum EmployeeCode {
     GIULIA
 }
 
-public enum EmployeeStatus {
-    WORK,
-    PREVENTION,
-    REPAIR,
-    UPGRADE
-}
-
 [System.Serializable]
 public class EmployeeInfo {
     public EmployeeCode id;
@@ -23,7 +16,7 @@ public class EmployeeInfo {
     public string description;
     public float moneyGain;
     public bool owned;
-    public EmployeeStatus status;
+    public TaskType status;
     public EmployeeAbility[] abilities;
 }
 
@@ -31,9 +24,9 @@ public class EmployeeInfo {
 public class EmployeeRecap {
     public EmployeeCode id;
     public bool owned;
-    public EmployeeStatus status;
+    public TaskType status;
 
-    public EmployeeRecap(EmployeeCode id, bool owned, EmployeeStatus status) {
+    public EmployeeRecap(EmployeeCode id, bool owned, TaskType status) {
         this.id = id;
         this.owned = owned;
         this.status = status;
@@ -42,7 +35,7 @@ public class EmployeeRecap {
 
 [System.Serializable]
 public class EmployeeAbility {
-    public ShopItemCategory category;
+    public Category category;
     public int level;
 }
 
@@ -69,8 +62,8 @@ public static class EmployeeUtils {
         return er.ToArray();
     }
 
-    public static Dictionary<ShopItemCategory, float> GetAbilities(EmployeeAbility[] a) {
-        Dictionary<ShopItemCategory, float> abilities = new Dictionary<ShopItemCategory, float>();
+    public static Dictionary<Category, float> GetAbilities(EmployeeAbility[] a) {
+        Dictionary<Category, float> abilities = new Dictionary<Category, float>();
 
         foreach (EmployeeAbility ability in a) {
             abilities.Add(ability.category, ability.level);
@@ -91,7 +84,7 @@ public static class EmployeeUtils {
 
     public static bool CheckEmployeeAvailability(Dictionary<EmployeeCode, EmployeeInfo> employees) {
         foreach (EmployeeInfo e in employees.Values) {
-            if (e.owned && e.status == EmployeeStatus.WORK) return true;
+            if (e.owned && e.status == TaskType.NONE) return true;
         }
         return false;
     }
@@ -100,7 +93,7 @@ public static class EmployeeUtils {
         List<EmployeeInfo> employees = new List<EmployeeInfo>();
 
         foreach(EmployeeInfo el in e.Values) {
-            if (el.owned && el.status == EmployeeStatus.WORK) employees.Add(el);
+            if (el.owned && el.status == TaskType.NONE) employees.Add(el);
         }
 
         return employees;

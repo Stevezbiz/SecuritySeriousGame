@@ -33,11 +33,11 @@ public class GameSave {
     public EmployeeRecap[] er;
     public LogData logs;
     public AttackStats[] aStats;
-    public AttackRecap[] aSchedule;
+    public AttackPlan[] aSchedule;
     public Task[] tasks;
     public Resistance[] res;
 
-    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackRecap[] aSchedule, Task[] tasks, Resistance[] res) {
+    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackPlan[] aSchedule, Task[] tasks, Resistance[] res) {
         this.gc = gc;
         this.sir = sir;
         this.er = er;
@@ -116,6 +116,14 @@ public enum ActionCode {
     PURCHASE_ITEM,
     ENABLE_ITEM,
     DISABLE_ITEM
+}
+
+public enum Category {
+    NETWORK,
+    ACCESS,
+    SOFTWARE,
+    ASSET,
+    SERVICES
 }
 
 public static class COLOR {

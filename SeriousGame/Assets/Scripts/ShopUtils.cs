@@ -25,14 +25,6 @@ public enum ShopItemCode {
     BACK_UP
 }
 
-public enum ShopItemCategory {
-    NETWORK,
-    ACCESS,
-    SOFTWARE,
-    ASSET,
-    SERVICES
-}
-
 public enum ShopItemStatus {
     NOT_OWNED,
     UPGRADING,
@@ -43,7 +35,7 @@ public enum ShopItemStatus {
 [System.Serializable]
 public class ShopItemInfo {
     public ShopItemCode id;
-    public ShopItemCategory category;
+    public Category category;
     public string name;
     public string description;
     public int cost;

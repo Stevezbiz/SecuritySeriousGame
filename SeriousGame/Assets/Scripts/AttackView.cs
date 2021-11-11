@@ -63,8 +63,7 @@ public class AttackView : MonoBehaviour {
             missText.SetText("- %");
             enduranceText.SetText("- %");
         } else {
-            if (res.duration == -1) durationText.SetText("- %");
-            else durationText.SetText("-" + (res.duration * 100).ToString("0.") + " %");
+            durationText.SetText("-" + (res.duration * 100).ToString("0.") + " %");
             missText.SetText("+" + (res.miss * 100).ToString("0.") + " %");
             enduranceText.SetText("+" + (res.endurance * 100).ToString("0.") + " %");
         }

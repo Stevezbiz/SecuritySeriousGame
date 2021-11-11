@@ -17,6 +17,12 @@ public enum AttackCode {
     RANSOMWARE
 }
 
+public enum AttackStatus {
+    INACTIVE,
+    PLANNING,
+    ACTIVE
+}
+
 [System.Serializable]
 public class Resistance {
     public AttackCode id;
@@ -35,6 +41,7 @@ public class Resistance {
 [System.Serializable]
 public class AttackInfo {
     public AttackCode id;
+    public Category category;
     public string name;
     public string description;
     public float moneyLoss;
@@ -43,20 +50,18 @@ public class AttackInfo {
     public float usersMalus;
     public float reputationMalus;
     public float maxTime;
-    public float duration;
+    public int duration;
 }
 
 [System.Serializable]
-public class AttackRecap {
+public class AttackPlan {
     public AttackCode id;
-    public int duration;
-    public bool active;
+    public AttackStatus status;
     public int timer;
 
-    public AttackRecap(AttackCode id, int duration, bool active, int timer) {
+    public AttackPlan(AttackCode id, AttackStatus status, int timer) {
         this.id = id;
-        this.duration = duration;
-        this.active = active;
+        this.status = status;
         this.timer = timer;
     }
 }
@@ -97,23 +102,23 @@ public static class AttackUtils {
         return attacks;
     }
 
-    public static void SetupAll(Dictionary<AttackCode, AttackInfo> attacks, Dictionary<AttackCode, Resistance> resistances, Dictionary<AttackCode, AttackStats> attackStats) {
+    public static void SetupAll(Dictionary<AttackCode, AttackInfo> attacks, Dictionary<AttackCode, Resistance> resistances, Dictionary<AttackCode, AttackStats> attackStats, Dictionary<AttackCode, AttackPlan> attackSchedule) {
         foreach (AttackInfo attack in attacks.Values) {
-            if (attack.duration == 0) {
-                if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, -1f, 0f, 0f));
-            } else {
-                if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0f, 0f, 0f));
-            }
+            if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0, 0f, 0f));
             attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
+            attackSchedule.Add(attack.id, new AttackPlan(attack.id, AttackStatus.INACTIVE, 0));
         }
     }
 
-    public static void UpdateAll(Dictionary<AttackCode, Resistance> resistances, Dictionary<AttackCode, AttackStats> attackStats, Resistance[] ress, AttackStats[] aStats) {
+    public static void UpdateAll(Dictionary<AttackCode, Resistance> resistances, Dictionary<AttackCode, AttackStats> attackStats, Dictionary<AttackCode, AttackPlan> attackSchedule, Resistance[] ress, AttackStats[] aStats, AttackPlan[] aSchedules) {
         foreach (Resistance res in ress) {
             resistances.Add(res.id, res);
         }
         foreach (AttackStats aStat in aStats) {
             attackStats.Add(aStat.id, aStat);
+        }
+        foreach (AttackPlan aSchedule in aSchedules) {
+            attackSchedule.Add(aSchedule.id, aSchedule);
         }
     }
 }
