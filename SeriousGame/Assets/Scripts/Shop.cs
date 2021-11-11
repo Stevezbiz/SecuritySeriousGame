@@ -10,7 +10,7 @@ public class Shop : MonoBehaviour {
     [SerializeField] GameManager gameManager;
 
     List<ShopItemCode> indexes = new List<ShopItemCode>();
-    List<GameObject> shopItems = new List<GameObject>();
+    List<GameObject> toDestroy = new List<GameObject>();
 
     /**
      * <summary>Initialize the data structures</summary>
@@ -28,10 +28,10 @@ public class Shop : MonoBehaviour {
      * <summary>Load all the items in the list</summary>
      */
     public void Load() {
-        foreach (GameObject obj in shopItems) {
+        foreach (GameObject obj in toDestroy) {
             Destroy(obj);
         }
-        shopItems.Clear();
+        toDestroy.Clear();
         foreach (ShopItemCode id in indexes) {
             AddShopRecord(gameManager.GetShopItem(id));
         }
@@ -42,10 +42,10 @@ public class Shop : MonoBehaviour {
      */
     void AddShopRecord(ShopItemInfo sii) {
         // create the new item
-        GameObject newRecord = Instantiate(shopItem);
-        newRecord.transform.SetParent(content, false);
-        newRecord.GetComponent<ShopItem>().Load(sii, gameManager, this, details);
-        shopItems.Add(newRecord);
+        GameObject newItem = Instantiate(shopItem);
+        newItem.transform.SetParent(content, false);
+        newItem.GetComponent<ShopItem>().Load(sii, gameManager, this, details);
+        toDestroy.Add(newItem);
     }
 
     /**
