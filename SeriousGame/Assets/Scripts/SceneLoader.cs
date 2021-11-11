@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 public static class SceneLoader {
+    [DllImport("__Internal")]
+    private static extern void Redirect(string url);
+    
     /**
      * <summary>Load the specified scene</summary>
      */
@@ -18,7 +22,7 @@ public static class SceneLoader {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-        Application.OpenURL("about:blank");
+        Redirect("about:blank");
 #endif
     }
 }

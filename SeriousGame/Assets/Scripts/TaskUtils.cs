@@ -6,7 +6,7 @@ public enum TaskType {
     UPGRADE
 }
 
-[SerializeField]
+[System.Serializable]
 public class Task {
     public TaskType type;
     public bool assigned;
