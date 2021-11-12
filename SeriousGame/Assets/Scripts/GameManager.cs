@@ -335,6 +335,10 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void RepairAttack(AttackCode id, EmployeeCode eid) {
+        AssignEmployee(eid, new Task(TaskType.REPAIR, id));
+    }
+
     // TASK
     
     public List<Task> GetTasksByType(TaskType type) {

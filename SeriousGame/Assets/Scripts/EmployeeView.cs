@@ -13,6 +13,7 @@ public class EmployeeView : MonoBehaviour {
     [SerializeField] GameObject preventButton;
     [SerializeField] TextMeshProUGUI labelText;
     [SerializeField] InstallView installView;
+    [SerializeField] RepairView repairView;
 
     float oldTimeScale = 1f;
     List<EmployeeInfo> employees;
@@ -78,7 +79,7 @@ public class EmployeeView : MonoBehaviour {
     }
 
     public void Repair() {
-
+        repairView.Load(selected);
     }
 
     public void Prevent() {
