@@ -8,11 +8,14 @@ using Slider = UnityEngine.UI.Slider;
 public class ShopItem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI itemText;
     [SerializeField] TextMeshProUGUI costText;
-    [SerializeField] GameObject upgradingImage;
+    [SerializeField] GameObject installButton;
+    [SerializeField] GameObject installingImage;
     [SerializeField] GameObject lockedImage;
     [SerializeField] GameObject slider;
-    [SerializeField] Image bar;
-    [SerializeField] Image handle;
+    [SerializeField] Image enableBar;
+    [SerializeField] Image enableHandle;
+    [SerializeField] Image installBar;
+    [SerializeField] Image installText;
 
     Shop parent;
     ShopItemDetail details;
@@ -45,8 +48,11 @@ public class ShopItem : MonoBehaviour {
             switch (sii.status) {
                 case ShopItemStatus.NOT_OWNED:
                     break;
-                case ShopItemStatus.UPGRADING:
-                    Upgrade();
+                case ShopItemStatus.NOT_INSTALLED:
+                    Purchase();
+                    break;
+                case ShopItemStatus.INSTALLING:
+                    Install();
                     break;
                 case ShopItemStatus.ACTIVE:
                     lastValue = 1;
@@ -76,9 +82,24 @@ public class ShopItem : MonoBehaviour {
     /**
     * <summary>Change the aspect of the item of the shop</summary>
     */
-    public void Upgrade() {
+    public void Purchase() {
         costText.SetText("");
-        upgradingImage.SetActive(true);
+        installButton.SetActive(true);
+        installingImage.SetActive(false);
+        lockedImage.SetActive(false);
+        slider.SetActive(false);
+    }
+
+    /**
+    * <summary>Change the aspect of the item of the shop</summary>
+    */
+    public void Install() {
+        costText.SetText("");
+        float fill = Random.Range(0f, 1f);
+        installBar.fillAmount = fill;
+        installText.fillAmount = fill;
+        installButton.SetActive(false);
+        installingImage.SetActive(true);
         lockedImage.SetActive(false);
         slider.SetActive(false);
     }
@@ -88,11 +109,12 @@ public class ShopItem : MonoBehaviour {
      */
     public void Enable() {
         costText.SetText("");
-        upgradingImage.SetActive(false);
+        installButton.SetActive(false);
+        installingImage.SetActive(false);
         lockedImage.SetActive(false);
         slider.SetActive(true);
-        bar.color = COLOR.GREEN;
-        handle.color = COLOR.GREEN;
+        enableBar.color = COLOR.GREEN;
+        enableHandle.color = COLOR.GREEN;
         slider.GetComponent<Slider>().value = 1;
     }
 
@@ -101,11 +123,12 @@ public class ShopItem : MonoBehaviour {
      */
     public void Disable() {
         costText.SetText("");
-        upgradingImage.SetActive(false);
+        installButton.SetActive(false);
+        installingImage.SetActive(false);
         lockedImage.SetActive(false);
         slider.SetActive(true);
-        bar.color = COLOR.GREEN_DISABLED;
-        handle.color = COLOR.GREEN_DISABLED;
+        enableBar.color = COLOR.GREEN_DISABLED;
+        enableHandle.color = COLOR.GREEN_DISABLED;
         slider.GetComponent<Slider>().value = 0;
     }
 
@@ -114,7 +137,8 @@ public class ShopItem : MonoBehaviour {
      */
     public void Lock() {
         costText.SetText("");
-        upgradingImage.SetActive(false);
+        installButton.SetActive(false);
+        installingImage.SetActive(false);
         lockedImage.SetActive(true);
         slider.SetActive(false);
     }
@@ -127,6 +151,10 @@ public class ShopItem : MonoBehaviour {
             if (newValue == 1) details.EnableItem();
             else details.DisableItem();
         }
-        
+    }
+
+    public void SelectEmployee() {
+        details.Load(id, this);
+        details.OpenEmployeeChoice();
     }
 }

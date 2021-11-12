@@ -15,20 +15,29 @@ public class EmployeeChoice : MonoBehaviour {
     [SerializeField] Image softwareBar;
     [SerializeField] Image assetBar;
     [SerializeField] Image servicesBar;
+    [SerializeField] GameObject windowPopUp;
 
     List<EmployeeInfo> employees;
 
     public void Load() {
         // fill the options of the dropdown element
         employees = gameManager.GetAvailableEmployees();
-        List<string> options = new List<string>();
-        foreach(EmployeeInfo el in employees) {
-            options.Add(el.name);
+        if (employees.Count == 0) {
+            Close();
+            GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
+            newWindow.transform.SetParent(gameManager.gameObject.transform, false);
+            newWindow.GetComponent<WindowPopUp>().Load("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE);
+        } else {
+            List<string> options = new List<string>();
+            foreach(EmployeeInfo el in employees) {
+                options.Add(el.name);
+            }
+            employeeDropdown.ClearOptions();
+            employeeDropdown.AddOptions(options);
+            employeeDropdown.value = 0;
+            Display(0);
         }
-        employeeDropdown.ClearOptions();
-        employeeDropdown.AddOptions(options);
-        employeeDropdown.value = 0;
-        Display(0);
+        
     }
 
     public void Display(int err) {
@@ -43,8 +52,8 @@ public class EmployeeChoice : MonoBehaviour {
         moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
     }
 
-    public void Purchase() {
-        shopItemDetail.PurchaseItem(employees[employeeDropdown.value].id);
+    public void AssignEmployee() {
+        shopItemDetail.InstallItem(employees[employeeDropdown.value].id);
         gameObject.SetActive(false);
     }
 

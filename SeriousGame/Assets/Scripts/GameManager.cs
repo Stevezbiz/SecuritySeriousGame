@@ -355,7 +355,7 @@ public class GameManager : MonoBehaviour {
     void EndTask(int i) {
         Task task = tasks[i];
         switch (task.type) {
-            case TaskType.UPGRADE:
+            case TaskType.INSTALL:
                 employees[task.executor].status = TaskType.NONE;
                 EnableShopItem(task.shopItem);
                 tasks.RemoveAt(i);
@@ -398,13 +398,17 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Applies the effects of buying an item in the shop</summary>
      */
-    public void PurchaseShopItem(ShopItemCode id, EmployeeCode eid) {
+    public void PurchaseShopItem(ShopItemCode id) {
         // print in the log
         logManager.LogPrintItem(shopItems[id].name, ActionCode.PURCHASE_ITEM);
-        shopItems[id].status = ShopItemStatus.UPGRADING;
+        shopItems[id].status = ShopItemStatus.NOT_INSTALLED;
         gc.money -= shopItems[id].cost;
-        AssignEmployee(eid, new Task(TaskType.UPGRADE, id));
         gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
+    }
+
+    public void InstallShopItem(ShopItemCode id, EmployeeCode eid) {
+        shopItems[id].status = ShopItemStatus.INSTALLING;
+        AssignEmployee(eid, new Task(TaskType.INSTALL, id));
     }
 
     /**
@@ -456,7 +460,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Returns true if the specified item of the shop is installed</summary>
      */
     public bool ShopItemIsInstalled(ShopItemCode id) {
-        return ShopItemIsOwned(id) && shopItems[id].status != ShopItemStatus.UPGRADING;
+        return ShopItemIsOwned(id) && shopItems[id].status != ShopItemStatus.INSTALLING;
     }
 
     // EMPLOYEES
@@ -487,8 +491,8 @@ public class GameManager : MonoBehaviour {
 
     void AssignEmployee(EmployeeCode id, Task t) {
         switch (t.type) {
-            case TaskType.UPGRADE:
-                employees[id].status = TaskType.UPGRADE;
+            case TaskType.INSTALL:
+                employees[id].status = TaskType.INSTALL;
                 t.AssignEmployee(id, GetUpgradeDuration(id, t.shopItem));
                 tasks.Add(t);
                 break;
@@ -526,7 +530,7 @@ public class GameManager : MonoBehaviour {
                     case TaskType.NONE:
                         moneyBonus += e.moneyGain;
                         break;
-                    case TaskType.UPGRADE:
+                    case TaskType.INSTALL:
                         moneyBonus += 0.5f * e.moneyGain;
                         break;
                     case TaskType.REPAIR:
@@ -563,7 +567,7 @@ public class GameManager : MonoBehaviour {
                     case TaskType.NONE:
                         moneyBonus += e.moneyGain;
                         break;
-                    case TaskType.UPGRADE:
+                    case TaskType.INSTALL:
                         moneyBonus += 0.5f * e.moneyGain;
                         break;
                     case TaskType.REPAIR:

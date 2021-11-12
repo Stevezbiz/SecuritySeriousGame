@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum TaskType {
     NONE,
-    UPGRADE,
+    INSTALL,
     REPAIR
 }
 

@@ -27,7 +27,8 @@ public enum ShopItemCode {
 
 public enum ShopItemStatus {
     NOT_OWNED,
-    UPGRADING,
+    NOT_INSTALLED,
+    INSTALLING,
     ACTIVE,
     INACTIVE
 }

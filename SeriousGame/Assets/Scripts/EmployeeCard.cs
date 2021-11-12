@@ -27,7 +27,7 @@ public class EmployeeCard : MonoBehaviour {
                 statusText.SetText("DISPONIBILE");
                 progressBar.SetActive(false);
                 break;
-            case TaskType.UPGRADE:
+            case TaskType.INSTALL:
                 statusText.SetText("POTENZIMENTO");
                 progressBar.SetActive(true);
                 progressBar.GetComponentInChildren<Image>().fillAmount = Random.Range(0f, 1f);

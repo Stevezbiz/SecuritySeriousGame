@@ -71,4 +71,16 @@ public class EmployeeView : MonoBehaviour {
         bottomPanel.SetActive(true);
         gameObject.SetActive(false);
     }
+
+    public void Upgrade() {
+
+    }
+
+    public void Repair() {
+
+    }
+
+    public void Prevent() {
+
+    }
 }

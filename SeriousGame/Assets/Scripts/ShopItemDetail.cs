@@ -13,7 +13,8 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] GameObject purchaseButton;
     [SerializeField] GameObject enableButton;
     [SerializeField] GameObject disableButton;
-    [SerializeField] GameObject upgradingButton;
+    [SerializeField] GameObject installingButton;
+    [SerializeField] GameObject installButton;
     [SerializeField] GameObject lockImage;
     [SerializeField] TextMeshProUGUI purchaseText;
     [SerializeField] Outline purchaseOutline;
@@ -36,9 +37,6 @@ public class ShopItemDetail : MonoBehaviour {
             foreach (ShopItemCode code in sii.requirements) {
                 requirements += "    " + gameManager.GetShopItem(code).name + "\n";
             }
-        }
-        if (!gameManager.CheckEmployeeAvailability()) {
-            requirements += "Non hai dipendenti disponibili\n";
         }
         requirementsText.SetText(requirements);
         // set the technical details about resistances
@@ -74,14 +72,15 @@ public class ShopItemDetail : MonoBehaviour {
         purchaseButton.SetActive(false);
         enableButton.SetActive(false);
         disableButton.SetActive(false);
-        upgradingButton.SetActive(false);
+        installingButton.SetActive(false);
+        installButton.SetActive(false);
         purchaseButton.GetComponentInChildren<Button>().interactable = true;
         purchaseText.color = COLOR.GREEN;
         purchaseOutline.effectColor = COLOR.GREEN;
         lockImage.SetActive(false);
         switch (sii.status) {
             case ShopItemStatus.NOT_OWNED:
-                if (sii.locked || !gameManager.CheckEmployeeAvailability()) {
+                if (sii.locked) {
                     purchaseButton.GetComponentInChildren<Button>().interactable = false;
                     purchaseText.color = COLOR.GREEN_DISABLED;
                     purchaseOutline.effectColor = COLOR.GREEN_DISABLED;
@@ -89,8 +88,11 @@ public class ShopItemDetail : MonoBehaviour {
                 }
                 purchaseButton.SetActive(true);
                 break;
-            case ShopItemStatus.UPGRADING:
-                upgradingButton.SetActive(true);
+            case ShopItemStatus.NOT_INSTALLED:
+                installButton.SetActive(true);
+                break;
+            case ShopItemStatus.INSTALLING:
+                installingButton.SetActive(true);
                 break;
             case ShopItemStatus.ACTIVE:
                 disableButton.SetActive(true);
@@ -107,11 +109,18 @@ public class ShopItemDetail : MonoBehaviour {
     /**
      * <summary>Applies the effects of buying an item of the shop</summary>
      */
-    public void PurchaseItem(EmployeeCode eid) {
-        gameManager.PurchaseShopItem(id, eid);
-        parent.Upgrade();
+    public void PurchaseItem() {
+        gameManager.PurchaseShopItem(id);
+        parent.Purchase();
         purchaseButton.SetActive(false);
-        upgradingButton.SetActive(true);
+        installButton.SetActive(true);
+    }
+
+    public void InstallItem(EmployeeCode eid) {
+        gameManager.InstallShopItem(id, eid);
+        parent.Install();
+        installButton.SetActive(false);
+        installingButton.SetActive(true);
     }
 
     /**
@@ -142,7 +151,7 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void OpenEmployeeChoice() {
-        employeeChoice.Load();
         employeeChoice.gameObject.SetActive(true);
+        employeeChoice.Load();
     }
 }
