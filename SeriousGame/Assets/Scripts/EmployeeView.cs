@@ -8,10 +8,11 @@ public class EmployeeView : MonoBehaviour {
     [SerializeField] GameObject bottomPanel;
     [SerializeField] GameObject employeeCard;
     [SerializeField] RectTransform content;
-    [SerializeField] GameObject upgradeButton;
+    [SerializeField] GameObject installButton;
     [SerializeField] GameObject repairButton;
     [SerializeField] GameObject preventButton;
     [SerializeField] TextMeshProUGUI labelText;
+    [SerializeField] InstallView installView;
 
     float oldTimeScale = 1f;
     List<EmployeeInfo> employees;
@@ -43,13 +44,13 @@ public class EmployeeView : MonoBehaviour {
     }
 
     void EnableButtons() {
-        upgradeButton.SetActive(true);
+        installButton.SetActive(true);
         repairButton.SetActive(true);
         preventButton.SetActive(true);
     }
 
     void DisableButtons() {
-        upgradeButton.SetActive(false);
+        installButton.SetActive(false);
         repairButton.SetActive(false);
         preventButton.SetActive(false);
     }
@@ -72,8 +73,8 @@ public class EmployeeView : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
-    public void Upgrade() {
-
+    public void Install() {
+        installView.Load(selected);
     }
 
     public void Repair() {

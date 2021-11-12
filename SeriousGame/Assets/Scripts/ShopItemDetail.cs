@@ -151,7 +151,6 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void OpenEmployeeChoice() {
-        employeeChoice.gameObject.SetActive(true);
         employeeChoice.Load();
     }
 }

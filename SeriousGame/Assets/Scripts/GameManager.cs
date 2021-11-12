@@ -337,6 +337,14 @@ public class GameManager : MonoBehaviour {
 
     // TASK
     
+    public List<Task> GetTasksByType(TaskType type) {
+        List<Task> res = new List<Task>();
+        foreach(Task t in tasks) {
+            if (t.type == type) res.Add(t);
+        }
+        return res;
+    }
+
     void UpdateTasks() {
         for (int i = 0; i < tasks.Count; i++) {
             Task task = tasks[i];

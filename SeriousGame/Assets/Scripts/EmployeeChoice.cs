@@ -23,7 +23,6 @@ public class EmployeeChoice : MonoBehaviour {
         // fill the options of the dropdown element
         employees = gameManager.GetAvailableEmployees();
         if (employees.Count == 0) {
-            Close();
             GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
             newWindow.transform.SetParent(gameManager.gameObject.transform, false);
             newWindow.GetComponent<WindowPopUp>().Load("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE);
@@ -36,6 +35,7 @@ public class EmployeeChoice : MonoBehaviour {
             employeeDropdown.AddOptions(options);
             employeeDropdown.value = 0;
             Display(0);
+            gameObject.SetActive(true);
         }
         
     }
