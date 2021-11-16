@@ -151,6 +151,6 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void OpenEmployeeChoice() {
-        employeeChoice.Load();
+        employeeChoice.Load(id);
     }
 }

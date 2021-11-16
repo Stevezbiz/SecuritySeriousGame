@@ -678,6 +678,7 @@ MonoBehaviour:
   statusText: {fileID: 2157941214897503608}
   employeeDetails: {fileID: 5730788747857698220, guid: e3ca9ea0867a605489e870489c841197, type: 3}
   progressBar: {fileID: 6434859305165564123}
+  bar: {fileID: 6718130327034025812}
 --- !u!1 &4860831115571006172
 GameObject:
   m_ObjectHideFlags: 0

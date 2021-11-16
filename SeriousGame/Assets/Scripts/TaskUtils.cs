@@ -16,6 +16,7 @@ public class Task {
     public ShopItemCode shopItem;
     public AttackCode attack;
     public int duration;
+    public int progress;
 
     public Task(TaskType type, ShopItemCode shopItem) {
         this.type = type;
@@ -33,6 +34,7 @@ public class Task {
         this.assigned = true;
         this.executor = executor;
         this.duration = duration;
+        this.progress = 0;
     }
 }
 

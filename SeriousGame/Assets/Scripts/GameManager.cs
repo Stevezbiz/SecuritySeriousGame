@@ -258,8 +258,8 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Return the duration for the specified attack</summary>
      */
-    int GetAttackDuration(EmployeeCode id, AttackCode attack) {
-        return Mathf.CeilToInt((1 - resistances[attack].duration) * attacks[attack].duration * EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[attack].category] - 5);
+    public int GetAttackDuration(EmployeeCode id, AttackCode aid) {
+        return Mathf.CeilToInt((1 - resistances[aid].duration) * attacks[aid].duration * (1 - 0.15f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[aid].category] - 5)));
     }
 
     /**
@@ -344,7 +344,7 @@ public class GameManager : MonoBehaviour {
     public List<Task> GetTasksByType(TaskType type) {
         List<Task> res = new List<Task>();
         foreach(Task t in tasks) {
-            if (t.type == type) res.Add(t);
+            if (t.type == type && !t.assigned) res.Add(t);
         }
         return res;
     }
@@ -353,12 +353,12 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < tasks.Count; i++) {
             Task task = tasks[i];
             if (task.assigned) {
-                if (tasks[i].duration == 0) {
+                if (tasks[i].progress == tasks[i].duration) {
                     // end task
                     EndTask(i);
                     i--;
                 } else {
-                    tasks[i].duration--;
+                    tasks[i].progress++;
                 }
             }
         }
@@ -386,8 +386,39 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    int GetUpgradeDuration(EmployeeCode id, ShopItemCode shopItem) {
-        return Mathf.CeilToInt(shopItems[shopItem].upgradeTime * (1 - 0.1f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[shopItem].category] - 5)));
+    public int GetInstallDuration(EmployeeCode id, ShopItemCode sid) {
+        return Mathf.CeilToInt(shopItems[sid].upgradeTime * (1 - 0.15f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[sid].category] - 5)));
+    }
+
+    public float GetTaskProgress(ShopItemCode id) {
+        foreach(Task t in tasks) {
+            if (t.shopItem == id) return (float)t.progress / t.duration;
+        }
+        Debug.Log("Error: no task with the given ShopItemCode");
+        return 0f;
+    }
+
+    public float GetTaskProgress(EmployeeCode id) {
+        foreach (Task t in tasks) {
+            if (t.executor == id) return (float)t.progress / t.duration;
+        }
+        Debug.Log("Error: no task assigned to the given employee");
+        return 0f;
+    }
+
+    public int GetTaskTarget(EmployeeCode id) {
+        foreach (Task t in tasks) {
+            if (t.executor == id) {
+                switch (t.type) {
+                    case TaskType.INSTALL:
+                        return (int)t.shopItem;
+                    case TaskType.REPAIR:
+                        return (int)t.attack;
+                }
+            }
+        }
+        Debug.Log("Error: no task assigned to the given employee");
+        return 0;
     }
 
     // SHOP
@@ -505,7 +536,7 @@ public class GameManager : MonoBehaviour {
         switch (t.type) {
             case TaskType.INSTALL:
                 employees[id].status = TaskType.INSTALL;
-                t.AssignEmployee(id, GetUpgradeDuration(id, t.shopItem));
+                t.AssignEmployee(id, GetInstallDuration(id, t.shopItem));
                 tasks.Add(t);
                 break;
             case TaskType.REPAIR:

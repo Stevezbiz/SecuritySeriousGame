@@ -13,8 +13,12 @@ public class EmployeeDetails : MonoBehaviour {
     [SerializeField] Image softwareBar;
     [SerializeField] Image assetBar;
     [SerializeField] Image servicesBar;
+    [SerializeField] TextMeshProUGUI taskText;
 
-    public void Load(EmployeeInfo e) {
+    GameManager gameManager;
+
+    public void Load(EmployeeInfo e, GameManager gameManager) {
+        this.gameManager = gameManager;
         titleText.SetText(e.name);
         descriptionText.SetText(e.description);
         Dictionary<Category, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
@@ -24,6 +28,20 @@ public class EmployeeDetails : MonoBehaviour {
         assetBar.fillAmount = abilities[Category.ASSET] / 10;
         servicesBar.fillAmount = abilities[Category.SERVICES] / 10;
         moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
+        switch (e.status) {
+            case TaskType.NONE:
+                taskText.SetText("");
+                break;
+            case TaskType.INSTALL:
+                taskText.SetText("Sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(e.id)).name);
+                break;
+            case TaskType.REPAIR:
+                taskText.SetText("Sta riparando i danni provocati dall'attacco " + gameManager.GetAttack((AttackCode)gameManager.GetTaskTarget(e.id)).name);
+                break;
+            default:
+                Debug.Log("Error: undefined TaskType");
+                break;
+        }
     }
 
     public void Close() {

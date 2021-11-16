@@ -16,10 +16,13 @@ public class EmployeeChoice : MonoBehaviour {
     [SerializeField] Image assetBar;
     [SerializeField] Image servicesBar;
     [SerializeField] GameObject windowPopUp;
+    [SerializeField] TextMeshProUGUI durationText;
 
     List<EmployeeInfo> employees;
+    ShopItemCode id;
 
-    public void Load() {
+    public void Load(ShopItemCode id) {
+        this.id = id;
         // fill the options of the dropdown element
         employees = gameManager.GetAvailableEmployees();
         if (employees.Count == 0) {
@@ -50,6 +53,7 @@ public class EmployeeChoice : MonoBehaviour {
         assetBar.fillAmount = abilities[Category.ASSET] / 10;
         servicesBar.fillAmount = abilities[Category.SERVICES] / 10;
         moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
+        durationText.SetText("Durata: " + gameManager.GetInstallDuration(e.id, id) + " h");
     }
 
     public void AssignEmployee() {

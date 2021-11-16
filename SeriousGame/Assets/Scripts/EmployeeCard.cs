@@ -9,6 +9,7 @@ public class EmployeeCard : MonoBehaviour {
     [SerializeField] TextMeshProUGUI statusText;
     [SerializeField] GameObject employeeDetails;
     [SerializeField] GameObject progressBar;
+    [SerializeField] Image bar;
 
     EmployeeInfo employee;
     GameManager gameManager;
@@ -28,14 +29,14 @@ public class EmployeeCard : MonoBehaviour {
                 progressBar.SetActive(false);
                 break;
             case TaskType.INSTALL:
-                statusText.SetText("POTENZIMENTO");
+                statusText.SetText("INSTALLAZIONE");
                 progressBar.SetActive(true);
-                progressBar.GetComponentInChildren<Image>().fillAmount = Random.Range(0f, 1f);
+                bar.fillAmount = gameManager.GetTaskProgress(e.id);
                 break;
             case TaskType.REPAIR:
                 statusText.SetText("RIPARAZIONE");
                 progressBar.SetActive(true);
-                progressBar.GetComponentInChildren<Image>().fillAmount = Random.Range(0f, 1f);
+                bar.fillAmount = gameManager.GetTaskProgress(e.id);
                 break;
             default:
                 Debug.Log("Error: undefined TaskType");
@@ -53,6 +54,6 @@ public class EmployeeCard : MonoBehaviour {
     public void PrintDetails() {
         GameObject newDetails = Instantiate(employeeDetails, new Vector3(0, 0, 0), Quaternion.identity);
         newDetails.transform.SetParent(gameManager.gameObject.transform, false);
-        newDetails.GetComponent<EmployeeDetails>().Load(employee);
+        newDetails.GetComponent<EmployeeDetails>().Load(employee, gameManager);
     }
 }

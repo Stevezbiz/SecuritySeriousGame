@@ -17,6 +17,7 @@ public class ShopItem : MonoBehaviour {
     [SerializeField] Image installBar;
     [SerializeField] Image installText;
 
+    GameManager gameManager;
     Shop parent;
     ShopItemDetail details;
     ShopItemCode id;
@@ -27,6 +28,7 @@ public class ShopItem : MonoBehaviour {
      */
     public void Load(ShopItemInfo sii, GameManager gameManager, Shop parent, ShopItemDetail details) {
         this.id = sii.id;
+        this.gameManager = gameManager;
         this.parent = parent;
         this.details = details;
         gameObject.name = "ShopItem" + id.ToString();
@@ -95,7 +97,7 @@ public class ShopItem : MonoBehaviour {
     */
     public void Install() {
         costText.SetText("");
-        float fill = Random.Range(0f, 1f);
+        float fill = gameManager.GetTaskProgress(id);
         installBar.fillAmount = fill;
         installText.fillAmount = fill;
         installButton.SetActive(false);
