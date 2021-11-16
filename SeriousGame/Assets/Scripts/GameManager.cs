@@ -259,7 +259,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the duration for the specified attack</summary>
      */
     public int GetAttackDuration(EmployeeCode id, AttackCode aid) {
-        return Mathf.CeilToInt((1 - resistances[aid].duration) * attacks[aid].duration * (1 - 0.15f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[aid].category] - 5)));
+        return Mathf.CeilToInt((1 - resistances[aid].duration) * attacks[aid].duration * (1 - 0.18f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[aid].category] - 5)));
     }
 
     /**
@@ -387,12 +387,12 @@ public class GameManager : MonoBehaviour {
     }
 
     public int GetInstallDuration(EmployeeCode id, ShopItemCode sid) {
-        return Mathf.CeilToInt(shopItems[sid].upgradeTime * (1 - 0.15f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[sid].category] - 5)));
+        return Mathf.CeilToInt(shopItems[sid].upgradeTime * (1 - 0.18f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[sid].category] - 5)));
     }
 
     public float GetTaskProgress(ShopItemCode id) {
         foreach(Task t in tasks) {
-            if (t.shopItem == id) return (float)t.progress / t.duration;
+            if (t.shopItem == id) return (float)t.progress / (t.duration + 1);
         }
         Debug.Log("Error: no task with the given ShopItemCode");
         return 0f;
@@ -400,7 +400,7 @@ public class GameManager : MonoBehaviour {
 
     public float GetTaskProgress(EmployeeCode id) {
         foreach (Task t in tasks) {
-            if (t.executor == id) return (float)t.progress / t.duration;
+            if (t.executor == id) return (float)t.progress / (t.duration + 1);
         }
         Debug.Log("Error: no task assigned to the given employee");
         return 0f;

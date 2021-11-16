@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum EmployeeCode {
+    NONE,
     LUIGI,
     ANTONIO,
     SARA,
-    GIULIA
+    GIULIA,
+    MIRKO,
+    MELISSA,
+    AGATA,
+    BRUNO
 }
 
 [System.Serializable]

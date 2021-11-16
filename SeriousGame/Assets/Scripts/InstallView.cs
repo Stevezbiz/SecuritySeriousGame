@@ -8,6 +8,7 @@ public class InstallView : MonoBehaviour {
     [SerializeField] TMP_Dropdown dropdown;
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextMeshProUGUI durationText;
+    [SerializeField] EmployeeView employeeView;
 
     EmployeeCode employee;
     List<Task> tasks = new List<Task>();
@@ -44,6 +45,7 @@ public class InstallView : MonoBehaviour {
     }
 
     public void Close() {
+        employeeView.Load();
         gameObject.SetActive(false);
     }
 }

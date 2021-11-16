@@ -6214,6 +6214,7 @@ MonoBehaviour:
   dropdown: {fileID: 1636870817}
   windowPopUp: {fileID: 7429000584695828995, guid: 2fa7e241c74cfd14683799803d5d6f00, type: 3}
   durationText: {fileID: 1668806922}
+  employeeView: {fileID: 417635149}
 --- !u!114 &230424219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24421,6 +24422,7 @@ MonoBehaviour:
   dropdown: {fileID: 1878235238}
   windowPopUp: {fileID: 7429000584695828995, guid: 2fa7e241c74cfd14683799803d5d6f00, type: 3}
   durationText: {fileID: 1265192498}
+  employeeView: {fileID: 417635149}
 --- !u!114 &1047083243
 MonoBehaviour:
   m_ObjectHideFlags: 0

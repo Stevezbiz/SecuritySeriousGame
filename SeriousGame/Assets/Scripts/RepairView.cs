@@ -8,6 +8,7 @@ public class RepairView : MonoBehaviour {
     [SerializeField] TMP_Dropdown dropdown;
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextMeshProUGUI durationText;
+    [SerializeField] EmployeeView employeeView;
 
     EmployeeCode employee;
     List<Task> tasks = new List<Task>();
@@ -40,9 +41,11 @@ public class RepairView : MonoBehaviour {
 
     public void RepairAttack() {
         gameManager.RepairAttack(tasks[dropdown.value].attack, employee);
+        Close();
     }
 
     public void Close() {
+        employeeView.Load();
         gameObject.SetActive(false);
     }
 }

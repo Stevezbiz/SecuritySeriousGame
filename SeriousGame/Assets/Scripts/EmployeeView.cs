@@ -20,7 +20,11 @@ public class EmployeeView : MonoBehaviour {
     List<GameObject> toDestroy = new List<GameObject>();
     EmployeeCode selected;
 
-    void Load() {
+    public void Load() {
+        foreach (GameObject obj in toDestroy) {
+            Destroy(obj);
+        }
+        toDestroy.Clear();
         employees = gameManager.GetHiredEmployees();
         foreach(EmployeeInfo e in employees) {
             GameObject newEmployee = Instantiate(employeeCard);
@@ -35,12 +39,22 @@ public class EmployeeView : MonoBehaviour {
     public void Select(EmployeeCode id) {
         selected = id;
         EmployeeInfo employee = gameManager.GetEmployee(id);
-        if (employee.status != TaskType.NONE) {
-            DisableButtons();
-            labelText.SetText(employee.name + " ha già un incarico in questo momento.");
-        } else {
-            EnableButtons();
-            labelText.SetText("Cosa deve fare " + employee.name + "?");
+        switch (employee.status) {
+            case TaskType.NONE:
+                EnableButtons();
+                labelText.SetText("Cosa deve fare " + employee.name + "?");
+                break;
+            case TaskType.INSTALL:
+                DisableButtons();
+                labelText.SetText(employee.name + " sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(id)).name);
+                break;
+            case TaskType.REPAIR:
+                DisableButtons();
+                labelText.SetText(employee.name + " sta riparando i danni provocati dall'attacco " + gameManager.GetAttack((AttackCode)gameManager.GetTaskTarget(id)).name);
+                break;
+            default:
+                Debug.Log("Error: undefined TaskType");
+                break;
         }
     }
 
@@ -59,10 +73,6 @@ public class EmployeeView : MonoBehaviour {
     public void OpenView() {
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0f;
-        foreach (GameObject obj in toDestroy) {
-            Destroy(obj);
-        }
-        toDestroy.Clear();
         Load();
         bottomPanel.SetActive(false);
         gameObject.SetActive(true);
