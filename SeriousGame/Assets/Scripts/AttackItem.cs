@@ -6,20 +6,22 @@ using UnityEngine;
 public class AttackItem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI text;
 
-    AttackCode id;
+    Task task;
+    AttackView parent;
 
     /**
      * <summary>Populate the item with all the elements to show</summary>
      */
-    public void Load(AttackInfo attack) {
-        this.id = attack.id;
-        text.SetText(attack.name);
+    public void Load(Task task, string name, AttackView parent) {
+        this.task = task;
+        this.parent = parent;
+        text.SetText(name);
     }
 
     /**
      * <summary>Function called when the element is clicked</summary>
      */
     public void OnClick() {
-
+        parent.OpenEmployeeChoice(task);
     }
 }

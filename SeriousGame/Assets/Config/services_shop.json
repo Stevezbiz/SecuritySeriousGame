@@ -2,7 +2,7 @@
 	"powerUps":
 	[
 		{
-			"id": 15,
+			"id": 16,
 			"category": 4,
 			"name": "Sensibilizzare gli utenti",
 			"description": "Una campagna di sensibilizzazione sui rischi legati ai servizi online per i clienti. Permette di ridurre il rischio che questi cadano preda di tentativi di truffa per mezzo di tecniche di social engineering.",
@@ -15,7 +15,7 @@
 			"resistances":
 			[
 				{
-					"id": 6,
+					"id": 7,
 					"duration": 0,
 					"miss": 0.5,
 					"endurance": 0.7
@@ -24,7 +24,7 @@
 			"requirements": [16]
 		},
 		{
-			"id": 16,
+			"id": 17,
 			"category": 4,
 			"name": "Sportello di assistenza",
 			"description": "Un servizio di assistenza clienti che permette di aiutare gli utenti in caso di dubbi o difficoltà. Migliora l'esperienza utente del servizio",
@@ -37,7 +37,7 @@
 			"resistances":
 			[
 				{
-					"id": 6,
+					"id": 7,
 					"duration": 0,
 					"miss": 0.2,
 					"endurance": 0.3

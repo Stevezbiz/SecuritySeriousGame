@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum ShopItemCode {
+    NONE,
     CONN_TIME_RED,
     CONN_QUEUE_CIRC,
     FIREWALL,

@@ -34,17 +34,19 @@ public class GameSave {
     public LogData logs;
     public AttackStats[] aStats;
     public AttackPlan[] aSchedule;
-    public Task[] tasks;
+    public Task[] waitingTasks;
+    public Task[] assignedTasks;
     public Resistance[] res;
 
-    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackPlan[] aSchedule, Task[] tasks, Resistance[] res) {
+    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackPlan[] aSchedule, Task[] waitingTasks, Task[] assignedTasks, Resistance[] res) {
         this.gc = gc;
         this.sir = sir;
         this.er = er;
         this.logs = logs;
         this.aStats = aStats;
         this.aSchedule = aSchedule;
-        this.tasks = tasks;
+        this.waitingTasks = waitingTasks;
+        this.assignedTasks = assignedTasks;
         this.res = res;
     }
 }

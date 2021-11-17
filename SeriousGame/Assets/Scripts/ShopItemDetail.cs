@@ -23,6 +23,7 @@ public class ShopItemDetail : MonoBehaviour {
 
     ShopItem parent;
     ShopItemCode id;
+    Task task;
 
     /**
      * <summary>Compose all the details of the item</summary>
@@ -89,6 +90,7 @@ public class ShopItemDetail : MonoBehaviour {
                 purchaseButton.SetActive(true);
                 break;
             case ShopItemStatus.NOT_INSTALLED:
+                task = gameManager.GetInstallTask(id);
                 installButton.SetActive(true);
                 break;
             case ShopItemStatus.INSTALLING:
@@ -112,12 +114,13 @@ public class ShopItemDetail : MonoBehaviour {
     public void PurchaseItem() {
         gameManager.PurchaseShopItem(id);
         parent.Purchase();
+        task = gameManager.GetInstallTask(id);
         purchaseButton.SetActive(false);
         installButton.SetActive(true);
     }
 
     public void InstallItem(EmployeeCode eid) {
-        gameManager.InstallShopItem(id, eid);
+        gameManager.AssignEmployee(eid, task.id);
         parent.Install();
         installButton.SetActive(false);
         installingButton.SetActive(true);
@@ -151,6 +154,6 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void OpenEmployeeChoice() {
-        employeeChoice.Load(id);
+        employeeChoice.Load(id, this);
     }
 }

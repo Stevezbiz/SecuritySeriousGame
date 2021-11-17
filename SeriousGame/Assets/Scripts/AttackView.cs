@@ -14,17 +14,27 @@ public class AttackView : MonoBehaviour {
     [SerializeField] TextMeshProUGUI missText;
     [SerializeField] TextMeshProUGUI enduranceText;
     [SerializeField] GameObject bottomPanel;
+    [SerializeField] EmployeeChoice employeeChoice;
+    [SerializeField] GameObject noAttackText;
+    [SerializeField] GameObject attackList;
+    [SerializeField] RectTransform content;
+    [SerializeField] GameObject attackItem;
 
     float oldTimeScale = 1f;
+    List<AttackInfo> attacks;
+    List<Task> tasks;
+    List<GameObject> toDestroy = new List<GameObject>();
+    int selected;
 
     /**
      * <summary>Initialize the data structures</summary>
      */
-    public void Init(int n) {
+    public void Init() {
+        attacks = gameManager.GetAttacks();
         // fill the options of the attack dropdown
         List<string> options = new List<string>();
-        for (int i = 0; i < n; i++) {
-            options.Add(gameManager.GetAttack((AttackCode)i).name);
+        foreach (AttackInfo a in attacks) {
+            options.Add(a.name);
         }
         options.Add("tutti");
         attackDropdown.AddOptions(options);
@@ -36,6 +46,28 @@ public class AttackView : MonoBehaviour {
     public void Load() {
         attackDropdown.value = attackDropdown.options.Count - 1;
         DisplayStats(0);
+        LoadCurrentAttacks();
+    }
+
+    void LoadCurrentAttacks() {
+        foreach (GameObject obj in toDestroy) {
+            Destroy(obj);
+        }
+        toDestroy.Clear();
+        tasks = gameManager.GetTasksByType(TaskType.REPAIR);
+        if (tasks.Count == 0) {
+            noAttackText.SetActive(true);
+            attackList.SetActive(false);
+        } else {
+            noAttackText.SetActive(false);
+            attackList.SetActive(true);
+            foreach (Task t in tasks) {
+                GameObject newItem = Instantiate(attackItem);
+                newItem.transform.SetParent(content, false);
+                newItem.GetComponent<AttackItem>().Load(t, gameManager.GetAttack(t.attack).name, this);
+                toDestroy.Add(newItem);
+            }
+        }
     }
 
     /**
@@ -43,10 +75,12 @@ public class AttackView : MonoBehaviour {
      */
     void DisplayStats(int err) {
         // retrieve the stats
-        AttackStats stats = gameManager.GetAttackStats((AttackCode)attackDropdown.value);
-        if (stats == null) {
+        AttackStats stats;
+        if (attackDropdown.value == attackDropdown.options.Count - 1) {
             // the "all" selector is active
             stats = gameManager.GetAttackStatsTotal();
+        } else {
+            stats = gameManager.GetAttackStats(attacks[attackDropdown.value].id);
         }
         // display the retrieved stats
         hitValue.SetText(stats.hit + "/" + stats.n);
@@ -56,17 +90,27 @@ public class AttackView : MonoBehaviour {
         if (stats.n != 0) missPercent.SetText("(" + (100 * (float)stats.miss / stats.n).ToString("0.") + " %)");
         else missPercent.SetText("(- %)");
         // retrieve and display the resistances
-        Resistance res = gameManager.GetResistance((AttackCode)attackDropdown.value);
-        if (res == null) {
+        if (attackDropdown.value == attackDropdown.options.Count - 1) {
             // the "all" selector is active
             durationText.SetText("- %");
             missText.SetText("- %");
             enduranceText.SetText("- %");
         } else {
+            Resistance res = gameManager.GetResistance(attacks[attackDropdown.value].id);
             durationText.SetText("-" + (res.duration * 100).ToString("0.") + " %");
             missText.SetText("+" + (res.miss * 100).ToString("0.") + " %");
             enduranceText.SetText("+" + (res.endurance * 100).ToString("0.") + " %");
         }
+    }
+
+    public void Repair(EmployeeCode id) {
+        gameManager.AssignEmployee(id, selected);
+        LoadCurrentAttacks();
+    }
+
+    public void OpenEmployeeChoice(Task t) {
+        selected = t.id;
+        employeeChoice.Load(t.attack, this);
     }
 
     /**

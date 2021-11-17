@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviour {
 
     List<LogLine> logs = new List<LogLine>();
     Dictionary<AttackCode, AttackPlan> attackSchedule = new Dictionary<AttackCode, AttackPlan>();
-    List<Task> tasks = new List<Task>();
+    Dictionary<int, Task> waitingTasks = new Dictionary<int, Task>();
+    Dictionary<EmployeeCode, Task> assignedTasks = new Dictionary<EmployeeCode, Task>();
     Dictionary<AttackCode, AttackInfo> attacks = new Dictionary<AttackCode, AttackInfo>();
     Dictionary<AttackCode, Resistance> resistances = new Dictionary<AttackCode, Resistance>();
     Dictionary<AttackCode, AttackStats> attackStats = new Dictionary<AttackCode, AttackStats>();
@@ -73,7 +74,7 @@ public class GameManager : MonoBehaviour {
         gc.date = dateTime.ToString();
         return new GameSave(gc, ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(),
             logManager.GetNLines(), logManager.GetNPages()), new List<AttackStats>(attackStats.Values).ToArray(), new List<AttackPlan>(attackSchedule.Values).ToArray(),
-            tasks.ToArray(), new List<Resistance>(resistances.Values).ToArray());
+            new List<Task>(waitingTasks.Values).ToArray(), new List<Task>(assignedTasks.Values).ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
 
     /**
@@ -86,7 +87,7 @@ public class GameManager : MonoBehaviour {
         shop.Init();
         // load the attacks from the file and initialize the view
         attacks = AttackUtils.LoadFromFile(attacksFileJSON);
-        attackView.Init(attacks.Count);
+        attackView.Init();
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
             LoadGameData(SaveSystem.LoadGame());
@@ -129,7 +130,7 @@ public class GameManager : MonoBehaviour {
         logManager.LoadGameData(gameSave.logs.nLines, gameSave.logs.nPages);
         // load the data structures
         AttackUtils.UpdateAll(resistances, attackStats, attackSchedule, gameSave.res, gameSave.aStats, gameSave.aSchedule);
-        tasks = new List<Task>(gameSave.tasks);
+        TaskUtils.UpdateTasks(waitingTasks, gameSave.waitingTasks, assignedTasks, gameSave.assignedTasks);
     }
 
     // LOG
@@ -177,6 +178,10 @@ public class GameManager : MonoBehaviour {
     public AttackInfo GetAttack(AttackCode id) {
         if (!attacks.ContainsKey(id)) return null;
         return attacks[id];
+    }
+
+    public List<AttackInfo> GetAttacks() {
+        return new List<AttackInfo>(attacks.Values);
     }
 
     /**
@@ -320,7 +325,8 @@ public class GameManager : MonoBehaviour {
                         gc.miss += 0.1f;
                         // log print hit
                         logManager.LogPrintAttack(attacks[attack.id].name, true);
-                        tasks.Add(new Task(TaskType.REPAIR, attack.id));
+                        Task newTask = new Task(TaskType.REPAIR, attack.id);
+                        waitingTasks.Add(newTask.id, newTask);
                     } else {
                         // miss
                         attackStats[attack.id].miss++;
@@ -335,50 +341,41 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void RepairAttack(AttackCode id, EmployeeCode eid) {
-        AssignEmployee(eid, new Task(TaskType.REPAIR, id));
-    }
-
     // TASK
     
     public List<Task> GetTasksByType(TaskType type) {
         List<Task> res = new List<Task>();
-        foreach(Task t in tasks) {
-            if (t.type == type && !t.assigned) res.Add(t);
+        foreach(Task t in waitingTasks.Values) {
+            if (t.type == type) res.Add(t);
         }
         return res;
     }
 
     void UpdateTasks() {
-        for (int i = 0; i < tasks.Count; i++) {
-            Task task = tasks[i];
-            if (task.assigned) {
-                if (tasks[i].progress == tasks[i].duration) {
-                    // end task
-                    EndTask(i);
-                    i--;
-                } else {
-                    tasks[i].progress++;
-                }
+        foreach (Task t in assignedTasks.Values) {
+            if (t.progress == t.duration) {
+                // end task
+                EndTask(t);
+            } else {
+                t.progress++;
             }
         }
     }
 
-    void EndTask(int i) {
-        Task task = tasks[i];
-        switch (task.type) {
+    void EndTask(Task t) {
+        switch (t.type) {
             case TaskType.INSTALL:
-                employees[task.executor].status = TaskType.NONE;
-                EnableShopItem(task.shopItem);
-                tasks.RemoveAt(i);
+                employees[t.executor].status = TaskType.NONE;
+                EnableShopItem(t.shopItem);
+                waitingTasks.Remove(t.id);
                 break;
             case TaskType.REPAIR:
                 // end the attack
-                employees[task.executor].status = TaskType.NONE;
-                StopAttack(task.attack);
-                ScheduleAttack(task.attack);
-                attackSchedule[task.attack].timer--;
-                tasks.RemoveAt(i);
+                employees[t.executor].status = TaskType.NONE;
+                StopAttack(t.attack);
+                ScheduleAttack(t.attack);
+                attackSchedule[t.attack].timer--;
+                waitingTasks.Remove(t.id);
                 break;
             default:
                 Debug.Log("Error: undefined taskType");
@@ -391,7 +388,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public float GetTaskProgress(ShopItemCode id) {
-        foreach(Task t in tasks) {
+        foreach(Task t in waitingTasks.Values) {
             if (t.shopItem == id) return (float)t.progress / (t.duration + 1);
         }
         Debug.Log("Error: no task with the given ShopItemCode");
@@ -399,7 +396,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public float GetTaskProgress(EmployeeCode id) {
-        foreach (Task t in tasks) {
+        foreach (Task t in waitingTasks.Values) {
             if (t.executor == id) return (float)t.progress / (t.duration + 1);
         }
         Debug.Log("Error: no task assigned to the given employee");
@@ -407,7 +404,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public int GetTaskTarget(EmployeeCode id) {
-        foreach (Task t in tasks) {
+        foreach (Task t in waitingTasks.Values) {
             if (t.executor == id) {
                 switch (t.type) {
                     case TaskType.INSTALL:
@@ -419,6 +416,24 @@ public class GameManager : MonoBehaviour {
         }
         Debug.Log("Error: no task assigned to the given employee");
         return 0;
+    }
+
+    public Task GetRepairTask(AttackCode id) {
+        foreach(Task t in waitingTasks.Values) {
+            if(t.type==TaskType.REPAIR && t.attack == id) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public Task GetInstallTask(ShopItemCode id) {
+        foreach (Task t in waitingTasks.Values) {
+            if (t.type == TaskType.INSTALL && t.shopItem == id) {
+                return t;
+            }
+        }
+        return null;
     }
 
     // SHOP
@@ -446,12 +461,9 @@ public class GameManager : MonoBehaviour {
         logManager.LogPrintItem(shopItems[id].name, ActionCode.PURCHASE_ITEM);
         shopItems[id].status = ShopItemStatus.NOT_INSTALLED;
         gc.money -= shopItems[id].cost;
+        Task t = new Task(TaskType.INSTALL, id);
+        waitingTasks.Add(t.id, t);
         gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
-    }
-
-    public void InstallShopItem(ShopItemCode id, EmployeeCode eid) {
-        shopItems[id].status = ShopItemStatus.INSTALLING;
-        AssignEmployee(eid, new Task(TaskType.INSTALL, id));
     }
 
     /**
@@ -532,17 +544,20 @@ public class GameManager : MonoBehaviour {
         return EmployeeUtils.GetAvailableEmployees(employees);
     }
 
-    void AssignEmployee(EmployeeCode id, Task t) {
+    public void AssignEmployee(EmployeeCode id, int tid) {
+        Task t = waitingTasks[tid];
+        employees[id].status = t.type;
         switch (t.type) {
             case TaskType.INSTALL:
-                employees[id].status = TaskType.INSTALL;
-                t.AssignEmployee(id, GetInstallDuration(id, t.shopItem));
-                tasks.Add(t);
+                shopItems[t.shopItem].status = ShopItemStatus.INSTALLING;
+                assignedTasks.Add(id, t);
+                assignedTasks[id].AssignEmployee(id, GetInstallDuration(id, t.shopItem));
+                waitingTasks.Remove(tid);
                 break;
             case TaskType.REPAIR:
-                employees[id].status = TaskType.REPAIR;
-                t.AssignEmployee(id, GetAttackDuration(id, t.attack));
-                tasks.Add(t);
+                assignedTasks.Add(id, t);
+                assignedTasks[id].AssignEmployee(id, GetAttackDuration(id, t.attack));
+                waitingTasks.Remove(tid);
                 break;
             default:
                 Debug.Log("Error: undefined taskType");

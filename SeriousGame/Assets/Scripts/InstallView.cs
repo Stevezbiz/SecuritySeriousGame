@@ -40,7 +40,7 @@ public class InstallView : MonoBehaviour {
     }
 
     public void InstallItem() {
-        gameManager.InstallShopItem(tasks[dropdown.value].shopItem, employee);
+        gameManager.AssignEmployee(employee, tasks[dropdown.value].id);
         Close();
     }
 

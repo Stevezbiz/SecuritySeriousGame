@@ -40,7 +40,7 @@ public class RepairView : MonoBehaviour {
     }
 
     public void RepairAttack() {
-        gameManager.RepairAttack(tasks[dropdown.value].attack, employee);
+        gameManager.AssignEmployee(employee, tasks[dropdown.value].id);
         Close();
     }
 

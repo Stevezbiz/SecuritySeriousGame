@@ -6,7 +6,6 @@ using Image = UnityEngine.UI.Image;
 
 public class EmployeeChoice : MonoBehaviour {
     [SerializeField] GameManager gameManager;
-    [SerializeField] ShopItemDetail shopItemDetail;
     [SerializeField] TMP_Dropdown employeeDropdown;
     [SerializeField] TextMeshProUGUI descriptionText;
     [SerializeField] TextMeshProUGUI moneyGainText;
@@ -18,11 +17,18 @@ public class EmployeeChoice : MonoBehaviour {
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextMeshProUGUI durationText;
 
-    List<EmployeeInfo> employees;
-    ShopItemCode id;
 
-    public void Load(ShopItemCode id) {
-        this.id = id;
+    ShopItemDetail shopItemDetail;
+    AttackView attackView;
+    List<EmployeeInfo> employees;
+    ShopItemCode sid;
+    AttackCode aid;
+    TaskType type;
+
+    public void Load(ShopItemCode id, ShopItemDetail shopItemDetail) {
+        this.sid = id;
+        this.shopItemDetail = shopItemDetail;
+        type = TaskType.INSTALL;
         // fill the options of the dropdown element
         employees = gameManager.GetAvailableEmployees();
         if (employees.Count == 0) {
@@ -40,7 +46,29 @@ public class EmployeeChoice : MonoBehaviour {
             Display(0);
             gameObject.SetActive(true);
         }
-        
+    }
+
+    public void Load(AttackCode id, AttackView attackView) {
+        this.aid = id;
+        this.attackView = attackView;
+        type = TaskType.REPAIR;
+        // fill the options of the dropdown element
+        employees = gameManager.GetAvailableEmployees();
+        if (employees.Count == 0) {
+            GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
+            newWindow.transform.SetParent(gameManager.gameObject.transform, false);
+            newWindow.GetComponent<WindowPopUp>().Load("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE);
+        } else {
+            List<string> options = new List<string>();
+            foreach (EmployeeInfo el in employees) {
+                options.Add(el.name);
+            }
+            employeeDropdown.ClearOptions();
+            employeeDropdown.AddOptions(options);
+            employeeDropdown.value = 0;
+            Display(0);
+            gameObject.SetActive(true);
+        }
     }
 
     public void Display(int err) {
@@ -53,12 +81,36 @@ public class EmployeeChoice : MonoBehaviour {
         assetBar.fillAmount = abilities[Category.ASSET] / 10;
         servicesBar.fillAmount = abilities[Category.SERVICES] / 10;
         moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
-        durationText.SetText("Durata: " + gameManager.GetInstallDuration(e.id, id) + " h");
+        switch (type) {
+            case TaskType.NONE:
+                break;
+            case TaskType.INSTALL:
+                durationText.SetText("Durata: " + gameManager.GetInstallDuration(e.id, sid) + " h");
+                break;
+            case TaskType.REPAIR:
+                durationText.SetText("Durata: " + gameManager.GetAttackDuration(e.id, aid) + " h");
+                break;
+            default:
+                Debug.Log("Error: undefined TaskType");
+                break;
+        }
     }
 
     public void AssignEmployee() {
-        shopItemDetail.InstallItem(employees[employeeDropdown.value].id);
-        gameObject.SetActive(false);
+        switch (type) {
+            case TaskType.NONE:
+                break;
+            case TaskType.INSTALL:
+                shopItemDetail.InstallItem(employees[employeeDropdown.value].id);
+                break;
+            case TaskType.REPAIR:
+                attackView.Repair(employees[employeeDropdown.value].id);
+                break;
+            default:
+                Debug.Log("Error: undefined TaskType");
+                break;
+        }
+        Close();
     }
 
     public void Close() {
