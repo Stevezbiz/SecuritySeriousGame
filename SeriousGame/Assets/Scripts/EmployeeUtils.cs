@@ -97,7 +97,7 @@ public static class EmployeeUtils {
     public static List<EmployeeInfo> GetAvailableEmployees(Dictionary<EmployeeCode, EmployeeInfo> e) {
         List<EmployeeInfo> employees = new List<EmployeeInfo>();
 
-        foreach(EmployeeInfo el in e.Values) {
+        foreach (EmployeeInfo el in e.Values) {
             if (el.owned && el.status == TaskType.NONE) employees.Add(el);
         }
 

@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<AttackCode, AttackStats> attackStats = new Dictionary<AttackCode, AttackStats>();
     Dictionary<ShopItemCode, ShopItemInfo> shopItems = new Dictionary<ShopItemCode, ShopItemInfo>();
     Dictionary<EmployeeCode, EmployeeInfo> employees = new Dictionary<EmployeeCode, EmployeeInfo>();
+    List<KnowledgeComponent> kcs = new List<KnowledgeComponent>();
 
     // Start is called before the first frame update
     void Start() {
@@ -342,10 +343,10 @@ public class GameManager : MonoBehaviour {
     }
 
     // TASK
-    
+
     public List<Task> GetTasksByType(TaskType type) {
         List<Task> res = new List<Task>();
-        foreach(Task t in waitingTasks.Values) {
+        foreach (Task t in waitingTasks.Values) {
             if (t.type == type) res.Add(t);
         }
         return res;
@@ -388,7 +389,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public float GetTaskProgress(ShopItemCode id) {
-        foreach(Task t in waitingTasks.Values) {
+        foreach (Task t in waitingTasks.Values) {
             if (t.shopItem == id) return (float)t.progress / (t.duration + 1);
         }
         Debug.Log("Error: no task with the given ShopItemCode");
@@ -419,8 +420,8 @@ public class GameManager : MonoBehaviour {
     }
 
     public Task GetRepairTask(AttackCode id) {
-        foreach(Task t in waitingTasks.Values) {
-            if(t.type==TaskType.REPAIR && t.attack == id) {
+        foreach (Task t in waitingTasks.Values) {
+            if (t.type == TaskType.REPAIR && t.attack == id) {
                 return t;
             }
         }
@@ -600,14 +601,14 @@ public class GameManager : MonoBehaviour {
             }
         }
         // the costs for the active items
-        foreach(ShopItemInfo sii in shopItems.Values) {
+        foreach (ShopItemInfo sii in shopItems.Values) {
             if (sii.status == ShopItemStatus.ACTIVE) {
                 if (sii.moneyMalus < 0) moneyBonus -= sii.moneyMalus;
                 else moneyMalus += sii.moneyMalus;
             }
         }
         // the malus for the active attacks
-        foreach(AttackPlan a in attackSchedule.Values) {
+        foreach (AttackPlan a in attackSchedule.Values) {
             if (a.status == AttackStatus.ACTIVE) attackMoneyMalus += attacks[a.id].moneyMalus;
         }
         return moneyBonus * (1 - attackMoneyMalus) - moneyMalus;

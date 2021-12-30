@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using Image = UnityEngine.UI.Image;
 
 public class EmployeeChoice : MonoBehaviour {
@@ -37,7 +37,7 @@ public class EmployeeChoice : MonoBehaviour {
             newWindow.GetComponent<WindowPopUp>().Load("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE);
         } else {
             List<string> options = new List<string>();
-            foreach(EmployeeInfo el in employees) {
+            foreach (EmployeeInfo el in employees) {
                 options.Add(el.name);
             }
             employeeDropdown.ClearOptions();

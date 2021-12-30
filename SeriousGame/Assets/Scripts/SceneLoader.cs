@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Runtime.InteropServices;
 
 public static class SceneLoader {
     [DllImport("__Internal")]
     private static extern void Redirect(string url);
-    
+
     /**
      * <summary>Load the specified scene</summary>
      */

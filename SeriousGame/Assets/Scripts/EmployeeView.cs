@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class EmployeeView : MonoBehaviour {
     [SerializeField] GameManager gameManager;
@@ -26,7 +26,7 @@ public class EmployeeView : MonoBehaviour {
         }
         toDestroy.Clear();
         employees = gameManager.GetHiredEmployees();
-        foreach(EmployeeInfo e in employees) {
+        foreach (EmployeeInfo e in employees) {
             GameObject newEmployee = Instantiate(employeeCard);
             newEmployee.transform.SetParent(content, false);
             newEmployee.GetComponent<EmployeeCard>().Load(e, gameManager, this);

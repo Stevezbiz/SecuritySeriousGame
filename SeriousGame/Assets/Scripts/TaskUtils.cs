@@ -59,7 +59,7 @@ public class Task {
 
 public static class TaskUtils {
     public static void UpdateTasks(Dictionary<int, Task> waitingTasks, Task[] t1, Dictionary<EmployeeCode, Task> assignedTasks, Task[] t2) {
-        foreach(Task t in t1) {
+        foreach (Task t in t1) {
             Task newTask = new Task(t);
             waitingTasks.Add(newTask.id, newTask);
         }

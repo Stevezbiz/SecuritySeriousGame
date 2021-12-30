@@ -72,7 +72,7 @@
 		{
 			"id": 20,
 			"category": 3,
-			"name": "Back-up efficiente",
+			"name": "Backup efficiente",
 			"description": "Una policy di back-up efficiente e sicura non rappresenta solo un costo da sostenere, ma si rivela una grande risorsa in caso di infezione da ransomware o compromissione del sistema",
 			"cost": 200,
 			"moneyMalus": 3,
