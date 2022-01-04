@@ -59,11 +59,13 @@ public class AttackPlan {
     public AttackCode id;
     public AttackStatus status;
     public int timer;
+    public bool inevitable;
 
-    public AttackPlan(AttackCode id, AttackStatus status, int timer) {
+    public AttackPlan(AttackCode id, AttackStatus status, int timer, bool inevitable) {
         this.id = id;
         this.status = status;
         this.timer = timer;
+        this.inevitable = inevitable;
     }
 }
 
@@ -107,7 +109,7 @@ public static class AttackUtils {
         foreach (AttackInfo attack in attacks.Values) {
             if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0, 0f, 0f));
             attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
-            attackSchedule.Add(attack.id, new AttackPlan(attack.id, AttackStatus.INACTIVE, 0));
+            attackSchedule.Add(attack.id, new AttackPlan(attack.id, AttackStatus.INACTIVE, 0, false));
         }
     }
 

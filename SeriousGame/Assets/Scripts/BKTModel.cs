@@ -106,7 +106,10 @@ public class KnowledgeComponent {
         double num = 0, den = 0;
         for (int i = 0; i < tests.Count - 1; i++) {
             if (i < transitionPos) {
-                if (i + 1 >= transitionPos) num++;
+                if (i + 1 >= transitionPos) {
+                    num++;
+                    den++;
+                }
                 den++;
             }
         }
@@ -123,7 +126,7 @@ public class KnowledgeComponent {
             }
         }
         if (den != 0) guess = num / den;
-        if (guess > 0.3) guess = 0.3;
+        //if (guess > 0.3) guess = 0.3;
     }
 
     void UpdateSlipParameter() {
@@ -136,7 +139,7 @@ public class KnowledgeComponent {
             }
         }
         if (den != 0) slip = num / den;
-        if (slip > 0.1) slip = 0.1;
+        //if (slip > 0.1) slip = 0.1;
     }
 
     void UpdateKnownParameter(bool LastPerformance) {

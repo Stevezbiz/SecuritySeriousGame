@@ -196,10 +196,10 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Insert an instance of the specified attack among the scheduled ones</summary>
      */
-    void ScheduleAttack(AttackCode id) {
+    void ScheduleAttack(AttackCode id, bool inevitable) {
         float maxTime = attacks[id].maxTime * GetAttackEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
-        attackSchedule[id] = new AttackPlan(id, AttackStatus.PLANNING, Mathf.CeilToInt(nextTime));
+        attackSchedule[id] = new AttackPlan(id, AttackStatus.PLANNING, Mathf.CeilToInt(nextTime), inevitable);
     }
 
     /**
@@ -208,45 +208,45 @@ public class GameManager : MonoBehaviour {
     void ActivateAttacks() {
         switch (gc.totalTime) {
             case 48: // day 2
-                ScheduleAttack(AttackCode.DOS);
-                ScheduleAttack(AttackCode.BRUTE_FORCE);
-                ScheduleAttack(AttackCode.WORM);
+                ScheduleAttack(AttackCode.DOS, false);
+                ScheduleAttack(AttackCode.BRUTE_FORCE, false);
+                ScheduleAttack(AttackCode.WORM, false);
                 DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.DOS].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE);
                 break;
             case 120: // day 5
-                ScheduleAttack(AttackCode.MITM);
+                ScheduleAttack(AttackCode.MITM, false);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE);
                 break;
             case 168: // day 7
-                ScheduleAttack(AttackCode.VIRUS);
+                ScheduleAttack(AttackCode.VIRUS, false);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.VIRUS].name, ActionCode.CONTINUE);
                 break;
             case 240: // day 10
-                ScheduleAttack(AttackCode.SOCIAL_ENGINEERING);
+                ScheduleAttack(AttackCode.SOCIAL_ENGINEERING, false);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE);
                 break;
             case 288: // day 12
-                ScheduleAttack(AttackCode.API_VULNERABILITY);
+                ScheduleAttack(AttackCode.API_VULNERABILITY, false);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE);
                 break;
             case 360: // day 15
-                ScheduleAttack(AttackCode.DICTIONARY);
+                ScheduleAttack(AttackCode.DICTIONARY, false);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DICTIONARY].name, ActionCode.CONTINUE);
                 break;
             case 408: // day 17
-                ScheduleAttack(AttackCode.PHISHING);
+                ScheduleAttack(AttackCode.PHISHING, false);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.PHISHING].name, ActionCode.CONTINUE);
                 break;
             case 480: // day 20
-                ScheduleAttack(AttackCode.SPYWARE);
+                ScheduleAttack(AttackCode.SPYWARE, false);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SPYWARE].name, ActionCode.CONTINUE);
                 break;
             case 528: // day 22
-                ScheduleAttack(AttackCode.RAINBOW_TABLE);
+                ScheduleAttack(AttackCode.RAINBOW_TABLE, false);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE);
                 break;
             case 600: // day 25
-                ScheduleAttack(AttackCode.RANSOMWARE);
+                ScheduleAttack(AttackCode.RANSOMWARE, false);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RANSOMWARE].name, ActionCode.CONTINUE);
                 break;
             default:
@@ -318,7 +318,7 @@ public class GameManager : MonoBehaviour {
                 } else {
                     // start the attack
                     attackStats[attack.id].n++;
-                    if (Random.Range(0f, 1f) > GetAttackMiss(attack.id)) {
+                    if (attack.inevitable || Random.Range(0f, 1f) > GetAttackMiss(attack.id)) {
                         // hit
                         attack.status = AttackStatus.ACTIVE;
                         attackStats[attack.id].hit++;
@@ -332,7 +332,7 @@ public class GameManager : MonoBehaviour {
                         // miss
                         attackStats[attack.id].miss++;
                         MissedAttack(attack.id);
-                        ScheduleAttack(attack.id);
+                        ScheduleAttack(attack.id, false);
                         gc.miss = 0f;
                         // log print miss
                         logManager.LogPrintAttack(attacks[attack.id].name, false);
@@ -374,7 +374,7 @@ public class GameManager : MonoBehaviour {
                 // end the attack
                 employees[t.executor].status = TaskType.NONE;
                 StopAttack(t.attack);
-                ScheduleAttack(t.attack);
+                ScheduleAttack(t.attack, false);
                 attackSchedule[t.attack].timer--;
                 waitingTasks.Remove(t.id);
                 break;
