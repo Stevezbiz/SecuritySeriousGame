@@ -3,17 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum SkillCode {
-    NONE
+    NONE,
+    NETWORK,
+    ACCESS,
+    SOFTWARE,
+    ASSET,
+    SERVICES
 }
 
 public static class BKTModel {
     public static double COGNITIVE_MASTERY = 0.95;     // threshold to reach to achieve mastery
     public static int N_FIRST_EMPIRICAL_TEST = 3;      // N number to verify first empirical test
     public static int M_SECOND_EMPIRICAL_TEST = 10;    // M number to verify second empirical test
-    public static double baseTransit;
-    public static double baseSlip;
-    public static double baseGuess;
-    public static double baseLearned;
+    public static double baseTransit = 0.1;
+    public static double baseSlip = 0.1;
+    public static double baseGuess = 0.3;
+    public static double baseLearned = 0.01;
+
+    public static Dictionary<SkillCode, KnowledgeComponent> Init() {
+        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
+        kcs.Add(SkillCode.NETWORK, new KnowledgeComponent(SkillCode.NETWORK));
+        kcs.Add(SkillCode.ACCESS, new KnowledgeComponent(SkillCode.ACCESS));
+        kcs.Add(SkillCode.SOFTWARE, new KnowledgeComponent(SkillCode.SOFTWARE));
+        kcs.Add(SkillCode.ASSET, new KnowledgeComponent(SkillCode.ASSET));
+        kcs.Add(SkillCode.SERVICES, new KnowledgeComponent(SkillCode.SERVICES));
+        return kcs;
+    }
 }
 
 [System.Serializable]
@@ -58,7 +73,7 @@ public class KnowledgeComponent {
         this.tests = tests;
     }
 
-    public void AddResult(bool result) {
+    public void AddTestResult(bool result) {
         tests.Add(result);
         FitThisParametersUpdate(result);
     }

@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<AttackCode, AttackStats> attackStats = new Dictionary<AttackCode, AttackStats>();
     Dictionary<ShopItemCode, ShopItemInfo> shopItems = new Dictionary<ShopItemCode, ShopItemInfo>();
     Dictionary<EmployeeCode, EmployeeInfo> employees = new Dictionary<EmployeeCode, EmployeeInfo>();
-    List<KnowledgeComponent> kcs = new List<KnowledgeComponent>();
+    Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
 
     // Start is called before the first frame update
     void Start() {
@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour {
             dateTime = dateTime.AddHours(1);
             // schedule new attacks
             ActivateAttacks();
+            // trigger periodic evaluation
+            TriggerEvaluation();
             // update tasks
             UpdateTasks();
             // update attacks
@@ -92,6 +94,8 @@ public class GameManager : MonoBehaviour {
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
             LoadGameData(SaveSystem.LoadGame());
+            // TODO: save/load system for BKT model data (and substitute this part)
+            kcs = BKTModel.Init();
         } else {
             // load the game data for a new game
             GameConfigJSON gameConfigContent = JsonUtility.FromJson<GameConfigJSON>(gameConfigJSON.text);
@@ -102,6 +106,8 @@ public class GameManager : MonoBehaviour {
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
             UpdateAttacks();
+            // initialize the BKT model
+            kcs = BKTModel.Init();
         }
         // generate all the objects in the shop
         shop.Load();
@@ -823,6 +829,66 @@ public class GameManager : MonoBehaviour {
             "tot miss: " + r.miss + "\n" +
             "tot endurance: " + r.endurance + "\n" +
             "max time: " + attacks[r.id].maxTime);
+        }
+    }
+
+    void TriggerEvaluation() {
+
+    }
+    
+    void EvaluatePurchaseShopItem(ShopItemCode id) {
+        // Consider various aspects of the purchase
+        int score = 0;
+        ShopItemInfo sii = shopItems[id];
+        List<Resistance> res = new List<Resistance>(sii.resistances);
+        
+        // 1. Are the attacks mitigated by the item active, so that the countermeasure is needed?
+        foreach(Resistance r in res) {
+            if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score--;
+            else score++;
+        }
+        // 2. How much is the impact on the money?
+        if (GetActualMoneyGain() - sii.cost > 0) score++;
+        else score--;
+        // 3. Is the countermeasure over-preventing an attack?
+        foreach(Resistance r in res) {
+            if (resistances[r.id].miss > 1) score--;
+            if (resistances[r.id].duration > 1) score--;
+            if (resistances[r.id].endurance > 1) score--;
+        }
+        // Select the proper Knowledge Component
+        SkillCode kc;
+
+        switch (sii.category) {
+            case Category.NETWORK:
+                kc = SkillCode.NETWORK;
+                break;
+            case Category.ACCESS:
+                kc = SkillCode.ACCESS;
+                break;
+            case Category.SOFTWARE:
+                kc = SkillCode.SOFTWARE;
+                break;
+            case Category.ASSET:
+                kc = SkillCode.ASSET;
+                break;
+            case Category.SERVICES:
+                kc = SkillCode.SERVICES;
+                break;
+            default:
+                Debug.Log("Error: unexpected Category");
+                kc = SkillCode.NONE;
+                break;
+        }
+        // check error
+        if (kc == SkillCode.NONE) return;
+        // Decide the result of the evaluation
+        if (score >= 0) {
+            // correct
+            kcs[kc].AddTestResult(true);
+        } else {
+            // wrong
+            kcs[kc].AddTestResult(false);
         }
     }
 }

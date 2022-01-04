@@ -18,13 +18,13 @@ public class BKTTest : MonoBehaviour {
 
     public void CorrectAnswer() {
         // Apply the observation to the model
-        kc.AddResult(true);
+        kc.AddTestResult(true);
         Refresh();
     }
 
     public void WrongAnswer() {
         // Apply the observation to the model
-        kc.AddResult(false);
+        kc.AddTestResult(false);
         Refresh();
     }
 
