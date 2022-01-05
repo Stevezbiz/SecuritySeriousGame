@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public enum SkillCode {
     NONE,
+    MANAGEMENT,
     NETWORK,
     ACCESS,
     SOFTWARE,
@@ -21,13 +24,44 @@ public static class BKTModel {
     public static double baseLearned = 0.01;
 
     public static Dictionary<SkillCode, KnowledgeComponent> Init() {
-        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
-        kcs.Add(SkillCode.NETWORK, new KnowledgeComponent(SkillCode.NETWORK));
-        kcs.Add(SkillCode.ACCESS, new KnowledgeComponent(SkillCode.ACCESS));
-        kcs.Add(SkillCode.SOFTWARE, new KnowledgeComponent(SkillCode.SOFTWARE));
-        kcs.Add(SkillCode.ASSET, new KnowledgeComponent(SkillCode.ASSET));
-        kcs.Add(SkillCode.SERVICES, new KnowledgeComponent(SkillCode.SERVICES));
+        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent> {
+            { SkillCode.NETWORK, new KnowledgeComponent(SkillCode.NETWORK) },
+            { SkillCode.ACCESS, new KnowledgeComponent(SkillCode.ACCESS) },
+            { SkillCode.SOFTWARE, new KnowledgeComponent(SkillCode.SOFTWARE) },
+            { SkillCode.ASSET, new KnowledgeComponent(SkillCode.ASSET) },
+            { SkillCode.SERVICES, new KnowledgeComponent(SkillCode.SERVICES) }
+        };
         return kcs;
+    }
+
+    public static Dictionary<SkillCode, KnowledgeComponent> LoadModel() {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/bktmodel.data";
+        FileStream fs = new FileStream(path, FileMode.Open);
+        ModelSave modelSave = formatter.Deserialize(fs) as ModelSave;
+        fs.Close();
+        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
+        foreach(KCRecord r in modelSave.records) {
+            kcs.Add(r.id, new KnowledgeComponent(r));
+        }
+        return kcs;
+    }
+
+    public static void SaveModel(ModelSave modelSave) {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/bktmodel.data";
+        FileStream fs = new FileStream(path, FileMode.Create);
+        formatter.Serialize(fs, modelSave);
+        fs.Close();
+    }
+}
+
+[System.Serializable]
+public class ModelSave {
+    public KCRecord[] records;
+
+    public ModelSave(KCRecord[] records) {
+        this.records = records;
     }
 }
 
@@ -45,7 +79,7 @@ public class KCRecord {
 }
 
 public class KnowledgeComponent {
-    SkillCode id;                               // the id of the skill
+    public SkillCode id;                               // the id of the skill
     double transit;                             // p(T)
     double slip;                                // p(S)
     double guess;                               // p(G)
@@ -63,14 +97,14 @@ public class KnowledgeComponent {
         tests = new List<bool>();
     }
 
-    public KnowledgeComponent(SkillCode id, int transitionPos, List<bool> tests) {
-        this.id = id;
+    public KnowledgeComponent(KCRecord r) {
+        id = r.id;
         transit = BKTModel.baseTransit;
         slip = BKTModel.baseSlip;
         guess = BKTModel.baseGuess;
         learned = BKTModel.baseLearned;
-        this.transitionPos = transitionPos;
-        this.tests = tests;
+        transitionPos = r.transitionPos;
+        tests = new List<bool>(r.tests);
     }
 
     public void AddTestResult(bool result) {
@@ -273,5 +307,9 @@ public class KnowledgeComponent {
 
     public int GetTestN() {
         return tests.Count;
+    }
+
+    public bool[] GetTests() {
+        return tests.ToArray();
     }
 }

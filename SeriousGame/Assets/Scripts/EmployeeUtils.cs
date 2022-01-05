@@ -77,6 +77,14 @@ public static class EmployeeUtils {
         return abilities;
     }
 
+    public static int GetAbility(EmployeeAbility[] abilities, Category c) {
+        foreach(EmployeeAbility a in abilities) {
+            if (a.category == c) return a.level;
+        }
+        Debug.Log("Error: unexpected Category");
+        return -1;
+    }
+
     public static List<EmployeeInfo> GetHiredEmployees(Dictionary<EmployeeCode, EmployeeInfo> e) {
         List<EmployeeInfo> employees = new List<EmployeeInfo>();
 

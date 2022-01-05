@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour {
             // schedule new attacks
             ActivateAttacks();
             // trigger periodic evaluation
-            TriggerEvaluation();
+            EvaluateSecurityStatus();
             // update tasks
             UpdateTasks();
             // update attacks
@@ -94,8 +94,8 @@ public class GameManager : MonoBehaviour {
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
             LoadGameData(SaveSystem.LoadGame());
-            // TODO: save/load system for BKT model data (and substitute this part)
-            kcs = BKTModel.Init();
+            // load the model data saved on file
+            kcs = BKTModel.LoadModel();
         } else {
             // load the game data for a new game
             GameConfigJSON gameConfigContent = JsonUtility.FromJson<GameConfigJSON>(gameConfigJSON.text);
@@ -466,6 +466,8 @@ public class GameManager : MonoBehaviour {
     public void PurchaseShopItem(ShopItemCode id) {
         // print in the log
         logManager.LogPrintItem(shopItems[id].name, ActionCode.PURCHASE_ITEM);
+        // evaluate the purchase
+        EvaluatePurchaseShopItem(id);
         shopItems[id].status = ShopItemStatus.NOT_INSTALLED;
         gc.money -= shopItems[id].cost;
         Task t = new Task(TaskType.INSTALL, id);
@@ -570,6 +572,8 @@ public class GameManager : MonoBehaviour {
                 Debug.Log("Error: undefined taskType");
                 break;
         }
+        // evaluate the choice of the employee
+        EvaluateEmployeeManagement(id);
     }
 
     // MISC
@@ -832,8 +836,8 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void TriggerEvaluation() {
-
+    void EvaluateSecurityStatus() {
+        // TODO: every x time evaluate the status of the countermeasures of the active attacks
     }
     
     void EvaluatePurchaseShopItem(ShopItemCode id) {
@@ -890,5 +894,62 @@ public class GameManager : MonoBehaviour {
             // wrong
             kcs[kc].AddTestResult(false);
         }
+    }
+
+    void EvaluateEmployeeManagement(EmployeeCode id) {
+        // identify the type of the task
+        switch (employees[id].status) {
+            case TaskType.INSTALL:
+                kcs[SkillCode.MANAGEMENT].AddTestResult(EmployeeTestResult(id, shopItems[assignedTasks[id].shopItem].category));
+                break;
+            case TaskType.REPAIR:
+                kcs[SkillCode.MANAGEMENT].AddTestResult(EmployeeTestResult(id, attacks[assignedTasks[id].attack].category));
+                break;
+            default:
+                Debug.Log("Error: undefined taskType");
+                break;
+        }
+    }
+
+    bool EmployeeTestResult(EmployeeCode id, Category category) {
+        int score = 0;
+        EmployeeInfo employee = employees[id];
+        // 1. How good is the selected employee in the category of the task?
+        score += EmployeeUtils.GetAbility(employee.abilities, category);
+        
+        bool good1 = true;
+        bool good2 = true;
+        foreach(EmployeeInfo e in GetAvailableEmployees()) {
+            // 2. Are there better solutions?
+            if (EmployeeUtils.GetAbility(employee.abilities, category) < EmployeeUtils.GetAbility(e.abilities, category)) {
+                good1 = false;
+                score--;
+            }
+            // 3. How much is the impact on the money?
+            if (employee.moneyGain > e.moneyGain) {
+                good2 = false;
+                score--;
+            }
+        }
+        if (good1) score++;
+        if (good2) score++;
+        // Decide the result of the evaluation
+        if (score >= 0) {
+            // correct
+            return true;
+        } else {
+            // wrong
+            return false;
+        }
+    }
+
+    public ModelSave SaveModel() {
+        List<KCRecord> records = new List<KCRecord>();
+
+        foreach(KnowledgeComponent kc in kcs.Values) {
+            records.Add(new KCRecord(kc.id, kc.GetTransitionPos(), kc.GetTests()));
+        }
+
+        return new ModelSave(records.ToArray());
     }
 }
