@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour {
     [SerializeField] GameManager gameManager;
     [SerializeField] GameObject windowPopUp;
+    [SerializeField] Button loadButton;
+    [SerializeField] TextMeshProUGUI loadText;
+    [SerializeField] Outline loadOutline;
 
     float oldTimeScale = 1;
 
@@ -14,6 +19,17 @@ public class SettingsMenu : MonoBehaviour {
     public void OpenSettings() {
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0;
+        // disable the possibility to load a game in case of missing save file
+        string path = Application.persistentDataPath + "/savedata.data";
+        if (!System.IO.File.Exists(path)) {
+            loadButton.interactable = false;
+            loadText.color = COLOR.GREEN_DISABLED;
+            loadOutline.effectColor = COLOR.GREEN_DISABLED;
+        } else {
+            loadButton.interactable = true;
+            loadText.color = COLOR.GREEN;
+            loadOutline.effectColor = COLOR.GREEN;
+        }
         gameObject.SetActive(true);
     }
 
@@ -34,6 +50,14 @@ public class SettingsMenu : MonoBehaviour {
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
         newWindow.GetComponent<WindowPopUp>().Load("Partita salvata", ActionCode.CONTINUE);
+    }
+
+    /**
+     * <summary>Load a saved game</summary>
+     */
+    public void LoadGameButton() {
+        SaveSystem.load = true;
+        SceneLoader.ReloadScene();
     }
 
     /**

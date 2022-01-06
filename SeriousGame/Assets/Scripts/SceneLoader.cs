@@ -16,6 +16,13 @@ public static class SceneLoader {
     }
 
     /**
+     * <summary>Load the specified scene</summary>
+     */
+    public static void ReloadScene() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    /**
      * <summary>Close the game</summary>
      */
     public static void ExitGame() {
