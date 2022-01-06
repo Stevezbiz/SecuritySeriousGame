@@ -29,7 +29,8 @@ public static class BKTModel {
             { SkillCode.ACCESS, new KnowledgeComponent(SkillCode.ACCESS) },
             { SkillCode.SOFTWARE, new KnowledgeComponent(SkillCode.SOFTWARE) },
             { SkillCode.ASSET, new KnowledgeComponent(SkillCode.ASSET) },
-            { SkillCode.SERVICES, new KnowledgeComponent(SkillCode.SERVICES) }
+            { SkillCode.SERVICES, new KnowledgeComponent(SkillCode.SERVICES) },
+            { SkillCode.MANAGEMENT, new KnowledgeComponent(SkillCode.MANAGEMENT) }
         };
         return kcs;
     }

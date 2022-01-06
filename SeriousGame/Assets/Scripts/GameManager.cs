@@ -395,7 +395,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public float GetTaskProgress(ShopItemCode id) {
-        foreach (Task t in waitingTasks.Values) {
+        foreach (Task t in assignedTasks.Values) {
             if (t.shopItem == id) return (float)t.progress / (t.duration + 1);
         }
         Debug.Log("Error: no task with the given ShopItemCode");
@@ -403,7 +403,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public float GetTaskProgress(EmployeeCode id) {
-        foreach (Task t in waitingTasks.Values) {
+        foreach (Task t in assignedTasks.Values) {
             if (t.executor == id) return (float)t.progress / (t.duration + 1);
         }
         Debug.Log("Error: no task assigned to the given employee");
