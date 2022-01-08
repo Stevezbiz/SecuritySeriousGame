@@ -24,14 +24,11 @@ public static class BKTModel {
     public static double baseLearned = 0.01;
 
     public static Dictionary<SkillCode, KnowledgeComponent> Init() {
-        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent> {
-            { SkillCode.NETWORK, new KnowledgeComponent(SkillCode.NETWORK) },
-            { SkillCode.ACCESS, new KnowledgeComponent(SkillCode.ACCESS) },
-            { SkillCode.SOFTWARE, new KnowledgeComponent(SkillCode.SOFTWARE) },
-            { SkillCode.ASSET, new KnowledgeComponent(SkillCode.ASSET) },
-            { SkillCode.SERVICES, new KnowledgeComponent(SkillCode.SERVICES) },
-            { SkillCode.MANAGEMENT, new KnowledgeComponent(SkillCode.MANAGEMENT) }
-        };
+        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
+        foreach(SkillCode id in typeof(SkillCode).GetEnumValues()) {
+            kcs.Add(id, new KnowledgeComponent(id));
+        }
+        kcs.Remove(SkillCode.NONE);
         return kcs;
     }
 

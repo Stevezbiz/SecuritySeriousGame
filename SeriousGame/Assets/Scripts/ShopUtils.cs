@@ -69,8 +69,6 @@ public class ShopJSON {
 }
 
 public static class ShopUtils {
-    static ShopJSON shopJSON;
-
     public static void UpdateShopItems(Dictionary<ShopItemCode, ShopItemInfo> shopItems, ShopItemRecap[] sir) {
         foreach (ShopItemRecap s in sir) {
             shopItems[s.id].status = s.status;

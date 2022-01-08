@@ -92,12 +92,10 @@ public class AttacksJSON {
 }
 
 public static class AttackUtils {
-    static AttacksJSON attacksJSON;
-
     public static Dictionary<AttackCode, AttackInfo> LoadFromFile(TextAsset file) {
         Dictionary<AttackCode, AttackInfo> attacks = new Dictionary<AttackCode, AttackInfo>();
 
-        attacksJSON = JsonUtility.FromJson<AttacksJSON>(file.text);
+        AttacksJSON attacksJSON = JsonUtility.FromJson<AttacksJSON>(file.text);
         foreach (AttackInfo attack in attacksJSON.attacks) {
             attacks.Add(attack.id, attack);
         }

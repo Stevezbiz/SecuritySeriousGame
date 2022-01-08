@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] ShopGUI shop;
     [SerializeField] Log logManager;
     [SerializeField] AttackView attackView;
+    [SerializeField] Guide guide;
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
@@ -91,6 +92,8 @@ public class GameManager : MonoBehaviour {
         // load the attacks from the file and initialize the view
         attacks = AttackUtils.LoadFromFile(attacksFileJSON);
         attackView.Init();
+        // load the guide structure
+        guide.Init();
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
             LoadGameData(SaveSystem.LoadGame());
