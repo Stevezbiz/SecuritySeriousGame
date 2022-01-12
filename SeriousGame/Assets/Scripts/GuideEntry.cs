@@ -12,11 +12,11 @@ public class GuideEntry : MonoBehaviour {
     public void Load(GuideEntryCode id, GuideDetails guideDetails, string name) {
         this.id = id;
         this.guideDetails = guideDetails;
-        entryText.SetText(name);
+        entryText.SetText(name.ToLower());
     }
 
     public void ShowEntry() {
-        guideDetails.Load();
+        guideDetails.Load(id);
         guideDetails.gameObject.SetActive(true);
     }
 }

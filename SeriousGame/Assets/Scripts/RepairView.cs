@@ -17,9 +17,7 @@ public class RepairView : MonoBehaviour {
         tasks.Clear();
         tasks = gameManager.GetTasksByType(TaskType.REPAIR);
         if (tasks.Count == 0) {
-            GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
-            newWindow.transform.SetParent(gameManager.gameObject.transform, false);
-            newWindow.GetComponent<WindowPopUp>().Load("Non ci sono attacchi in corso al momento", ActionCode.CONTINUE);
+            Instantiate(windowPopUp, gameManager.gameObject.transform, false).GetComponent<WindowPopUp>().Load("Non ci sono attacchi in corso al momento", ActionCode.CONTINUE);
         } else {
             employee = id;
             List<string> options = new List<string>();

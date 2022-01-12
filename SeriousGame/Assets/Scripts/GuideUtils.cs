@@ -3,7 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum GuideEntryCode {
-    FIREWALL
+    NONE,
+    DOS,
+    MITM,
+    BRUTE_FORCE,
+    DICTIONARY,
+    RAINBOW_TABLE,
+    API_VULNERABILITY,
+    SOCIAL_ENGINEERING,
+    PHISHING,
+    WORM,
+    VIRUS,
+    SPYWARE,
+    RANSOMWARE,
+    FIREWALL,
+    DNSSEC,
+    TWO_F_A,
+    HASH,
+    CAPTCHA,
+    IDS,
+    ANTIVIRUS,
+    BACK_UP
 }
 
 [System.Serializable]

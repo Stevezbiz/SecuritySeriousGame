@@ -52,10 +52,8 @@ public class EmployeeShop : MonoBehaviour {
      */
     void AddEmployeeRecord(EmployeeInfo e) {
         // create the new item
-        GameObject newRecord = Instantiate(employeeItem);
-        newRecord.transform.SetParent(content, false);
-        newRecord.GetComponent<EmployeeItem>().Load(e, this);
-        employees[e.id] = newRecord.GetComponent<EmployeeItem>();
+        employees[e.id] = Instantiate(employeeItem, content, false).GetComponent<EmployeeItem>();
+        employees[e.id].Load(e, this);
     }
 
     /**

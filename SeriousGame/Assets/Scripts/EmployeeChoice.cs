@@ -32,9 +32,7 @@ public class EmployeeChoice : MonoBehaviour {
         // fill the options of the dropdown element
         employees = gameManager.GetAvailableEmployees();
         if (employees.Count == 0) {
-            GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
-            newWindow.transform.SetParent(gameManager.gameObject.transform, false);
-            newWindow.GetComponent<WindowPopUp>().Load("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE);
+            Instantiate(windowPopUp, gameManager.gameObject.transform, false).GetComponent<WindowPopUp>().Load("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE);
         } else {
             List<string> options = new List<string>();
             foreach (EmployeeInfo el in employees) {
@@ -55,9 +53,7 @@ public class EmployeeChoice : MonoBehaviour {
         // fill the options of the dropdown element
         employees = gameManager.GetAvailableEmployees();
         if (employees.Count == 0) {
-            GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
-            newWindow.transform.SetParent(gameManager.gameObject.transform, false);
-            newWindow.GetComponent<WindowPopUp>().Load("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE);
+            Instantiate(windowPopUp, gameManager.gameObject.transform, false).GetComponent<WindowPopUp>().Load("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE);
         } else {
             List<string> options = new List<string>();
             foreach (EmployeeInfo el in employees) {

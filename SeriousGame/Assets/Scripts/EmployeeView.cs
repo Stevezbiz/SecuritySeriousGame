@@ -27,8 +27,7 @@ public class EmployeeView : MonoBehaviour {
         toDestroy.Clear();
         employees = gameManager.GetHiredEmployees();
         foreach (EmployeeInfo e in employees) {
-            GameObject newEmployee = Instantiate(employeeCard);
-            newEmployee.transform.SetParent(content, false);
+            GameObject newEmployee = Instantiate(employeeCard, content, false);
             newEmployee.GetComponent<EmployeeCard>().Load(e, gameManager, this);
             toDestroy.Add(newEmployee);
         }

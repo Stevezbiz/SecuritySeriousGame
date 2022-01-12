@@ -21,11 +21,9 @@ public class Guide : MonoBehaviour {
         GameObject column = null;
         foreach(GuideEntryData entry in entries.Values) {
             if (i == 0) column = Instantiate(guideIndexColumn, content, false);
-            GameObject newEntry = Instantiate(guideEntry, column.transform, false);
-            newEntry.GetComponent<GuideEntry>().Load(entry.id, guideDetails, entry.entryName);
+            Instantiate(guideEntry, column.transform, false).GetComponent<GuideEntry>().Load(entry.id, guideDetails, entry.entryName);
             i = (i + 1) % COLUMN_CAPACITY;
         }
-        guideDetails.Init();
     }
 
     /**
@@ -44,5 +42,9 @@ public class Guide : MonoBehaviour {
         Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);
         guideDetails.gameObject.SetActive(false);
+    }
+
+    public GuideEntryData GetEntry(GuideEntryCode id) {
+        return entries[id];
     }
 }

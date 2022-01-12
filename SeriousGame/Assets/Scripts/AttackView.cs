@@ -62,8 +62,7 @@ public class AttackView : MonoBehaviour {
             noAttackText.SetActive(false);
             attackList.SetActive(true);
             foreach (Task t in tasks) {
-                GameObject newItem = Instantiate(attackItem);
-                newItem.transform.SetParent(content, false);
+                GameObject newItem = Instantiate(attackItem, content, false);
                 newItem.GetComponent<AttackItem>().Load(t, gameManager.GetAttack(t.attack).name, this);
                 toDestroy.Add(newItem);
             }

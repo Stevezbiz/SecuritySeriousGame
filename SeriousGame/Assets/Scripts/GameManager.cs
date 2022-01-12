@@ -815,9 +815,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Creates a pop-up window message</summary>
      */
     void DisplayMessage(string message, ActionCode action) {
-        GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
-        newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load(message, action);
+        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load(message, action);
     }
 
     void DebugPrint() {

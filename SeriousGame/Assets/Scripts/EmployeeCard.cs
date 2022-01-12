@@ -52,8 +52,6 @@ public class EmployeeCard : MonoBehaviour {
     }
 
     public void PrintDetails() {
-        GameObject newDetails = Instantiate(employeeDetails, new Vector3(0, 0, 0), Quaternion.identity);
-        newDetails.transform.SetParent(gameManager.gameObject.transform, false);
-        newDetails.GetComponent<EmployeeDetails>().Load(employee, gameManager);
+        Instantiate(employeeDetails, gameManager.gameObject.transform, false).GetComponent<EmployeeDetails>().Load(employee, gameManager);
     }
 }

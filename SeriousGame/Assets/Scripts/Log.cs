@@ -32,8 +32,7 @@ public class Log : MonoBehaviour {
         else N = i + nLinesStep;
         // print the lines
         for (int j = i; j < N; j++) {
-            GameObject newLog = Instantiate(logRecord);
-            newLog.transform.SetParent(content, false);
+            GameObject newLog = Instantiate(logRecord, content, false);
             toDestroy.Add(newLog);
             TextMeshProUGUI text = newLog.GetComponent<TextMeshProUGUI>();
             LogLine line = gameManager.GetLog(j);

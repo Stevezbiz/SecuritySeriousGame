@@ -12,7 +12,7 @@ public enum ShopItemCode {
     ERR_PASS_WAIT,
     CHANGE_PASS,
     COMPLEX_PASS,
-    TWO_F_A,
+    MFA,
     HASH,
     CAPTCHA,
     IDS,

@@ -140,7 +140,7 @@
 		{
 			"id": 9,
 			"category": 1,
-			"name": "Autenticazione a 2 fattori",
+			"name": "Autenticazione multifattore (MFA)",
 			"description": "Aggiungere un passaggio all'autenticazione può spazientire gli utenti, ma il risultato è una maggiore resistenza ad attacchi MITM, brute-force e attacchi basati su dizionari.",
 			"cost": 500,
 			"moneyMalus": 10,
