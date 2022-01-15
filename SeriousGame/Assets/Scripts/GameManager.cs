@@ -11,14 +11,18 @@ public class GameManager : MonoBehaviour {
     [SerializeField] Log logManager;
     [SerializeField] AttackView attackView;
     [SerializeField] Guide guide;
+    [SerializeField] QuizQuestion quizQuestion;
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
+    [SerializeField] TextAsset quizFileJSON;
 
     float startTime;
     int updateTime = 1;
     DateTime dateTime;
     GameConfig gc;
+    int activeQuiz;
+    int quizTimer;
 
     List<LogLine> logs = new List<LogLine>();
     Dictionary<AttackCode, AttackPlan> attackSchedule = new Dictionary<AttackCode, AttackPlan>();
@@ -30,6 +34,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<ShopItemCode, ShopItemInfo> shopItems = new Dictionary<ShopItemCode, ShopItemInfo>();
     Dictionary<EmployeeCode, EmployeeInfo> employees = new Dictionary<EmployeeCode, EmployeeInfo>();
     Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
+    Dictionary<int, Quiz> quizzes = new Dictionary<int, Quiz>();
 
     // Start is called before the first frame update
     void Start() {
@@ -48,7 +53,9 @@ public class GameManager : MonoBehaviour {
             // schedule new attacks
             ActivateAttacks();
             // trigger periodic evaluation
-            EvaluateSecurityStatus();
+            if (gc.totalTime % gc.evaluationTime == 0) EvaluateSecurityStatus();
+            // update quiz timer
+            UpdateQuiz();
             // update tasks
             UpdateTasks();
             // update attacks
@@ -78,7 +85,7 @@ public class GameManager : MonoBehaviour {
         gc.date = dateTime.ToString();
         return new GameSave(gc, ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(),
             logManager.GetNLines(), logManager.GetNPages()), new List<AttackStats>(attackStats.Values).ToArray(), new List<AttackPlan>(attackSchedule.Values).ToArray(),
-            new List<Task>(waitingTasks.Values).ToArray(), new List<Task>(assignedTasks.Values).ToArray(), new List<Resistance>(resistances.Values).ToArray());
+            new List<Task>(waitingTasks.Values).ToArray(), new List<Task>(assignedTasks.Values).ToArray(), new List<Resistance>(resistances.Values).ToArray(), activeQuiz, quizTimer);
     }
 
     /**
@@ -94,6 +101,8 @@ public class GameManager : MonoBehaviour {
         attackView.Init();
         // load the guide structure
         guide.Init();
+        // load the quizzes from file
+        quizzes = QuizUtils.LoadFromFile(quizFileJSON);
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
             LoadGameData(SaveSystem.LoadGame());
@@ -205,10 +214,10 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Insert an instance of the specified attack among the scheduled ones</summary>
      */
-    void ScheduleAttack(AttackCode id, bool inevitable) {
+    void ScheduleAttack(AttackCode id) {
         float maxTime = attacks[id].maxTime * GetAttackEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
-        attackSchedule[id] = new AttackPlan(id, AttackStatus.PLANNING, Mathf.CeilToInt(nextTime), inevitable);
+        attackSchedule[id] = new AttackPlan(attackSchedule[id], Mathf.CeilToInt(nextTime));
     }
 
     /**
@@ -217,45 +226,45 @@ public class GameManager : MonoBehaviour {
     void ActivateAttacks() {
         switch (gc.totalTime) {
             case 48: // day 2
-                ScheduleAttack(AttackCode.DOS, false);
-                ScheduleAttack(AttackCode.BRUTE_FORCE, false);
-                ScheduleAttack(AttackCode.WORM, false);
+                ScheduleAttack(AttackCode.DOS);
+                ScheduleAttack(AttackCode.BRUTE_FORCE);
+                ScheduleAttack(AttackCode.WORM);
                 DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.DOS].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE);
                 break;
             case 120: // day 5
-                ScheduleAttack(AttackCode.MITM, false);
+                ScheduleAttack(AttackCode.MITM);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE);
                 break;
             case 168: // day 7
-                ScheduleAttack(AttackCode.VIRUS, false);
+                ScheduleAttack(AttackCode.VIRUS);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.VIRUS].name, ActionCode.CONTINUE);
                 break;
             case 240: // day 10
-                ScheduleAttack(AttackCode.SOCIAL_ENGINEERING, false);
+                ScheduleAttack(AttackCode.SOCIAL_ENGINEERING);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE);
                 break;
             case 288: // day 12
-                ScheduleAttack(AttackCode.API_VULNERABILITY, false);
+                ScheduleAttack(AttackCode.API_VULNERABILITY);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE);
                 break;
             case 360: // day 15
-                ScheduleAttack(AttackCode.DICTIONARY, false);
+                ScheduleAttack(AttackCode.DICTIONARY);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DICTIONARY].name, ActionCode.CONTINUE);
                 break;
             case 408: // day 17
-                ScheduleAttack(AttackCode.PHISHING, false);
+                ScheduleAttack(AttackCode.PHISHING);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.PHISHING].name, ActionCode.CONTINUE);
                 break;
             case 480: // day 20
-                ScheduleAttack(AttackCode.SPYWARE, false);
+                ScheduleAttack(AttackCode.SPYWARE);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SPYWARE].name, ActionCode.CONTINUE);
                 break;
             case 528: // day 22
-                ScheduleAttack(AttackCode.RAINBOW_TABLE, false);
+                ScheduleAttack(AttackCode.RAINBOW_TABLE);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE);
                 break;
             case 600: // day 25
-                ScheduleAttack(AttackCode.RANSOMWARE, false);
+                ScheduleAttack(AttackCode.RANSOMWARE);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RANSOMWARE].name, ActionCode.CONTINUE);
                 break;
             default:
@@ -341,7 +350,7 @@ public class GameManager : MonoBehaviour {
                         // miss
                         attackStats[attack.id].miss++;
                         MissedAttack(attack.id);
-                        ScheduleAttack(attack.id, false);
+                        ScheduleAttack(attack.id);
                         gc.miss = 0f;
                         // log print miss
                         logManager.LogPrintAttack(attacks[attack.id].name, false);
@@ -383,7 +392,7 @@ public class GameManager : MonoBehaviour {
                 // end the attack
                 employees[t.executor].status = TaskType.NONE;
                 StopAttack(t.attack);
-                ScheduleAttack(t.attack, false);
+                ScheduleAttack(t.attack);
                 attackSchedule[t.attack].timer--;
                 waitingTasks.Remove(t.id);
                 break;
@@ -838,7 +847,51 @@ public class GameManager : MonoBehaviour {
     }
 
     void EvaluateSecurityStatus() {
-        // TODO: every x time evaluate the status of the countermeasures of the active attacks
+        // every x time evaluate the status of the countermeasures of the active attacks
+        Dictionary<Category, int> scores = new Dictionary<Category, int>();
+        foreach(Resistance r in resistances.Values) {
+            if(attackSchedule[r.id].status != AttackStatus.INACTIVE) {
+                Category c = attacks[r.id].category;
+                if (r.miss >= 0.5) scores[c]++;
+                else scores[c]--;
+                if (r.duration >= 0.5) scores[c]++;
+                else scores[c]--;
+                if (r.endurance >= 0.5) scores[c]++;
+                else scores[c]--;
+            }
+        }
+        foreach(KeyValuePair<Category, int> s in scores) {
+            // Select the proper Knowledge Component
+            SkillCode kc;
+            switch (s.Key) {
+                case Category.NETWORK:
+                    kc = SkillCode.NETWORK;
+                    break;
+                case Category.ACCESS:
+                    kc = SkillCode.ACCESS;
+                    break;
+                case Category.SOFTWARE:
+                    kc = SkillCode.SOFTWARE;
+                    break;
+                case Category.ASSET:
+                    kc = SkillCode.ASSET;
+                    break;
+                case Category.SERVICES:
+                    kc = SkillCode.SERVICES;
+                    break;
+                default:
+                    Debug.Log("Error: unexpected Category");
+                    return;
+            }
+            // Decide the result of the evaluation
+            if (s.Value >= 0) {
+                // correct
+                kcs[kc].AddTestResult(true);
+            } else {
+                // wrong
+                kcs[kc].AddTestResult(false);
+            }
+        }
     }
     
     void EvaluatePurchaseShopItem(ShopItemCode id) {
@@ -882,11 +935,8 @@ public class GameManager : MonoBehaviour {
                 break;
             default:
                 Debug.Log("Error: unexpected Category");
-                kc = SkillCode.NONE;
-                break;
+                return;
         }
-        // check error
-        if (kc == SkillCode.NONE) return;
         // Decide the result of the evaluation
         if (score >= 0) {
             // correct
@@ -910,6 +960,38 @@ public class GameManager : MonoBehaviour {
                 Debug.Log("Error: undefined taskType");
                 break;
         }
+    }
+
+    public void EvaluateQuiz(int qid, int aid) {
+        QuizAnswer qa = quizzes[qid].answers[aid];
+        // send the test to the model
+        kcs[quizzes[qid].skill].AddTestResult(qa.correct);
+        // apply the effects of the answer
+        foreach(AnswerEffect effect in qa.effects) {
+            switch (effect.target) {
+                case Element.REPUTATION:
+                    gc.reputation += effect.modifier;
+                    break;
+                default:
+                    Debug.Log("Error: unexpected Element");
+                    return;
+            }
+        }
+        // eventually launch an attack
+        if (qa.triggeredAttack != AttackCode.NONE && attackSchedule[qa.triggeredAttack].status != AttackStatus.INACTIVE) {
+            attackSchedule[qa.triggeredAttack].nextInevitable = true;
+        }
+    }
+
+    void UpdateQuiz() {
+        if (gc.totalTime % gc.quizTime == 0) {
+            // random quiz and time choice
+            quizTimer = Random.Range(1, gc.quizTime);
+            activeQuiz = Random.Range(0, quizzes.Count);
+
+        }
+        // launch quiz
+        if (quizTimer-- == 0) quizQuestion.Load(quizzes[activeQuiz]);
     }
 
     bool EmployeeTestResult(EmployeeCode id, Category category) {

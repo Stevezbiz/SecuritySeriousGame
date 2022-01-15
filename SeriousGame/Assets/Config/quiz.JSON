@@ -1,0 +1,25 @@
+{
+	"quizzes":
+	[
+		{
+			"id": 0,
+			"skill": 0,
+			"question": "",
+			"answers":
+			[
+				{
+					"text": "",
+					"correct": false,
+					"effects":
+					[
+						{
+							"target": 0,
+							"modifier": 0
+						}
+					],
+					"triggeredAttack": 0
+				{
+			]
+		}
+	]
+}

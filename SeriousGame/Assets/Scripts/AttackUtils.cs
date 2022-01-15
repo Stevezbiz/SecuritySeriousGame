@@ -60,12 +60,22 @@ public class AttackPlan {
     public AttackStatus status;
     public int timer;
     public bool inevitable;
+    public bool nextInevitable;
 
-    public AttackPlan(AttackCode id, AttackStatus status, int timer, bool inevitable) {
+    public AttackPlan(AttackCode id) {
         this.id = id;
-        this.status = status;
+        this.status = AttackStatus.INACTIVE;
+        this.timer = 0;
+        this.inevitable = false;
+        this.nextInevitable = false;
+    }
+
+    public AttackPlan(AttackPlan ap, int timer) {
+        this.id = ap.id;
+        this.status = AttackStatus.PLANNING;
         this.timer = timer;
-        this.inevitable = inevitable;
+        this.inevitable = ap.nextInevitable;
+        this.nextInevitable = false;
     }
 }
 
@@ -107,7 +117,7 @@ public static class AttackUtils {
         foreach (AttackInfo attack in attacks.Values) {
             if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 0, 0f, 0f));
             attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
-            attackSchedule.Add(attack.id, new AttackPlan(attack.id, AttackStatus.INACTIVE, 0, false));
+            attackSchedule.Add(attack.id, new AttackPlan(attack.id));
         }
     }
 

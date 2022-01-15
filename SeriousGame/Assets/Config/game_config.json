@@ -4,6 +4,8 @@
 		"endTime": 1440,
 		"negativeTime": 0,
 		"maxNegative": 72,
+		"evaluationTime": 288,
+		"quizTime": 72,
 		"noAttackTime": 0,
 		"noAttackStep": 10,
 		"ongoingAttacks": 0,

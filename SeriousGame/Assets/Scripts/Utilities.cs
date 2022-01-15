@@ -37,8 +37,10 @@ public class GameSave {
     public Task[] waitingTasks;
     public Task[] assignedTasks;
     public Resistance[] res;
+    public int activeQuiz;
+    public int quizTimer;
 
-    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackPlan[] aSchedule, Task[] waitingTasks, Task[] assignedTasks, Resistance[] res) {
+    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackPlan[] aSchedule, Task[] waitingTasks, Task[] assignedTasks, Resistance[] res, int activeQuiz, int quizTimer) {
         this.gc = gc;
         this.sir = sir;
         this.er = er;
@@ -48,6 +50,8 @@ public class GameSave {
         this.waitingTasks = waitingTasks;
         this.assignedTasks = assignedTasks;
         this.res = res;
+        this.activeQuiz = activeQuiz;
+        this.quizTimer = quizTimer;
     }
 }
 
@@ -57,6 +61,8 @@ public class GameConfig {
     public int endTime;
     public int negativeTime;
     public int maxNegative;
+    public int evaluationTime;
+    public int quizTime;
     public int noAttackTime;
     public int noAttackStep;
     public int ongoingAttacks;
@@ -73,31 +79,6 @@ public class GameConfig {
     public float[] usersGoals;
     public float[] employeeGoals;
     public string date;
-
-    public GameConfig(int totalTime, int endTime, int negativeTime, int maxNegative, int noAttackTime, int noAttackStep, int ongoingAttacks,
-        int userLevel, int initEmployees, int availableEmployees, int hiredEmployees, float money, float users, float reputation, float endurance, float miss,
-        float[] usersGain, float[] usersGoals, float[] employeeGoals, string date) {
-        this.totalTime = totalTime;
-        this.endTime = endTime;
-        this.negativeTime = negativeTime;
-        this.maxNegative = maxNegative;
-        this.noAttackTime = noAttackTime;
-        this.noAttackStep = noAttackStep;
-        this.ongoingAttacks = ongoingAttacks;
-        this.userLevel = userLevel;
-        this.initEmployees = initEmployees;
-        this.availableEmployees = availableEmployees;
-        this.hiredEmployees = hiredEmployees;
-        this.money = money;
-        this.users = users;
-        this.reputation = reputation;
-        this.endurance = endurance;
-        this.miss = miss;
-        this.usersGain = usersGain;
-        this.usersGoals = usersGoals;
-        this.employeeGoals = employeeGoals;
-        this.date = date;
-    }
 }
 
 [System.Serializable]
