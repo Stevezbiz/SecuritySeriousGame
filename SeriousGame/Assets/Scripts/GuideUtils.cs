@@ -31,6 +31,7 @@ public class GuideEntryData {
     public GuideEntryCode id;
     public string entryName;
     public string entryText;
+    public string link;
 }
 
 [System.Serializable]
