@@ -4,6 +4,7 @@ using UnityEngine;
 using DateTime = System.DateTime;
 using DateTimeKind = System.DateTimeKind;
 using Math = System.Math;
+using Image = UnityEngine.UI.Image;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] GUI gui;
@@ -16,7 +17,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset quizFileJSON;
-
+    [SerializeField] List<Sprite> avatarImages;
     float startTime;
     int updateTime = 1;
     DateTime dateTime;
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<EmployeeCode, EmployeeInfo> employees = new Dictionary<EmployeeCode, EmployeeInfo>();
     Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
     Dictionary<int, Quiz> quizzes = new Dictionary<int, Quiz>();
+    Dictionary<Role, Person> avatars = new Dictionary<Role, Person>();
 
     // Start is called before the first frame update
     void Start() {
@@ -103,6 +105,10 @@ public class GameManager : MonoBehaviour {
         guide.Init();
         // load the quizzes from file
         quizzes = QuizUtils.LoadFromFile(quizFileJSON);
+        // load the avatars
+        for (int i = 0; i < avatarImages.Count; i++) {
+            avatars.Add((Role)i, new Person(avatarImages[i].name, avatarImages[i]));
+        }
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
             LoadGameData(SaveSystem.LoadGame());
@@ -972,6 +978,9 @@ public class GameManager : MonoBehaviour {
                 case Element.REPUTATION:
                     gc.reputation += effect.modifier;
                     break;
+                case Element.MONEY:
+                    gc.money += effect.modifier;
+                    break;
                 default:
                     Debug.Log("Error: unexpected Element");
                     return;
@@ -991,7 +1000,7 @@ public class GameManager : MonoBehaviour {
 
         }
         // launch quiz
-        if (quizTimer-- == 0) quizQuestion.Load(quizzes[activeQuiz]);
+        if (quizTimer-- == 0) quizQuestion.Load(quizzes[activeQuiz], avatars[quizzes[activeQuiz].person]);
     }
 
     bool EmployeeTestResult(EmployeeCode id, Category category) {

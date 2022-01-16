@@ -14,8 +14,10 @@ public class QuizQuestion : MonoBehaviour {
 
     Quiz q;
 
-    public void Load(Quiz q) {
+    public void Load(Quiz q, Person p) {
         this.q = q;
+        nameText.SetText(p.name.ToLower());
+        image.sprite = p.sprite;
         questionText.SetText(q.question);
         for (int i = 0; i < q.answers.Length; i++) {
             Instantiate(quizAlternative, answers, false).GetComponent<QuizAlternative>().Load(this, i, q.answers[i].text);

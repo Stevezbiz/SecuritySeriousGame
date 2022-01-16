@@ -3,22 +3,76 @@
 	[
 		{
 			"id": 0,
-			"skill": 0,
-			"question": "",
+			"skill": 4,
+			"person": 0,
+			"question": "C'è un nuovo aggiornamento per l'antivirus, indicato come urgente. Il problema è che per installarlo ora dovremmo sospendere momentaneamente il lavoro. Cosa facciamo?",
 			"answers":
 			[
 				{
-					"text": "",
+					"text": "Aggiorniamo subito",
+					"correct": true,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": 0.03
+						},
+						{
+							"target": 2,
+							"modifier": -100
+						}
+					],
+					"triggeredAttack": 0
+				},
+				{
+					"text": "Finiamo prima il lavoro",
 					"correct": false,
 					"effects":
 					[
 						{
-							"target": 0,
-							"modifier": 0
+							"target": 1,
+							"modifier": -0.05
+						}
+					],
+					"triggeredAttack": 10
+				}
+			]
+		},
+		{
+			"id": 1,
+			"skill": 4,
+			"person": 0,
+			"question": "Non mi trovo bene con il nuovo programma del calendario che abbiamo installato. Posso installare quello che ho già sul computer a casa?",
+			"answers":
+			[
+				{
+					"text": "Va bene",
+					"correct": false,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": -0.05
+						}
+					],
+					"triggeredAttack": 10
+				},
+				{
+					"text": "Non se ne parla",
+					"correct": true,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": 0.03
+						},
+						{
+							"target": 2,
+							"modifier": -100
 						}
 					],
 					"triggeredAttack": 0
-				{
+				}
 			]
 		}
 	]

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum Element {
     NONE,
-    REPUTATION
+    REPUTATION,
+    MONEY
 }
 
 [System.Serializable]
@@ -25,6 +26,7 @@ public class QuizAnswer {
 public class Quiz {
     public int id;
     public SkillCode skill;
+    public Role person;
     public string question;
     public QuizAnswer[] answers;
 }

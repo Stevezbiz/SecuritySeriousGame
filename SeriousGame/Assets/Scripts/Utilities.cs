@@ -86,6 +86,16 @@ public class GameConfigJSON {
     public GameConfig gameConfig;
 }
 
+public class Person {
+    public string name;
+    public Sprite sprite;
+
+    public Person(string name, Sprite sprite) {
+        this.name = name;
+        this.sprite = sprite;
+    }
+}
+
 // error codes used in the project
 public enum ECode {
     OK, // no error
@@ -107,6 +117,14 @@ public enum Category {
     SOFTWARE,
     ASSET,
     SERVICES
+}
+
+public enum Role {
+    CEO,
+    SECURITY,
+    SOFTWARE,
+    MARKETING,
+    ASSISTANCE
 }
 
 public static class COLOR {
