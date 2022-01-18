@@ -20,12 +20,15 @@ public class GameManager : MonoBehaviour {
     [SerializeField] TextAsset quizFileJSON;
     [SerializeField] TextAsset modelFileJSON;
     [SerializeField] List<Sprite> avatarImages;
+    
     float startTime;
     int updateTime = 1;
     DateTime dateTime;
     GameConfig gc;
     int activeQuiz;
     int quizTimer;
+    AttackCode actualAttackTrend = AttackCode.NONE;
+    int attackTrendTimer = 0;
 
     List<LogLine> logs = new List<LogLine>();
     Dictionary<AttackCode, AttackPlan> attackSchedule = new Dictionary<AttackCode, AttackPlan>();
@@ -89,7 +92,7 @@ public class GameManager : MonoBehaviour {
         gc.date = dateTime.ToString();
         return new GameSave(gc, ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(),
             logManager.GetNLines(), logManager.GetNPages()), new List<AttackStats>(attackStats.Values).ToArray(), new List<AttackPlan>(attackSchedule.Values).ToArray(),
-            new List<Task>(waitingTasks.Values).ToArray(), new List<Task>(assignedTasks.Values).ToArray(), new List<Resistance>(resistances.Values).ToArray(), activeQuiz, quizTimer);
+            new List<Task>(waitingTasks.Values).ToArray(), new List<Task>(assignedTasks.Values).ToArray(), new List<Resistance>(resistances.Values).ToArray(), activeQuiz, quizTimer, actualAttackTrend, attackTrendTimer);
     }
 
     /**
@@ -161,6 +164,10 @@ public class GameManager : MonoBehaviour {
         // load the data structures
         AttackUtils.UpdateAll(resistances, attackStats, attackSchedule, gameSave.res, gameSave.aStats, gameSave.aSchedule);
         TaskUtils.UpdateTasks(waitingTasks, gameSave.waitingTasks, assignedTasks, gameSave.assignedTasks);
+        activeQuiz = gameSave.activeQuiz;
+        quizTimer = gameSave.quizTimer;
+        actualAttackTrend = gameSave.actualAttackTrend;
+        attackTrendTimer = gameSave.attackTrendTimer;
     }
 
     // LOG
@@ -228,6 +235,7 @@ public class GameManager : MonoBehaviour {
     void ScheduleAttack(AttackCode id) {
         float maxTime = attacks[id].maxTime * GetAttackEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
+        if (actualAttackTrend == id) nextTime /= 2;
         attackSchedule[id] = new AttackPlan(attackSchedule[id], Mathf.CeilToInt(nextTime));
     }
 
@@ -244,6 +252,7 @@ public class GameManager : MonoBehaviour {
                 break;
             case 120: // day 5
                 ScheduleAttack(AttackCode.MITM);
+                SetAttackTrend();
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE);
                 break;
             case 168: // day 7
@@ -339,6 +348,9 @@ public class GameManager : MonoBehaviour {
      * <summary>Updates the scheduled attacks</summary>
      */
     void UpdateAttacks() {
+        // manage the attack trend
+        if (actualAttackTrend != AttackCode.NONE && quizTimer-- == 0) SetAttackTrend();
+        // manage the the attacks
         foreach (AttackPlan attack in attackSchedule.Values) {
             if (attack.status == AttackStatus.PLANNING) {
                 if (attack.timer > 0) {
@@ -369,6 +381,15 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    void SetAttackTrend() {
+        List<AttackCode> possibleTrends = new List<AttackCode>();
+        foreach(AttackPlan p in attackSchedule.Values) {
+            possibleTrends.Add(p.id);
+        }
+        actualAttackTrend = possibleTrends[Random.Range(0, possibleTrends.Count)];
+        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Attenzione: secondo le nostre analisi gli attacchi di tipo " + attacks[actualAttackTrend].name + " sono in aumento!", ActionCode.CONTINUE);
     }
 
     // TASK

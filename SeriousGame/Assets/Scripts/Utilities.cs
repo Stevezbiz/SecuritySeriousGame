@@ -39,8 +39,11 @@ public class GameSave {
     public Resistance[] res;
     public int activeQuiz;
     public int quizTimer;
+    public AttackCode actualAttackTrend;
+    public int attackTrendTimer;
 
-    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackPlan[] aSchedule, Task[] waitingTasks, Task[] assignedTasks, Resistance[] res, int activeQuiz, int quizTimer) {
+    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackPlan[] aSchedule,
+        Task[] waitingTasks, Task[] assignedTasks, Resistance[] res, int activeQuiz, int quizTimer, AttackCode actualAttackTrend, int attackTrendTimer) {
         this.gc = gc;
         this.sir = sir;
         this.er = er;
@@ -52,6 +55,8 @@ public class GameSave {
         this.res = res;
         this.activeQuiz = activeQuiz;
         this.quizTimer = quizTimer;
+        this.actualAttackTrend = actualAttackTrend;
+        this.attackTrendTimer = attackTrendTimer;
     }
 }
 
