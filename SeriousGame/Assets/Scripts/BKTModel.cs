@@ -326,4 +326,8 @@ public class KnowledgeComponent {
     public bool[] GetTests() {
         return tests.ToArray();
     }
+
+    public bool IsMastered() {
+        return learned >= 0.95;
+    }
 }

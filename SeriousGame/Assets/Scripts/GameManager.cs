@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] AttackView attackView;
     [SerializeField] Guide guide;
     [SerializeField] QuizQuestion quizQuestion;
+    [SerializeField] LearningReport learningReport;
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
@@ -98,6 +99,7 @@ public class GameManager : MonoBehaviour {
         // initialize the data structures and the settings
         startTime = Time.time;
         Time.timeScale = 0;
+        // initialize the shop structure
         shop.Init();
         // load the attacks from the file and initialize the view
         attacks = AttackUtils.LoadFromFile(attacksFileJSON);
@@ -130,6 +132,8 @@ public class GameManager : MonoBehaviour {
         }
         // generate all the objects in the shop
         shop.Load();
+        // initialize the report structure
+        learningReport.Init(kcs);
         // refresh the GUI for the first time
         gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
     }
@@ -1044,5 +1048,9 @@ public class GameManager : MonoBehaviour {
         }
 
         return new ModelSave(records.ToArray());
+    }
+
+    public void PrintLearningReport() {
+        learningReport.Load();
     }
 }

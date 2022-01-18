@@ -12,6 +12,7 @@ public class QuizQuestion : MonoBehaviour {
     [SerializeField] RectTransform answers;
     [SerializeField] GameObject quizAlternative;
 
+    float oldTimeScale = 1f;
     Quiz q;
 
     public void Load(Quiz q, Person p) {
@@ -23,6 +24,7 @@ public class QuizQuestion : MonoBehaviour {
             Instantiate(quizAlternative, answers, false).GetComponent<QuizAlternative>().Load(this, i, q.answers[i].text);
         }
         gameObject.SetActive(true);
+        oldTimeScale = Time.timeScale;
         Time.timeScale = 0f;
     }
 
@@ -32,7 +34,7 @@ public class QuizQuestion : MonoBehaviour {
     }
 
     public void Close() {
-        Time.timeScale = 1f;
+        Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);
     }
 }
