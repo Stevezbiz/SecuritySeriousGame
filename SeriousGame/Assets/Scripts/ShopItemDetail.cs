@@ -154,6 +154,6 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void OpenEmployeeChoice() {
-        employeeChoice.Load(id, this);
+        employeeChoice.Load(id, gameManager.GetShopItem(id).category, this);
     }
 }

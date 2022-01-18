@@ -1226,6 +1226,11 @@ MonoBehaviour:
   softwareBar: {fileID: 5730788747934282147}
   assetBar: {fileID: 5730788747615226507}
   servicesBar: {fileID: 5730788746695640804}
+  networkBarOutline: {fileID: 5730788748091322950}
+  accessBarOutline: {fileID: 5730788748154406261}
+  softwareBarOutline: {fileID: 5730788747097594193}
+  assetBarOutline: {fileID: 5730788747569067638}
+  servicesBarOutline: {fileID: 5730788748267643671}
   taskText: {fileID: 2201996096845484120}
 --- !u!1 &5730788747885236004
 GameObject:

@@ -14,6 +14,11 @@ public class EmployeeChoice : MonoBehaviour {
     [SerializeField] Image softwareBar;
     [SerializeField] Image assetBar;
     [SerializeField] Image servicesBar;
+    [SerializeField] GameObject networkOutline;
+    [SerializeField] GameObject accessOutline;
+    [SerializeField] GameObject softwareOutline;
+    [SerializeField] GameObject assetOutline;
+    [SerializeField] GameObject servicesOutline;
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextMeshProUGUI durationText;
 
@@ -24,9 +29,11 @@ public class EmployeeChoice : MonoBehaviour {
     ShopItemCode sid;
     AttackCode aid;
     TaskType type;
+    Category category;
 
-    public void Load(ShopItemCode id, ShopItemDetail shopItemDetail) {
+    public void Load(ShopItemCode id, Category category, ShopItemDetail shopItemDetail) {
         this.sid = id;
+        this.category = category;
         this.shopItemDetail = shopItemDetail;
         type = TaskType.INSTALL;
         // fill the options of the dropdown element
@@ -46,8 +53,9 @@ public class EmployeeChoice : MonoBehaviour {
         }
     }
 
-    public void Load(AttackCode id, AttackView attackView) {
+    public void Load(AttackCode id, Category category, AttackView attackView) {
         this.aid = id;
+        this.category = category;
         this.attackView = attackView;
         type = TaskType.REPAIR;
         // fill the options of the dropdown element
@@ -88,6 +96,31 @@ public class EmployeeChoice : MonoBehaviour {
                 break;
             default:
                 Debug.Log("Error: undefined TaskType");
+                break;
+        }
+        networkOutline.SetActive(false);
+        accessOutline.SetActive(false);
+        softwareOutline.SetActive(false);
+        assetOutline.SetActive(false);
+        servicesOutline.SetActive(false);
+        switch (category) {
+            case Category.NETWORK:
+                networkOutline.SetActive(true);
+                break;
+            case Category.ACCESS:
+                accessOutline.SetActive(true);
+                break;
+            case Category.SOFTWARE:
+                softwareOutline.SetActive(true);
+                break;
+            case Category.ASSET:
+                assetOutline.SetActive(true);
+                break;
+            case Category.SERVICES:
+                servicesOutline.SetActive(true);
+                break;
+            default:
+                Debug.Log("Error: undefined Category");
                 break;
         }
     }
