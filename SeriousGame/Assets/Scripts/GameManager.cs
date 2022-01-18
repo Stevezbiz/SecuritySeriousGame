@@ -396,7 +396,7 @@ public class GameManager : MonoBehaviour {
 
     // TASK
 
-    public List<Task> GetTasksByType(TaskType type) {
+    public List<Task> GetAvailableTasksByType(TaskType type) {
         List<Task> res = new List<Task>();
         foreach (Task t in waitingTasks.Values) {
             if (t.type == type) res.Add(t);
@@ -405,28 +405,32 @@ public class GameManager : MonoBehaviour {
     }
 
     void UpdateTasks() {
+        List<EmployeeCode> toRemove = new List<EmployeeCode>();
         foreach (Task t in assignedTasks.Values) {
             if (t.progress == t.duration) {
                 // end task
                 EndTask(t);
+                toRemove.Add(t.executor);
             } else {
                 t.progress++;
             }
         }
+        foreach(EmployeeCode id in toRemove) {
+            assignedTasks.Remove(id);
+        }
     }
 
     void EndTask(Task t) {
+        t.progress = 0;
         switch (t.type) {
             case TaskType.INSTALL:
                 employees[t.executor].status = TaskType.NONE;
                 EnableShopItem(t.shopItem);
-                waitingTasks.Remove(t.id);
                 break;
             case TaskType.REPAIR:
                 // end the attack
                 employees[t.executor].status = TaskType.NONE;
                 StopAttack(t.attack);
-                waitingTasks.Remove(t.id);
                 break;
             default:
                 Debug.Log("Error: undefined taskType");
@@ -447,23 +451,16 @@ public class GameManager : MonoBehaviour {
     }
 
     public float GetTaskProgress(EmployeeCode id) {
-        foreach (Task t in assignedTasks.Values) {
-            if (t.executor == id) return (float)t.progress / (t.duration + 1);
-        }
-        Debug.Log("Error: no task assigned to the given employee");
-        return 0f;
+        return (float)assignedTasks[id].progress / (assignedTasks[id].duration + 1);
     }
 
     public int GetTaskTarget(EmployeeCode id) {
-        foreach (Task t in waitingTasks.Values) {
-            if (t.executor == id) {
-                switch (t.type) {
-                    case TaskType.INSTALL:
-                        return (int)t.shopItem;
-                    case TaskType.REPAIR:
-                        return (int)t.attack;
-                }
-            }
+        Task t = assignedTasks[id];
+        switch (t.type) {
+            case TaskType.INSTALL:
+                return (int)t.shopItem;
+            case TaskType.REPAIR:
+                return (int)t.attack;
         }
         Debug.Log("Error: no task assigned to the given employee");
         return 0;

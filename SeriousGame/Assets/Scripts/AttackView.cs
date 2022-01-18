@@ -54,7 +54,7 @@ public class AttackView : MonoBehaviour {
             Destroy(obj);
         }
         toDestroy.Clear();
-        tasks = gameManager.GetTasksByType(TaskType.REPAIR);
+        tasks = gameManager.GetAvailableTasksByType(TaskType.REPAIR);
         if (tasks.Count == 0) {
             noAttackText.SetActive(true);
             attackList.SetActive(false);

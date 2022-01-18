@@ -15,7 +15,7 @@ public class InstallView : MonoBehaviour {
 
     public void Load(EmployeeCode id) {
         tasks.Clear();
-        tasks = gameManager.GetTasksByType(TaskType.INSTALL);
+        tasks = gameManager.GetAvailableTasksByType(TaskType.INSTALL);
         if (tasks.Count == 0) {
             Instantiate(windowPopUp, gameManager.gameObject.transform, false).GetComponent<WindowPopUp>().Load("Non ci sono installazioni richieste al momento", ActionCode.CONTINUE);
         } else {

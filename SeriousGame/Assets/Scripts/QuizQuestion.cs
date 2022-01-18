@@ -14,6 +14,7 @@ public class QuizQuestion : MonoBehaviour {
 
     float oldTimeScale = 1f;
     Quiz q;
+    List<GameObject> toDestroy = new List<GameObject>();
 
     public void Load(Quiz q, Person p) {
         this.q = q;
@@ -21,7 +22,8 @@ public class QuizQuestion : MonoBehaviour {
         image.sprite = p.sprite;
         questionText.SetText(q.question);
         for (int i = 0; i < q.answers.Length; i++) {
-            Instantiate(quizAlternative, answers, false).GetComponent<QuizAlternative>().Load(this, i, q.answers[i].text);
+            toDestroy[i] = Instantiate(quizAlternative, answers, false);
+            toDestroy[i].GetComponent<QuizAlternative>().Load(this, i, q.answers[i].text);
         }
         gameObject.SetActive(true);
         oldTimeScale = Time.timeScale;
@@ -35,6 +37,8 @@ public class QuizQuestion : MonoBehaviour {
 
     public void Close() {
         Time.timeScale = oldTimeScale;
+        foreach (GameObject g in toDestroy) Destroy(g);
+        toDestroy.Clear();
         gameObject.SetActive(false);
     }
 }
