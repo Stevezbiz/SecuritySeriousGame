@@ -1,0 +1,29 @@
+{
+	"kcs":
+	[
+		{
+			"id": 1,
+			"name": "Gestione"
+		},
+		{
+			"id": 2,
+			"name": "Rete"
+		},
+		{
+			"id": 3,
+			"name": "Accesso"
+		},
+		{
+			"id": 4,
+			"name": "Software"
+		},
+		{
+			"id": 5,
+			"name": "Risorse"
+		},
+		{
+			"id": 6,
+			"name": "Servizi"
+		}
+	]
+}

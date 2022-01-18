@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset quizFileJSON;
+    [SerializeField] TextAsset modelFileJSON;
     [SerializeField] List<Sprite> avatarImages;
     float startTime;
     int updateTime = 1;
@@ -125,7 +126,7 @@ public class GameManager : MonoBehaviour {
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
             UpdateAttacks();
             // initialize the BKT model
-            kcs = BKTModel.Init();
+            kcs = BKTModel.Init(modelFileJSON);
         }
         // generate all the objects in the shop
         shop.Load();
@@ -1039,7 +1040,7 @@ public class GameManager : MonoBehaviour {
         List<KCRecord> records = new List<KCRecord>();
 
         foreach(KnowledgeComponent kc in kcs.Values) {
-            records.Add(new KCRecord(kc.id, kc.GetTransitionPos(), kc.GetTests()));
+            records.Add(new KCRecord(kc.id, kc.name, kc.GetTransitionPos(), kc.GetTests()));
         }
 
         return new ModelSave(records.ToArray());

@@ -29,7 +29,7 @@ public class BKTTest : MonoBehaviour {
     }
 
     public void ResetButton() {
-        kc = new KnowledgeComponent(SkillCode.NONE);
+        kc = new KnowledgeComponent(SkillCode.NONE, "None");
         answers.SetText(kc.GetTestsVector());
         learned.SetText(kc.GetLearnedVector());
         for (int i = 0; i < content.childCount; i++) {

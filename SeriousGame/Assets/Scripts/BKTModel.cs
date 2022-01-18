@@ -14,6 +14,17 @@ public enum SkillCode {
     SERVICES
 }
 
+[System.Serializable]
+public class KCData {
+    public SkillCode id;
+    public string name;
+}
+
+[System.Serializable]
+public class ModelJSON {
+    public KCData[] kcs;
+}
+
 public static class BKTModel {
     public static double COGNITIVE_MASTERY = 0.95;     // threshold to reach to achieve mastery
     public static int N_FIRST_EMPIRICAL_TEST = 3;      // N number to verify first empirical test
@@ -23,12 +34,12 @@ public static class BKTModel {
     public static double baseGuess = 0.3;
     public static double baseLearned = 0.01;
 
-    public static Dictionary<SkillCode, KnowledgeComponent> Init() {
+    public static Dictionary<SkillCode, KnowledgeComponent> Init(TextAsset file) {
         Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
-        foreach(SkillCode id in typeof(SkillCode).GetEnumValues()) {
-            kcs.Add(id, new KnowledgeComponent(id));
+        ModelJSON modelJSON = JsonUtility.FromJson<ModelJSON>(file.text);
+        foreach (KCData kc in modelJSON.kcs) {
+            kcs.Add(kc.id, new KnowledgeComponent(kc.id, kc.name));
         }
-        kcs.Remove(SkillCode.NONE);
         return kcs;
     }
 
@@ -66,18 +77,21 @@ public class ModelSave {
 [System.Serializable]
 public class KCRecord {
     public SkillCode id;
+    public string name;
     public int transitionPos;
     public bool[] tests;
 
-    public KCRecord(SkillCode id, int transitionPos, bool[] tests) {
+    public KCRecord(SkillCode id, string name, int transitionPos, bool[] tests) {
         this.id = id;
+        this.name = name;
         this.transitionPos = transitionPos;
         this.tests = tests;
     }
 }
 
 public class KnowledgeComponent {
-    public SkillCode id;                               // the id of the skill
+    public SkillCode id;
+    public string name;
     double transit;                             // p(T)
     double slip;                                // p(S)
     double guess;                               // p(G)
@@ -85,8 +99,9 @@ public class KnowledgeComponent {
     int transitionPos;                          // test number corresponding to the estimated transition
     List<bool> tests;                           // test results
 
-    public KnowledgeComponent(SkillCode id) {
+    public KnowledgeComponent(SkillCode id, string name) {
         this.id = id;
+        this.name = name;
         transit = BKTModel.baseTransit;
         slip = BKTModel.baseSlip;
         guess = BKTModel.baseGuess;
@@ -97,6 +112,7 @@ public class KnowledgeComponent {
 
     public KnowledgeComponent(KCRecord r) {
         id = r.id;
+        name = r.name;
         transit = BKTModel.baseTransit;
         slip = BKTModel.baseSlip;
         guess = BKTModel.baseGuess;
