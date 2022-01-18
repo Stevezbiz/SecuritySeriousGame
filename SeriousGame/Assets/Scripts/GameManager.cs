@@ -317,11 +317,17 @@ public class GameManager : MonoBehaviour {
      * <summary>Applies the effects of the specified attack</summary>
      */
     void StartAttack(AttackCode id) {
+        // update data
         gc.ongoingAttacks++;
+        attackSchedule[id].status = AttackStatus.ACTIVE;
+        gc.miss += 0.1f;
         // apply the maluses
         gc.money -= attacks[id].moneyLoss;
         gc.users -= attacks[id].usersLoss * gc.users;
         gc.reputation -= attacks[id].reputationMalus;
+        // update statistics
+        attackStats[id].n++;
+        attackStats[id].hit++;
         // generate a message
         DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE);
     }
@@ -332,14 +338,23 @@ public class GameManager : MonoBehaviour {
     void StopAttack(AttackCode id) {
         // remove the maluses
         gc.ongoingAttacks--;
+        ScheduleAttack(id);
+        attackSchedule[id].timer--;
     }
 
     /**
      * <summary>Applies the effects of avoiding an attack</summary>
      */
     void MissedAttack(AttackCode id) {
+        // update data
+        gc.miss = 0f;
         // increment the reputation
         gc.reputation += 0.02f;
+        // update statistics
+        attackStats[id].n++;
+        attackStats[id].miss++;
+        // re-schedule the attack
+        ScheduleAttack(id);
         // generate a message
         DisplayMessage("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name, ActionCode.CONTINUE);
     }
@@ -352,32 +367,19 @@ public class GameManager : MonoBehaviour {
         if (actualAttackTrend != AttackCode.NONE && quizTimer-- == 0) SetAttackTrend();
         // manage the the attacks
         foreach (AttackPlan attack in attackSchedule.Values) {
-            if (attack.status == AttackStatus.PLANNING) {
-                if (attack.timer > 0) {
-                    // decrement the timer
-                    attack.timer--;
+            if (attack.status == AttackStatus.PLANNING && attack.timer-- == 0) {
+                // start the attack
+                if (attack.inevitable || Random.Range(0f, 1f) > GetAttackMiss(attack.id)) {
+                    // hit
+                    StartAttack(attack.id);
+                    logManager.LogPrintAttack(attacks[attack.id].name, true);
+                    // generate new repair task
+                    Task newTask = new Task(TaskType.REPAIR, attack.id);
+                    waitingTasks.Add(newTask.id, newTask);
                 } else {
-                    // start the attack
-                    attackStats[attack.id].n++;
-                    if (attack.inevitable || Random.Range(0f, 1f) > GetAttackMiss(attack.id)) {
-                        // hit
-                        attack.status = AttackStatus.ACTIVE;
-                        attackStats[attack.id].hit++;
-                        StartAttack(attack.id);
-                        gc.miss += 0.1f;
-                        // log print hit
-                        logManager.LogPrintAttack(attacks[attack.id].name, true);
-                        Task newTask = new Task(TaskType.REPAIR, attack.id);
-                        waitingTasks.Add(newTask.id, newTask);
-                    } else {
-                        // miss
-                        attackStats[attack.id].miss++;
-                        MissedAttack(attack.id);
-                        ScheduleAttack(attack.id);
-                        gc.miss = 0f;
-                        // log print miss
-                        logManager.LogPrintAttack(attacks[attack.id].name, false);
-                    }
+                    // miss
+                    MissedAttack(attack.id);
+                    logManager.LogPrintAttack(attacks[attack.id].name, false);
                 }
             }
         }
@@ -386,7 +388,7 @@ public class GameManager : MonoBehaviour {
     void SetAttackTrend() {
         List<AttackCode> possibleTrends = new List<AttackCode>();
         foreach(AttackPlan p in attackSchedule.Values) {
-            possibleTrends.Add(p.id);
+            if (p.status != AttackStatus.INACTIVE) possibleTrends.Add(p.id);
         }
         actualAttackTrend = possibleTrends[Random.Range(0, possibleTrends.Count)];
         Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Attenzione: secondo le nostre analisi gli attacchi di tipo " + attacks[actualAttackTrend].name + " sono in aumento!", ActionCode.CONTINUE);
@@ -424,8 +426,6 @@ public class GameManager : MonoBehaviour {
                 // end the attack
                 employees[t.executor].status = TaskType.NONE;
                 StopAttack(t.attack);
-                ScheduleAttack(t.attack);
-                attackSchedule[t.attack].timer--;
                 waitingTasks.Remove(t.id);
                 break;
             default:
