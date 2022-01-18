@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class WindowPopUp : MonoBehaviour {
     [SerializeField] TextMeshProUGUI messageText;
+    [SerializeField] GameManager gameManager;
 
     float oldTimeScale;
     ActionCode action;
@@ -28,7 +29,8 @@ public class WindowPopUp : MonoBehaviour {
                 Time.timeScale = oldTimeScale;
                 break;
             case ActionCode.GAME_OVER:
-                SceneLoader.LoadScene("MainMenu");
+                Time.timeScale = 0f;
+                gameManager.PrintFinalReport();
                 break;
             default:
                 Time.timeScale = oldTimeScale;

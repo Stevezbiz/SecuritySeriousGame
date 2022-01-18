@@ -331,6 +331,7 @@ MonoBehaviour:
   debugView: {fileID: 324848572}
   debugLearningRecord: {fileID: 3983941215844514561, guid: 7014800a496270c4188cda60f311be5e, type: 3}
   debugContent: {fileID: 1357748588}
+  bottomPanel: {fileID: 1981295489}
 --- !u!114 &2840172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40221,6 +40222,7 @@ MonoBehaviour:
   content: {fileID: 1916649853}
   guideDetails: {fileID: 1399287116}
   guideFileJSON: {fileID: 4900000, guid: 3802e8658c7d4464484234cdc3b72ec6, type: 3}
+  bottomPanel: {fileID: 1981295489}
 --- !u!114 &1387339982
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -816,7 +816,7 @@ public class GameManager : MonoBehaviour {
      */
     void GameOver() {
         Time.timeScale = 0;
-        DisplayMessage("GAME OVER", ActionCode.GAME_OVER);
+        DisplayMessage("GAME OVER", ActionCode.CONTINUE);
     }
 
     /**
@@ -998,11 +998,10 @@ public class GameManager : MonoBehaviour {
     }
 
     void UpdateQuiz() {
-        if (gc.totalTime % gc.quizTime == 0) {
+        if ((gc.totalTime - 1) % gc.quizTime == 0) {
             // random quiz and time choice
             quizTimer = Random.Range(1, gc.quizTime);
             activeQuiz = Random.Range(0, quizzes.Count);
-
         }
         // launch quiz
         if (quizTimer-- == 0) quizQuestion.Load(quizzes[activeQuiz], avatars[quizzes[activeQuiz].person]);
@@ -1051,6 +1050,10 @@ public class GameManager : MonoBehaviour {
     }
 
     public void PrintLearningReport() {
-        learningReport.Load();
+        learningReport.Load(ActionCode.CONTINUE);
+    }
+
+    public void PrintFinalReport() {
+        learningReport.Load(ActionCode.GAME_OVER);
     }
 }

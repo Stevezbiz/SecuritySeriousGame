@@ -8,6 +8,7 @@ public class Guide : MonoBehaviour {
     [SerializeField] RectTransform content;
     [SerializeField] GuideDetails guideDetails;
     [SerializeField] TextAsset guideFileJSON;
+    [SerializeField] GameObject bottomPanel;
 
     float oldTimeScale = 1f;
     const int COLUMN_CAPACITY = 7;
@@ -32,6 +33,7 @@ public class Guide : MonoBehaviour {
     public void OpenGuide() {
         oldTimeScale = Time.timeScale;
         Time.timeScale = 0;
+        bottomPanel.SetActive(false);
         gameObject.SetActive(true);
     }
 
@@ -40,6 +42,7 @@ public class Guide : MonoBehaviour {
      */
     public void CloseLGuide() {
         Time.timeScale = oldTimeScale;
+        bottomPanel.SetActive(true);
         gameObject.SetActive(false);
         guideDetails.gameObject.SetActive(false);
     }

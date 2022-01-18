@@ -9,8 +9,10 @@ public class LearningReport : MonoBehaviour {
     [SerializeField] GameObject debugView;
     [SerializeField] GameObject debugLearningRecord;
     [SerializeField] RectTransform debugContent;
+    [SerializeField] GameObject bottomPanel;
 
     float oldTomeScale = 1f;
+    ActionCode action;
     Dictionary<SkillCode, KnowledgeComponent> kcs;
     Dictionary<SkillCode, LearningRecord> records = new Dictionary<SkillCode, LearningRecord>();
     Dictionary<SkillCode, DebugLearningRecord> debugRecords = new Dictionary<SkillCode, DebugLearningRecord>();
@@ -30,18 +32,22 @@ public class LearningReport : MonoBehaviour {
         InitDebugView();
     }
 
-    public void Load() {
+    public void Load(ActionCode action) {
         oldTomeScale = Time.timeScale;
         Time.timeScale = 0f;
+        this.action = action;
         foreach (KnowledgeComponent kc in kcs.Values) {
             records[kc.id].Load(kc);
         }
+        bottomPanel.SetActive(false);
         gameObject.SetActive(true);
     }
 
     public void Close() {
         Time.timeScale = oldTomeScale;
+        bottomPanel.SetActive(true);
         gameObject.SetActive(false);
+        if (action == ActionCode.GAME_OVER) SceneLoader.LoadScene("MainMenu");
     }
 
     public void OpenDebugView() {
