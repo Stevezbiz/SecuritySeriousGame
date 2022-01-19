@@ -94,6 +94,9 @@ public class EmployeeChoice : MonoBehaviour {
             case TaskType.REPAIR:
                 durationText.SetText("Durata: " + gameManager.GetAttackDuration(e.id, aid) + " h");
                 break;
+            case TaskType.UPGRADE:
+                durationText.SetText("Durata: " + gameManager.GetInstallDuration(e.id, sid) + " h");
+                break;
             default:
                 Debug.Log("Error: undefined TaskType");
                 break;
@@ -134,6 +137,9 @@ public class EmployeeChoice : MonoBehaviour {
                 break;
             case TaskType.REPAIR:
                 attackView.Repair(employees[employeeDropdown.value].id);
+                break;
+            case TaskType.UPGRADE:
+                shopItemDetail.UpgradeItem(employees[employeeDropdown.value].id);
                 break;
             default:
                 Debug.Log("Error: undefined TaskType");

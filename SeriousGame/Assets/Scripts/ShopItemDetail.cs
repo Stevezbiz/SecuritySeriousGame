@@ -15,6 +15,8 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] GameObject disableButton;
     [SerializeField] GameObject installingButton;
     [SerializeField] GameObject installButton;
+    [SerializeField] GameObject upgradeButton;
+    [SerializeField] GameObject upgradingButton;
     [SerializeField] GameObject lockImage;
     [SerializeField] TextMeshProUGUI purchaseText;
     [SerializeField] Outline purchaseOutline;
@@ -75,6 +77,8 @@ public class ShopItemDetail : MonoBehaviour {
         disableButton.SetActive(false);
         installingButton.SetActive(false);
         installButton.SetActive(false);
+        upgradeButton.SetActive(false);
+        upgradingButton.SetActive(false);
         purchaseButton.GetComponentInChildren<Button>().interactable = true;
         purchaseText.color = COLOR.GREEN;
         purchaseOutline.effectColor = COLOR.GREEN;
@@ -96,11 +100,16 @@ public class ShopItemDetail : MonoBehaviour {
             case ShopItemStatus.INSTALLING:
                 installingButton.SetActive(true);
                 break;
+            case ShopItemStatus.UPGRADING:
+                upgradingButton.SetActive(true);
+                break;
             case ShopItemStatus.ACTIVE:
                 disableButton.SetActive(true);
+                if (sii.level != sii.maxLevel) upgradeButton.SetActive(true);
                 break;
             case ShopItemStatus.INACTIVE:
                 enableButton.SetActive(true);
+                if (sii.level != sii.maxLevel) upgradeButton.SetActive(true);
                 break;
             default:
                 Debug.Log("Error: undefined shopItemStatus");
@@ -113,7 +122,7 @@ public class ShopItemDetail : MonoBehaviour {
      */
     public void PurchaseItem() {
         gameManager.PurchaseShopItem(id);
-        parent.Purchase();
+        parent.NotInstalled();
         task = gameManager.GetInstallTask(id);
         purchaseButton.SetActive(false);
         installButton.SetActive(true);
@@ -121,9 +130,20 @@ public class ShopItemDetail : MonoBehaviour {
 
     public void InstallItem(EmployeeCode eid) {
         gameManager.AssignEmployee(eid, task.id);
-        parent.Install();
+        parent.Installing();
         installButton.SetActive(false);
         installingButton.SetActive(true);
+    }
+
+    public void UpgradeItem(EmployeeCode eid) {
+        gameManager.StartUpgradeShopItem(id);
+        task = gameManager.GetUpgradeTask(id);
+        gameManager.AssignEmployee(eid, task.id);
+        parent.Upgrading();
+        upgradeButton.SetActive(false);
+        enableButton.SetActive(false);
+        disableButton.SetActive(false);
+        upgradingButton.SetActive(true);
     }
 
     /**

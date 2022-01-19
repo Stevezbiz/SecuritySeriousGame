@@ -76,6 +76,9 @@ public class Log : MonoBehaviour {
             case ActionCode.PURCHASE_ITEM:
                 desc = "Acquistato " + item;
                 break;
+            case ActionCode.UPGRADE_ITEM:
+                desc = "Aumentato livello " + item;
+                break;
             case ActionCode.ENABLE_ITEM:
                 desc = "Abilitato " + item;
                 break;

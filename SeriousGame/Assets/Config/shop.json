@@ -21,7 +21,9 @@
 					"endurance": 0.2
 				}
 			],
-			"requirements": [2]
+			"requirements": [2],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 2,
@@ -43,7 +45,9 @@
 					"endurance": 0.2
 				}
 			],
-			"requirements": [2]
+			"requirements": [2],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 3,
@@ -95,7 +99,9 @@
 					"endurance": 0.2
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 4,
@@ -123,7 +129,9 @@
 					"endurance": 0.5
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 5,
@@ -157,7 +165,9 @@
 					"endurance": 0.1
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 6,
@@ -191,7 +201,9 @@
 					"endurance": 0.1
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 7,
@@ -225,7 +237,9 @@
 					"endurance": 0.2
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 8,
@@ -259,7 +273,9 @@
 					"endurance": 0.2
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 9,
@@ -299,7 +315,9 @@
 					"endurance": 0.5
 				}
 			],
-			"requirements": [9]
+			"requirements": [9],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 10,
@@ -333,7 +351,9 @@
 					"endurance": 0.3
 				}
 			],
-			"requirements": [6, 7]
+			"requirements": [6, 7],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 11,
@@ -367,7 +387,9 @@
 					"endurance": 0.3
 				}
 			],
-			"requirements": [4, 5]
+			"requirements": [4, 5],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 12,
@@ -425,7 +447,9 @@
 					"endurance": 0.2
 				}
 			],
-			"requirements": [13]
+			"requirements": [13],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 13,
@@ -477,7 +501,9 @@
 					"endurance": 0.1
 				}
 			],
-			"requirements": [13]
+			"requirements": [13],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 14,
@@ -517,7 +543,9 @@
 					"endurance": 0.3
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 15,
@@ -563,7 +591,9 @@
 					"endurance": 0.2
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 16,
@@ -585,7 +615,9 @@
 					"endurance": 0.7
 				}
 			],
-			"requirements": [16]
+			"requirements": [16],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 17,
@@ -607,7 +639,9 @@
 					"endurance": 0.3
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 18,
@@ -629,7 +663,9 @@
 					"endurance": 0.2
 				}
 			],
-			"requirements": [2, 13]
+			"requirements": [2, 13],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 19,
@@ -675,7 +711,9 @@
 					"endurance": 0.3
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		},
 		{
 			"id": 20,
@@ -703,7 +741,9 @@
 					"endurance": 0
 				}
 			],
-			"requirements": []
+			"requirements": [],
+			"maxLevel": 1,
+			"level": 0
 		}
 	]
 }

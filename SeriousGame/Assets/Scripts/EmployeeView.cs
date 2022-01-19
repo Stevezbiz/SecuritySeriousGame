@@ -51,6 +51,10 @@ public class EmployeeView : MonoBehaviour {
                 DisableButtons();
                 labelText.SetText(employee.name + " sta riparando i danni provocati dall'attacco " + gameManager.GetAttack((AttackCode)gameManager.GetTaskTarget(id)).name);
                 break;
+            case TaskType.UPGRADE:
+                DisableButtons();
+                labelText.SetText(employee.name + " sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(id)).name);
+                break;
             default:
                 Debug.Log("Error: undefined TaskType");
                 break;

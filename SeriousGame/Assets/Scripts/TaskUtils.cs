@@ -5,7 +5,8 @@ using UnityEngine;
 public enum TaskType {
     NONE,
     INSTALL,
-    REPAIR
+    REPAIR,
+    UPGRADE
 }
 
 [System.Serializable]

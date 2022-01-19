@@ -429,12 +429,18 @@ public class GameManager : MonoBehaviour {
         switch (t.type) {
             case TaskType.INSTALL:
                 employees[t.executor].status = TaskType.NONE;
+                shopItems[t.shopItem].level = 1;
                 EnableShopItem(t.shopItem);
                 break;
             case TaskType.REPAIR:
                 // end the attack
                 employees[t.executor].status = TaskType.NONE;
                 StopAttack(t.attack);
+                break;
+            case TaskType.UPGRADE:
+                employees[t.executor].status = TaskType.NONE;
+                shopItems[t.shopItem].level++;
+                FinishUpgradeShopItem(t.shopItem);
                 break;
             default:
                 Debug.Log("Error: undefined taskType");
@@ -465,6 +471,8 @@ public class GameManager : MonoBehaviour {
                 return (int)t.shopItem;
             case TaskType.REPAIR:
                 return (int)t.attack;
+            case TaskType.UPGRADE:
+                return (int)t.shopItem;
         }
         Debug.Log("Error: no task assigned to the given employee");
         return 0;
@@ -480,6 +488,15 @@ public class GameManager : MonoBehaviour {
     }
 
     public Task GetInstallTask(ShopItemCode id) {
+        foreach (Task t in waitingTasks.Values) {
+            if (t.type == TaskType.INSTALL && t.shopItem == id) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public Task GetUpgradeTask(ShopItemCode id) {
         foreach (Task t in waitingTasks.Values) {
             if (t.type == TaskType.INSTALL && t.shopItem == id) {
                 return t;
@@ -513,6 +530,13 @@ public class GameManager : MonoBehaviour {
         return codes;
     }
 
+    public bool IsToUpgrade(ShopItemCode id) {
+        foreach(Task t in waitingTasks.Values) {
+            if (t.type == TaskType.UPGRADE && t.shopItem == id) return true;
+        }
+        return false;
+    }
+
     /**
      * <summary>Applies the effects of buying an item in the shop</summary>
      */
@@ -521,11 +545,34 @@ public class GameManager : MonoBehaviour {
         logManager.LogPrintItem(shopItems[id].name, ActionCode.PURCHASE_ITEM);
         // evaluate the purchase
         EvaluatePurchaseShopItem(id);
+        // apply the effects
         shopItems[id].status = ShopItemStatus.NOT_INSTALLED;
         gc.money -= shopItems[id].cost;
         Task t = new Task(TaskType.INSTALL, id);
         waitingTasks.Add(t.id, t);
         gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
+    }
+
+    public void StartUpgradeShopItem(ShopItemCode id) {
+        // print in the log
+        logManager.LogPrintItem(shopItems[id].name, ActionCode.UPGRADE_ITEM);
+        // evaluate the purchase
+        EvaluateUpgradeShopItem(id);
+        // apply the effects
+        gc.money -= shopItems[id].cost;
+        Task t = new Task(TaskType.UPGRADE, id);
+        waitingTasks.Add(t.id, t);
+        gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
+    }
+
+    void FinishUpgradeShopItem(ShopItemCode id) {
+        foreach (Resistance r in shopItems[id].resistances) {
+            if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
+            resistances[r.id].miss -= r.miss;
+            resistances[r.id].duration -= r.duration;
+            resistances[r.id].endurance -= r.endurance;
+        }
+        EnableShopItem(id);
     }
 
     /**
@@ -621,6 +668,12 @@ public class GameManager : MonoBehaviour {
                 assignedTasks[id].AssignEmployee(id, GetAttackDuration(id, t.attack));
                 waitingTasks.Remove(tid);
                 break;
+            case TaskType.UPGRADE:
+                shopItems[t.shopItem].status = ShopItemStatus.UPGRADING;
+                assignedTasks.Add(id, t);
+                assignedTasks[id].AssignEmployee(id, GetInstallDuration(id, t.shopItem));
+                waitingTasks.Remove(tid);
+                break;
             default:
                 Debug.Log("Error: undefined taskType");
                 break;
@@ -656,6 +709,9 @@ public class GameManager : MonoBehaviour {
                         moneyBonus += 0.5f * e.moneyGain;
                         break;
                     case TaskType.REPAIR:
+                        break;
+                    case TaskType.UPGRADE:
+                        moneyBonus += 0.5f * e.moneyGain;
                         break;
                     default:
                         Debug.Log("Error: undefined employeeStatus");
@@ -693,6 +749,9 @@ public class GameManager : MonoBehaviour {
                         moneyBonus += 0.5f * e.moneyGain;
                         break;
                     case TaskType.REPAIR:
+                        break;
+                    case TaskType.UPGRADE:
+                        moneyBonus += 0.5f * e.moneyGain;
                         break;
                     default:
                         Debug.Log("Error: undefined employeeStatus");
@@ -988,6 +1047,10 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    void EvaluateUpgradeShopItem(ShopItemCode id) {
+
+    }
+
     void EvaluateEmployeeManagement(EmployeeCode id) {
         // identify the type of the task
         switch (employees[id].status) {
@@ -996,6 +1059,9 @@ public class GameManager : MonoBehaviour {
                 break;
             case TaskType.REPAIR:
                 kcs[SkillCode.MANAGEMENT].AddTestResult(EmployeeTestResult(id, attacks[assignedTasks[id].attack].category));
+                break;
+            case TaskType.UPGRADE:
+                kcs[SkillCode.MANAGEMENT].AddTestResult(EmployeeTestResult(id, shopItems[assignedTasks[id].shopItem].category));
                 break;
             default:
                 Debug.Log("Error: undefined taskType");

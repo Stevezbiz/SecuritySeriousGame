@@ -112,6 +112,7 @@ public enum ActionCode {
     GAME_OVER,
     CONTINUE,
     PURCHASE_ITEM,
+    UPGRADE_ITEM,
     ENABLE_ITEM,
     DISABLE_ITEM
 }

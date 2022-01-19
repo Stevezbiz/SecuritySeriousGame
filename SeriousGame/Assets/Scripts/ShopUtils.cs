@@ -30,6 +30,7 @@ public enum ShopItemStatus {
     NOT_OWNED,
     NOT_INSTALLED,
     INSTALLING,
+    UPGRADING,
     ACTIVE,
     INACTIVE
 }
@@ -48,6 +49,8 @@ public class ShopItemInfo {
     public int upgradeTime;
     public Resistance[] resistances;
     public ShopItemCode[] requirements;
+    public int maxLevel;
+    public int level;
 }
 
 [System.Serializable]
@@ -55,11 +58,13 @@ public class ShopItemRecap {
     public ShopItemCode id;
     public ShopItemStatus status;
     public bool locked;
+    public int level;
 
-    public ShopItemRecap(ShopItemCode id, ShopItemStatus status, bool locked) {
+    public ShopItemRecap(ShopItemCode id, ShopItemStatus status, bool locked, int level) {
         this.id = id;
         this.status = status;
         this.locked = locked;
+        this.level = level;
     }
 }
 
@@ -89,7 +94,7 @@ public static class ShopUtils {
         List<ShopItemRecap> sir = new List<ShopItemRecap>();
 
         foreach (ShopItemInfo sii in shopItems.Values) {
-            sir.Add(new ShopItemRecap(sii.id, sii.status, sii.locked));
+            sir.Add(new ShopItemRecap(sii.id, sii.status, sii.locked, sii.level));
         }
 
         return sir.ToArray();

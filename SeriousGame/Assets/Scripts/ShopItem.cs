@@ -7,7 +7,6 @@ using Slider = UnityEngine.UI.Slider;
 
 public class ShopItem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI itemText;
-    [SerializeField] TextMeshProUGUI costText;
     [SerializeField] GameObject installButton;
     [SerializeField] GameObject installingImage;
     [SerializeField] GameObject lockedImage;
@@ -33,7 +32,6 @@ public class ShopItem : MonoBehaviour {
         this.details = details;
         gameObject.name = "ShopItem" + id.ToString();
         itemText.SetText(sii.name);
-        costText.SetText(sii.cost.ToString());
         if (sii.locked) {
             bool ok = true;
             foreach (ShopItemCode code in sii.requirements) {
@@ -51,10 +49,13 @@ public class ShopItem : MonoBehaviour {
                 case ShopItemStatus.NOT_OWNED:
                     break;
                 case ShopItemStatus.NOT_INSTALLED:
-                    Purchase();
+                    NotInstalled();
                     break;
                 case ShopItemStatus.INSTALLING:
-                    Install();
+                    Installing();
+                    break;
+                case ShopItemStatus.UPGRADING:
+                    Upgrading();
                     break;
                 case ShopItemStatus.ACTIVE:
                     lastValue = 1;
@@ -84,8 +85,7 @@ public class ShopItem : MonoBehaviour {
     /**
     * <summary>Change the aspect of the item of the shop</summary>
     */
-    public void Purchase() {
-        costText.SetText("");
+    public void NotInstalled() {
         installButton.SetActive(true);
         installingImage.SetActive(false);
         lockedImage.SetActive(false);
@@ -95,8 +95,17 @@ public class ShopItem : MonoBehaviour {
     /**
     * <summary>Change the aspect of the item of the shop</summary>
     */
-    public void Install() {
-        costText.SetText("");
+    public void Installing() {
+        float fill = gameManager.GetTaskProgress(id);
+        installBar.fillAmount = fill;
+        installText.fillAmount = fill;
+        installButton.SetActive(false);
+        installingImage.SetActive(true);
+        lockedImage.SetActive(false);
+        slider.SetActive(false);
+    }
+
+    public void Upgrading() {
         float fill = gameManager.GetTaskProgress(id);
         installBar.fillAmount = fill;
         installText.fillAmount = fill;
@@ -110,7 +119,6 @@ public class ShopItem : MonoBehaviour {
      * <summary>Change the aspect of the item of the shop</summary>
      */
     public void Enable() {
-        costText.SetText("");
         installButton.SetActive(false);
         installingImage.SetActive(false);
         lockedImage.SetActive(false);
@@ -124,7 +132,6 @@ public class ShopItem : MonoBehaviour {
      * <summary>Change the aspect of the item of the shop</summary>
      */
     public void Disable() {
-        costText.SetText("");
         installButton.SetActive(false);
         installingImage.SetActive(false);
         lockedImage.SetActive(false);
@@ -138,7 +145,6 @@ public class ShopItem : MonoBehaviour {
      * <summary>Change the aspect of the item of the shop</summary>
      */
     public void Lock() {
-        costText.SetText("");
         installButton.SetActive(false);
         installingImage.SetActive(false);
         lockedImage.SetActive(true);

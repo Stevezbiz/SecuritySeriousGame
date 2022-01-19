@@ -38,6 +38,11 @@ public class EmployeeCard : MonoBehaviour {
                 progressBar.SetActive(true);
                 bar.fillAmount = gameManager.GetTaskProgress(e.id);
                 break;
+            case TaskType.UPGRADE:
+                statusText.SetText("INSTALLAZIONE");
+                progressBar.SetActive(true);
+                bar.fillAmount = gameManager.GetTaskProgress(e.id);
+                break;
             default:
                 Debug.Log("Error: undefined TaskType");
                 break;

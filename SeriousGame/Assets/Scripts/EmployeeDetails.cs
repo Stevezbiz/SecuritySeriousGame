@@ -38,6 +38,9 @@ public class EmployeeDetails : MonoBehaviour {
             case TaskType.REPAIR:
                 taskText.SetText("Sta riparando i danni provocati dall'attacco " + gameManager.GetAttack((AttackCode)gameManager.GetTaskTarget(e.id)).name);
                 break;
+            case TaskType.UPGRADE:
+                taskText.SetText("Sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(e.id)).name);
+                break;
             default:
                 Debug.Log("Error: undefined TaskType");
                 break;
