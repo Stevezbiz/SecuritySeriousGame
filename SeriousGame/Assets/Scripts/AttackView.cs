@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Image = UnityEngine.UI.Image;
 
 public class AttackView : MonoBehaviour {
     [SerializeField] GameManager gameManager;
@@ -19,6 +20,9 @@ public class AttackView : MonoBehaviour {
     [SerializeField] GameObject attackList;
     [SerializeField] RectTransform content;
     [SerializeField] GameObject attackItem;
+    [SerializeField] Image durationBar;
+    [SerializeField] Image missBar;
+    [SerializeField] Image enduranceBar;
 
     float oldTimeScale = 1f;
     List<AttackInfo> attacks;
@@ -99,6 +103,9 @@ public class AttackView : MonoBehaviour {
             durationText.SetText("-" + (res.duration * 100).ToString("0.") + " %");
             missText.SetText("+" + (res.miss * 100).ToString("0.") + " %");
             enduranceText.SetText("+" + (res.endurance * 100).ToString("0.") + " %");
+            durationBar.fillAmount = res.duration;
+            missBar.fillAmount = res.miss;
+            enduranceBar.fillAmount = res.endurance;
         }
     }
 

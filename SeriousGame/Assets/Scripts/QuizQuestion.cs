@@ -22,7 +22,7 @@ public class QuizQuestion : MonoBehaviour {
         image.sprite = p.sprite;
         questionText.SetText(q.question);
         for (int i = 0; i < q.answers.Length; i++) {
-            toDestroy[i] = Instantiate(quizAlternative, answers, false);
+            toDestroy.Add(Instantiate(quizAlternative, answers, false));
             toDestroy[i].GetComponent<QuizAlternative>().Load(this, i, q.answers[i].text);
         }
         gameObject.SetActive(true);
