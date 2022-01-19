@@ -65,10 +65,19 @@ public class ShopItemRecap {
 
 [System.Serializable]
 public class ShopJSON {
-    public ShopItemInfo[] powerUps;
+    public ShopItemInfo[] shopItems;
 }
 
 public static class ShopUtils {
+    public static Dictionary<ShopItemCode, ShopItemInfo> LoadFromFile(TextAsset file) {
+        Dictionary<ShopItemCode, ShopItemInfo> shopItems = new Dictionary<ShopItemCode, ShopItemInfo>();
+        ShopJSON shopContent = JsonUtility.FromJson<ShopJSON>(file.text);
+        foreach (ShopItemInfo item in shopContent.shopItems) {
+            shopItems.Add(item.id, item);
+        }
+        return shopItems;
+    }
+    
     public static void UpdateShopItems(Dictionary<ShopItemCode, ShopItemInfo> shopItems, ShopItemRecap[] sir) {
         foreach (ShopItemRecap s in sir) {
             shopItems[s.id].status = s.status;

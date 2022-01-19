@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameObject windowPopUp;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
+    [SerializeField] TextAsset shopFileJSON;
     [SerializeField] TextAsset quizFileJSON;
     [SerializeField] TextAsset modelFileJSON;
     [SerializeField] List<Sprite> avatarImages;
@@ -105,6 +106,7 @@ public class GameManager : MonoBehaviour {
         startTime = Time.time;
         Time.timeScale = 0;
         // initialize the shop structure
+        shopItems = ShopUtils.LoadFromFile(shopFileJSON);
         shop.Init();
         // load the attacks from the file and initialize the view
         attacks = AttackUtils.LoadFromFile(attacksFileJSON);
@@ -501,6 +503,14 @@ public class GameManager : MonoBehaviour {
      */
     public ShopItemInfo GetShopItem(ShopItemCode id) {
         return shopItems[id];
+    }
+
+    public List<ShopItemCode> GetShopItemsByCategory(Category category) {
+        List<ShopItemCode> codes = new List<ShopItemCode>();
+        foreach(ShopItemInfo sii in shopItems.Values) {
+            if (sii.category == category) codes.Add(sii.id);
+        }
+        return codes;
     }
 
     /**

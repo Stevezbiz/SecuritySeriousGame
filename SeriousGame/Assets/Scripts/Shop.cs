@@ -5,23 +5,17 @@ using UnityEngine;
 public class Shop : MonoBehaviour {
     [SerializeField] GameObject shopItem;
     [SerializeField] RectTransform content;
-    [SerializeField] TextAsset shopFileJSON;
     [SerializeField] ShopItemDetail details;
     [SerializeField] GameManager gameManager;
 
-    List<ShopItemCode> indexes = new List<ShopItemCode>();
+    List<ShopItemCode> indexes;
     List<GameObject> toDestroy = new List<GameObject>();
 
     /**
      * <summary>Initialize the data structures</summary>
      */
-    public void Init() {
-        gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-        ShopJSON shopContent = JsonUtility.FromJson<ShopJSON>(shopFileJSON.text);
-        foreach (ShopItemInfo item in shopContent.powerUps) {
-            gameManager.AddToShopItems(item);
-            indexes.Add(item.id);
-        }
+    public void Init(Category category) {
+        indexes = gameManager.GetShopItemsByCategory(category);
     }
 
     /**

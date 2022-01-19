@@ -18,11 +18,11 @@ public class ShopGUI : MonoBehaviour {
      * <summary>Initialize the data structures</summary>
      */
     public void Init() {
-        networkShop.GetComponent<Shop>().Init();
-        accessShop.GetComponent<Shop>().Init();
-        softwareShop.GetComponent<Shop>().Init();
-        assetShop.GetComponent<Shop>().Init();
-        servicesShop.GetComponent<Shop>().Init();
+        networkShop.GetComponent<Shop>().Init(Category.NETWORK);
+        accessShop.GetComponent<Shop>().Init(Category.ACCESS);
+        softwareShop.GetComponent<Shop>().Init(Category.SOFTWARE);
+        assetShop.GetComponent<Shop>().Init(Category.ASSET);
+        servicesShop.GetComponent<Shop>().Init(Category.SERVICES);
         employeeView.GetComponent<EmployeeShop>().Init();
     }
 
