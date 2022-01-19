@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
+using Outline = UnityEngine.UI.Outline;
 
 public class AttackView : MonoBehaviour {
     [SerializeField] GameManager gameManager;
@@ -23,6 +24,13 @@ public class AttackView : MonoBehaviour {
     [SerializeField] Image durationBar;
     [SerializeField] Image missBar;
     [SerializeField] Image enduranceBar;
+    [SerializeField] Outline durationOutline;
+    [SerializeField] Outline missOutline;
+    [SerializeField] Outline enduranceOutline;
+    [SerializeField] GameObject durationMarker;
+    [SerializeField] GameObject missMarker;
+    [SerializeField] GameObject enduranceMarker;
+    [SerializeField] GameObject windowPopUp;
 
     float oldTimeScale = 1f;
     List<AttackInfo> attacks;
@@ -106,6 +114,7 @@ public class AttackView : MonoBehaviour {
             durationBar.fillAmount = res.duration;
             missBar.fillAmount = res.miss;
             enduranceBar.fillAmount = res.endurance;
+            SetColor(res);
         }
     }
 
@@ -137,5 +146,32 @@ public class AttackView : MonoBehaviour {
         Time.timeScale = oldTimeScale;
         gameObject.SetActive(false);
         bottomPanel.SetActive(true);
+    }
+
+    public void ResistancesButton() {
+
+        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Le difese attive conferiscono resistenza ad attacchi specifici. Sono indicati i livelli di resistenza minimi consigliati per ottenere una protezione adeguata.", ActionCode.CONTINUE);
+    }
+
+    void SetColor(Resistance res) {
+        Color c1;
+        Color c2;
+        Color c3;
+        if (res.duration >= 0.5) c1 = COLOR.BLUE;
+        else c1 = COLOR.YELLOW;
+        if (res.miss >= 0.5) c2 = COLOR.BLUE;
+        else c2 = COLOR.YELLOW;
+        if (res.endurance >= 0.5) c3 = COLOR.BLUE;
+        else c3 = COLOR.YELLOW;
+        durationBar.color = c1;
+        durationOutline.effectColor = c1;
+        foreach(Image i in durationMarker.GetComponentsInChildren<Image>()) i.color = c1;
+        missBar.color = c2;
+        missOutline.effectColor = c2;
+        foreach (Image i in missMarker.GetComponentsInChildren<Image>()) i.color = c2;
+        enduranceBar.color = c3;
+        enduranceOutline.effectColor = c3;
+        foreach (Image i in enduranceMarker.GetComponentsInChildren<Image>()) i.color = c3;
+
     }
 }
