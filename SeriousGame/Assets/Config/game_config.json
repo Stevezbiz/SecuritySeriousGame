@@ -1,5 +1,6 @@
 {
-	"gameConfig": {
+	"gameConfig":
+	{
 		"totalTime": 0,
 		"endTime": 1440,
 		"negativeTime": 0,

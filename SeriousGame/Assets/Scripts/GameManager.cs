@@ -57,6 +57,8 @@ public class GameManager : MonoBehaviour {
             updateTime++;
             gc.totalTime++;
             dateTime = dateTime.AddHours(1);
+            // update model
+            BKTModel.UpdateModel(gc.totalTime);
             // schedule new attacks
             ActivateAttacks();
             // trigger periodic evaluation
@@ -881,11 +883,11 @@ public class GameManager : MonoBehaviour {
         foreach(Resistance r in resistances.Values) {
             if(attackSchedule[r.id].status != AttackStatus.INACTIVE) {
                 Category c = attacks[r.id].category;
-                if (r.miss >= 0.5) scores[c]++;
+                if (r.duration >= BKTModel.GetDurationL(r.id)) scores[c]++;
                 else scores[c]--;
-                if (r.duration >= 0.5) scores[c]++;
+                if (r.miss >= BKTModel.GetMissL(r.id)) scores[c]++;
                 else scores[c]--;
-                if (r.endurance >= 0.5) scores[c]++;
+                if (r.endurance >= BKTModel.GetEnduranceL(r.id)) scores[c]++;
                 else scores[c]--;
             }
         }
@@ -939,9 +941,9 @@ public class GameManager : MonoBehaviour {
         else score--;
         // 3. Is the countermeasure over-preventing an attack?
         foreach(Resistance r in res) {
-            if (resistances[r.id].miss > 1) score--;
-            if (resistances[r.id].duration > 1) score--;
-            if (resistances[r.id].endurance > 1) score--;
+            if (resistances[r.id].duration > BKTModel.GetDurationH(r.id)) score--;
+            if (resistances[r.id].miss > BKTModel.GetMissH(r.id)) score--;
+            if (resistances[r.id].endurance > BKTModel.GetEnduranceH(r.id)) score--;
         }
         // Select the proper Knowledge Component
         SkillCode kc;
@@ -1064,7 +1066,7 @@ public class GameManager : MonoBehaviour {
             records.Add(new KCRecord(kc.id, kc.name, kc.GetTransitionPos(), kc.GetTests()));
         }
 
-        return new ModelSave(records.ToArray());
+        return new ModelSave(records.ToArray(), BKTModel.actualTimeSlot);
     }
 
     public void PrintLearningReport() {

@@ -27,10 +27,11 @@ public class AttackView : MonoBehaviour {
     [SerializeField] Outline durationOutline;
     [SerializeField] Outline missOutline;
     [SerializeField] Outline enduranceOutline;
-    [SerializeField] GameObject durationMarker;
-    [SerializeField] GameObject missMarker;
-    [SerializeField] GameObject enduranceMarker;
+    [SerializeField] RectTransform durationMarker;
+    [SerializeField] RectTransform missMarker;
+    [SerializeField] RectTransform enduranceMarker;
     [SerializeField] GameObject windowPopUp;
+    [SerializeField] GameObject bars;
 
     float oldTimeScale = 1f;
     List<AttackInfo> attacks;
@@ -106,6 +107,7 @@ public class AttackView : MonoBehaviour {
             durationText.SetText("- %");
             missText.SetText("- %");
             enduranceText.SetText("- %");
+            bars.SetActive(false);
         } else {
             Resistance res = gameManager.GetResistance(attacks[attackDropdown.value].id);
             durationText.SetText("-" + (res.duration * 100).ToString("0.") + " %");
@@ -115,6 +117,7 @@ public class AttackView : MonoBehaviour {
             missBar.fillAmount = res.miss;
             enduranceBar.fillAmount = res.endurance;
             SetColor(res);
+            bars.SetActive(true);
         }
     }
 
@@ -166,12 +169,14 @@ public class AttackView : MonoBehaviour {
         durationBar.color = c1;
         durationOutline.effectColor = c1;
         foreach(Image i in durationMarker.GetComponentsInChildren<Image>()) i.color = c1;
+        durationMarker.localPosition = new Vector3((float)(-durationBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetDurationL(res.id))), -20, 0);
         missBar.color = c2;
         missOutline.effectColor = c2;
         foreach (Image i in missMarker.GetComponentsInChildren<Image>()) i.color = c2;
+        missMarker.localPosition = new Vector3((float)(-missBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetMissL(res.id))), -20, 0);
         enduranceBar.color = c3;
         enduranceOutline.effectColor = c3;
         foreach (Image i in enduranceMarker.GetComponentsInChildren<Image>()) i.color = c3;
-
+        enduranceMarker.localPosition = new Vector3((float)(-enduranceBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetEnduranceL(res.id))), -20, 0);
     }
 }

@@ -19330,10 +19330,11 @@ MonoBehaviour:
   durationOutline: {fileID: 1405445795}
   missOutline: {fileID: 365922605}
   enduranceOutline: {fileID: 1178431444}
-  durationMarker: {fileID: 1754280011}
-  missMarker: {fileID: 1575861176}
-  enduranceMarker: {fileID: 1766273662}
+  durationMarker: {fileID: 1754280012}
+  missMarker: {fileID: 1575861177}
+  enduranceMarker: {fileID: 1766273663}
   windowPopUp: {fileID: 7429000584695828995, guid: 2fa7e241c74cfd14683799803d5d6f00, type: 3}
+  bars: {fileID: 1430560827}
 --- !u!1 &556428173
 GameObject:
   m_ObjectHideFlags: 0

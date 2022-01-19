@@ -1,29 +1,152 @@
 {
-	"kcs":
-	[
-		{
-			"id": 1,
-			"name": "Gestione"
-		},
-		{
-			"id": 2,
-			"name": "Rete"
-		},
-		{
-			"id": 3,
-			"name": "Accesso"
-		},
-		{
-			"id": 4,
-			"name": "Software"
-		},
-		{
-			"id": 5,
-			"name": "Risorse"
-		},
-		{
-			"id": 6,
-			"name": "Servizi"
-		}
-	]
+	"modelConfig":
+	{
+		"COGNITIVE_MASTERY": 0.95,
+		"N_FIRST_EMPIRICAL_TEST": 3,
+		"M_SECOND_EMPIRICAL_TEST": 10,
+		"baseTransit": 0.1,
+		"baseSlip": 0.1,
+		"baseGuess": 0.3,
+		"baseLearned": 0.01,
+		"actualTimeSlot": 0,
+		"timeSlots": [ 1440 ],
+		"kcs":
+		[
+			{
+				"id": 1,
+				"name": "Gestione"
+			},
+			{
+				"id": 2,
+				"name": "Rete"
+			},
+			{
+				"id": 3,
+				"name": "Accesso"
+			},
+			{
+				"id": 4,
+				"name": "Software"
+			},
+			{
+				"id": 5,
+				"name": "Risorse"
+			},
+			{
+				"id": 6,
+				"name": "Servizi"
+			}
+		],
+		"requirements":
+		[
+			{
+				"id": 1,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 2,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 3,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 4,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 5,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 6,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 7,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 8,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 9,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 10,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 11,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			},
+			{
+				"id": 12,
+				"durationL": [ 0.5 ],
+				"durationH": [ 1 ],
+				"missL": [ 0.5 ],
+				"missH": [ 1 ],
+				"enduranceL": [ 0.5 ],
+				"enduranceH": [ 1 ]
+			}
+		]
+	}
 }

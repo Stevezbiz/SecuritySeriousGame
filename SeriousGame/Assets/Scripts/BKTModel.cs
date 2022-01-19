@@ -15,62 +15,50 @@ public enum SkillCode {
 }
 
 [System.Serializable]
+public class ResistanceRequirements {
+    public AttackCode id;
+    public float[] durationL;
+    public float[] durationH;
+    public float[] missL;
+    public float[] missH;
+    public float[] enduranceL;
+    public float[] enduranceH;
+}
+
+[System.Serializable]
 public class KCData {
     public SkillCode id;
     public string name;
 }
 
 [System.Serializable]
-public class ModelJSON {
+public class ModelConfig {
+    public double COGNITIVE_MASTERY;
+    public int N_FIRST_EMPIRICAL_TEST;
+    public int M_SECOND_EMPIRICAL_TEST;
+    public double baseTransit;
+    public double baseSlip;
+    public double baseGuess;
+    public double baseLearned;
+    public int actualTimeSlot;
+    public int[] timeSlots;
     public KCData[] kcs;
+    public ResistanceRequirements[] requirements;
 }
 
-public static class BKTModel {
-    public static double COGNITIVE_MASTERY = 0.95;     // threshold to reach to achieve mastery
-    public static int N_FIRST_EMPIRICAL_TEST = 3;      // N number to verify first empirical test
-    public static int M_SECOND_EMPIRICAL_TEST = 10;    // M number to verify second empirical test
-    public static double baseTransit = 0.1;
-    public static double baseSlip = 0.1;
-    public static double baseGuess = 0.3;
-    public static double baseLearned = 0.01;
-
-    public static Dictionary<SkillCode, KnowledgeComponent> Init(TextAsset file) {
-        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
-        ModelJSON modelJSON = JsonUtility.FromJson<ModelJSON>(file.text);
-        foreach (KCData kc in modelJSON.kcs) {
-            kcs.Add(kc.id, new KnowledgeComponent(kc.id, kc.name));
-        }
-        return kcs;
-    }
-
-    public static Dictionary<SkillCode, KnowledgeComponent> LoadModel() {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/bktmodel.data";
-        FileStream fs = new FileStream(path, FileMode.Open);
-        ModelSave modelSave = formatter.Deserialize(fs) as ModelSave;
-        fs.Close();
-        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
-        foreach(KCRecord r in modelSave.records) {
-            kcs.Add(r.id, new KnowledgeComponent(r));
-        }
-        return kcs;
-    }
-
-    public static void SaveModel(ModelSave modelSave) {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/bktmodel.data";
-        FileStream fs = new FileStream(path, FileMode.Create);
-        formatter.Serialize(fs, modelSave);
-        fs.Close();
-    }
+[System.Serializable]
+public class ModelJSON {
+    public ModelConfig modelConfig;
 }
 
 [System.Serializable]
 public class ModelSave {
     public KCRecord[] records;
+    public int actualTimeSlot;
 
-    public ModelSave(KCRecord[] records) {
+    public ModelSave(KCRecord[] records, int actualTimeSlot) {
         this.records = records;
+        this.actualTimeSlot = actualTimeSlot;
     }
 }
 
@@ -86,6 +74,93 @@ public class KCRecord {
         this.name = name;
         this.transitionPos = transitionPos;
         this.tests = tests;
+    }
+}
+
+public static class BKTModel {
+    public static double COGNITIVE_MASTERY;         // threshold to reach to achieve mastery
+    public static int N_FIRST_EMPIRICAL_TEST;       // N number to verify first empirical test
+    public static int M_SECOND_EMPIRICAL_TEST;      // M number to verify second empirical test
+    public static double baseTransit;
+    public static double baseSlip;
+    public static double baseGuess;
+    public static double baseLearned;
+    public static int actualTimeSlot;
+    public static List<int> timeSlots = new List<int>();
+
+    static Dictionary<AttackCode, ResistanceRequirements> resistanceRequirements = new Dictionary<AttackCode, ResistanceRequirements>();
+
+    public static Dictionary<SkillCode, KnowledgeComponent> Init(TextAsset file) {
+        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
+        ModelJSON modelJSON = JsonUtility.FromJson<ModelJSON>(file.text);
+        COGNITIVE_MASTERY = modelJSON.modelConfig.COGNITIVE_MASTERY;
+        N_FIRST_EMPIRICAL_TEST = modelJSON.modelConfig.N_FIRST_EMPIRICAL_TEST;
+        M_SECOND_EMPIRICAL_TEST = modelJSON.modelConfig.M_SECOND_EMPIRICAL_TEST;
+        baseTransit = modelJSON.modelConfig.baseTransit;
+        baseSlip = modelJSON.modelConfig.baseSlip;
+        baseGuess = modelJSON.modelConfig.baseGuess;
+        baseLearned = modelJSON.modelConfig.baseLearned;
+        actualTimeSlot = modelJSON.modelConfig.actualTimeSlot;
+        foreach (KCData kc in modelJSON.modelConfig.kcs) {
+            kcs.Add(kc.id, new KnowledgeComponent(kc.id, kc.name));
+        }
+        foreach(ResistanceRequirements r in modelJSON.modelConfig.requirements) {
+            resistanceRequirements.Add(r.id, r);
+        }
+        foreach(int slot in modelJSON.modelConfig.timeSlots) {
+            timeSlots.Add(slot);
+        }
+        return kcs;
+    }
+
+    public static Dictionary<SkillCode, KnowledgeComponent> LoadModel() {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/bktmodel.data";
+        FileStream fs = new FileStream(path, FileMode.Open);
+        ModelSave modelSave = formatter.Deserialize(fs) as ModelSave;
+        fs.Close();
+        actualTimeSlot = modelSave.actualTimeSlot;
+        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
+        foreach(KCRecord r in modelSave.records) {
+            kcs.Add(r.id, new KnowledgeComponent(r));
+        }
+        return kcs;
+    }
+
+    public static void SaveModel(ModelSave modelSave) {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/bktmodel.data";
+        FileStream fs = new FileStream(path, FileMode.Create);
+        formatter.Serialize(fs, modelSave);
+        fs.Close();
+    }
+
+    public static void UpdateModel(int time) {
+        if (time == timeSlots[actualTimeSlot]) actualTimeSlot++;
+    }
+
+    public static float GetDurationL(AttackCode id) {
+        return resistanceRequirements[id].durationL[actualTimeSlot];
+    }
+
+    public static float GetDurationH(AttackCode id) {
+        return resistanceRequirements[id].durationH[actualTimeSlot];
+    }
+
+    public static float GetMissL(AttackCode id) {
+        return resistanceRequirements[id].missL[actualTimeSlot];
+    }
+
+    public static float GetMissH(AttackCode id) {
+        return resistanceRequirements[id].missH[actualTimeSlot];
+    }
+
+    public static float GetEnduranceL(AttackCode id) {
+        return resistanceRequirements[id].enduranceL[actualTimeSlot];
+    }
+
+    public static float GetEnduranceH(AttackCode id) {
+        return resistanceRequirements[id].enduranceH[actualTimeSlot];
     }
 }
 
