@@ -31,11 +31,11 @@ public class EmployeeChoice : MonoBehaviour {
     TaskType type;
     Category category;
 
-    public void Load(ShopItemCode id, Category category, ShopItemDetail shopItemDetail) {
+    public void Load(ShopItemCode id, Category category, ShopItemDetail shopItemDetail, TaskType type) {
         this.sid = id;
         this.category = category;
         this.shopItemDetail = shopItemDetail;
-        type = TaskType.INSTALL;
+        this.type = type;
         // fill the options of the dropdown element
         employees = gameManager.GetAvailableEmployees();
         if (employees.Count == 0) {

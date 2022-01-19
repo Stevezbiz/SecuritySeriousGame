@@ -163,6 +163,6 @@ public class ShopItem : MonoBehaviour {
 
     public void SelectEmployee() {
         details.Load(id, this);
-        details.OpenEmployeeChoice();
+        details.OpenEmployeeChoiceToInstall();
     }
 }

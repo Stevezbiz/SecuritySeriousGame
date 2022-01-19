@@ -498,7 +498,7 @@ public class GameManager : MonoBehaviour {
 
     public Task GetUpgradeTask(ShopItemCode id) {
         foreach (Task t in waitingTasks.Values) {
-            if (t.type == TaskType.INSTALL && t.shopItem == id) {
+            if (t.type == TaskType.UPGRADE && t.shopItem == id) {
                 return t;
             }
         }
