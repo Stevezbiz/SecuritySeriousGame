@@ -8,7 +8,8 @@ public class EmployeeShop : MonoBehaviour {
     [SerializeField] TextAsset employeesFileJSON;
     [SerializeField] GameManager gameManager;
     [SerializeField] GameObject employeeItem;
-    [SerializeField] RectTransform content;
+    [SerializeField] RectTransform listContent;
+    [SerializeField] RectTransform descriptionContent;
     [SerializeField] TextMeshProUGUI titleText;
     [SerializeField] TextMeshProUGUI descriptionText;
     [SerializeField] TextMeshProUGUI moneyGainText;
@@ -52,7 +53,7 @@ public class EmployeeShop : MonoBehaviour {
      */
     void AddEmployeeRecord(EmployeeInfo e) {
         // create the new item
-        employees[e.id] = Instantiate(employeeItem, content, false).GetComponent<EmployeeItem>();
+        employees[e.id] = Instantiate(employeeItem, listContent, false).GetComponent<EmployeeItem>();
         employees[e.id].Load(e, this);
     }
 
@@ -62,7 +63,7 @@ public class EmployeeShop : MonoBehaviour {
     public void OpenView() {
         // set the aspect of the navigation elements
         gameObject.SetActive(true);
-        ComposeDetails(0);
+        ComposeDetails(indexes[0]);
     }
 
     /**
@@ -80,7 +81,7 @@ public class EmployeeShop : MonoBehaviour {
         EmployeeInfo e = gameManager.GetEmployee(id);
         current = id;
         // set the description fields
-        titleText.SetText(e.name);
+        titleText.SetText(e.name.ToLower());
         descriptionText.SetText(e.description);
         Dictionary<Category, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
         networkBar.fillAmount = abilities[Category.NETWORK] / 10;
@@ -110,6 +111,7 @@ public class EmployeeShop : MonoBehaviour {
             notAvailable.SetActive(false);
             hireButton.SetActive(false);
         }
+        descriptionContent.SetPositionAndRotation(new Vector3(descriptionContent.position.x, 0f, descriptionContent.position.z), Quaternion.identity);
     }
 
     /**

@@ -12,7 +12,7 @@ public class EmployeeView : MonoBehaviour {
     [SerializeField] GameObject repairButton;
     [SerializeField] GameObject preventButton;
     [SerializeField] TextMeshProUGUI labelText;
-    [SerializeField] InstallView installView;
+    [SerializeField] InstallOrUpgradeView installView;
     [SerializeField] RepairView repairView;
 
     float oldTimeScale = 1f;

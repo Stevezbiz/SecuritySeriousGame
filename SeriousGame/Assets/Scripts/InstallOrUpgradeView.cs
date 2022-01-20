@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
 
-public class InstallView : MonoBehaviour {
+public class InstallOrUpgradeView : MonoBehaviour {
     [SerializeField] GameManager gameManager;
     [SerializeField] TMP_Dropdown dropdown;
     [SerializeField] GameObject windowPopUp;
@@ -57,14 +57,28 @@ public class InstallView : MonoBehaviour {
     }
 
     public void Display(int err) {
-        int duration = gameManager.GetInstallDuration(employee, tasks[dropdown.value].shopItem);
+        Task t = tasks[dropdown.value];
+        ShopItemInfo sii = gameManager.GetShopItem(t.shopItem);
+        int duration;
+        switch (t.type) {
+            case TaskType.INSTALL:
+                duration = gameManager.GetInstallDuration(employee, sii.id);
+                break;
+            case TaskType.UPGRADE:
+                duration = gameManager.GetUpgradeDuration(employee, sii.id);
+                break;
+            default:
+                Debug.Log("Error: unhandled TaskType");
+                duration = 0;
+                break;
+        }
         durationText.SetText("Durata: " + duration + " h");
         networkOutline.SetActive(false);
         accessOutline.SetActive(false);
         softwareOutline.SetActive(false);
         assetOutline.SetActive(false);
         servicesOutline.SetActive(false);
-        switch (gameManager.GetShopItem(tasks[dropdown.value].shopItem).category) {
+        switch (sii.category) {
             case Category.NETWORK:
                 networkOutline.SetActive(true);
                 break;

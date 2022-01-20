@@ -6729,7 +6729,8 @@ MonoBehaviour:
   employeesFileJSON: {fileID: 4900000, guid: bf408e75c7d416b4982b74de3691bf48, type: 3}
   gameManager: {fileID: 709143596}
   employeeItem: {fileID: 2241162721490505898, guid: 20e3337bf9f3acf469736b921df2ea3c, type: 3}
-  content: {fileID: 1313635517}
+  listContent: {fileID: 1313635517}
+  descriptionContent: {fileID: 2113008487}
   titleText: {fileID: 1697243092}
   descriptionText: {fileID: 2006294284}
   moneyGainText: {fileID: 1167646488}
@@ -13561,7 +13562,7 @@ RectTransform:
   m_Children:
   - {fileID: 6765290}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -24925,7 +24926,7 @@ GameObject:
   - component: {fileID: 727298413}
   - component: {fileID: 727298412}
   m_Layer: 5
-  m_Name: InstallView
+  m_Name: InstallOrUpgradeView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33287,7 +33288,7 @@ RectTransform:
   m_Children:
   - {fileID: 120897425}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -46686,7 +46687,7 @@ RectTransform:
   m_Children:
   - {fileID: 396295561}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -49322,7 +49323,7 @@ RectTransform:
   m_Children:
   - {fileID: 1852504708}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -54987,8 +54988,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1fd39b43e31458e4b8932753cf8667d7, type: 2}
-  m_sharedMaterial: {fileID: 5452706112618563107, guid: 1fd39b43e31458e4b8932753cf8667d7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 20dbb243004eaf04186d9a8e2cee34d8, type: 2}
+  m_sharedMaterial: {fileID: 7863810318649886199, guid: 20dbb243004eaf04186d9a8e2cee34d8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -55012,15 +55013,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70
-  m_fontSizeBase: 70
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -55079,7 +55080,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0.00012207031, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 90}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1702463250
 GameObject:
@@ -63710,7 +63711,7 @@ RectTransform:
   m_Children:
   - {fileID: 1815666576}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}

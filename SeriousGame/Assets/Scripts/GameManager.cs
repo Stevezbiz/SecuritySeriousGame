@@ -449,7 +449,17 @@ public class GameManager : MonoBehaviour {
     }
 
     public int GetInstallDuration(EmployeeCode id, ShopItemCode sid) {
-        return Mathf.CeilToInt(shopItems[sid].upgradeTime[shopItems[sid].level] * (1 - 0.18f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[sid].category] - 5)));
+        ShopItemInfo sii = shopItems[sid];
+        int upgradeTime = sii.upgradeTime[sii.level];
+        float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[sii.category];
+        return Mathf.CeilToInt(upgradeTime * (1f - 0.18f * (abilityLevel - 5f)));
+    }
+
+    public int GetUpgradeDuration(EmployeeCode id, ShopItemCode sid) {
+        ShopItemInfo sii = shopItems[sid];
+        int upgradeTime = sii.upgradeTime[sii.level];
+        float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[sii.category];
+        return Mathf.CeilToInt(upgradeTime * (1f - 0.18f * (abilityLevel - 5f)));
     }
 
     public float GetTaskProgress(ShopItemCode id) {
@@ -670,7 +680,7 @@ public class GameManager : MonoBehaviour {
             case TaskType.UPGRADE:
                 shopItems[t.shopItem].status = ShopItemStatus.UPGRADING;
                 assignedTasks.Add(id, t);
-                assignedTasks[id].AssignEmployee(id, GetInstallDuration(id, t.shopItem));
+                assignedTasks[id].AssignEmployee(id, GetUpgradeDuration(id, t.shopItem));
                 waitingTasks.Remove(tid);
                 break;
             default:
