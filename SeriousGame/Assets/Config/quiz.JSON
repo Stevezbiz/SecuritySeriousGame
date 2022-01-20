@@ -1,85 +1,178 @@
 {
 	"quizzes":
 	[
-		{
+	  {
 			"id": 0,
 			"skill": 2,
-			"person": ,
-			"question": "",
+			"person": 0,
+			"question": "Durante la pausa pranzo ho fissato un meeting online con un cliente. Il problema è che non sarò in sede, ma in un bar con la connessione ad internet. Come faccio ad accedere al mio profilo aziendale?",
 			"answers":
 			[
 				{
-					"text": "",
-					"correct": ,
+					"text": "Dobbiamo implementare una vpn",
+					"correct": true,
 					"effects":
 					[
 						{
-							"target": ,
-							"modifier": 
+							"target": 1,
+							"modifier": 0.03
 						},
 						{
-							"target": ,
-							"modifier": 
+							"target": 2,
+							"modifier": -300
 						}
 					],
-					"triggeredAttack": 
+					"triggeredAttack": 0
 				},
 				{
-					"text": "",
-					"correct": ,
+					"text": "Puoi accedere da dove preferisci, ma solo usando la password $up3r$3cur3p4$$w0rd",
+					"correct": false,
 					"effects":
 					[
 						{
-							"target": ,
-							"modifier": 
+							"target": 1,
+							"modifier": -0.05
 						}
 					],
-					"triggeredAttack": 
+					"triggeredAttack": 2
+				},
+				{
+					"text": "Mi spiace, dovrai rimandare",
+					"correct": true,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": -0.05
+						},
+						{
+							"target": 2,
+							"modifier": -100
+						}
+					],
+					"triggeredAttack": 0
 				}
 			]
 		},
 		{
 			"id": 0,
 			"skill": 2,
-			"person": ,
-			"question": "",
+			"person": 4,
+			"question": "Abbiamo un problema! Il numero di clienti che utilizzano i nostri servizi è aumentato notevolmente nell'ultimo periodo; e questo in realtà è un bene. Però il nostro sistema non riesce a servire al meglio un così grande numero di connessioni. Cosa possiamo fare?",
 			"answers":
 			[
 				{
-					"text": "",
-					"correct": ,
+					"text": "I server possono sostenere il carico ancora per un po'",
+					"correct": false,
 					"effects":
 					[
 						{
-							"target": ,
-							"modifier": 
+							"target": 1,
+							"modifier": -0.05
 						},
 						{
-							"target": ,
-							"modifier": 
+							"target": 3,
+							"modifier": 0.9
 						}
 					],
-					"triggeredAttack": 
+					"triggeredAttack": 1
 				},
 				{
-					"text": "",
-					"correct": ,
+					"text": "Dobbiamo monitorare meglio il traffico della rete per ridurre il consumo di banda",
+					"correct": false,
 					"effects":
 					[
 						{
-							"target": ,
-							"modifier": 
+							"target": 1,
+							"modifier": -0.05
+						},
+						{
+							"target": 2,
+							"modifier": -100
 						}
 					],
-					"triggeredAttack": 
+					"triggeredAttack": 1
+				},
+				{
+					"text": "Dobbiamo investire in server più numerosi e potenti",
+					"correct": true,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": 0.03
+						},
+						{
+							"target": 2,
+							"modifier": -300
+						}
+					],
+					"triggeredAttack": 0
 				}
 			]
 		},
 		{
 			"id": 0,
 			"skill": 3,
-			"person": ,
-			"question": "Ci risiamo! Ho dimenticato un'altra volta la password e ne ho dovuta inventare un'altra. Il problema è che il sistema mi chiede di inserire una password così complessa che ogni volta finisco per scordarla o confonderla con tutte le altre che uso. Tu cosa faresti per ricordartela sempre?",
+			"person": 3,
+			"question": "Devo aggiornare il mio profilo aziendale. Secondo te quale di queste password dovrei scegliere?",
+			"answers":
+			[
+				{
+					"text": "Aldo99!",
+					"correct": false,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": -0.05
+						}
+					],
+					"triggeredAttack": 4
+				},
+				{
+					"text": "3G1u$t4P3rT3?",
+					"correct": true,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": 0.03
+						}
+					],
+					"triggeredAttack": 0
+				},
+				{
+					"text": "ks$fxVi98Mpl!2%cZc7qW35T",
+					"correct": true,
+					"effects":
+					[
+						{
+							"target": 2,
+							"modifier": -100
+						}
+					],
+					"triggeredAttack": 0
+				},
+				{
+					"text": "password",
+					"correct": false,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": -0.05
+						}
+					],
+					"triggeredAttack": 4
+				}
+			]
+		},
+		{
+			"id": 0,
+			"skill": 3,
+			"person": 4,
+			"question": "Ci risiamo! Ho di nuovo dimenticato la password e ne ho dovuta inventare un'altra. Il problema è che il sistema mi chiede di inserire una password così complessa che ogni volta finisco per scordarla o confonderla con tutte le altre che uso. Tu cosa faresti per ricordartela sempre?",
 			"answers":
 			[
 				{
@@ -104,7 +197,7 @@
 							"modifier": 0.03
 						}
 					],
-					"triggeredAttack": 
+					"triggeredAttack": 0
 				},
 				{
 					"text": "Uso la stessa password per tutto, tanto nessuno riuscirebbe mai a indovinarla",
@@ -122,46 +215,9 @@
 		},
 		{
 			"id": 0,
-			"skill": 3,
-			"person": ,
-			"question": "Devo assolutamente terminare ",
-			"answers":
-			[
-				{
-					"text": "",
-					"correct": ,
-					"effects":
-					[
-						{
-							"target": ,
-							"modifier": 
-						},
-						{
-							"target": ,
-							"modifier": 
-						}
-					],
-					"triggeredAttack": 
-				},
-				{
-					"text": "",
-					"correct": ,
-					"effects":
-					[
-						{
-							"target": ,
-							"modifier": 
-						}
-					],
-					"triggeredAttack": 
-				}
-			]
-		},
-		{
-			"id": 0,
 			"skill": 4,
-			"person": 0,
-			"question": "C'è un nuovo aggiornamento per l'antivirus, indicato come urgente. Il problema è che per installarlo ora dovremmo sospendere momentaneamente il lavoro. Cosa facciamo?",
+			"person": 2,
+			"question": "C'è un nuovo aggiornamento per l'antivirus. Il problema è che per installarlo ora dovremmo sospendere momentaneamente il lavoro. Cosa facciamo?",
 			"answers":
 			[
 				{
@@ -197,7 +253,7 @@
 		{
 			"id": 1,
 			"skill": 4,
-			"person": 0,
+			"person": 3,
 			"question": "Non mi trovo bene con il nuovo programma del calendario che abbiamo installato. Posso installare quello che ho già sul computer a casa?",
 			"answers":
 			[
@@ -214,7 +270,7 @@
 					"triggeredAttack": 10
 				},
 				{
-					"text": "Non se ne parla",
+					"text": "Dovrai imparare a usarlo",
 					"correct": true,
 					"effects":
 					[
@@ -234,148 +290,86 @@
 		{
 			"id": 0,
 			"skill": 5,
-			"person": ,
-			"question": "",
+			"person": 1,
+			"question": "Ho ricevuto una mail:\nCiao ...,\npurtroppo ho cancellato per errore il report di ieri sul progetto ... e vorrei dargli un'occhiata. Potresti inviarmelo di nuovo per favore?\n...\nE' strano perchè stamattina ... si è congratulata con me per l'ottimo lavoro svolto. Cosa sarà successo?",
 			"answers":
 			[
 				{
-					"text": "",
-					"correct": ,
+					"text": "Probabilmente se ne sarà dimenticata",
+					"correct": false,
 					"effects":
 					[
 						{
-							"target": ,
-							"modifier": 
-						},
-						{
-							"target": ,
-							"modifier": 
+							"target": 1,
+							"modifier": -0.05
 						}
 					],
-					"triggeredAttack": 
+					"triggeredAttack": 8
 				},
 				{
-					"text": "",
-					"correct": ,
+					"text": "Forse è meglio se vai a parlarle, per sicurezza",
+					"correct": true,
 					"effects":
 					[
 						{
-							"target": ,
-							"modifier": 
+							"target": 1,
+							"modifier": 0.03
 						}
 					],
-					"triggeredAttack": 
+					"triggeredAttack": 0
+				},
+				{
+					"text": "Non ha senso, cancellala",
+					"correct": false,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": -0.05
+						}
+					],
+					"triggeredAttack": 0
 				}
 			]
 		},
 		{
 			"id": 0,
 			"skill": 5,
-			"person": ,
-			"question": "",
+			"person": 0,
+			"question": "Abbiamo degli hard-disk completamente vuoti collegati alla rete aziendale. Se li utilizziamo per effettuare il backup possiamo risparmiare una somma notevole!",
 			"answers":
 			[
 				{
-					"text": "",
-					"correct": ,
+					"text": "Non è sicuro",
+					"correct": true,
 					"effects":
 					[
 						{
-							"target": ,
-							"modifier": 
+							"target": 1,
+							"modifier": 0.03
 						},
 						{
-							"target": ,
-							"modifier": 
+							"target": 2,
+							"modifier": -100
 						}
 					],
-					"triggeredAttack": 
+					"triggeredAttack": 0
 				},
 				{
-					"text": "",
-					"correct": ,
+					"text": "Ottima idea",
+					"correct": false,
 					"effects":
 					[
 						{
-							"target": ,
-							"modifier": 
-						}
-					],
-					"triggeredAttack": 
-				}
-			]
-		},
-		{
-			"id": 0,
-			"skill": 6,
-			"person": ,
-			"question": "",
-			"answers":
-			[
-				{
-					"text": "",
-					"correct": ,
-					"effects":
-					[
-						{
-							"target": ,
-							"modifier": 
+							"target": 1,
+							"modifier": -0.05
 						},
 						{
-							"target": ,
-							"modifier": 
+							"target": 2,
+							"modifier": 200
 						}
 					],
-					"triggeredAttack": 
-				},
-				{
-					"text": "",
-					"correct": ,
-					"effects":
-					[
-						{
-							"target": ,
-							"modifier": 
-						}
-					],
-					"triggeredAttack": 
-				}
-			]
-		},
-		{
-			"id": 0,
-			"skill": 6,
-			"person": ,
-			"question": "",
-			"answers":
-			[
-				{
-					"text": "",
-					"correct": ,
-					"effects":
-					[
-						{
-							"target": ,
-							"modifier": 
-						},
-						{
-							"target": ,
-							"modifier": 
-						}
-					],
-					"triggeredAttack": 
-				},
-				{
-					"text": "",
-					"correct": ,
-					"effects":
-					[
-						{
-							"target": ,
-							"modifier": 
-						}
-					],
-					"triggeredAttack": 
+					"triggeredAttack": 12
 				}
 			]
 		}

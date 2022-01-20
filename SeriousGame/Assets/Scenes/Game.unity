@@ -13562,7 +13562,7 @@ RectTransform:
   m_Children:
   - {fileID: 6765290}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -24449,7 +24449,7 @@ MonoBehaviour:
   gameConfigJSON: {fileID: 4900000, guid: e60745214a7362142996acefa56014bf, type: 3}
   attacksFileJSON: {fileID: 4900000, guid: a1d2035f2e9207a42b7fc1d02bfb87f2, type: 3}
   shopFileJSON: {fileID: 4900000, guid: 0a609eea7f3d08f4f957eb804e31d289, type: 3}
-  quizFileJSON: {fileID: 4900000, guid: 050d3239cb573b64f8d2a7a8ff51ea5b, type: 3}
+  quizFileJSON: {fileID: 4900000, guid: cf87d5be30f39fa4ea45c2f765eced19, type: 3}
   modelFileJSON: {fileID: 4900000, guid: f78afda7f61ba29438c692a3642ca35b, type: 3}
   avatarImages:
   - {fileID: 21300000, guid: 3591f66ab540d7849a78690f7ecf0004, type: 3}
@@ -33288,7 +33288,7 @@ RectTransform:
   m_Children:
   - {fileID: 120897425}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -46687,7 +46687,7 @@ RectTransform:
   m_Children:
   - {fileID: 396295561}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -49323,7 +49323,7 @@ RectTransform:
   m_Children:
   - {fileID: 1852504708}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -63711,7 +63711,7 @@ RectTransform:
   m_Children:
   - {fileID: 1815666576}
   m_Father: {fileID: 596917324}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
