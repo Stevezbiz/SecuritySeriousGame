@@ -557,7 +557,7 @@ public class GameManager : MonoBehaviour {
         EvaluatePurchaseShopItem(id);
         // apply the effects
         shopItems[id].status = ShopItemStatus.NOT_INSTALLED;
-        gc.money -= shopItems[id].cost[0];
+        gc.money -= shopItems[id].cost[shopItems[id].level];
         Task t = new Task(TaskType.INSTALL, id);
         waitingTasks.Add(t.id, t);
         gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
@@ -1057,7 +1057,56 @@ public class GameManager : MonoBehaviour {
     }
 
     void EvaluateUpgradeShopItem(ShopItemCode id) {
+        // Consider various aspects of the upgrade
+        int score = 0;
+        ShopItemInfo sii = shopItems[id];
+        List<Resistance> res = new List<Resistance>(sii.resistances[sii.level].resistances);
 
+        // 1. Are the attacks mitigated by the item active, so that the upgrade of the countermeasure is needed?
+        foreach (Resistance r in res) {
+            if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score--;
+            else score++;
+        }
+        // 2. How much is the impact on the money?
+        if (GetActualMoneyGain() - sii.cost[sii.level] > 0) score++;
+        else score--;
+        // 3. Is the countermeasure over-preventing an attack?
+        foreach (Resistance r in res) {
+            if (resistances[r.id].duration > BKTModel.GetDurationH(r.id)) score--;
+            if (resistances[r.id].miss > BKTModel.GetMissH(r.id)) score--;
+            if (resistances[r.id].endurance > BKTModel.GetEnduranceH(r.id)) score--;
+        }
+        // Select the proper Knowledge Component
+        SkillCode kc;
+
+        switch (sii.category) {
+            case Category.NETWORK:
+                kc = SkillCode.NETWORK;
+                break;
+            case Category.ACCESS:
+                kc = SkillCode.ACCESS;
+                break;
+            case Category.SOFTWARE:
+                kc = SkillCode.SOFTWARE;
+                break;
+            case Category.ASSET:
+                kc = SkillCode.ASSET;
+                break;
+            case Category.SERVICES:
+                kc = SkillCode.SERVICES;
+                break;
+            default:
+                Debug.Log("Error: unexpected Category");
+                return;
+        }
+        // Decide the result of the evaluation
+        if (score >= 0) {
+            // correct
+            kcs[kc].AddTestResult(true);
+        } else {
+            // wrong
+            kcs[kc].AddTestResult(false);
+        }
     }
 
     void EvaluateEmployeeManagement(EmployeeCode id) {
