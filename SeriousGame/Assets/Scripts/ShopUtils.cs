@@ -41,13 +41,13 @@ public class ShopItemInfo {
     public Category category;
     public string name;
     public string description;
-    public int cost;
-    public float moneyMalus;
-    public float usersMod;
+    public int[] cost;
+    public float[] moneyMalus;
+    public float[] usersMod;
     public ShopItemStatus status;
     public bool locked;
-    public int upgradeTime;
-    public Resistance[] resistances;
+    public int[] upgradeTime;
+    public ResistanceArray[] resistances;
     public ShopItemCode[] requirements;
     public int maxLevel;
     public int level;

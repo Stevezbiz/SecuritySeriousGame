@@ -31,7 +31,7 @@ public class ShopItemDetail : MonoBehaviour {
      * <summary>Compose all the details of the item</summary>
      */
     void ComposeDetails(ShopItemInfo sii) {
-        titleText.SetText(sii.name + "\n" + sii.cost.ToString() + " Fondi");
+        titleText.SetText(sii.name + "\n" + sii.cost[sii.level] + " Fondi");
         descriptionText.SetText(sii.description);
         // set the technical details about requirements
         string requirements = "";
@@ -45,21 +45,21 @@ public class ShopItemDetail : MonoBehaviour {
         // set the technical details about resistances
         string resistances = "";
         resistances += "Resistenze:\n";
-        foreach (Resistance res in sii.resistances) {
+        foreach (Resistance res in sii.resistances[sii.level].resistances) {
             resistances += "    " + gameManager.GetAttack(res.id).name + "\n";
             if (res.duration != 0) resistances += "        durata dell'attacco -" + (res.duration * 100) + "%\n";
             if (res.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (res.miss * 100) + "%\n";
             if (res.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (res.endurance * 100) + "%\n";
         }
         if (sii.resistances.Length == 0) resistances += "nessuna\n";
-        if (sii.moneyMalus < 0) resistances += "Guadagno aggiuntivo: " + (-sii.moneyMalus) + " F/h\n";
-        if (sii.usersMod > 1) resistances += "Prestazioni e usabilità: +" + ((sii.usersMod - 1) * 100) + "%\n";
-        resistancesText.SetText(resistances);
         // set the technical details about costs and usability
+        if (sii.moneyMalus[sii.level] < 0) resistances += "Guadagno aggiuntivo: " + (-sii.moneyMalus[sii.level]) + " F/h\n";
+        if (sii.usersMod[sii.level] > 1) resistances += "Prestazioni e usabilità: +" + ((sii.usersMod[sii.level] - 1) * 100) + "%\n";
+        resistancesText.SetText(resistances);
         string costs = "";
-        if (sii.moneyMalus < 0) costs += "Costo: 0 F/h\n";
+        if (sii.moneyMalus[sii.level] < 0) costs += "Costo: 0 F/h\n";
         else costs += "Costo: " + sii.moneyMalus + " F/h\n";
-        if (sii.usersMod != 0 && sii.usersMod < 1) costs += "Prestazioni e usabilità: -" + (sii.usersMod * 100) + "%\n";
+        if (sii.usersMod[sii.level] != 0 && sii.usersMod[sii.level] < 1) costs += "Prestazioni e usabilità: -" + (sii.usersMod[sii.level] * 100) + "%\n";
         costsText.SetText(costs);
     }
 

@@ -40,6 +40,11 @@ public class Resistance {
 }
 
 [System.Serializable]
+public class ResistanceArray {
+    public Resistance[] resistances;
+}
+
+[System.Serializable]
 public class AttackInfo {
     public AttackCode id;
     public Category category;

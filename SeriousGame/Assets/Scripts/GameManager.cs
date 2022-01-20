@@ -449,7 +449,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public int GetInstallDuration(EmployeeCode id, ShopItemCode sid) {
-        return Mathf.CeilToInt(shopItems[sid].upgradeTime * (1 - 0.18f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[sid].category] - 5)));
+        return Mathf.CeilToInt(shopItems[sid].upgradeTime[shopItems[sid].level] * (1 - 0.18f * (float)(EmployeeUtils.GetAbilities(employees[id].abilities)[shopItems[sid].category] - 5)));
     }
 
     public float GetTaskProgress(ShopItemCode id) {
@@ -547,7 +547,7 @@ public class GameManager : MonoBehaviour {
         EvaluatePurchaseShopItem(id);
         // apply the effects
         shopItems[id].status = ShopItemStatus.NOT_INSTALLED;
-        gc.money -= shopItems[id].cost;
+        gc.money -= shopItems[id].cost[0];
         Task t = new Task(TaskType.INSTALL, id);
         waitingTasks.Add(t.id, t);
         gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
@@ -559,15 +559,14 @@ public class GameManager : MonoBehaviour {
         // evaluate the purchase
         EvaluateUpgradeShopItem(id);
         // apply the effects
-        gc.money -= shopItems[id].cost;
+        gc.money -= shopItems[id].cost[shopItems[id].level];
         Task t = new Task(TaskType.UPGRADE, id);
         waitingTasks.Add(t.id, t);
         gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
     }
 
     void FinishUpgradeShopItem(ShopItemCode id) {
-        foreach (Resistance r in shopItems[id].resistances) {
-            if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
+        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
             resistances[r.id].miss -= r.miss;
             resistances[r.id].duration -= r.duration;
             resistances[r.id].endurance -= r.endurance;
@@ -583,7 +582,7 @@ public class GameManager : MonoBehaviour {
         logManager.LogPrintItem(shopItems[id].name, ActionCode.ENABLE_ITEM);
         shopItems[id].status = ShopItemStatus.ACTIVE;
         // update resistances
-        foreach (Resistance r in shopItems[id].resistances) {
+        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
             if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
             resistances[r.id].miss += r.miss;
             resistances[r.id].duration += r.duration;
@@ -599,7 +598,7 @@ public class GameManager : MonoBehaviour {
         logManager.LogPrintItem(shopItems[id].name, ActionCode.DISABLE_ITEM);
         shopItems[id].status = ShopItemStatus.INACTIVE;
         // update resistances
-        foreach (Resistance r in shopItems[id].resistances) {
+        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
             resistances[r.id].miss -= r.miss;
             resistances[r.id].duration -= r.duration;
             resistances[r.id].endurance -= r.endurance;
@@ -721,9 +720,9 @@ public class GameManager : MonoBehaviour {
         }
         // the costs for the active items
         foreach (ShopItemInfo sii in shopItems.Values) {
-            if (sii.status == ShopItemStatus.ACTIVE) {
-                if (sii.moneyMalus < 0) moneyBonus -= sii.moneyMalus;
-                else moneyMalus += sii.moneyMalus;
+            if (sii.status == ShopItemStatus.ACTIVE || sii.status == ShopItemStatus.UPGRADING) {
+                if (sii.moneyMalus[sii.level - 1] < 0) moneyBonus -= sii.moneyMalus[sii.level - 1];
+                else moneyMalus += sii.moneyMalus[sii.level - 1];
             }
         }
         // the malus for the active attacks
@@ -761,7 +760,7 @@ public class GameManager : MonoBehaviour {
         }
         // the gain from the active items
         foreach (ShopItemInfo sii in shopItems.Values) {
-            if (sii.status == ShopItemStatus.ACTIVE && sii.moneyMalus < 0) moneyBonus -= sii.moneyMalus;
+            if ((sii.status == ShopItemStatus.ACTIVE || sii.status == ShopItemStatus.UPGRADING) && sii.moneyMalus[sii.level - 1] < 0) moneyBonus -= sii.moneyMalus[sii.level - 1];
         }
         return moneyBonus;
     }
@@ -773,8 +772,8 @@ public class GameManager : MonoBehaviour {
         float moneyMalus = 0f;
         // the costs for the active items
         foreach (ShopItemInfo sii in shopItems.Values) {
-            if (sii.status == ShopItemStatus.ACTIVE && sii.moneyMalus > 0) {
-                moneyMalus += sii.moneyMalus;
+            if ((sii.status == ShopItemStatus.ACTIVE || sii.status == ShopItemStatus.UPGRADING) && sii.moneyMalus[sii.level - 1] > 0) {
+                moneyMalus += sii.moneyMalus[sii.level - 1];
             }
         }
         return moneyMalus;
@@ -802,8 +801,8 @@ public class GameManager : MonoBehaviour {
         // the user modifier for the active items
         foreach (ShopItemInfo sii in shopItems.Values) {
             if (sii.status == ShopItemStatus.ACTIVE) {
-                if (sii.usersMod < 1) usersMalus *= 1 - sii.usersMod;
-                else usersBonus *= sii.usersMod;
+                if (sii.usersMod[sii.level - 1] < 1) usersMalus *= 1 - sii.usersMod[sii.level - 1];
+                else usersBonus *= sii.usersMod[sii.level - 1];
             }
         }
         // the malus for the active attacks
@@ -828,9 +827,9 @@ public class GameManager : MonoBehaviour {
         float usersBonus = 1f;
         // the user modifier for the active items
         foreach (ShopItemInfo sii in shopItems.Values) {
-            if (sii.status == ShopItemStatus.ACTIVE) {
-                if (sii.usersMod < 1) usersMalus *= 1 - sii.usersMod;
-                else usersBonus *= sii.usersMod;
+            if (sii.status == ShopItemStatus.ACTIVE || sii.status == ShopItemStatus.UPGRADING) {
+                if (sii.usersMod[sii.level - 1] < 1) usersMalus *= 1 - sii.usersMod[sii.level - 1];
+                else usersBonus *= sii.usersMod[sii.level - 1];
             }
         }
         return usersMalus * usersBonus;
@@ -930,7 +929,7 @@ public class GameManager : MonoBehaviour {
     void DebugPrint() {
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         foreach (ShopItemInfo sii in shopItems.Values) {
-            foreach (Resistance r in sii.resistances) {
+            foreach (Resistance r in sii.resistances[sii.maxLevel - 1].resistances) {
                 if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
                 res[r.id].miss += r.miss;
                 res[r.id].duration += r.duration;
@@ -998,7 +997,7 @@ public class GameManager : MonoBehaviour {
         // Consider various aspects of the purchase
         int score = 0;
         ShopItemInfo sii = shopItems[id];
-        List<Resistance> res = new List<Resistance>(sii.resistances);
+        List<Resistance> res = new List<Resistance>(sii.resistances[sii.level].resistances);
         
         // 1. Are the attacks mitigated by the item active, so that the countermeasure is needed?
         foreach(Resistance r in res) {
@@ -1006,7 +1005,7 @@ public class GameManager : MonoBehaviour {
             else score++;
         }
         // 2. How much is the impact on the money?
-        if (GetActualMoneyGain() - sii.cost > 0) score++;
+        if (GetActualMoneyGain() - sii.cost[0] > 0) score++;
         else score--;
         // 3. Is the countermeasure over-preventing an attack?
         foreach(Resistance r in res) {
