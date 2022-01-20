@@ -3,6 +3,162 @@
 	[
 		{
 			"id": 0,
+			"skill": 2,
+			"person": ,
+			"question": "",
+			"answers":
+			[
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						},
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				},
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				}
+			]
+		},
+		{
+			"id": 0,
+			"skill": 2,
+			"person": ,
+			"question": "",
+			"answers":
+			[
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						},
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				},
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				}
+			]
+		},
+		{
+			"id": 0,
+			"skill": 3,
+			"person": ,
+			"question": "Ci risiamo! Ho dimenticato un'altra volta la password e ne ho dovuta inventare un'altra. Il problema è che il sistema mi chiede di inserire una password così complessa che ogni volta finisco per scordarla o confonderla con tutte le altre che uso. Tu cosa faresti per ricordartela sempre?",
+			"answers":
+			[
+				{
+					"text": "La scrivo su un foglio",
+					"correct": false,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": -0.05
+						}
+					],
+					"triggeredAttack": 4
+				},
+				{
+					"text": "Creo una password semplice e sostituisco le lettere per renderla complicata",
+					"correct": true,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": 0.03
+						}
+					],
+					"triggeredAttack": 
+				},
+				{
+					"text": "Uso la stessa password per tutto, tanto nessuno riuscirebbe mai a indovinarla",
+					"correct": false,
+					"effects":
+					[
+						{
+							"target": 1,
+							"modifier": -0.05
+						}
+					],
+					"triggeredAttack": 4
+				}
+			]
+		},
+		{
+			"id": 0,
+			"skill": 3,
+			"person": ,
+			"question": "Devo assolutamente terminare ",
+			"answers":
+			[
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						},
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				},
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				}
+			]
+		},
+		{
+			"id": 0,
 			"skill": 4,
 			"person": 0,
 			"question": "C'è un nuovo aggiornamento per l'antivirus, indicato come urgente. Il problema è che per installarlo ora dovremmo sospendere momentaneamente il lavoro. Cosa facciamo?",
@@ -72,6 +228,154 @@
 						}
 					],
 					"triggeredAttack": 0
+				}
+			]
+		},
+		{
+			"id": 0,
+			"skill": 5,
+			"person": ,
+			"question": "",
+			"answers":
+			[
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						},
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				},
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				}
+			]
+		},
+		{
+			"id": 0,
+			"skill": 5,
+			"person": ,
+			"question": "",
+			"answers":
+			[
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						},
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				},
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				}
+			]
+		},
+		{
+			"id": 0,
+			"skill": 6,
+			"person": ,
+			"question": "",
+			"answers":
+			[
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						},
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				},
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				}
+			]
+		},
+		{
+			"id": 0,
+			"skill": 6,
+			"person": ,
+			"question": "",
+			"answers":
+			[
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						},
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
+				},
+				{
+					"text": "",
+					"correct": ,
+					"effects":
+					[
+						{
+							"target": ,
+							"modifier": 
+						}
+					],
+					"triggeredAttack": 
 				}
 			]
 		}

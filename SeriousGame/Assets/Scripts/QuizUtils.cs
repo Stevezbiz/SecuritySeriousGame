@@ -5,7 +5,8 @@ using UnityEngine;
 public enum Element {
     NONE,
     REPUTATION,
-    MONEY
+    MONEY,
+    USERS
 }
 
 [System.Serializable]

@@ -1140,6 +1140,9 @@ public class GameManager : MonoBehaviour {
                 case Element.MONEY:
                     gc.money += effect.modifier;
                     break;
+                case Element.USERS:
+                    gc.users *= effect.modifier;
+                    break;
                 default:
                     Debug.Log("Error: unexpected Element");
                     return;
