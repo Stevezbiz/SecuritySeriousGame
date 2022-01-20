@@ -11,9 +11,11 @@ public class EmployeeView : MonoBehaviour {
     [SerializeField] GameObject installButton;
     [SerializeField] GameObject repairButton;
     [SerializeField] GameObject preventButton;
+    [SerializeField] GameObject endTaskButton;
     [SerializeField] TextMeshProUGUI labelText;
     [SerializeField] InstallOrUpgradeView installView;
     [SerializeField] RepairView repairView;
+    [SerializeField] PreventView preventView;
 
     float oldTimeScale = 1f;
     List<EmployeeInfo> employees;
@@ -38,22 +40,46 @@ public class EmployeeView : MonoBehaviour {
     public void Select(EmployeeCode id) {
         selected = id;
         EmployeeInfo employee = gameManager.GetEmployee(id);
+        DisableButtons();
         switch (employee.status) {
             case TaskType.NONE:
                 EnableButtons();
                 labelText.SetText("Cosa deve fare " + employee.name + "?");
                 break;
             case TaskType.INSTALL:
-                DisableButtons();
                 labelText.SetText(employee.name + " sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(id)).name);
                 break;
             case TaskType.REPAIR:
-                DisableButtons();
                 labelText.SetText(employee.name + " sta riparando i danni provocati dall'attacco " + gameManager.GetAttack((AttackCode)gameManager.GetTaskTarget(id)).name);
                 break;
             case TaskType.UPGRADE:
-                DisableButtons();
                 labelText.SetText(employee.name + " sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(id)).name);
+                break;
+            case TaskType.PREVENT:
+                endTaskButton.SetActive(true);
+                string category;
+                switch ((Category)gameManager.GetTaskTarget(id)) {
+                    case Category.NETWORK:
+                        category = "Rete";
+                        break;
+                    case Category.ACCESS:
+                        category = "Accesso";
+                        break;
+                    case Category.SOFTWARE:
+                        category = "Software";
+                        break;
+                    case Category.ASSET:
+                        category = "Risorse";
+                        break;
+                    case Category.SERVICES:
+                        category = "Servizi";
+                        break;
+                    default:
+                        Debug.Log("Error: undefined Category");
+                        category = "";
+                        break;
+                }
+                labelText.SetText(employee.name + " sta facendo prevenzione nel settore " + category);
                 break;
             default:
                 Debug.Log("Error: undefined TaskType");
@@ -71,6 +97,7 @@ public class EmployeeView : MonoBehaviour {
         installButton.SetActive(false);
         repairButton.SetActive(false);
         preventButton.SetActive(false);
+        endTaskButton.SetActive(false);
     }
 
     public void OpenView() {
@@ -96,6 +123,11 @@ public class EmployeeView : MonoBehaviour {
     }
 
     public void Prevent() {
+        preventView.Load(selected);
+    }
 
+    public void EndTask() {
+        gameManager.EndTask(gameManager.GetPreventionTask(selected));
+        Load();
     }
 }

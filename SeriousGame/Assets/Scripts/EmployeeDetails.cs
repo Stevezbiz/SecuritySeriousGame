@@ -27,19 +27,49 @@ public class EmployeeDetails : MonoBehaviour {
         softwareBar.fillAmount = abilities[Category.SOFTWARE] / 10;
         assetBar.fillAmount = abilities[Category.ASSET] / 10;
         servicesBar.fillAmount = abilities[Category.SERVICES] / 10;
-        moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
+        moneyGainText.SetText("Guadagno: " + e.GetMoneyGain() + " F/h");
         switch (e.status) {
             case TaskType.NONE:
                 taskText.SetText("");
+                moneyGainText.color = COLOR.BLUE;
                 break;
             case TaskType.INSTALL:
                 taskText.SetText("Sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(e.id)).name);
+                moneyGainText.color = COLOR.YELLOW;
                 break;
             case TaskType.REPAIR:
                 taskText.SetText("Sta riparando i danni provocati dall'attacco " + gameManager.GetAttack((AttackCode)gameManager.GetTaskTarget(e.id)).name);
+                moneyGainText.color = COLOR.YELLOW;
                 break;
             case TaskType.UPGRADE:
                 taskText.SetText("Sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(e.id)).name);
+                moneyGainText.color = COLOR.YELLOW;
+                break;
+            case TaskType.PREVENT:
+                string category;
+                switch ((Category)gameManager.GetTaskTarget(e.id)) {
+                    case Category.NETWORK:
+                        category = "Rete";
+                        break;
+                    case Category.ACCESS:
+                        category = "Accesso";
+                        break;
+                    case Category.SOFTWARE:
+                        category = "Software";
+                        break;
+                    case Category.ASSET:
+                        category = "Risorse";
+                        break;
+                    case Category.SERVICES:
+                        category = "Servizi";
+                        break;
+                    default:
+                        Debug.Log("Error: undefined Category");
+                        category = "";
+                        break;
+                }
+                taskText.SetText("Sta facendo prevenzione nel settore " + category);
+                moneyGainText.color = COLOR.YELLOW;
                 break;
             default:
                 Debug.Log("Error: undefined TaskType");

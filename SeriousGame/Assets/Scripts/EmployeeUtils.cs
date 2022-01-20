@@ -23,6 +23,24 @@ public class EmployeeInfo {
     public bool owned;
     public TaskType status;
     public EmployeeAbility[] abilities;
+
+    public float GetMoneyGain() {
+        switch (status) {
+            case TaskType.NONE:
+                return moneyGain;
+            case TaskType.INSTALL:
+                return 0.5f * moneyGain;
+            case TaskType.REPAIR:
+                return 0f;
+            case TaskType.UPGRADE:
+                return 0.5f * moneyGain;
+            case TaskType.PREVENT:
+                return 0.5f * moneyGain;
+            default:
+                Debug.Log("Error: undefined employeeStatus");
+                return 0f;
+        }
+    }
 }
 
 [System.Serializable]

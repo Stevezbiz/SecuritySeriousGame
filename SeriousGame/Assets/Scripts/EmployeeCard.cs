@@ -43,6 +43,10 @@ public class EmployeeCard : MonoBehaviour {
                 progressBar.SetActive(true);
                 bar.fillAmount = gameManager.GetTaskProgress(e.id);
                 break;
+            case TaskType.PREVENT:
+                statusText.SetText("PREVENZIONE");
+                progressBar.SetActive(false);
+                break;
             default:
                 Debug.Log("Error: undefined TaskType");
                 break;

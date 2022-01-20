@@ -55,7 +55,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 1,
 			"skill": 2,
 			"person": 4,
 			"question": "Abbiamo un problema! Il numero di clienti che utilizzano i nostri servizi è aumentato notevolmente nell'ultimo periodo; e questo in realtà è un bene. Però il nostro sistema non riesce a servire al meglio un così grande numero di connessioni. Cosa possiamo fare?",
@@ -112,7 +112,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 2,
 			"skill": 3,
 			"person": 3,
 			"question": "Devo aggiornare il mio profilo aziendale. Secondo te quale di queste password dovrei scegliere?",
@@ -169,7 +169,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 3,
 			"skill": 3,
 			"person": 4,
 			"question": "Ci risiamo! Ho di nuovo dimenticato la password e ne ho dovuta inventare un'altra. Il problema è che il sistema mi chiede di inserire una password così complessa che ogni volta finisco per scordarla o confonderla con tutte le altre che uso. Tu cosa faresti per ricordartela sempre?",
@@ -214,7 +214,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 4,
 			"skill": 4,
 			"person": 2,
 			"question": "C'è un nuovo aggiornamento per l'antivirus. Il problema è che per installarlo ora dovremmo sospendere momentaneamente il lavoro. Cosa facciamo?",
@@ -251,7 +251,7 @@
 			]
 		},
 		{
-			"id": 1,
+			"id": 5,
 			"skill": 4,
 			"person": 3,
 			"question": "Non mi trovo bene con il nuovo programma del calendario che abbiamo installato. Posso installare quello che ho già sul computer a casa?",
@@ -288,7 +288,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 6,
 			"skill": 5,
 			"person": 1,
 			"question": "Ho ricevuto una mail:\nCiao ...,\npurtroppo ho cancellato per errore il report di ieri sul progetto ... e vorrei dargli un'occhiata. Potresti inviarmelo di nuovo per favore?\n...\nE' strano perchè stamattina ... si è congratulata con me per l'ottimo lavoro svolto. Cosa sarà successo?",
@@ -333,7 +333,7 @@
 			]
 		},
 		{
-			"id": 0,
+			"id": 7,
 			"skill": 5,
 			"person": 0,
 			"question": "Abbiamo degli hard-disk completamente vuoti collegati alla rete aziendale. Se li utilizziamo per effettuare il backup possiamo risparmiare una somma notevole!",
