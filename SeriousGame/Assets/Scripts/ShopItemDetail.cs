@@ -32,7 +32,7 @@ public class ShopItemDetail : MonoBehaviour {
      */
     void ComposeDetails(ShopItemInfo sii) {
         titleText.SetText(sii.name + "\n" + sii.cost[sii.level] + " Fondi");
-        descriptionText.SetText(sii.description);
+        descriptionText.SetText(sii.description[sii.level]);
         // set the technical details about requirements
         string requirements = "";
         if (sii.locked) {

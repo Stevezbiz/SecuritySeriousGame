@@ -5,7 +5,10 @@
 			"id": 1,
 			"category": 0,
 			"name": "Riduzione del tempo di connessione",
-			"description": "Eliminare le connessioni non completate entro un certo limite di tempo aiuta a contrastare gli attacchi DoS. Purtroppo può capitare di scartare connessioni potenzialmente valide.",
+			"description":
+			[
+				"Eliminare le connessioni non completate entro un certo limite di tempo aiuta a contrastare gli attacchi DoS. Purtroppo può capitare di scartare connessioni potenzialmente valide."
+			],
 			"cost": [ 100 ],
 			"moneyMalus": [ 2 ],
 			"usersMod": [ 0.1 ],
@@ -34,7 +37,10 @@
 			"id": 2,
 			"category": 0,
 			"name": "Coda di connessioni circolare",
-			"description": "Eliminare le connessioni più vecchie non ancora chiuse per far spazio alle nuove può aiutare a contrastare gli attacchi DoS. D'altra parte questa tecnica è soggetta al rischio di eliminare connessioni legittime anche se datate.",
+			"description":
+			[
+				"Eliminare le connessioni più vecchie non ancora chiuse per far spazio alle nuove può aiutare a contrastare gli attacchi DoS. D'altra parte questa tecnica è soggetta al rischio di eliminare connessioni legittime anche se datate."
+			],
 			"cost": [ 100 ],
 			"moneyMalus": [ 2 ],
 			"usersMod": [ 0.1 ],
@@ -63,7 +69,10 @@
 			"id": 3,
 			"category": 0,
 			"name": "Firewall",
-			"description": "L'adozione di un firewall ben configurato garantisce una prima linea di difesa contro gli attacchi DoS meno sofisticati e permette di scartare le connessioni a siti ritenuti poco sicuri, in modo da limitare le possibilità di contagio da malware.",
+			"description":
+			[
+				"L'adozione di un firewall ben configurato garantisce una prima linea di difesa contro gli attacchi DoS meno sofisticati e permette di scartare le connessioni a siti ritenuti poco sicuri, in modo da limitare le possibilità di contagio da malware."
+			],
 			"cost": [ 300 ],
 			"moneyMalus": [ 7 ],
 			"usersMod": [ 0 ],
@@ -122,7 +131,10 @@
 			"id": 4,
 			"category": 0,
 			"name": "DNSSEC",
-			"description": "L'adozione di DNSSEC comporta un ulteriore livello di difesa da attacchi MITM e mitiga l'efficacia degli attacchi DoS.",
+			"description":
+			[
+				"L'adozione di DNSSEC comporta un ulteriore livello di difesa da attacchi MITM e mitiga l'efficacia degli attacchi DoS."
+			],
 			"cost": [ 400 ],
 			"moneyMalus": [ 8 ],
 			"usersMod": [ 0 ],
@@ -157,7 +169,10 @@
 			"id": 5,
 			"category": 1,
 			"name": "Limite di password errate",
-			"description": "Inserire un limite ai tentativi di autenticazione fornisce una maggiore resistenza agli attacchi di brute-force e a quelli basati sui dizionari.",
+			"description":
+			[
+				"Inserire un limite ai tentativi di autenticazione fornisce una maggiore resistenza agli attacchi di brute-force e a quelli basati sui dizionari."
+			],
 			"cost": [ 100 ],
 			"moneyMalus": [ 0 ],
 			"usersMod": [ 0.1 ],
@@ -198,7 +213,10 @@
 			"id": 6,
 			"category": 1,
 			"name": "Attesa dopo password errata",
-			"description": "Se un utente sbaglia password deve attendere un breve lasso di tempo prima di fare un nuovo tentativo. Può spazientire gli utenti più frettolosi ma è utile a prevenire attacchi di brute-force e anche attacchi basati su dizionari.",
+			"description":
+			[
+				"Se un utente sbaglia password deve attendere un breve lasso di tempo prima di fare un nuovo tentativo. Può spazientire gli utenti più frettolosi ma è utile a prevenire attacchi di brute-force e anche attacchi basati su dizionari."
+			],
 			"cost": [ 100 ],
 			"moneyMalus": [ 0 ],
 			"usersMod": [ 0.1 ],
@@ -239,7 +257,10 @@
 			"id": 7,
 			"category": 1,
 			"name": "Cambio password",
-			"description": "Obbligare gli utenti a cambiare password dopo un certo periodo di tempo può essere una seccatura, ma è necessario a prevenire attacchi di brute-force.",
+			"description":
+			[
+				"Obbligare gli utenti a cambiare password dopo un certo periodo di tempo può essere una seccatura, ma è necessario a prevenire attacchi di brute-force."
+			],
 			"cost": [ 100 ],
 			"moneyMalus": [ 0 ],
 			"usersMod": [ 0.2 ],
@@ -280,7 +301,10 @@
 			"id": 8,
 			"category": 1,
 			"name": "Password complesse",
-			"description": "Obbligare gli utenti ad utilizzare password complesse può essere una seccatura, ma è necessario a prevenire attacchi di brute-force e attacchi basati su dizionari.",
+			"description":
+			[
+				"Obbligare gli utenti ad utilizzare password complesse può essere una seccatura, ma è necessario a prevenire attacchi di brute-force e attacchi basati su dizionari."
+			],
 			"cost": [ 100 ],
 			"moneyMalus": [ 0 ],
 			"usersMod": [ 0.2 ],
@@ -321,7 +345,10 @@
 			"id": 9,
 			"category": 1,
 			"name": "Autenticazione multifattore (MFA)",
-			"description": "Aggiungere un passaggio all'autenticazione può spazientire gli utenti, ma il risultato è una maggiore resistenza ad attacchi MITM, brute-force e attacchi basati su dizionari.",
+			"description":
+			[
+				"Aggiungere un passaggio all'autenticazione può spazientire gli utenti, ma il risultato è una maggiore resistenza ad attacchi MITM, brute-force e attacchi basati su dizionari."
+			],
 			"cost": [ 500 ],
 			"moneyMalus": [ 10 ],
 			"usersMod": [ 0.3 ],
@@ -368,7 +395,10 @@
 			"id": 10,
 			"category": 1,
 			"name": "Utilizzare hash",
-			"description": "Utilizzare funzioni di hash per manipolare le password è una tecnica necessaria per contrastare attacchi brute-force e attacchi basati su dizionari.",
+			"description":
+			[
+				"Utilizzare funzioni di hash per manipolare le password è una tecnica necessaria per contrastare attacchi brute-force e attacchi basati su dizionari."
+			],
 			"cost": [ 200 ],
 			"moneyMalus": [ 4 ],
 			"usersMod": [ 0 ],
@@ -409,7 +439,10 @@
 			"id": 11,
 			"category": 1,
 			"name": "Utilizzare CAPTCHA",
-			"description": "Aggiungere un passaggio all'autenticazione degli utenti può essere una seccatura, ma è necessario a prevenire attacchi di brute-force e attacchi basati su dizionari.",
+			"description":
+			[
+				"Aggiungere un passaggio all'autenticazione degli utenti può essere una seccatura, ma è necessario a prevenire attacchi di brute-force e attacchi basati su dizionari."
+			],
 			"cost": [ 200 ],
 			"moneyMalus": [ 3 ],
 			"usersMod": [ 0.1 ],
@@ -450,7 +483,10 @@
 			"id": 12,
 			"category": 2,
 			"name": "Intrusion Detection Systems (IDS)",
-			"description": "L'utilizzo di IDS permette di analizzare anomalie nel traffico e aiuta a prevenire gli attacchi DoS. Può identificare comportamenti insoliti, spesso riconducibili all'opera di malware o accessi non autorizzati.",
+			"description":
+			[
+				"L'utilizzo di IDS permette di analizzare anomalie nel traffico e aiuta a prevenire gli attacchi DoS. Può identificare comportamenti insoliti, spesso riconducibili all'opera di malware o accessi non autorizzati."
+			],
 			"cost": [ 500 ],
 			"moneyMalus": [ 10 ],
 			"usersMod": [ 0 ],
@@ -515,7 +551,10 @@
 			"id": 13,
 			"category": 2,
 			"name": "Aggiornamenti programmati",
-			"description": "Applicare prontamente le nuove patch permette di eliminare alcune vulnerabilità dal software utilizzato, rendendo più difficile sfruttare eventuali falle del codice ai malware e ai malintenzionati che cercano di sabotare le API.",
+			"description":
+			[
+				"Applicare prontamente le nuove patch permette di eliminare alcune vulnerabilità dal software utilizzato, rendendo più difficile sfruttare eventuali falle del codice ai malware e ai malintenzionati che cercano di sabotare le API."
+			],
 			"cost": [ 100 ],
 			"moneyMalus": [ 4 ],
 			"usersMod": [ 0 ],
@@ -574,7 +613,10 @@
 			"id": 14,
 			"category": 2,
 			"name": "Antivirus",
-			"description": "Un antivirus può rallentare il lavoro di un dipendente, ma è un agente che contribuisce in maniera determinante alla sicurezza del sistema grazie alla capacità di individuare un gran numero di malware, prima che questi danneggino il sistema.",
+			"description":
+			[
+				"Un antivirus può rallentare il lavoro di un dipendente, ma è un agente che contribuisce in maniera determinante alla sicurezza del sistema grazie alla capacità di individuare un gran numero di malware, prima che questi danneggino il sistema."
+			],
 			"cost": [ 400 ],
 			"moneyMalus": [ 7 ],
 			"usersMod": [ 0 ],
@@ -621,7 +663,10 @@
 			"id": 15,
 			"category": 2,
 			"name": "Solo software autorizzato",
-			"description": "Utilizzare solo software autorizzato sui computer aziendali può essere limitante per un dipendente, ma con questa misura di sicurezza si evita di introdurre nuove vulnerabilità nel sistema, contrastando l'opera dei malware.",
+			"description":
+			[
+				"Utilizzare solo software autorizzato sui computer aziendali può essere limitante per un dipendente, ma con questa misura di sicurezza si evita di introdurre nuove vulnerabilità nel sistema, contrastando l'opera dei malware."
+			],
 			"cost": [ 100 ],
 			"moneyMalus": [ 3 ],
 			"usersMod": [ 0 ],
@@ -674,7 +719,10 @@
 			"id": 16,
 			"category": 4,
 			"name": "Sensibilizzare gli utenti",
-			"description": "Una campagna di sensibilizzazione sui rischi legati ai servizi online per i clienti. Permette di ridurre il rischio che questi cadano preda di tentativi di truffa per mezzo di tecniche di social engineering.",
+			"description":
+			[
+				"Una campagna di sensibilizzazione sui rischi legati ai servizi online per i clienti. Permette di ridurre il rischio che questi cadano preda di tentativi di truffa per mezzo di tecniche di social engineering."
+			],
 			"cost": [ 300 ],
 			"moneyMalus": [ 0 ],
 			"usersMod": [ 0 ],
@@ -703,7 +751,10 @@
 			"id": 17,
 			"category": 4,
 			"name": "Sportello di assistenza",
-			"description": "Un servizio di assistenza clienti che permette di aiutare gli utenti in caso di dubbi o difficoltà. Migliora l'esperienza utente del servizio",
+			"description":
+			[
+				"Un servizio di assistenza clienti che permette di aiutare gli utenti in caso di dubbi o difficoltà. Migliora l'esperienza utente del servizio"
+			],
 			"cost": [ 300 ],
 			"moneyMalus": [ 3 ],
 			"usersMod": [ 2 ],
@@ -732,7 +783,10 @@
 			"id": 18,
 			"category": 3,
 			"name": "Server più potenti",
-			"description": "Sostituire i server è un'operazione costosa, ma permette di servire più clienti più velocemente. Sono anche più resistenti ai tentativi di attacco DoS",
+			"description":
+			[
+				"Sostituire i server è un'operazione costosa, ma permette di servire più clienti più velocemente. Sono anche più resistenti ai tentativi di attacco DoS"
+			],
 			"cost": [ 500 ],
 			"moneyMalus": [ -5 ],
 			"usersMod": [ 2 ],
@@ -761,7 +815,10 @@
 			"id": 19,
 			"category": 3,
 			"name": "Training di sicurezza",
-			"description": "Istruire adeguatamente i dipendenti riguardo le minacce alla sicurezza che devono affrontare ogni giorno è un passo fondamentale per garantire un adeguato livello di sicurezza all'interno di un'azienda. Il training insegna ai dipendenti a mettere in atto comportamenti più consapevoli, con l'obiettivo di limitare l'impatto di attacchi di phishing e per mezzo di malware.",
+			"description":
+			[
+				"Istruire adeguatamente i dipendenti riguardo le minacce alla sicurezza che devono affrontare ogni giorno è un passo fondamentale per garantire un adeguato livello di sicurezza all'interno di un'azienda. Il training insegna ai dipendenti a mettere in atto comportamenti più consapevoli, con l'obiettivo di limitare l'impatto di attacchi di phishing e per mezzo di malware."
+			],
 			"cost": [ 300 ],
 			"moneyMalus": [ 0 ],
 			"usersMod": [ 0 ],
@@ -814,7 +871,10 @@
 			"id": 20,
 			"category": 3,
 			"name": "Backup efficiente",
-			"description": "Una policy di back-up efficiente e sicura non rappresenta solo un costo da sostenere, ma si rivela una grande risorsa in caso di infezione da ransomware o compromissione del sistema",
+			"description":
+			[
+				"Una policy di back-up efficiente e sicura non rappresenta solo un costo da sostenere, ma si rivela una grande risorsa in caso di infezione da ransomware o compromissione del sistema"
+			],
 			"cost": [ 200 ],
 			"moneyMalus": [ 3 ],
 			"usersMod": [ 0 ],

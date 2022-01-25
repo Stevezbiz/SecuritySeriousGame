@@ -40,7 +40,7 @@ public class ShopItemInfo {
     public ShopItemCode id;
     public Category category;
     public string name;
-    public string description;
+    public string[] description;
     public int[] cost;
     public float[] moneyMalus;
     public float[] usersMod;
