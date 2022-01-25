@@ -117,6 +117,9 @@ public class AttackView : MonoBehaviour {
             missBar.fillAmount = res.miss;
             enduranceBar.fillAmount = res.endurance;
             SetColor(res);
+            durationMarker.localPosition = new Vector3((float)(-durationBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetDurationL(res.id))), -20, 0);
+            missMarker.localPosition = new Vector3((float)(-missBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetMissL(res.id))), -20, 0);
+            enduranceMarker.localPosition = new Vector3((float)(-enduranceBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetEnduranceL(res.id))), -20, 0);
             bars.SetActive(true);
         }
     }
@@ -169,14 +172,11 @@ public class AttackView : MonoBehaviour {
         durationBar.color = c1;
         durationOutline.effectColor = c1;
         foreach(Image i in durationMarker.GetComponentsInChildren<Image>()) i.color = c1;
-        durationMarker.localPosition = new Vector3((float)(-durationBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetDurationL(res.id))), -20, 0);
         missBar.color = c2;
         missOutline.effectColor = c2;
         foreach (Image i in missMarker.GetComponentsInChildren<Image>()) i.color = c2;
-        missMarker.localPosition = new Vector3((float)(-missBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetMissL(res.id))), -20, 0);
         enduranceBar.color = c3;
         enduranceOutline.effectColor = c3;
         foreach (Image i in enduranceMarker.GetComponentsInChildren<Image>()) i.color = c3;
-        enduranceMarker.localPosition = new Vector3((float)(-enduranceBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetEnduranceL(res.id))), -20, 0);
     }
 }

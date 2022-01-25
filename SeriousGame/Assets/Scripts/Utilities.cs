@@ -37,13 +37,9 @@ public class GameSave {
     public Task[] waitingTasks;
     public Task[] assignedTasks;
     public Resistance[] res;
-    public int activeQuiz;
-    public int quizTimer;
-    public AttackCode actualAttackTrend;
-    public int attackTrendTimer;
 
-    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats, AttackPlan[] aSchedule,
-        Task[] waitingTasks, Task[] assignedTasks, Resistance[] res, int activeQuiz, int quizTimer, AttackCode actualAttackTrend, int attackTrendTimer) {
+    public GameSave(GameConfig gc, ShopItemRecap[] sir, EmployeeRecap[] er, LogData logs, AttackStats[] aStats,
+        AttackPlan[] aSchedule, Task[] waitingTasks, Task[] assignedTasks, Resistance[] res) {
         this.gc = gc;
         this.sir = sir;
         this.er = er;
@@ -53,10 +49,6 @@ public class GameSave {
         this.waitingTasks = waitingTasks;
         this.assignedTasks = assignedTasks;
         this.res = res;
-        this.activeQuiz = activeQuiz;
-        this.quizTimer = quizTimer;
-        this.actualAttackTrend = actualAttackTrend;
-        this.attackTrendTimer = attackTrendTimer;
     }
 }
 
@@ -68,7 +60,13 @@ public class GameConfig {
     public int maxNegative;
     public int evaluationTime;
     public int quizTime;
+    public int actualQuiz;
+    public int quizTimer;
     public int attackTrendTime;
+    public AttackCode actualAttackTrend;
+    public int attackTrendTimer;
+    public int resistanceModStep;
+    public int actualResistanceMod;
     public int noAttackTime;
     public int noAttackStep;
     public int ongoingAttacks;
@@ -79,8 +77,9 @@ public class GameConfig {
     public float money;
     public float users;
     public float reputation;
-    public float endurance;
-    public float miss;
+    public float[] duration;
+    public float[] endurance;
+    public float[] miss;
     public float[] usersGain;
     public float[] usersGoals;
     public float[] employeeGoals;

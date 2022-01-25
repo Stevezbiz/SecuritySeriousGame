@@ -89,13 +89,13 @@ public class EmployeeChoice : MonoBehaviour {
             case TaskType.NONE:
                 break;
             case TaskType.INSTALL:
-                durationText.SetText("Durata: " + gameManager.GetInstallDuration(e.id, sid) + " h");
+                durationText.SetText("Durata: " + gameManager.GetInstallTaskDuration(e.id, sid) + " h");
                 break;
             case TaskType.REPAIR:
-                durationText.SetText("Durata: " + gameManager.GetAttackDuration(e.id, aid) + " h");
+                durationText.SetText("Durata: " + gameManager.GetRepairTaskDuration(e.id, aid) + " h");
                 break;
             case TaskType.UPGRADE:
-                durationText.SetText("Durata: " + gameManager.GetUpgradeDuration(e.id, sid) + " h");
+                durationText.SetText("Durata: " + gameManager.GetUpgradeTaskDuration(e.id, sid) + " h");
                 break;
             default:
                 Debug.Log("Error: undefined TaskType");

@@ -45,11 +45,11 @@ public class ShopItemDetail : MonoBehaviour {
         // set the technical details about resistances
         string resistances = "";
         resistances += "Resistenze:\n";
-        foreach (Resistance res in sii.resistances[sii.level].resistances) {
-            resistances += "    " + gameManager.GetAttack(res.id).name + "\n";
-            if (res.duration != 0) resistances += "        durata dell'attacco -" + (res.duration * 100) + "%\n";
-            if (res.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (res.miss * 100) + "%\n";
-            if (res.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (res.endurance * 100) + "%\n";
+        foreach (Resistance r in gameManager.GetShopItemResistances(sii.id)) {
+            resistances += "    " + gameManager.GetAttack(r.id).name + "\n";
+            if (r.duration != 0) resistances += "        durata dell'attacco -" + (r.duration * 100) + "%\n";
+            if (r.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (r.miss * 100) + "%\n";
+            if (r.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (r.endurance * 100) + "%\n";
         }
         if (sii.resistances.Length == 0) resistances += "nessuna\n";
         // set the technical details about costs and usability

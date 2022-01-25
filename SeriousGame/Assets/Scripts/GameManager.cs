@@ -26,10 +26,6 @@ public class GameManager : MonoBehaviour {
     int updateTime = 1;
     DateTime dateTime;
     GameConfig gc;
-    int activeQuiz;
-    int quizTimer;
-    AttackCode actualAttackTrend = AttackCode.NONE;
-    int attackTrendTimer = 0;
 
     List<LogLine> logs = new List<LogLine>();
     Dictionary<AttackCode, AttackPlan> attackSchedule = new Dictionary<AttackCode, AttackPlan>();
@@ -60,6 +56,10 @@ public class GameManager : MonoBehaviour {
             dateTime = dateTime.AddHours(1);
             // update model
             BKTModel.UpdateModel(gc.totalTime);
+            // game over check
+            CheckGameOver();
+            // update resistance aging
+            UpdateResistanceAging();
             // schedule new attacks
             ActivateAttacks();
             // trigger periodic evaluation
@@ -78,8 +78,6 @@ public class GameManager : MonoBehaviour {
             gc.availableEmployees = CalculateEmployees();
             // refresh
             gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
-            // game over check
-            CheckGameOver();
             // update the stats for possible game over
             if (gc.money < 0) gc.negativeTime++;
             else gc.negativeTime = 0;
@@ -95,7 +93,7 @@ public class GameManager : MonoBehaviour {
         gc.date = dateTime.ToString();
         return new GameSave(gc, ShopUtils.GetShopItemRecap(shopItems), EmployeeUtils.GetEmployeeRecap(employees), new LogData(logs.ToArray(),
             logManager.GetNLines(), logManager.GetNPages()), new List<AttackStats>(attackStats.Values).ToArray(), new List<AttackPlan>(attackSchedule.Values).ToArray(),
-            new List<Task>(waitingTasks.Values).ToArray(), new List<Task>(assignedTasks.Values).ToArray(), new List<Resistance>(resistances.Values).ToArray(), activeQuiz, quizTimer, actualAttackTrend, attackTrendTimer);
+            new List<Task>(waitingTasks.Values).ToArray(), new List<Task>(assignedTasks.Values).ToArray(), new List<Resistance>(resistances.Values).ToArray());
     }
 
     /**
@@ -170,10 +168,6 @@ public class GameManager : MonoBehaviour {
         // load the data structures
         AttackUtils.UpdateAll(resistances, attackStats, attackSchedule, gameSave.res, gameSave.aStats, gameSave.aSchedule);
         TaskUtils.UpdateTasks(waitingTasks, gameSave.waitingTasks, assignedTasks, gameSave.assignedTasks);
-        activeQuiz = gameSave.activeQuiz;
-        quizTimer = gameSave.quizTimer;
-        actualAttackTrend = gameSave.actualAttackTrend;
-        attackTrendTimer = gameSave.attackTrendTimer;
     }
 
     // LOG
@@ -232,7 +226,10 @@ public class GameManager : MonoBehaviour {
      */
     public Resistance GetResistance(AttackCode id) {
         if (!resistances.ContainsKey(id)) return null;
-        return resistances[id];
+        float duration = gc.duration[gc.actualResistanceMod] * resistances[id].duration;
+        float miss = gc.miss[gc.actualResistanceMod] * resistances[id].miss;
+        float endurance = gc.endurance[gc.actualResistanceMod] * resistances[id].endurance;
+        return new Resistance(id, duration, miss, endurance);
     }
 
     /**
@@ -241,7 +238,7 @@ public class GameManager : MonoBehaviour {
     void ScheduleAttack(AttackCode id) {
         float maxTime = attacks[id].maxTime * GetAttackEndurance(id);
         float nextTime = Random.Range(0.5f * maxTime, maxTime);
-        if (actualAttackTrend == id) nextTime /= 2;
+        if (gc.actualAttackTrend == id) nextTime /= 2;
         attackSchedule[id] = new AttackPlan(attackSchedule[id], Mathf.CeilToInt(nextTime));
     }
 
@@ -302,23 +299,14 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the miss ratio for the specified attack</summary>
      */
     float GetAttackMiss(AttackCode id) {
-        return gc.miss + resistances[id].miss;
-    }
-
-    /**
-     * <summary>Return the duration for the specified attack</summary>
-     */
-    public int GetAttackDuration(EmployeeCode id, AttackCode aid) {
-        float resMod = 1f - resistances[aid].duration;
-        float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[aid].category];
-        return Mathf.CeilToInt(resMod * attacks[aid].duration * (1 - 0.18f * (abilityLevel - 5f)));
+        return gc.miss[gc.actualResistanceMod] * resistances[id].miss;
     }
 
     /**
      * <summary>Return the endurance against the specified attack</summary>
      */
     float GetAttackEndurance(AttackCode id) {
-        return gc.endurance + resistances[id].endurance + 0.5f * (1 - gc.reputation);
+        return gc.endurance[gc.actualResistanceMod] * (1f + resistances[id].endurance);
     }
 
     /**
@@ -328,7 +316,6 @@ public class GameManager : MonoBehaviour {
         // update data
         gc.ongoingAttacks++;
         attackSchedule[id].status = AttackStatus.ACTIVE;
-        gc.miss += 0.1f;
         // apply the maluses
         gc.money -= attacks[id].moneyLoss;
         gc.users -= attacks[id].usersLoss * gc.users;
@@ -355,7 +342,6 @@ public class GameManager : MonoBehaviour {
      */
     void MissedAttack(AttackCode id) {
         // update data
-        gc.miss = 0f;
         // increment the reputation
         gc.reputation += 0.02f;
         // update statistics
@@ -372,9 +358,9 @@ public class GameManager : MonoBehaviour {
      */
     void UpdateAttacks() {
         // manage the attack trend
-        if (actualAttackTrend != AttackCode.NONE) {
-            attackTrendTimer--;
-            if (attackTrendTimer == 0) SetAttackTrend();
+        if (gc.actualAttackTrend != AttackCode.NONE) {
+            gc.attackTrendTimer--;
+            if (gc.attackTrendTimer == 0) SetAttackTrend();
         }
         // manage the the attacks
         foreach (AttackPlan attack in attackSchedule.Values) {
@@ -401,9 +387,13 @@ public class GameManager : MonoBehaviour {
         foreach(AttackPlan p in attackSchedule.Values) {
             if (p.status != AttackStatus.INACTIVE) possibleTrends.Add(p.id);
         }
-        actualAttackTrend = possibleTrends[Random.Range(0, possibleTrends.Count)];
-        attackTrendTimer = Random.Range(gc.attackTrendTime, 2 * gc.attackTrendTime);
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Attenzione: secondo le nostre analisi gli attacchi di tipo " + attacks[actualAttackTrend].name + " sono in aumento!", ActionCode.CONTINUE);
+        gc.actualAttackTrend = possibleTrends[Random.Range(0, possibleTrends.Count)];
+        gc.attackTrendTimer = Random.Range(gc.attackTrendTime, 2 * gc.attackTrendTime);
+        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Attenzione: secondo le nostre analisi gli attacchi di tipo " + attacks[gc.actualAttackTrend].name + " sono in aumento!", ActionCode.CONTINUE);
+    }
+
+    void UpdateResistanceAging() {
+        if (gc.totalTime % gc.resistanceModStep == 0) gc.actualResistanceMod++;
     }
 
     // TASK
@@ -460,18 +450,24 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public int GetInstallDuration(EmployeeCode id, ShopItemCode sid) {
+    public int GetInstallTaskDuration(EmployeeCode id, ShopItemCode sid) {
         ShopItemInfo sii = shopItems[sid];
         int upgradeTime = sii.upgradeTime[sii.level];
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[sii.category];
         return Mathf.CeilToInt(upgradeTime * (1f - 0.18f * (abilityLevel - 5f)));
     }
 
-    public int GetUpgradeDuration(EmployeeCode id, ShopItemCode sid) {
+    public int GetUpgradeTaskDuration(EmployeeCode id, ShopItemCode sid) {
         ShopItemInfo sii = shopItems[sid];
         int upgradeTime = sii.upgradeTime[sii.level];
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[sii.category];
         return Mathf.CeilToInt(upgradeTime * (1f - 0.18f * (abilityLevel - 5f)));
+    }
+
+    public int GetRepairTaskDuration(EmployeeCode id, AttackCode aid) {
+        float resMod = resistances[aid].duration;
+        float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[aid].category];
+        return Mathf.CeilToInt(gc.duration[gc.actualResistanceMod] * (1f - resMod) * attacks[aid].duration * (1 - 0.18f * (abilityLevel - 5f)));
     }
 
     public float GetPreventProtection(EmployeeCode id, Category c) {
@@ -701,18 +697,18 @@ public class GameManager : MonoBehaviour {
             case TaskType.INSTALL:
                 shopItems[t.shopItem].status = ShopItemStatus.INSTALLING;
                 assignedTasks.Add(id, t);
-                assignedTasks[id].AssignEmployee(id, GetInstallDuration(id, t.shopItem));
+                assignedTasks[id].AssignEmployee(id, GetInstallTaskDuration(id, t.shopItem));
                 waitingTasks.Remove(tid);
                 break;
             case TaskType.REPAIR:
                 assignedTasks.Add(id, t);
-                assignedTasks[id].AssignEmployee(id, GetAttackDuration(id, t.attack));
+                assignedTasks[id].AssignEmployee(id, GetRepairTaskDuration(id, t.attack));
                 waitingTasks.Remove(tid);
                 break;
             case TaskType.UPGRADE:
                 shopItems[t.shopItem].status = ShopItemStatus.UPGRADING;
                 assignedTasks.Add(id, t);
-                assignedTasks[id].AssignEmployee(id, GetUpgradeDuration(id, t.shopItem));
+                assignedTasks[id].AssignEmployee(id, GetUpgradeTaskDuration(id, t.shopItem));
                 waitingTasks.Remove(tid);
                 break;
             case TaskType.PREVENT:
@@ -866,6 +862,17 @@ public class GameManager : MonoBehaviour {
         return (float)Math.Round(gc.usersGain[gc.userLevel] * Math.Round(gc.users) * Math.Round(attackUsersMalus, 2));
     }
 
+    public List<Resistance> GetShopItemResistances(ShopItemCode id) {
+        List<Resistance> res = new List<Resistance>();
+        foreach(Resistance r in shopItems[id].resistances[shopItems[id].level].resistances) {
+            float duration = gc.duration[gc.actualResistanceMod] * r.duration;
+            float miss = gc.miss[gc.actualResistanceMod] * r.miss;
+            float endurance = gc.endurance[gc.actualResistanceMod] * r.endurance;
+            res.Add(new Resistance(r.id, duration, miss, endurance));
+        }
+        return res;
+    }
+
     public int GetTotalEmployeesN() {
         return gc.availableEmployees;
     }
@@ -967,14 +974,15 @@ public class GameManager : MonoBehaviour {
     void EvaluateSecurityStatus() {
         // every x time evaluate the status of the countermeasures of the active attacks
         Dictionary<Category, int> scores = new Dictionary<Category, int>();
-        foreach(Resistance r in resistances.Values) {
-            if(attackSchedule[r.id].status != AttackStatus.INACTIVE) {
+        foreach(AttackCode id in attacks.Keys) {
+            if(attackSchedule[id].status != AttackStatus.INACTIVE) {
+                Resistance r = GetResistance(id);
                 Category c = attacks[r.id].category;
-                if (r.duration >= BKTModel.GetDurationL(r.id)) scores[c]++;
+                if (r.duration >= BKTModel.GetDurationL(id)) scores[c]++;
                 else scores[c]--;
-                if (r.miss >= BKTModel.GetMissL(r.id)) scores[c]++;
+                if (r.miss >= BKTModel.GetMissL(id)) scores[c]++;
                 else scores[c]--;
-                if (r.endurance >= BKTModel.GetEnduranceL(r.id)) scores[c]++;
+                if (r.endurance >= BKTModel.GetEnduranceL(id)) scores[c]++;
                 else scores[c]--;
             }
         }
@@ -1016,12 +1024,13 @@ public class GameManager : MonoBehaviour {
         // Consider various aspects of the purchase
         int score = 0;
         ShopItemInfo sii = shopItems[id];
-        List<Resistance> res = new List<Resistance>(sii.resistances[sii.level].resistances);
+        List<Resistance> res = GetShopItemResistances(id);
         
         // 1. Are the attacks mitigated by the item active, so that the countermeasure is needed?
         foreach(Resistance r in res) {
             if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score--;
             else score++;
+            if (r.id == gc.actualAttackTrend) score++;
         }
         // 2. How much is the impact on the money?
         if (GetActualMoneyGain() - sii.cost[0] > 0) score++;
@@ -1069,13 +1078,13 @@ public class GameManager : MonoBehaviour {
         // Consider various aspects of the upgrade
         int score = 0;
         ShopItemInfo sii = shopItems[id];
-        List<Resistance> res = new List<Resistance>(sii.resistances[sii.level].resistances);
+        List<Resistance> res = GetShopItemResistances(id);
 
         // 1. Are the attacks mitigated by the item active, so that the upgrade of the countermeasure is needed?
         foreach (Resistance r in res) {
             if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score--;
             else score++;
-            if (r.id == actualAttackTrend) score++;
+            if (r.id == gc.actualAttackTrend) score++;
         }
         // 2. How much is the impact on the money?
         if (GetActualMoneyGain() - sii.cost[sii.level] > 0) score++;
@@ -1170,11 +1179,11 @@ public class GameManager : MonoBehaviour {
     void UpdateQuiz() {
         if ((gc.totalTime - 1) % gc.quizTime == 0) {
             // random quiz and time choice
-            quizTimer = Random.Range(1, gc.quizTime);
-            activeQuiz = Random.Range(0, quizzes.Count);
+            gc.quizTimer = Random.Range(1, gc.quizTime);
+            gc.actualQuiz = Random.Range(0, quizzes.Count);
         }
         // launch quiz
-        if (quizTimer-- == 0) quizQuestion.Load(quizzes[activeQuiz], avatars[quizzes[activeQuiz].person]);
+        if (gc.quizTimer-- == 0) quizQuestion.Load(quizzes[gc.actualQuiz], avatars[quizzes[gc.actualQuiz].person]);
     }
 
     bool EmployeeTestResult(EmployeeCode id, Category category) {

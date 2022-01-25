@@ -62,10 +62,10 @@ public class InstallOrUpgradeView : MonoBehaviour {
         int duration;
         switch (t.type) {
             case TaskType.INSTALL:
-                duration = gameManager.GetInstallDuration(employee, sii.id);
+                duration = gameManager.GetInstallTaskDuration(employee, sii.id);
                 break;
             case TaskType.UPGRADE:
-                duration = gameManager.GetUpgradeDuration(employee, sii.id);
+                duration = gameManager.GetUpgradeTaskDuration(employee, sii.id);
                 break;
             default:
                 Debug.Log("Error: unhandled TaskType");

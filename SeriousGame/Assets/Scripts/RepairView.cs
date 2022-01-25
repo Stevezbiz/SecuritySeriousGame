@@ -57,7 +57,7 @@ public class RepairView : MonoBehaviour {
     }
 
     public void Display(int err) {
-        int duration = gameManager.GetAttackDuration(employee, tasks[dropdown.value].attack);
+        int duration = gameManager.GetRepairTaskDuration(employee, tasks[dropdown.value].attack);
         durationText.SetText("Durata: " + duration + " h");
         networkOutline.SetActive(false);
         accessOutline.SetActive(false);
