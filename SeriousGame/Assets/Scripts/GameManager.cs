@@ -377,7 +377,7 @@ public class GameManager : MonoBehaviour {
         foreach (AttackPlan attack in attackSchedule.Values) {
             if (attack.status == AttackStatus.PLANNING && attack.timer-- == 0) {
                 // start the attack
-                if (attack.inevitable || Random.Range(0f, 1f) > GetAttackMiss(attack.id)) {
+                if (Random.Range(0f, attack.missMod) > GetAttackMiss(attack.id)) {
                     // hit
                     StartAttack(attack.id);
                     logManager.LogPrintAttack(attacks[attack.id].name, true);
@@ -1158,7 +1158,7 @@ public class GameManager : MonoBehaviour {
         }
         // eventually launch an attack
         if (qa.triggeredAttack != AttackCode.NONE && attackSchedule[qa.triggeredAttack].status != AttackStatus.INACTIVE) {
-            attackSchedule[qa.triggeredAttack].nextInevitable = true;
+            attackSchedule[qa.triggeredAttack].missMod = 2f;
         }
     }
 

@@ -64,23 +64,20 @@ public class AttackPlan {
     public AttackCode id;
     public AttackStatus status;
     public int timer;
-    public bool inevitable;
-    public bool nextInevitable;
+    public float missMod;
 
     public AttackPlan(AttackCode id) {
         this.id = id;
         this.status = AttackStatus.INACTIVE;
         this.timer = 0;
-        this.inevitable = false;
-        this.nextInevitable = false;
+        this.missMod = 1f;
     }
 
     public AttackPlan(AttackPlan ap, int timer) {
         this.id = ap.id;
         this.status = AttackStatus.PLANNING;
         this.timer = timer;
-        this.inevitable = ap.nextInevitable;
-        this.nextInevitable = false;
+        this.missMod = 1f;
     }
 }
 
