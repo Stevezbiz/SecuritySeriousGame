@@ -467,7 +467,7 @@ public class GameManager : MonoBehaviour {
     public int GetRepairTaskDuration(EmployeeCode id, AttackCode aid) {
         float resMod = resistances[aid].duration;
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[aid].category];
-        return Mathf.CeilToInt(gc.duration[gc.actualResistanceMod] * (1f - resMod) * attacks[aid].duration * (1 - 0.18f * (abilityLevel - 5f)));
+        return Mathf.CeilToInt((1f - gc.duration[gc.actualResistanceMod] * resMod) * attacks[aid].duration * (1 - 0.18f * (abilityLevel - 5f)));
     }
 
     public float GetPreventProtection(EmployeeCode id, Category c) {
@@ -810,21 +810,20 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the actual gain of users</summary>
      */
     public float GetActualUsersGain() {
-        float usersMalus = 1f;
-        float usersBonus = 1f;
+        float usersMod = 1f;
         float attackUsersMalus = 0f;
         // the user modifier for the active items
         foreach (ShopItemInfo sii in shopItems.Values) {
             if (sii.status == ShopItemStatus.ACTIVE) {
-                if (sii.usersMod[sii.level - 1] < 1) usersMalus *= 1 - sii.usersMod[sii.level - 1];
-                else usersBonus *= sii.usersMod[sii.level - 1];
+                if (sii.usersMod[sii.level - 1] > 0) usersMod *= 1 - sii.usersMod[sii.level - 1];
+                else usersMod *= 1 - sii.usersMod[sii.level - 1];
             }
         }
         // the malus for the active attacks
         foreach (AttackPlan a in attackSchedule.Values) {
             if (a.status == AttackStatus.ACTIVE) attackUsersMalus += attacks[a.id].usersMalus;
         }
-        return (float)Math.Round(gc.usersGain[gc.userLevel] * (0.5f * (1 + gc.reputation) * usersMalus * usersBonus - attackUsersMalus) * Math.Round(gc.users));
+        return (float)Math.Round(gc.usersGain[gc.userLevel] * (0.5f * (1 + gc.reputation) * usersMod - attackUsersMalus) * Math.Round(gc.users));
     }
 
     /**
@@ -838,16 +837,15 @@ public class GameManager : MonoBehaviour {
      * <summary>Return the modifier of the gain of users caused by defences and services</summary>
      */
     public float GetUsersMod() {
-        float usersMalus = 1f;
-        float usersBonus = 1f;
+        float usersMod = 1f;
         // the user modifier for the active items
         foreach (ShopItemInfo sii in shopItems.Values) {
             if (sii.status == ShopItemStatus.ACTIVE || sii.status == ShopItemStatus.UPGRADING) {
-                if (sii.usersMod[sii.level - 1] < 1) usersMalus *= 1 - sii.usersMod[sii.level - 1];
-                else usersBonus *= sii.usersMod[sii.level - 1];
+                if (sii.usersMod[sii.level - 1] > 0) usersMod *= 1 - sii.usersMod[sii.level - 1];
+                else usersMod *= 1 - sii.usersMod[sii.level - 1];
             }
         }
-        return usersMalus * usersBonus;
+        return usersMod;
     }
 
     /**
@@ -863,14 +861,26 @@ public class GameManager : MonoBehaviour {
     }
 
     public List<Resistance> GetShopItemResistances(ShopItemCode id) {
-        List<Resistance> res = new List<Resistance>();
-        foreach(Resistance r in shopItems[id].resistances[shopItems[id].level].resistances) {
-            float duration = gc.duration[gc.actualResistanceMod] * r.duration;
-            float miss = gc.miss[gc.actualResistanceMod] * r.miss;
-            float endurance = gc.endurance[gc.actualResistanceMod] * r.endurance;
-            res.Add(new Resistance(r.id, duration, miss, endurance));
+        Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
+        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level].resistances) {
+            res.Add(r.id, r);
         }
-        return res;
+        if (shopItems[id].level > 0) {
+            foreach(Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
+                if (res.ContainsKey(r.id)) {
+                    res[r.id].duration -= r.duration;
+                    res[r.id].miss -= r.miss;
+                    res[r.id].endurance -= r.endurance;
+                    if (r.duration == 0 && r.miss == 0 && r.endurance == 0) res.Remove(r.id);
+                }
+            }
+        }
+        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level].resistances) {
+            res[r.id].duration *= gc.duration[gc.actualResistanceMod];
+            res[r.id].miss *= gc.miss[gc.actualResistanceMod];
+            res[r.id].endurance *= gc.endurance[gc.actualResistanceMod];
+        }
+        return new List<Resistance>(res.Values);
     }
 
     public int GetTotalEmployeesN() {

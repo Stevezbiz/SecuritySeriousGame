@@ -31,8 +31,9 @@ public class ShopItemDetail : MonoBehaviour {
      * <summary>Compose all the details of the item</summary>
      */
     void ComposeDetails(ShopItemInfo sii) {
-        titleText.SetText(sii.name + "\n" + sii.cost[sii.level] + " Fondi");
-        descriptionText.SetText(sii.description[sii.level]);
+        int l = sii.level;
+        titleText.SetText(sii.name + "\n" + sii.cost[l] + " Fondi");
+        descriptionText.SetText(sii.description[l]);
         // set the technical details about requirements
         string requirements = "";
         if (sii.locked) {
@@ -53,13 +54,21 @@ public class ShopItemDetail : MonoBehaviour {
         }
         if (sii.resistances.Length == 0) resistances += "nessuna\n";
         // set the technical details about costs and usability
-        if (sii.moneyMalus[sii.level] < 0) resistances += "Guadagno aggiuntivo: " + (-sii.moneyMalus[sii.level]) + " F/h\n";
-        if (sii.usersMod[sii.level] > 1) resistances += "Prestazioni e usabilità: +" + ((sii.usersMod[sii.level] - 1) * 100) + "%\n";
+        float moneyMalus = sii.moneyMalus[l];
+        float usersMod = sii.usersMod[l];
+        if (l > 0) {
+            usersMod -= sii.usersMod[l - 1];
+            moneyMalus -= sii.moneyMalus[l - 1];
+        }
+        // possible bonuses
+        if (moneyMalus < 0) resistances += "Guadagno aggiuntivo: " + (-moneyMalus) + " F/h\n";
+        if (usersMod < 0) resistances += "Prestazioni e usabilità: +" + (-usersMod * 100) + "%\n";
         resistancesText.SetText(resistances);
+        // possible maluses
         string costs = "";
-        if (sii.moneyMalus[sii.level] < 0) costs += "Costo: 0 F/h\n";
-        else costs += "Costo: " + sii.moneyMalus + " F/h\n";
-        if (sii.usersMod[sii.level] != 0 && sii.usersMod[sii.level] < 1) costs += "Prestazioni e usabilità: -" + (sii.usersMod[sii.level] * 100) + "%\n";
+        if (moneyMalus < 0) costs += "Costo: 0 F/h\n";
+        else costs += "Costo: " + moneyMalus + " F/h\n";
+        if (usersMod > 0) costs += "Prestazioni e usabilità: -" + (usersMod * 100) + "%\n";
         costsText.SetText(costs);
     }
 
