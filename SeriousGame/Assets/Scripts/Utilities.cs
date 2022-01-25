@@ -68,6 +68,7 @@ public class GameConfig {
     public int maxNegative;
     public int evaluationTime;
     public int quizTime;
+    public int attackTrendTime;
     public int noAttackTime;
     public int noAttackStep;
     public int ongoingAttacks;

@@ -7,6 +7,7 @@
 		"maxNegative": 72,
 		"evaluationTime": 288,
 		"quizTime": 72,
+		"attackTrendTime": 72,
 		"noAttackTime": 0,
 		"noAttackStep": 10,
 		"ongoingAttacks": 0,

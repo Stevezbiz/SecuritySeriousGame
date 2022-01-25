@@ -372,7 +372,10 @@ public class GameManager : MonoBehaviour {
      */
     void UpdateAttacks() {
         // manage the attack trend
-        if (actualAttackTrend != AttackCode.NONE && quizTimer-- == 0) SetAttackTrend();
+        if (actualAttackTrend != AttackCode.NONE) {
+            attackTrendTimer--;
+            if (attackTrendTimer == 0) SetAttackTrend();
+        }
         // manage the the attacks
         foreach (AttackPlan attack in attackSchedule.Values) {
             if (attack.status == AttackStatus.PLANNING && attack.timer-- == 0) {
@@ -399,6 +402,7 @@ public class GameManager : MonoBehaviour {
             if (p.status != AttackStatus.INACTIVE) possibleTrends.Add(p.id);
         }
         actualAttackTrend = possibleTrends[Random.Range(0, possibleTrends.Count)];
+        attackTrendTimer = Random.Range(gc.attackTrendTime, 2 * gc.attackTrendTime);
         Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Attenzione: secondo le nostre analisi gli attacchi di tipo " + attacks[actualAttackTrend].name + " sono in aumento!", ActionCode.CONTINUE);
     }
 
@@ -1071,6 +1075,7 @@ public class GameManager : MonoBehaviour {
         foreach (Resistance r in res) {
             if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score--;
             else score++;
+            if (r.id == actualAttackTrend) score++;
         }
         // 2. How much is the impact on the money?
         if (GetActualMoneyGain() - sii.cost[sii.level] > 0) score++;
