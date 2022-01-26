@@ -32,12 +32,17 @@ public class ShopItemDetail : MonoBehaviour {
      */
     void ComposeDetails(ShopItemInfo sii) {
         int l = sii.level;
-        titleText.SetText(sii.name + "\n" + sii.cost[l] + " Fondi");
-        descriptionText.SetText(sii.description[l]);
+        if (l == sii.maxLevel) {
+            titleText.SetText(sii.name);
+            descriptionText.SetText("Non ci sono potenziamenti disponibili");
+        } else {
+            titleText.SetText(sii.name + "\n" + sii.cost[l] + " Fondi");
+            descriptionText.SetText(sii.description[l]);
+        }
         // set the technical details about requirements
         string requirements = "";
         if (sii.locked) {
-            requirements += "Per sbloccare questo potenziamento devi prima acquistare:\n";
+            requirements += "Per sbloccare questo oggetto devi prima acquistare:\n";
             foreach (ShopItemCode code in sii.requirements) {
                 requirements += "    " + gameManager.GetShopItem(code).name + "\n";
             }

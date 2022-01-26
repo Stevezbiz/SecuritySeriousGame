@@ -83,66 +83,291 @@
       "category": 0,
       "name": "Firewall",
       "description": [
-        "L'adozione di un firewall ben configurato garantisce una prima linea di difesa contro gli attacchi DoS meno sofisticati e permette di scartare le connessioni a siti ritenuti poco sicuri, in modo da limitare le possibilità di contagio da malware."
+        "Si tratta di un firewall di tipo packet filter. Come indica il nome, si occupa solamente di filtrare i pacchetti che entrano ed escono dalla rete seguendo delle regole statiche. Per questo è facile da raggirare e non è molto sicuro. Beh, è meglio di niente!",
+        "Un packet filter dinamico. Questo tipo di firewall applica delle regole statiche, ma è anche in grado di tenere traccia delle connessioni e del loro stato. Vanta performance migliori di un packet filter statico, anche se ne eredita molte limitazioni.",
+        "Si tratta di un circuit-level gateway. Questo firewall garantisce una protezione migliore dei precedenti perchè riesce ad analizzare sequenze di pacchetti appartenenti ad una connessione.",
+        "Un firewall di tipo application-level gateway. Come suggerisce il nome, questa tecnologia permette di analizzare il traffico a livello di applicazione e non più di singoli pacchetti. Ciò permette al firewall di identificare tentativi di attacco più complessi. Purtroppo questa complessità peggiora le performance del sistema.",
+        "Un server di tipo reverse proxy. Questa tecnologia, che affianca il firewall, consiste in un livello aggiuntivo di protezione, perchè maschera i server reali. Permette inoltre di bilanciare il carico dei server e migliorare le prestazioni del sistema.",
+        "Si tratta di uno stealth firewall, un terzo dispositivo che si pone a difesa del firewall principale. Intercetta i pacchetti a livello fisico e si comporta come un packet filter. Ma il suo maggiore punto di forza è che, essendo un dispositivo sprovvisto di indirizzo IP, non può essere attaccato in modo diretto come avviene per i dispositivi di rete. Per questo motivo fornisce una solida prima linea di difesa alla rete."
       ],
       "cost": [
+        300,
+        300,
+        300,
+        300,
+        300,
         300
       ],
       "moneyMalus": [
-        7
+        7,
+        8,
+        9,
+        10,
+        12,
+        15
       ],
       "usersMod": [
-        0
+        0.2,
+        0.1,
+        0.1,
+        0.3,
+        0.1,
+        0.1
       ],
       "status": 0,
       "locked": false,
       "upgradeTime": [
-        12
+        12,
+        15,
+        17,
+        24,
+        24,
+        24
       ],
       "resistances": [
         {
           "resistances": [
             {
               "id": 1,
-              "duration": 0.2,
-              "miss": 0.2,
-              "endurance": 0.3
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
             },
             {
               "id": 8,
-              "duration": 0,
+              "duration": 0.3,
               "miss": 0.2,
               "endurance": 0.3
             },
             {
               "id": 9,
-              "duration": 0,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
+            },
+            {
+              "id": 10,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
+            },
+            {
+              "id": 11,
+              "duration": 0.1,
+              "miss": 0.05,
+              "endurance": 0.1
+            },
+            {
+              "id": 12,
+              "duration": 0.1,
+              "miss": 0.05,
+              "endurance": 0.1
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.3,
               "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 8,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 9,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
+            },
+            {
+              "id": 10,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
+            },
+            {
+              "id": 11,
+              "duration": 0.1,
+              "miss": 0.05,
+              "endurance": 0.1
+            },
+            {
+              "id": 12,
+              "duration": 0.1,
+              "miss": 0.05,
+              "endurance": 0.1
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 8,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 9,
+              "duration": 0.3,
+              "miss": 0.25,
               "endurance": 0.3
             },
             {
               "id": 10,
-              "duration": 0,
+              "duration": 0.2,
               "miss": 0.2,
-              "endurance": 0.3
+              "endurance": 0.2
             },
             {
               "id": 11,
-              "duration": 0,
+              "duration": 0.2,
               "miss": 0.1,
               "endurance": 0.2
             },
             {
               "id": 12,
-              "duration": 0,
+              "duration": 0.2,
               "miss": 0.1,
               "endurance": 0.2
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 8,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 9,
+              "duration": 0.45,
+              "miss": 0.4,
+              "endurance": 0.45
+            },
+            {
+              "id": 10,
+              "duration": 0.35,
+              "miss": 0.3,
+              "endurance": 0.35
+            },
+            {
+              "id": 11,
+              "duration": 0.3,
+              "miss": 0.15,
+              "endurance": 0.3
+            },
+            {
+              "id": 12,
+              "duration": 0.35,
+              "miss": 0.2,
+              "endurance": 0.35
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 8,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 9,
+              "duration": 0.45,
+              "miss": 0.4,
+              "endurance": 0.45
+            },
+            {
+              "id": 10,
+              "duration": 0.35,
+              "miss": 0.3,
+              "endurance": 0.35
+            },
+            {
+              "id": 11,
+              "duration": 0.3,
+              "miss": 0.15,
+              "endurance": 0.3
+            },
+            {
+              "id": 12,
+              "duration": 0.35,
+              "miss": 0.2,
+              "endurance": 0.35
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.7,
+              "miss": 0.55,
+              "endurance": 0.7
+            },
+            {
+              "id": 8,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 9,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            },
+            {
+              "id": 10,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 11,
+              "duration": 0.35,
+              "miss": 0.2,
+              "endurance": 0.35
+            },
+            {
+              "id": 12,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
             }
           ]
         }
       ],
       "requirements": [],
-      "maxLevel": 1,
+      "maxLevel": 6,
       "level": 0
     },
     {
@@ -547,56 +772,105 @@
     },
     {
       "id": 12,
-      "category": 2,
+      "category": 0,
       "name": "Intrusion Detection Systems (IDS)",
       "description": [
-        "L'utilizzo di IDS permette di analizzare anomalie nel traffico e aiuta a prevenire gli attacchi DoS. Può identificare comportamenti insoliti, spesso riconducibili all'opera di malware o accessi non autorizzati."
+        "Installazione del modulo LFM (Log File Monitor). Si occupa di analizzare i file di log alla ricerca di pattern riconducibili a tentativi di attacco. Non è una tecnica molto sofisticata, ma contribuisce a contrastare gli attacchi malware e di accesso non autorizzato.",
+        "Installazione del modulo SIV (System Integrity Verifier). Questa tecnica passiva scansiona il file system alla ricerca di modifiche non autorizzate, contribuendo ad individuare i malware e contenere la loro diffusione.",
+        "Installazione di un sistema di monitoraggio attivo. Si tratta di estendere l'IDS nella rete interna con l'utilizzo di sensori, con lo scopo di collezionare informazioni sul traffico. Questo sistema permette di individuare in tempo reale tentativi di attacco mediante l'analisi dei dati acquisiti.",
+        "Installazione di tecniche di prevenzione per ottenere un IDPS (Intrusion Detection and Prevention System). In particolare vengono implementate tecniche che consentono al sistema di reagire automaticamente ai tentativi di attacco individuati. Può bloccare operazioni legittime in caso di falsi positivi."
       ],
       "cost": [
+        200,
+        300,
+        400,
         500
       ],
       "moneyMalus": [
-        10
+        5,
+        8,
+        12,
+        17
       ],
       "usersMod": [
-        0
+        0,
+        0,
+        0.1,
+        0.3
       ],
       "status": 0,
       "locked": true,
       "upgradeTime": [
-        24
+        18,
+        20,
+        24,
+        32
       ],
       "resistances": [
         {
           "resistances": [
             {
               "id": 1,
-              "duration": 0.3,
-              "miss": 0.2,
-              "endurance": 0.3
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
             },
             {
               "id": 6,
-              "duration": 0,
-              "miss": 0.2,
-              "endurance": 0.3
-            },
-            {
-              "id": 8,
-              "duration": 0,
-              "miss": 0.3,
-              "endurance": 0.4
+              "duration": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
             },
             {
               "id": 9,
               "duration": 0.2,
               "miss": 0.2,
-              "endurance": 0.3
+              "endurance": 0.2
             },
             {
               "id": 10,
+              "duration": 0.15,
+              "miss": 0.15,
+              "endurance": 0.15
+            },
+            {
+              "id": 11,
+              "duration": 0.1,
+              "miss": 0.05,
+              "endurance": 0.1
+            },
+            {
+              "id": 12,
+              "duration": 0.15,
+              "miss": 0.1,
+              "endurance": 0.15
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
+            },
+            {
+              "id": 6,
               "duration": 0.2,
-              "miss": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
+            },
+            {
+              "id": 9,
+              "duration": 0.4,
+              "miss": 0.35,
+              "endurance": 0.4
+            },
+            {
+              "id": 10,
+              "duration": 0.3,
+              "miss": 0.25,
               "endurance": 0.3
             },
             {
@@ -607,17 +881,97 @@
             },
             {
               "id": 12,
-              "duration": 0.2,
-              "miss": 0.1,
-              "endurance": 0.2
+              "duration": 0.25,
+              "miss": 0.15,
+              "endurance": 0.25
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.4,
+              "miss": 0.2,
+              "endurance": 0.4
+            },
+            {
+              "id": 6,
+              "duration": 0.5,
+              "miss": 0.3,
+              "endurance": 0.5
+            },
+            {
+              "id": 9,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            },
+            {
+              "id": 10,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 11,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 12,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 6,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            },
+            {
+              "id": 9,
+              "duration": 0.8,
+              "miss": 0.7,
+              "endurance": 0.8
+            },
+            {
+              "id": 10,
+              "duration": 0.7,
+              "miss": 0.6,
+              "endurance": 0.7
+            },
+            {
+              "id": 11,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 12,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
             }
           ]
         }
       ],
       "requirements": [
-        13
+        3
       ],
-      "maxLevel": 1,
+      "maxLevel": 4,
       "level": 0
     },
     {
@@ -694,54 +1048,210 @@
       "category": 2,
       "name": "Antivirus",
       "description": [
-        "Un antivirus può rallentare il lavoro di un dipendente, ma è un agente che contribuisce in maniera determinante alla sicurezza del sistema grazie alla capacità di individuare un gran numero di malware, prima che questi danneggino il sistema."
+        "Installazione di un antivirus basato sul riconoscimento delle firme. Questa tecnica permette diriconoscere un malware andando ad analizzare alcune parti del suo codice, da cui viene estratta una firma. Quando l'antivirus analizza un programma ne estrapola la firma e la confronta con le firme dei malware conosciuti. Purtroppo questa tecnica ha una limitazione importante: è sufficiente una modifica nel codice del malware per generare una firma diversa.",
+        "Installazione di un modulo per la protezione in tempo reale. Questa tecnica consiste nel monitorare il sistema per analizzare l'esecuzione dei programmi e individuare possibili malware. Può rallentare alcune operazioni.",
+        "Installazione di un modulo per l'analisi euristica. Si tratta di un insieme di tecniche che permette di riconoscere un numero maggiore di malware. Alcuni esempi sono l'analisi di firme parziali e la ricerca di pattern all'interno delle sezioni di codice. Si tratta, però, di analisi poco rigorose che possono portare all'identificazione di molti falsi positivi.",
+        "Installazione di un modulo per l'analisi tramite data-mining. Questa è una tecnica sofisticata che si basa sull'utilizzo di algoritmi di machine learning. Questi vengono applicati ad un file e lo classificano in base al contenuto, indicando se può trattarsi di un malware.",
+        "Installazione di un ambiente sandbox. Questo tipo di ambiente è isolato e non comunica con l'esterno. Se un programma è sospettato di nascondere un malware viene messo in quarantena nella sandbox. Il programma viene avviato normalmente e ne viene analizzato il comportamento, in modo da capire se si tratta di un malware o meno. Questa tecnica è molto efficace, ma allo stesso tempo richiede molte risorse."
       ],
       "cost": [
-        400
+        200,
+        300,
+        300,
+        400,
+        500
       ],
       "moneyMalus": [
-        7
+        7,
+        8,
+        10,
+        12,
+        17
       ],
       "usersMod": [
-        0
+        0,
+        0.1,
+        0.2,
+        0.2,
+        0.3
       ],
       "status": 0,
       "locked": false,
       "upgradeTime": [
-        12
+        12,
+        14,
+        18,
+        22,
+        28
       ],
       "resistances": [
         {
           "resistances": [
             {
               "id": 9,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 10,
+              "duration": 0.25,
+              "miss": 0.15,
+              "endurance": 0.25
+            },
+            {
+              "id": 11,
+              "duration": 0.15,
+              "miss": 0.1,
+              "endurance": 0.15
+            },
+            {
+              "id": 12,
               "duration": 0.2,
-              "miss": 0.4,
+              "miss": 0.1,
+              "endurance": 0.2
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 8,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
+            },
+            {
+              "id": 9,
+              "duration": 0.4,
+              "miss": 0.3,
               "endurance": 0.4
             },
             {
               "id": 10,
-              "duration": 0.2,
-              "miss": 0.4,
-              "endurance": 0.4
+              "duration": 0.35,
+              "miss": 0.25,
+              "endurance": 0.35
             },
             {
               "id": 11,
-              "duration": 0.1,
-              "miss": 0.2,
-              "endurance": 0.2
+              "duration": 0.25,
+              "miss": 0.15,
+              "endurance": 0.25
             },
             {
               "id": 12,
-              "duration": 0.1,
-              "miss": 0.3,
+              "duration": 0.3,
+              "miss": 0.2,
               "endurance": 0.3
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 8,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 9,
+              "duration": 0.55,
+              "miss": 0.45,
+              "endurance": 0.55
+            },
+            {
+              "id": 10,
+              "duration": 0.5,
+              "miss": 0.35,
+              "endurance": 0.5
+            },
+            {
+              "id": 11,
+              "duration": 0.35,
+              "miss": 0.25,
+              "endurance": 0.35
+            },
+            {
+              "id": 12,
+              "duration": 0.45,
+              "miss": 0.35,
+              "endurance": 0.45
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 8,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 9,
+              "duration": 0.7,
+              "miss": 0.55,
+              "endurance": 0.7
+            },
+            {
+              "id": 10,
+              "duration": 0.6,
+              "miss": 0.45,
+              "endurance": 0.6
+            },
+            {
+              "id": 11,
+              "duration": 0.45,
+              "miss": 0.35,
+              "endurance": 0.45
+            },
+            {
+              "id": 12,
+              "duration": 0.5,
+              "miss": 0.45,
+              "endurance": 0.5
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 8,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 9,
+              "duration": 0.8,
+              "miss": 0.8,
+              "endurance": 0.8
+            },
+            {
+              "id": 10,
+              "duration": 0.7,
+              "miss": 0.7,
+              "endurance": 0.7
+            },
+            {
+              "id": 11,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            },
+            {
+              "id": 12,
+              "duration": 0.6,
+              "miss": 0.6,
+              "endurance": 0.6
             }
           ]
         }
       ],
       "requirements": [],
-      "maxLevel": 1,
+      "maxLevel": 5,
       "level": 0
     },
     {
