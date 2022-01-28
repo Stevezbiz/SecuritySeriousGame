@@ -32,48 +32,52 @@ public class ShopItemDetail : MonoBehaviour {
      */
     void ComposeDetails(ShopItemInfo sii) {
         int l = sii.level;
-        if (l == sii.maxLevel) {
-            titleText.SetText(sii.name);
-            descriptionText.SetText("Non ci sono potenziamenti disponibili");
-        } else {
-            titleText.SetText(sii.name + "\n" + sii.cost[l] + " Fondi");
-            descriptionText.SetText(sii.description[l]);
-        }
-        // set the technical details about requirements
+        string title;
+        string description;
         string requirements = "";
-        if (sii.locked) {
-            requirements += "Per sbloccare questo oggetto devi prima acquistare:\n";
-            foreach (ShopItemCode code in sii.requirements) {
-                requirements += "    " + gameManager.GetShopItem(code).name + "\n";
-            }
-        }
-        requirementsText.SetText(requirements);
-        // set the technical details about resistances
         string resistances = "";
-        resistances += "Resistenze:\n";
-        foreach (Resistance r in gameManager.GetShopItemResistances(sii.id)) {
-            resistances += "    " + gameManager.GetAttack(r.id).name + "\n";
-            if (r.duration != 0) resistances += "        durata dell'attacco -" + (r.duration * 100) + "%\n";
-            if (r.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (r.miss * 100) + "%\n";
-            if (r.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (r.endurance * 100) + "%\n";
-        }
-        if (sii.resistances.Length == 0) resistances += "nessuna\n";
-        // set the technical details about costs and usability
-        float moneyMalus = sii.moneyMalus[l];
-        float usersMod = sii.usersMod[l];
-        if (l > 0) {
-            usersMod -= sii.usersMod[l - 1];
-            moneyMalus -= sii.moneyMalus[l - 1];
-        }
-        // possible bonuses
-        if (moneyMalus < 0) resistances += "Guadagno aggiuntivo: " + (-moneyMalus) + " F/h\n";
-        if (usersMod < 0) resistances += "Prestazioni e usabilità: +" + (-usersMod * 100) + "%\n";
-        resistancesText.SetText(resistances);
-        // possible maluses
         string costs = "";
-        if (moneyMalus < 0) costs += "Costo: 0 F/h\n";
-        else costs += "Costo: " + moneyMalus + " F/h\n";
-        if (usersMod > 0) costs += "Prestazioni e usabilità: -" + (usersMod * 100) + "%\n";
+        if (l == sii.maxLevel) {
+            title = sii.name;
+            description = "Non ci sono potenziamenti disponibili";
+        } else {
+            title = sii.name + "\n" + sii.cost[l] + " Fondi";
+            description = sii.description[l];
+            // set the technical details about requirements
+            if (sii.locked) {
+                requirements += "Per sbloccare questo oggetto devi prima acquistare:\n";
+                foreach (ShopItemCode code in sii.requirements) {
+                    requirements += "    " + gameManager.GetShopItem(code).name + "\n";
+                }
+            }
+            // set the technical details about resistances
+            resistances += "Resistenze:\n";
+            foreach (Resistance r in gameManager.GetShopItemResistances(sii.id)) {
+                resistances += "    " + gameManager.GetAttack(r.id).name + "\n";
+                if (r.duration != 0) resistances += "        durata dell'attacco -" + (r.duration * 100) + "%\n";
+                if (r.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (r.miss * 100) + "%\n";
+                if (r.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (r.endurance * 100) + "%\n";
+            }
+            if (sii.resistances.Length == 0) resistances += "nessuna\n";
+            // set the technical details about costs and usability
+            float moneyMalus = sii.moneyMalus[l];
+            float usersMod = sii.usersMod[l];
+            if (l > 0) {
+                usersMod -= sii.usersMod[l - 1];
+                moneyMalus -= sii.moneyMalus[l - 1];
+            }
+            // possible bonuses
+            if (moneyMalus < 0) resistances += "Guadagno aggiuntivo: " + (-moneyMalus) + " F/h\n";
+            if (usersMod < 0) resistances += "Prestazioni e usabilità: +" + (-usersMod * 100) + "%\n";
+            // possible maluses
+            if (moneyMalus < 0) costs += "Costo: 0 F/h\n";
+            else costs += "Costo: " + moneyMalus + " F/h\n";
+            if (usersMod > 0) costs += "Prestazioni e usabilità: -" + (usersMod * 100) + "%\n";
+        }
+        titleText.SetText(title);
+        descriptionText.SetText(description);
+        requirementsText.SetText(requirements);
+        resistancesText.SetText(resistances);
         costsText.SetText(costs);
     }
 

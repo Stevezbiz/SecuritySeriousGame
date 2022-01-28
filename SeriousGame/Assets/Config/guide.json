@@ -82,7 +82,7 @@
 		{
 			"id": 14,
 			"entryName": "DNSSEC",
-			"entryText": "Il DNS (Domain Name System) è un sistema distribuito che si occupa di rendere raggiungibili le informazioni presenti su Internet, principalmente traducendo indirizzi internet (es. www.nomesito.it) in indirizzi IP comprensibili ai dispositivi di rete (es. 192.168.27.58).\nCome indica l'acronimo, DNSSEC (DNS Security Extensions) è un set di estensioni volte a rendere sicuro lo scambio di dati che avviene tramite DNS. In particolare l'adozione di queste estensioni è utile per impedire alle applicazioni di accettare dati manipolati durante l'utilizzo del sistema DNS e mitigare anche attacchi DoS.",
+			"entryText": "Il DNS (Domain Name System) è un sistema distribuito che si occupa di rendere raggiungibili le informazioni presenti su Internet, principalmente traducendo indirizzi internet (es. www.nomesito.it) in indirizzi IP comprensibili ai dispositivi di rete (es. 192.168.27.58).\nCome indica l'acronimo, DNSSEC (DNS Security Extensions) è un set di estensioni volte a rendere sicuro lo scambio di dati che avviene tramite DNS. In particolare l'adozione di queste estensioni è utile per impedire alle applicazioni di accettare dati manipolati durante l'utilizzo del sistema DNS e mitigare anche attacchi di phishing e social engineering.",
 			"link": "https://it.wikipedia.org/wiki/DNSSEC"
 		},
 		{

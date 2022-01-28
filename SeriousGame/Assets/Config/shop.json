@@ -3,83 +3,110 @@
     {
       "id": 1,
       "category": 0,
-      "name": "Riduzione del tempo di connessione",
+      "name": "Sicurezza di rete",
       "description": [
-        "Eliminare le connessioni non completate entro un certo limite di tempo aiuta a contrastare gli attacchi DoS. Purtroppo può capitare di scartare connessioni potenzialmente valide."
+        "Configurazione del TTL (Time To Live) delle connessioni non completate. Si tratta di una tecnica che permette di scartare le connessioni non stabilite dopo un certo periodo di tempo. Questo permette di liberare memoria per nuove connessioni. D'altro canto può provocare la chiusura di connessioni legittime che impiegano più tempo del previsto per essere stabilite.",
+        "Configurazione di una coda dinamica di connessioni. Questa tecnica permette di dimensionare la coda di connessioni in modo variabile, seguendo l'esigenza dettata dal numero di richieste.",
+        "Allocazione della larghezza di banda. Si tratta di concedere ai servizi una banda massima che possono occupare. In questo modo gli effetti più distruttivi di un attacco DoS possono essere mitigati.",
+        "Installazione di un DDS (DoS Defense System). Questo sistema si occupa di constrastare gli attacchi DoS in maniera reattiva ed efficente.",
+        "Pianificazione di penetration test. Si tratta di un esame che ha lo scopo di identificare le vulnerabilità del sistema. In questo modo è possibile correggerle e rendere il sistema più sicuro."
       ],
       "cost": [
-        100
+        100,
+        150,
+        200,
+        300,
+        400
       ],
       "moneyMalus": [
-        2
+        1,
+        2,
+        4,
+        7,
+        10
       ],
       "usersMod": [
-        0.1
+        0.2,
+        0.1,
+        0.2,
+        0.2,
+        0.2
       ],
       "status": 0,
       "locked": true,
       "upgradeTime": [
-        5
+        5,
+        5,
+        7,
+        15,
+        24
       ],
       "resistances": [
         {
           "resistances": [
             {
               "id": 1,
-              "duration": 0,
-              "miss": 0,
+              "duration": 0.2,
+              "miss": 0.1,
               "endurance": 0.2
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.3,
+              "miss": 0.1,
+              "endurance": 0.3
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.3,
+              "miss": 0.3,
+              "endurance": 0.3
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            },
+            {
+              "id": 6,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
             }
           ]
         }
       ],
       "requirements": [
-        2
+        3
       ],
-      "maxLevel": 1,
+      "maxLevel": 5,
       "level": 0
     },
     {
       "id": 2,
-      "category": 0,
-      "name": "Coda di connessioni circolare",
-      "description": [
-        "Eliminare le connessioni più vecchie non ancora chiuse per far spazio alle nuove può aiutare a contrastare gli attacchi DoS. D'altra parte questa tecnica è soggetta al rischio di eliminare connessioni legittime anche se datate."
-      ],
-      "cost": [
-        100
-      ],
-      "moneyMalus": [
-        2
-      ],
-      "usersMod": [
-        0.1
-      ],
-      "status": 0,
-      "locked": true,
-      "upgradeTime": [
-        5
-      ],
-      "resistances": [
-        {
-          "resistances": [
-            {
-              "id": 1,
-              "duration": 0,
-              "miss": 0,
-              "endurance": 0.2
-            }
-          ]
-        }
-      ],
-      "requirements": [
-        2
-      ],
-      "maxLevel": 1,
-      "level": 0
-    },
-    {
-      "id": 3,
       "category": 0,
       "name": "Firewall",
       "description": [
@@ -91,12 +118,12 @@
         "Si tratta di uno stealth firewall, un terzo dispositivo che si pone a difesa del firewall principale. Intercetta i pacchetti a livello fisico e si comporta come un packet filter. Ma il suo maggiore punto di forza è che, essendo un dispositivo sprovvisto di indirizzo IP, non può essere attaccato in modo diretto come avviene per i dispositivi di rete. Per questo motivo fornisce una solida prima linea di difesa alla rete."
       ],
       "cost": [
+        200,
+        250,
         300,
-        300,
-        300,
-        300,
-        300,
-        300
+        350,
+        400,
+        500
       ],
       "moneyMalus": [
         7,
@@ -371,24 +398,34 @@
       "level": 0
     },
     {
-      "id": 4,
+      "id": 3,
       "category": 0,
-      "name": "DNSSEC",
+      "name": "Sicurezza DNS",
       "description": [
-        "L'adozione di DNSSEC comporta un ulteriore livello di difesa da attacchi MITM e mitiga l'efficacia degli attacchi DoS."
+        "Configurazione di tipo FCrDNS (Forward-confirmed reverse DNS). Questo tipo di configurazione permette di verificare se un indirizzo IP corrisponde effettivamente al dominio richiesto. Purtroppo non si tratta di un controllo molto rilevante a livello di sicurezza, ma risulta efficace nel contrastare i bot, che non riescono ad aggirarlo.",
+        "Utilizzo del protocollo TSIG (transaction signature). Si tratta di un protocollo che si occupa di autenticare gli aggiornamenti dei database DNS, per verificare che non siano stati modificati senza autorizzazione. Tuttavia il protocollo è datato e presenta delle misure di sicurezza che in alcuni casi sono troppo deboli.",
+        "Installazione delle estensioni DNSSEC (Domain Name System Security Extensions). Si tratta di un insieme di tecniche che sfruttano firme digitali per verificare l'autenticità e la correttezza delle informazioni scambiate."
       ],
       "cost": [
+        200,
+        300,
         400
       ],
       "moneyMalus": [
-        8
+        5,
+        7,
+        10
       ],
       "usersMod": [
+        0,
+        0,
         0
       ],
       "status": 0,
       "locked": false,
       "upgradeTime": [
+        15,
+        18,
         24
       ],
       "resistances": [
@@ -396,383 +433,574 @@
           "resistances": [
             {
               "id": 1,
-              "duration": 0,
-              "miss": 0.3,
-              "endurance": 0.5
+              "duration": 0.2,
+              "miss": 0.2,
+              "endurance": 0.2
+            },
+            {
+              "id": 7,
+              "duration": 0.2,
+              "miss": 0.2,
+              "endurance": 0.2
+            },
+            {
+              "id": 8,
+              "duration": 0.2,
+              "miss": 0.2,
+              "endurance": 0.2
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.2,
+              "miss": 0.2,
+              "endurance": 0.2
             },
             {
               "id": 2,
-              "duration": 0,
+              "duration": 0.2,
+              "miss": 0.2,
+              "endurance": 0.2
+            },
+            {
+              "id": 7,
+              "duration": 0.4,
               "miss": 0.3,
+              "endurance": 0.4
+            },
+            {
+              "id": 8,
+              "duration": 0.3,
+              "miss": 0.3,
+              "endurance": 0.3
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 1,
+              "duration": 0.2,
+              "miss": 0.2,
+              "endurance": 0.2
+            },
+            {
+              "id": 2,
+              "duration": 0.4,
+              "miss": 0.4,
+              "endurance": 0.4
+            },
+            {
+              "id": 7,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            },
+            {
+              "id": 8,
+              "duration": 0.5,
+              "miss": 0.5,
               "endurance": 0.5
             }
           ]
         }
       ],
       "requirements": [],
-      "maxLevel": 1,
+      "maxLevel": 3,
+      "level": 0
+    },
+    {
+      "id": 4,
+      "category": 1,
+      "name": "Sicurezza delle password",
+      "description": [
+        "Abolizione di password troppo semplici. Si tratta di aggiungere delle regole alla creazione delle password. In particolare verranno accettate password lunghe almeno 8 caratteri e che contengono almeno un numero, una lettera minuscola e una lettera maiuscola.",
+        "Introduzione di un limite di password errate. Per contrastare gli attachi di brute-force è necessario stabilire un numero massimo di tentativi per inserire la password corretta.",
+        "Introduzione del cambio periodico della password. Per evitare che nel tempo una password venga compromessa è necessario modificarla ogni 12 mesi.",
+        "Introduzione di un tempo d'attesa dopo l'inserimento di una password errata. Questa misura serve a contrastare gli attachi di brute-force.",
+        "Utilizzo di password complesse. Si tratta di aggiungere delle regole alla creazione delle password. In particolare verranno accettate password lunghe almeno 12 caratteri e che contengono almeno un numero, una lettera minuscola, una lettera maiuscola e un carattere speciale.",
+        "Riduzione del tempo massimo per il cambio periodico della password. Per evitare che nel tempo una password venga compromessa è necessario modificarla ogni 6 mesi."
+      ],
+      "cost": [
+        50,
+        100,
+        100,
+        150,
+        150,
+        200
+      ],
+      "moneyMalus": [
+        0,
+        1,
+        2,
+        3,
+        3,
+        3
+      ],
+      "usersMod": [
+        0.1,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3
+      ],
+      "status": 0,
+      "locked": false,
+      "upgradeTime": [
+        4,
+        6,
+        6,
+        8,
+        8,
+        8
+      ],
+      "resistances": [
+        {
+          "resistances": [
+            {
+              "id": 3,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
+            },
+            {
+              "id": 4,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
+            },
+            {
+              "id": 5,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 3,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 4,
+              "duration": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
+            },
+            {
+              "id": 5,
+              "duration": 0.15,
+              "miss": 0.1,
+              "endurance": 0.15
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 3,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 4,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 5,
+              "duration": 0.25,
+              "miss": 0.15,
+              "endurance": 0.25
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 3,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 4,
+              "duration": 0.35,
+              "miss": 0.2,
+              "endurance": 0.35
+            },
+            {
+              "id": 5,
+              "duration": 0.3,
+              "miss": 0.15,
+              "endurance": 0.3
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 3,
+              "duration": 0.75,
+              "miss": 0.7,
+              "endurance": 0.75
+            },
+            {
+              "id": 4,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 5,
+              "duration": 0.45,
+              "miss": 0.3,
+              "endurance": 0.45
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 3,
+              "duration": 0.75,
+              "miss": 0.7,
+              "endurance": 0.75
+            },
+            {
+              "id": 4,
+              "duration": 0.65,
+              "miss": 0.5,
+              "endurance": 0.65
+            },
+            {
+              "id": 5,
+              "duration": 0.6,
+              "miss": 0.45,
+              "endurance": 0.6
+            }
+          ]
+        }
+      ],
+      "requirements": [],
+      "maxLevel": 6,
       "level": 0
     },
     {
       "id": 5,
       "category": 1,
-      "name": "Limite di password errate",
+      "name": "Autenticazione multifattore (MFA)",
       "description": [
-        "Inserire un limite ai tentativi di autenticazione fornisce una maggiore resistenza agli attacchi di brute-force e a quelli basati sui dizionari."
+        "Adozione dell'autenticazione a 2 fattori sul posto di lavoro. Si tratta di adottare un'autenticazione che prevede l'inserimento di una password e di un PIN ricevuto via mail. Garantisce una sicurezza minima.",
+        "Adozione dell'autenticazione a 2 fattori per i clienti del servizio. Si tratta di adottare un'autenticazione che prevede l'inserimento di una password e di un PIN ricevuto via mail. Garantisce una sicurezza minima.",
+        "Adozione dell'autenticazione multifattore sul posto di lavoro. Si tratta di adottare un'autenticazione che prevede l'inserimento di una password e il possesso di un badge. Garantisce una sicurezza maggiore.",
+        "Adozione dell'autenticazione multifattore per i clienti del servizio. Si tratta di adottare un'autenticazione che prevede l'inserimento di una password e dei dati biometrici sull'applicazione mobile. Garantisce una sicurezza maggiore."
       ],
       "cost": [
-        100
+        300,
+        300,
+        500,
+        500
       ],
       "moneyMalus": [
-        0
+        10,
+        15,
+        20,
+        25
       ],
       "usersMod": [
-        0.1
+        0.2,
+        0.4,
+        0.3,
+        0.2
       ],
       "status": 0,
       "locked": false,
       "upgradeTime": [
-        7
+        20,
+        24,
+        28,
+        32
       ],
       "resistances": [
         {
           "resistances": [
             {
-              "id": 3,
-              "duration": 0,
+              "id": 2,
+              "duration": 0.2,
               "miss": 0.2,
+              "endurance": 0.2
+            },
+            {
+              "id": 3,
+              "duration": 0.3,
+              "miss": 0.3,
               "endurance": 0.3
             },
             {
               "id": 4,
-              "duration": 0,
-              "miss": 0.1,
+              "duration": 0.2,
+              "miss": 0.2,
               "endurance": 0.2
             },
             {
               "id": 5,
-              "duration": 0,
-              "miss": 0.05,
-              "endurance": 0.1
+              "duration": 0.2,
+              "miss": 0.15,
+              "endurance": 0.2
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 2,
+              "duration": 0.4,
+              "miss": 0.4,
+              "endurance": 0.4
+            },
+            {
+              "id": 3,
+              "duration": 0.5,
+              "miss": 0.5,
+              "endurance": 0.5
+            },
+            {
+              "id": 4,
+              "duration": 0.4,
+              "miss": 0.4,
+              "endurance": 0.4
+            },
+            {
+              "id": 5,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 2,
+              "duration": 0.5,
+              "miss": 0.5,
+              "endurance": 0.5
+            },
+            {
+              "id": 3,
+              "duration": 0.7,
+              "miss": 0.7,
+              "endurance": 0.7
+            },
+            {
+              "id": 4,
+              "duration": 0.55,
+              "miss": 0.5,
+              "endurance": 0.55
+            },
+            {
+              "id": 5,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 8,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 2,
+              "duration": 0.7,
+              "miss": 0.7,
+              "endurance": 0.7
+            },
+            {
+              "id": 3,
+              "duration": 0.9,
+              "miss": 0.9,
+              "endurance": 0.9
+            },
+            {
+              "id": 4,
+              "duration": 0.7,
+              "miss": 0.6,
+              "endurance": 0.7
+            },
+            {
+              "id": 5,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            },
+            {
+              "id": 7,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
+            },
+            {
+              "id": 8,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
             }
           ]
         }
       ],
       "requirements": [],
-      "maxLevel": 1,
+      "maxLevel": 4,
       "level": 0
     },
     {
       "id": 6,
       "category": 1,
-      "name": "Attesa dopo password errata",
+      "name": "Hashing delle password",
       "description": [
-        "Se un utente sbaglia password deve attendere un breve lasso di tempo prima di fare un nuovo tentativo. Può spazientire gli utenti più frettolosi ma è utile a prevenire attacchi di brute-force e anche attacchi basati su dizionari."
+        "Hashing con algoritmo MD5 (Message Digest 5). Si tratta di un algoritmo molto semplice e veloce. Purtroppo è ritenuto ormai obsoleto e poco sicuro.",
+        "Hashing con algoritmo SHA (Secure Hash Algorithm). Questo algoritmo è più complesso e il suo utilizzo è molto diffuso. Non è immune da attacchi",
+        "Utilizzo di un salt. Si tratta di un valore generato casualmente insieme ad una nuova password. Il suo utilizzo, combinato con un algoritmo di hash, riduce notevolmente le possibilità di attacco.",
+        "Hashing con algoritmo SHA3. Si tratta di un algoritmo molto complesso che garantisce un livello di sicurezza maggiore rispetto al predecessore SHA."
       ],
       "cost": [
-        100
+        200,
+        300,
+        400,
+        500
       ],
       "moneyMalus": [
-        0
+        3,
+        4,
+        6,
+        8
       ],
       "usersMod": [
-        0.1
+        0,
+        0,
+        0,
+        0
       ],
       "status": 0,
       "locked": false,
       "upgradeTime": [
-        7
+        12,
+        16,
+        18,
+        26
       ],
       "resistances": [
         {
           "resistances": [
             {
-              "id": 3,
-              "duration": 0,
+              "id": 2,
+              "duration": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
+            },
+            {
+              "id": 4,
+              "duration": 0.15,
+              "miss": 0.1,
+              "endurance": 0.15
+            },
+            {
+              "id": 5,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 2,
+              "duration": 0.3,
               "miss": 0.2,
               "endurance": 0.3
             },
             {
               "id": 4,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.2
+              "duration": 0.25,
+              "miss": 0.15,
+              "endurance": 0.25
             },
             {
               "id": 5,
-              "duration": 0,
-              "miss": 0.05,
-              "endurance": 0.1
+              "duration": 0.15,
+              "miss": 0.1,
+              "endurance": 0.15
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 2,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 4,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 5,
+              "duration": 0.45,
+              "miss": 0.35,
+              "endurance": 0.45
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 2,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 4,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            },
+            {
+              "id": 5,
+              "duration": 0.5,
+              "miss": 0.5,
+              "endurance": 0.5
             }
           ]
         }
       ],
       "requirements": [],
-      "maxLevel": 1,
+      "maxLevel": 4,
       "level": 0
     },
     {
       "id": 7,
-      "category": 1,
-      "name": "Cambio password",
-      "description": [
-        "Obbligare gli utenti a cambiare password dopo un certo periodo di tempo può essere una seccatura, ma è necessario a prevenire attacchi di brute-force."
-      ],
-      "cost": [
-        100
-      ],
-      "moneyMalus": [
-        0
-      ],
-      "usersMod": [
-        0.2
-      ],
-      "status": 0,
-      "locked": false,
-      "upgradeTime": [
-        7
-      ],
-      "resistances": [
-        {
-          "resistances": [
-            {
-              "id": 3,
-              "duration": 0,
-              "miss": 0.2,
-              "endurance": 0.3
-            },
-            {
-              "id": 4,
-              "duration": 0,
-              "miss": 0.2,
-              "endurance": 0.3
-            },
-            {
-              "id": 5,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.2
-            }
-          ]
-        }
-      ],
-      "requirements": [],
-      "maxLevel": 1,
-      "level": 0
-    },
-    {
-      "id": 8,
-      "category": 1,
-      "name": "Password complesse",
-      "description": [
-        "Obbligare gli utenti ad utilizzare password complesse può essere una seccatura, ma è necessario a prevenire attacchi di brute-force e attacchi basati su dizionari."
-      ],
-      "cost": [
-        100
-      ],
-      "moneyMalus": [
-        0
-      ],
-      "usersMod": [
-        0.2
-      ],
-      "status": 0,
-      "locked": false,
-      "upgradeTime": [
-        7
-      ],
-      "resistances": [
-        {
-          "resistances": [
-            {
-              "id": 3,
-              "duration": 0,
-              "miss": 0.2,
-              "endurance": 0.3
-            },
-            {
-              "id": 4,
-              "duration": 0,
-              "miss": 0.2,
-              "endurance": 0.3
-            },
-            {
-              "id": 5,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.2
-            }
-          ]
-        }
-      ],
-      "requirements": [],
-      "maxLevel": 1,
-      "level": 0
-    },
-    {
-      "id": 9,
-      "category": 1,
-      "name": "Autenticazione multifattore (MFA)",
-      "description": [
-        "Aggiungere un passaggio all'autenticazione può spazientire gli utenti, ma il risultato è una maggiore resistenza ad attacchi MITM, brute-force e attacchi basati su dizionari."
-      ],
-      "cost": [
-        500
-      ],
-      "moneyMalus": [
-        10
-      ],
-      "usersMod": [
-        0.3
-      ],
-      "status": 0,
-      "locked": true,
-      "upgradeTime": [
-        24
-      ],
-      "resistances": [
-        {
-          "resistances": [
-            {
-              "id": 2,
-              "duration": 0,
-              "miss": 0.3,
-              "endurance": 0.5
-            },
-            {
-              "id": 3,
-              "duration": 0,
-              "miss": 0.5,
-              "endurance": 1
-            },
-            {
-              "id": 4,
-              "duration": 0,
-              "miss": 0.4,
-              "endurance": 0.7
-            },
-            {
-              "id": 5,
-              "duration": 0,
-              "miss": 0.4,
-              "endurance": 0.5
-            }
-          ]
-        }
-      ],
-      "requirements": [
-        9
-      ],
-      "maxLevel": 1,
-      "level": 0
-    },
-    {
-      "id": 10,
-      "category": 1,
-      "name": "Utilizzare hash",
-      "description": [
-        "Utilizzare funzioni di hash per manipolare le password è una tecnica necessaria per contrastare attacchi brute-force e attacchi basati su dizionari."
-      ],
-      "cost": [
-        200
-      ],
-      "moneyMalus": [
-        4
-      ],
-      "usersMod": [
-        0
-      ],
-      "status": 0,
-      "locked": true,
-      "upgradeTime": [
-        12
-      ],
-      "resistances": [
-        {
-          "resistances": [
-            {
-              "id": 2,
-              "duration": 0,
-              "miss": 0.2,
-              "endurance": 0.3
-            },
-            {
-              "id": 3,
-              "duration": 0,
-              "miss": 0.2,
-              "endurance": 0.3
-            },
-            {
-              "id": 4,
-              "duration": 0,
-              "miss": 0.2,
-              "endurance": 0.3
-            }
-          ]
-        }
-      ],
-      "requirements": [
-        6,
-        7
-      ],
-      "maxLevel": 1,
-      "level": 0
-    },
-    {
-      "id": 11,
-      "category": 1,
-      "name": "Utilizzare CAPTCHA",
-      "description": [
-        "Aggiungere un passaggio all'autenticazione degli utenti può essere una seccatura, ma è necessario a prevenire attacchi di brute-force e attacchi basati su dizionari."
-      ],
-      "cost": [
-        200
-      ],
-      "moneyMalus": [
-        3
-      ],
-      "usersMod": [
-        0.1
-      ],
-      "status": 0,
-      "locked": true,
-      "upgradeTime": [
-        12
-      ],
-      "resistances": [
-        {
-          "resistances": [
-            {
-              "id": 3,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.3
-            },
-            {
-              "id": 4,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.3
-            },
-            {
-              "id": 5,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.3
-            }
-          ]
-        }
-      ],
-      "requirements": [
-        4,
-        5
-      ],
-      "maxLevel": 1,
-      "level": 0
-    },
-    {
-      "id": 12,
-      "category": 0,
+      "category": 2,
       "name": "Intrusion Detection Systems (IDS)",
       "description": [
         "Installazione del modulo LFM (Log File Monitor). Si occupa di analizzare i file di log alla ricerca di pattern riconducibili a tentativi di attacco. Non è una tecnica molto sofisticata, ma contribuisce a contrastare gli attacchi malware e di accesso non autorizzato.",
@@ -975,57 +1203,55 @@
       "level": 0
     },
     {
-      "id": 13,
+      "id": 8,
       "category": 2,
-      "name": "Aggiornamenti programmati",
+      "name": "Sicurezza del sistema informatico",
       "description": [
-        "Applicare prontamente le nuove patch permette di eliminare alcune vulnerabilità dal software utilizzato, rendendo più difficile sfruttare eventuali falle del codice ai malware e ai malintenzionati che cercano di sabotare le API."
+        "Divieto di installare software esterno. Questa misura vieta ai dipendenti di installare del software che potrebbe introdurre vulnerabilità o malware all'interno del sistema.",
+        "Divieto di utilizzare device esterni. Questa misura vieta ai dipendenti di connettere dispositivi esterni (come chiavette USB) al sistema. Questi potrebbero essere il vettore per un contagio malware.",
+        "Configurazione degli aggiornamenti periodici. Si tratta di pianificare l'aggiornamento del software nel tempo. Mantenere il software aggiornato limita la possibilità che gli attacchi sfruttino le vulnerabilità presenti nel codice."
       ],
       "cost": [
-        100
+        200,
+        250,
+        400
       ],
       "moneyMalus": [
-        4
+        3,
+        4,
+        5
       ],
       "usersMod": [
-        0
+        0.05,
+        0.1,
+        0.15
       ],
       "status": 0,
-      "locked": true,
+      "locked": false,
       "upgradeTime": [
-        7
+        15,
+        17,
+        20
       ],
       "resistances": [
         {
           "resistances": [
             {
-              "id": 6,
-              "duration": 0,
-              "miss": 0.3,
-              "endurance": 0.5
-            },
-            {
-              "id": 8,
-              "duration": 0,
-              "miss": 0.2,
-              "endurance": 0.2
-            },
-            {
               "id": 9,
-              "duration": 0.1,
-              "miss": 0.2,
+              "duration": 0.2,
+              "miss": 0.1,
               "endurance": 0.2
             },
             {
               "id": 10,
-              "duration": 0.1,
+              "duration": 0.15,
               "miss": 0.1,
-              "endurance": 0.2
+              "endurance": 0.15
             },
             {
               "id": 11,
               "duration": 0.1,
-              "miss": 0.1,
+              "miss": 0.05,
               "endurance": 0.1
             },
             {
@@ -1035,16 +1261,76 @@
               "endurance": 0.1
             }
           ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 9,
+              "duration": 0.4,
+              "miss": 0.25,
+              "endurance": 0.4
+            },
+            {
+              "id": 10,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 11,
+              "duration": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
+            },
+            {
+              "id": 12,
+              "duration": 0.25,
+              "miss": 0.15,
+              "endurance": 0.25
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 6,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
+            },
+            {
+              "id": 9,
+              "duration": 0.6,
+              "miss": 0.4,
+              "endurance": 0.6
+            },
+            {
+              "id": 10,
+              "duration": 0.5,
+              "miss": 0.3,
+              "endurance": 0.5
+            },
+            {
+              "id": 11,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 12,
+              "duration": 0.4,
+              "miss": 0.25,
+              "endurance": 0.4
+            }
+          ]
         }
       ],
-      "requirements": [
-        13
-      ],
-      "maxLevel": 1,
+      "requirements": [],
+      "maxLevel": 3,
       "level": 0
     },
     {
-      "id": 14,
+      "id": 9,
       "category": 2,
       "name": "Antivirus",
       "description": [
@@ -1255,162 +1541,161 @@
       "level": 0
     },
     {
-      "id": 15,
-      "category": 2,
-      "name": "Solo software autorizzato",
+      "id": 10,
+      "category": 4,
+      "name": "Sensibilizzare gli utenti",
       "description": [
-        "Utilizzare solo software autorizzato sui computer aziendali può essere limitante per un dipendente, ma con questa misura di sicurezza si evita di introdurre nuove vulnerabilità nel sistema, contrastando l'opera dei malware."
+        "Organizzazione di una campagna di sensibilizzazione sui rischi legati ai servizi online. Permette di ridurre il rischio che i clienti cadano preda di tentativi di truffa online.",
+        "Accettare segnalazioni di tentativi di frode. Consente ai clienti di segnalare possibili tentativi di frode.",
+        "Utilizzare un serious game. Si tratta di sviluppare e rendere disponibile ai clienti un serious game che trasmetta concetti di sicurezza informatica."
       ],
       "cost": [
-        100
+        200,
+        250,
+        400
       ],
       "moneyMalus": [
-        3
+        2,
+        3,
+        7
       ],
       "usersMod": [
-        0
+        0,
+        0,
+        -0.2
       ],
       "status": 0,
       "locked": false,
       "upgradeTime": [
-        7
+        12,
+        15,
+        28
       ],
       "resistances": [
         {
           "resistances": [
             {
-              "id": 6,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.2
+              "id": 7,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
             },
             {
-              "id": 9,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.2
+              "id": 7,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
             },
             {
-              "id": 10,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.2
-            },
-            {
-              "id": 11,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.2
-            },
-            {
-              "id": 12,
-              "duration": 0,
-              "miss": 0.1,
-              "endurance": 0.2
+              "id": 7,
+              "duration": 0.8,
+              "miss": 0.7,
+              "endurance": 0.8
             }
           ]
         }
       ],
       "requirements": [],
-      "maxLevel": 1,
+      "maxLevel": 3,
       "level": 0
     },
     {
-      "id": 16,
+      "id": 11,
       "category": 4,
-      "name": "Sensibilizzare gli utenti",
+      "name": "Assistenza clienti",
       "description": [
-        "Una campagna di sensibilizzazione sui rischi legati ai servizi online per i clienti. Permette di ridurre il rischio che questi cadano preda di tentativi di truffa per mezzo di tecniche di social engineering."
+        "Organizzare uno sportello di assistenza. In questo modo gli utenti sanno a chi rivolgersi in caso di necessità.",
+        "Implementazione di un sistema di feedback. In questo modo è possibile migliorare il servizio offerto.",
+        "Implementazione di un bot online. Si tratta di garantire un servizio migliore fornendo una prima linea di supporto disponibile 24 ore su 24 e 7 giorni su 7."
       ],
       "cost": [
-        300
+        200,
+        300,
+        400
       ],
       "moneyMalus": [
-        0
+        3,
+        5,
+        8
       ],
       "usersMod": [
-        0
-      ],
-      "status": 0,
-      "locked": true,
-      "upgradeTime": [
-        12
-      ],
-      "resistances": [
-        {
-          "resistances": [
-            {
-              "id": 7,
-              "duration": 0,
-              "miss": 0.5,
-              "endurance": 0.7
-            }
-          ]
-        }
-      ],
-      "requirements": [
-        16
-      ],
-      "maxLevel": 1,
-      "level": 0
-    },
-    {
-      "id": 17,
-      "category": 4,
-      "name": "Sportello di assistenza",
-      "description": [
-        "Un servizio di assistenza clienti che permette di aiutare gli utenti in caso di dubbi o difficoltà. Migliora l'esperienza utente del servizio"
-      ],
-      "cost": [
-        300
-      ],
-      "moneyMalus": [
-        3
-      ],
-      "usersMod": [
-        -1
+        -0.2,
+        -0.5,
+        -0.9
       ],
       "status": 0,
       "locked": false,
       "upgradeTime": [
-        24
+        18,
+        24,
+        30
       ],
       "resistances": [
         {
           "resistances": [
             {
               "id": 7,
-              "duration": 0,
+              "duration": 0.3,
               "miss": 0.2,
               "endurance": 0.3
             }
           ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 7,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 7,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
+            }
+          ]
         }
       ],
       "requirements": [],
-      "maxLevel": 1,
+      "maxLevel": 3,
       "level": 0
     },
     {
-      "id": 18,
+      "id": 12,
       "category": 3,
-      "name": "Server più potenti",
+      "name": "Prestazioni del sistema",
       "description": [
-        "Sostituire i server è un'operazione costosa, ma permette di servire più clienti più velocemente. Sono anche più resistenti ai tentativi di attacco DoS"
+        "Potenziare i server. Si tratta di acquistare server più performanti per garantire un servizio migliore.",
+        "Creazione di un cluster di server. Si tratta di creare un cluster di server che permetta delle performance molto elevate.",
+        "Utilizzo di un data center. Si tratta di utilizzare un vero e proprio data center per garantire maggiore solidità ai servizi forniti."
       ],
       "cost": [
+        300,
+        400,
         500
       ],
       "moneyMalus": [
-        -5
+        2,
+        5,
+        9
       ],
       "usersMod": [
-        -1
+        -0.2,
+        -0.4,
+        -0.8
       ],
       "status": 0,
-      "locked": true,
+      "locked": false,
       "upgradeTime": [
-        24
+        20,
+        28,
+        32
       ],
       "resistances": [
         {
@@ -1418,70 +1703,157 @@
             {
               "id": 1,
               "duration": 0.3,
-              "miss": 0.1,
-              "endurance": 0.2
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 1,
+              "duration": 0.5,
+              "miss": 0.3,
+              "endurance": 0.5
+            },
+            {
+              "id": 1,
+              "duration": 0.7,
+              "miss": 0.5,
+              "endurance": 0.7
             }
           ]
         }
       ],
-      "requirements": [
-        2,
-        13
-      ],
-      "maxLevel": 1,
+      "requirements": [],
+      "maxLevel": 3,
       "level": 0
     },
     {
-      "id": 19,
+      "id": 13,
       "category": 3,
       "name": "Training di sicurezza",
       "description": [
-        "Istruire adeguatamente i dipendenti riguardo le minacce alla sicurezza che devono affrontare ogni giorno è un passo fondamentale per garantire un adeguato livello di sicurezza all'interno di un'azienda. Il training insegna ai dipendenti a mettere in atto comportamenti più consapevoli, con l'obiettivo di limitare l'impatto di attacchi di phishing e per mezzo di malware."
+        "Organizzazione di training di base per i dipendenti. Si tratta di corsi di formazione sulla sicurezza informatica che forniscono competenze minime.",
+        "Organizzazione di training strutturato per i dipendenti. Si tratta di corsi di formazione che forniscono una visione ampia della sicurezza informatica.",
+        "Organizzazione di training avanzato per i dipendenti. Si tratta di corsi di formazione che approfondiscono i concetti della sicurezza informatica."
       ],
       "cost": [
-        300
+        300,
+        400,
+        500
       ],
       "moneyMalus": [
-        0
+        2,
+        4,
+        6
       ],
       "usersMod": [
+        0,
+        0,
         0
       ],
       "status": 0,
       "locked": false,
       "upgradeTime": [
-        12
+        12,
+        16,
+        20
       ],
       "resistances": [
         {
           "resistances": [
             {
               "id": 8,
-              "duration": 0,
-              "miss": 0.3,
-              "endurance": 0.5
+              "duration": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
             },
             {
               "id": 9,
-              "duration": 0,
+              "duration": 0.1,
+              "miss": 0.05,
+              "endurance": 0.1
+            },
+            {
+              "id": 10,
+              "duration": 0.1,
+              "miss": 0.05,
+              "endurance": 0.1
+            },
+            {
+              "id": 11,
+              "duration": 0.1,
+              "miss": 0.05,
+              "endurance": 0.1
+            },
+            {
+              "id": 12,
+              "duration": 0.1,
+              "miss": 0.05,
+              "endurance": 0.1
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 8,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
+            },
+            {
+              "id": 9,
+              "duration": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
+            },
+            {
+              "id": 10,
+              "duration": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
+            },
+            {
+              "id": 11,
+              "duration": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
+            },
+            {
+              "id": 12,
+              "duration": 0.2,
+              "miss": 0.1,
+              "endurance": 0.2
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 8,
+              "duration": 0.7,
+              "miss": 0.5,
+              "endurance": 0.7
+            },
+            {
+              "id": 9,
+              "duration": 0.3,
               "miss": 0.2,
               "endurance": 0.3
             },
             {
               "id": 10,
-              "duration": 0,
+              "duration": 0.3,
               "miss": 0.2,
               "endurance": 0.3
             },
             {
               "id": 11,
-              "duration": 0,
+              "duration": 0.3,
               "miss": 0.2,
               "endurance": 0.3
             },
             {
               "id": 12,
-              "duration": 0,
+              "duration": 0.3,
               "miss": 0.2,
               "endurance": 0.3
             }
@@ -1489,50 +1861,134 @@
         }
       ],
       "requirements": [],
-      "maxLevel": 1,
+      "maxLevel": 3,
       "level": 0
     },
     {
-      "id": 20,
+      "id": 14,
       "category": 3,
-      "name": "Backup efficiente",
+      "name": "Backup",
       "description": [
-        "Una policy di back-up efficiente e sicura non rappresenta solo un costo da sostenere, ma si rivela una grande risorsa in caso di infezione da ransomware o compromissione del sistema"
+        "Utilizzo di un backup non strutturato online. Si tratta di una tecnica molto semplice che prevede di duplicare le informazioni più importanti del sistema. Inoltre non è separato dal sistema e in definitiva è poco sicuro e poco affidabile. Sempre meglio di non avere alcun backup!",
+        "Utilizzo di un backup periodico completo online. Questa tecnica consente di ottenere automaticamente una copia esatta completa dei dati originali, garantendo un ripristino del sistema più semplice. Rimane comunque un metodo poco affidabile, dato che non è isolato dal sistema.",
+        "Duplicazione offline del backup. Si tratta di mantenere un'ulteriore copia dei dati isolata dal sistema. In questo modo in caso di compromissione del backup online è possibile ricorrere alla copia offline.",
+        "Utilizzo di un backup online di tipo quasi-CDP (Continuous Data Protection). Si tratta di una tecnica che prevede di mantenere costantemente aggiornati i dati contenuti nel backup, grazie ad un approccio incrementale che registra in tempo reale le modifiche. In questo modo è possibile garantire un ripristino del sistema completo ed efficiente.",
+        "Duplicazione off-site del backup. Si tratta di mantenere un'ulteriore copia dei dati isolata dal sito materiale in cui si trova il backup principale. In questo modo in caso di incidente e compromissione del backup è possibile ricorrere ad una copia di emergenza situata in una struttura sicura."
       ],
       "cost": [
-        200
+        100,
+        150,
+        250,
+        300,
+        400
       ],
       "moneyMalus": [
-        3
+        2,
+        4,
+        6,
+        7,
+        9
       ],
       "usersMod": [
-        0
+        0,
+        -0.2,
+        -0.2,
+        -0.5,
+        -0.5
       ],
       "status": 0,
       "locked": false,
       "upgradeTime": [
-        12
+        12,
+        15,
+        20,
+        24,
+        28
       ],
       "resistances": [
         {
           "resistances": [
             {
               "id": 10,
+              "duration": 0.2,
+              "miss": 0,
+              "endurance": 0.2
+            },
+            {
+              "id": 12,
+              "duration": 0.2,
+              "miss": 0,
+              "endurance": 0.2
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 10,
               "duration": 0.3,
               "miss": 0,
-              "endurance": 0
+              "endurance": 0.2
             },
             {
               "id": 12,
               "duration": 0.3,
               "miss": 0,
-              "endurance": 0
+              "endurance": 0.2
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 10,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 12,
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 10,
+              "duration": 0.5,
+              "miss": 0.2,
+              "endurance": 0.3
+            },
+            {
+              "id": 12,
+              "duration": 0.5,
+              "miss": 0.2,
+              "endurance": 0.3
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 10,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 12,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
             }
           ]
         }
       ],
       "requirements": [],
-      "maxLevel": 1,
+      "maxLevel": 5,
       "level": 0
     }
   ]
