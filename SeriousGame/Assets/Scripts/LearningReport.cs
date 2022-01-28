@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class LearningReport : MonoBehaviour {
+    [SerializeField] GameManager gameManager;
     [SerializeField] GameObject learningRecord;
     [SerializeField] RectTransform content;
     [SerializeField] RectTransform footer;
@@ -10,6 +12,7 @@ public class LearningReport : MonoBehaviour {
     [SerializeField] GameObject debugLearningRecord;
     [SerializeField] RectTransform debugContent;
     [SerializeField] GameObject bottomPanel;
+    [SerializeField] TMP_InputField inputField;
 
     float oldTomeScale = 1f;
     ActionCode action;
@@ -65,6 +68,20 @@ public class LearningReport : MonoBehaviour {
         foreach (KnowledgeComponent kc in kcs.Values) {
             debugRecords.Add(kc.id, Instantiate(debugLearningRecord, debugContent, false).GetComponent<DebugLearningRecord>());
             debugRecords[kc.id].Init(kc);
+        }
+    }
+
+    public void DebugPrint() {
+        switch (inputField.text[0]) {
+            case 'A':
+                gameManager.DebugPrintAttack((AttackCode)int.Parse(inputField.text.Replace("A", "")));
+                break;
+            case 'S':
+                gameManager.DebugPrintShopItem((ShopItemCode)int.Parse(inputField.text.Replace("S", "")));
+                break;
+            default:
+                Debug.Log("Unknown code");
+                break;
         }
     }
 }

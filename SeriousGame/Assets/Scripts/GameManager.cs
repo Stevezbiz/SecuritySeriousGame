@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour {
             gc.reputation = CalculateReputation();
             gc.availableEmployees = CalculateEmployees();
             // refresh
-            gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
+            gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
             // update the stats for possible game over
             if (gc.money < 0) gc.negativeTime++;
             else gc.negativeTime = 0;
@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour {
         // initialize the report structure
         learningReport.Init(kcs);
         // refresh the GUI for the first time
-        gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
+        gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
     }
 
     /**
@@ -588,7 +588,7 @@ public class GameManager : MonoBehaviour {
         gc.money -= shopItems[id].cost[shopItems[id].level];
         Task t = new Task(TaskType.INSTALL, id, shopItems[id].category);
         waitingTasks.Add(t.id, t);
-        gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
+        gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
     }
 
     public void StartUpgradeShopItem(ShopItemCode id) {
@@ -600,7 +600,7 @@ public class GameManager : MonoBehaviour {
         gc.money -= shopItems[id].cost[shopItems[id].level];
         Task t = new Task(TaskType.UPGRADE, id, shopItems[id].category);
         waitingTasks.Add(t.id, t);
-        gui.Refresh(Math.Round(gc.money).ToString(), Math.Round(gc.users).ToString(), gc.reputation, dateTime);
+        gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
     }
 
     void FinishUpgradeShopItem(ShopItemCode id) {
@@ -929,7 +929,7 @@ public class GameManager : MonoBehaviour {
 
     int CalculateEmployees() {
         if (gc.availableEmployees < gc.employeeGoals.Length + gc.initEmployees && gc.users >= gc.employeeGoals[gc.availableEmployees - gc.initEmployees]) {
-            DisplayMessage("Hai raggiunto " + gc.employeeGoals[gc.availableEmployees - gc.initEmployees] + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
+            DisplayMessage("Hai raggiunto " + NumUtils.NumToString(gc.employeeGoals[gc.availableEmployees - gc.initEmployees]) + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
             return gc.availableEmployees + 1;
         }
         return gc.availableEmployees;
@@ -973,12 +973,35 @@ public class GameManager : MonoBehaviour {
             }
         }
         foreach (Resistance r in res.Values) {
-            Debug.Log("attack: " + attacks[r.id].name + "\n" +
-            "tot duration: " + r.duration + "\n" +
-            "tot miss: " + r.miss + "\n" +
-            "tot endurance: " + r.endurance + "\n" +
-            "max time: " + attacks[r.id].maxTime);
+            Debug.Log(r.id + " | " + "duration: " + r.duration + " | " + "miss: " + r.miss + " | " + "endurance: " + r.endurance);
         }
+    }
+
+    public void DebugPrintAttack(AttackCode id) {
+        if (!attacks.ContainsKey(id)) {
+            Debug.Log("Unknown code");
+            return;
+        }
+        string res = id + "\n";
+        foreach(ShopItemInfo sii in shopItems.Values) {
+            foreach(Resistance r in sii.resistances[sii.maxLevel - 1].resistances) {
+                if (r.id == id) res += "\t" + sii.id + " | " + "duration: " + r.duration + " | " + "miss: " + r.miss + " | " + "endurance: " + r.endurance + "\n";
+            }
+        }
+        Debug.Log(res);
+    }
+
+    public void DebugPrintShopItem(ShopItemCode id) {
+        if (!shopItems.ContainsKey(id)) {
+            Debug.Log("Unknown code");
+            return;
+        }
+        string res = id + "\n";
+        ShopItemInfo sii = shopItems[id];
+        foreach (Resistance r in sii.resistances[sii.maxLevel - 1].resistances) {
+            res += "\t" + r.id + " | " + "duration: " + r.duration + " | " + "miss: " + r.miss + " | " + "endurance: " + r.endurance + "\n";
+        }
+        Debug.Log(res);
     }
 
     void EvaluateSecurityStatus() {

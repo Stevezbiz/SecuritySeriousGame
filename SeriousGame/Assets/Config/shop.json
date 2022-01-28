@@ -92,9 +92,9 @@
             },
             {
               "id": 6,
-              "duration": 0.5,
-              "miss": 0.4,
-              "endurance": 0.5
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
             }
           ]
         }
@@ -248,27 +248,27 @@
             },
             {
               "id": 9,
-              "duration": 0.3,
-              "miss": 0.25,
-              "endurance": 0.3
+              "duration": 0.25,
+              "miss": 0.2,
+              "endurance": 0.25
             },
             {
               "id": 10,
-              "duration": 0.2,
-              "miss": 0.2,
-              "endurance": 0.2
+              "duration": 0.15,
+              "miss": 0.15,
+              "endurance": 0.15
             },
             {
               "id": 11,
-              "duration": 0.2,
+              "duration": 0.15,
               "miss": 0.1,
-              "endurance": 0.2
+              "endurance": 0.15
             },
             {
               "id": 12,
-              "duration": 0.2,
+              "duration": 0.1,
               "miss": 0.1,
-              "endurance": 0.2
+              "endurance": 0.1
             }
           ]
         },
@@ -288,27 +288,27 @@
             },
             {
               "id": 9,
-              "duration": 0.45,
-              "miss": 0.4,
-              "endurance": 0.45
-            },
-            {
-              "id": 10,
               "duration": 0.35,
               "miss": 0.3,
               "endurance": 0.35
             },
             {
+              "id": 10,
+              "duration": 0.25,
+              "miss": 0.2,
+              "endurance": 0.25
+            },
+            {
               "id": 11,
-              "duration": 0.3,
-              "miss": 0.15,
-              "endurance": 0.3
+              "duration": 0.25,
+              "miss": 0.2,
+              "endurance": 0.25
             },
             {
               "id": 12,
-              "duration": 0.35,
+              "duration": 0.2,
               "miss": 0.2,
-              "endurance": 0.35
+              "endurance": 0.2
             }
           ]
         },
@@ -328,27 +328,27 @@
             },
             {
               "id": 9,
-              "duration": 0.45,
-              "miss": 0.4,
-              "endurance": 0.45
-            },
-            {
-              "id": 10,
               "duration": 0.35,
               "miss": 0.3,
               "endurance": 0.35
             },
             {
+              "id": 10,
+              "duration": 0.25,
+              "miss": 0.2,
+              "endurance": 0.25
+            },
+            {
               "id": 11,
-              "duration": 0.3,
-              "miss": 0.15,
-              "endurance": 0.3
+              "duration": 0.25,
+              "miss": 0.2,
+              "endurance": 0.25
             },
             {
               "id": 12,
-              "duration": 0.35,
+              "duration": 0.2,
               "miss": 0.2,
-              "endurance": 0.35
+              "endurance": 0.2
             }
           ]
         },
@@ -368,27 +368,27 @@
             },
             {
               "id": 9,
-              "duration": 0.6,
-              "miss": 0.5,
-              "endurance": 0.6
-            },
-            {
-              "id": 10,
               "duration": 0.5,
               "miss": 0.4,
               "endurance": 0.5
             },
             {
+              "id": 10,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
+            },
+            {
               "id": 11,
               "duration": 0.35,
-              "miss": 0.2,
+              "miss": 0.3,
               "endurance": 0.35
             },
             {
               "id": 12,
-              "duration": 0.4,
+              "duration": 0.3,
               "miss": 0.3,
-              "endurance": 0.4
+              "endurance": 0.3
             }
           ]
         }
@@ -432,7 +432,7 @@
         {
           "resistances": [
             {
-              "id": 1,
+              "id": 2,
               "duration": 0.2,
               "miss": 0.2,
               "endurance": 0.2
@@ -454,16 +454,10 @@
         {
           "resistances": [
             {
-              "id": 1,
-              "duration": 0.2,
-              "miss": 0.2,
-              "endurance": 0.2
-            },
-            {
               "id": 2,
-              "duration": 0.2,
-              "miss": 0.2,
-              "endurance": 0.2
+              "duration": 0.35,
+              "miss": 0.35,
+              "endurance": 0.35
             },
             {
               "id": 7,
@@ -482,16 +476,10 @@
         {
           "resistances": [
             {
-              "id": 1,
-              "duration": 0.2,
-              "miss": 0.2,
-              "endurance": 0.2
-            },
-            {
               "id": 2,
-              "duration": 0.4,
-              "miss": 0.4,
-              "endurance": 0.4
+              "duration": 0.55,
+              "miss": 0.5,
+              "endurance": 0.55
             },
             {
               "id": 7,
@@ -533,12 +521,12 @@
         200
       ],
       "moneyMalus": [
-        0,
         1,
         2,
         3,
-        3,
-        3
+        4,
+        5,
+        6
       ],
       "usersMod": [
         0.1,
@@ -607,9 +595,9 @@
           "resistances": [
             {
               "id": 3,
-              "duration": 0.3,
-              "miss": 0.2,
-              "endurance": 0.3
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
             },
             {
               "id": 4,
@@ -629,9 +617,9 @@
           "resistances": [
             {
               "id": 3,
-              "duration": 0.5,
-              "miss": 0.4,
-              "endurance": 0.5
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
             },
             {
               "id": 4,
@@ -651,9 +639,9 @@
           "resistances": [
             {
               "id": 3,
-              "duration": 0.75,
-              "miss": 0.7,
-              "endurance": 0.75
+              "duration": 0.85,
+              "miss": 0.8,
+              "endurance": 0.85
             },
             {
               "id": 4,
@@ -673,9 +661,9 @@
           "resistances": [
             {
               "id": 3,
-              "duration": 0.75,
-              "miss": 0.7,
-              "endurance": 0.75
+              "duration": 0.95,
+              "miss": 0.9,
+              "endurance": 0.95
             },
             {
               "id": 4,
@@ -765,9 +753,9 @@
           "resistances": [
             {
               "id": 2,
-              "duration": 0.4,
+              "duration": 0.45,
               "miss": 0.4,
-              "endurance": 0.4
+              "endurance": 0.45
             },
             {
               "id": 3,
@@ -793,9 +781,9 @@
           "resistances": [
             {
               "id": 2,
-              "duration": 0.5,
-              "miss": 0.5,
-              "endurance": 0.5
+              "duration": 0.65,
+              "miss": 0.6,
+              "endurance": 0.65
             },
             {
               "id": 3,
@@ -805,15 +793,15 @@
             },
             {
               "id": 4,
-              "duration": 0.55,
-              "miss": 0.5,
-              "endurance": 0.55
+              "duration": 0.6,
+              "miss": 0.55,
+              "endurance": 0.6
             },
             {
               "id": 5,
-              "duration": 0.5,
-              "miss": 0.4,
-              "endurance": 0.5
+              "duration": 0.55,
+              "miss": 0.45,
+              "endurance": 0.55
             },
             {
               "id": 8,
@@ -827,9 +815,9 @@
           "resistances": [
             {
               "id": 2,
-              "duration": 0.7,
-              "miss": 0.7,
-              "endurance": 0.7
+              "duration": 0.9,
+              "miss": 0.8,
+              "endurance": 0.9
             },
             {
               "id": 3,
@@ -839,15 +827,15 @@
             },
             {
               "id": 4,
-              "duration": 0.7,
-              "miss": 0.6,
-              "endurance": 0.7
+              "duration": 0.8,
+              "miss": 0.7,
+              "endurance": 0.8
             },
             {
               "id": 5,
-              "duration": 0.6,
-              "miss": 0.5,
-              "endurance": 0.6
+              "duration": 0.7,
+              "miss": 0.7,
+              "endurance": 0.7
             },
             {
               "id": 7,
@@ -914,6 +902,12 @@
               "endurance": 0.2
             },
             {
+              "id": 3,
+              "duration": 0.05,
+              "miss": 0.05,
+              "endurance": 0.05
+            },
+            {
               "id": 4,
               "duration": 0.15,
               "miss": 0.1,
@@ -931,9 +925,15 @@
           "resistances": [
             {
               "id": 2,
-              "duration": 0.3,
-              "miss": 0.2,
-              "endurance": 0.3
+              "duration": 0.35,
+              "miss": 0.25,
+              "endurance": 0.35
+            },
+            {
+              "id": 3,
+              "duration": 0.1,
+              "miss": 0.1,
+              "endurance": 0.1
             },
             {
               "id": 4,
@@ -953,8 +953,14 @@
           "resistances": [
             {
               "id": 2,
+              "duration": 0.35,
+              "miss": 0.25,
+              "endurance": 0.35
+            },
+            {
+              "id": 3,
               "duration": 0.3,
-              "miss": 0.2,
+              "miss": 0.25,
               "endurance": 0.3
             },
             {
@@ -975,9 +981,15 @@
           "resistances": [
             {
               "id": 2,
-              "duration": 0.5,
+              "duration": 0.6,
+              "miss": 0.5,
+              "endurance": 0.6
+            },
+            {
+              "id": 3,
+              "duration": 0.4,
               "miss": 0.4,
-              "endurance": 0.5
+              "endurance": 0.4
             },
             {
               "id": 4,
@@ -1045,9 +1057,9 @@
             },
             {
               "id": 6,
-              "duration": 0.2,
-              "miss": 0.1,
-              "endurance": 0.2
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
             },
             {
               "id": 9,
@@ -1085,15 +1097,15 @@
             },
             {
               "id": 6,
-              "duration": 0.2,
-              "miss": 0.1,
-              "endurance": 0.2
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
             },
             {
               "id": 9,
-              "duration": 0.4,
-              "miss": 0.35,
-              "endurance": 0.4
+              "duration": 0.25,
+              "miss": 0.2,
+              "endurance": 0.25
             },
             {
               "id": 10,
@@ -1109,9 +1121,9 @@
             },
             {
               "id": 12,
-              "duration": 0.25,
+              "duration": 0.2,
               "miss": 0.15,
-              "endurance": 0.25
+              "endurance": 0.2
             }
           ]
         },
@@ -1125,21 +1137,21 @@
             },
             {
               "id": 6,
-              "duration": 0.5,
-              "miss": 0.3,
-              "endurance": 0.5
+              "duration": 0.55,
+              "miss": 0.4,
+              "endurance": 0.55
             },
             {
               "id": 9,
-              "duration": 0.6,
-              "miss": 0.5,
-              "endurance": 0.6
-            },
-            {
-              "id": 10,
               "duration": 0.5,
               "miss": 0.4,
               "endurance": 0.5
+            },
+            {
+              "id": 10,
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
             },
             {
               "id": 11,
@@ -1149,9 +1161,9 @@
             },
             {
               "id": 12,
-              "duration": 0.4,
-              "miss": 0.3,
-              "endurance": 0.4
+              "duration": 0.3,
+              "miss": 0.2,
+              "endurance": 0.3
             }
           ]
         },
@@ -1165,33 +1177,33 @@
             },
             {
               "id": 6,
-              "duration": 0.6,
-              "miss": 0.5,
-              "endurance": 0.6
-            },
-            {
-              "id": 9,
-              "duration": 0.8,
-              "miss": 0.7,
-              "endurance": 0.8
-            },
-            {
-              "id": 10,
               "duration": 0.7,
               "miss": 0.6,
               "endurance": 0.7
             },
             {
+              "id": 9,
+              "duration": 0.65,
+              "miss": 0.55,
+              "endurance": 0.65
+            },
+            {
+              "id": 10,
+              "duration": 0.55,
+              "miss": 0.5,
+              "endurance": 0.55
+            },
+            {
               "id": 11,
-              "duration": 0.5,
-              "miss": 0.4,
-              "endurance": 0.5
+              "duration": 0.55,
+              "miss": 0.5,
+              "endurance": 0.55
             },
             {
               "id": 12,
-              "duration": 0.6,
-              "miss": 0.5,
-              "endurance": 0.6
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
             }
           ]
         }
@@ -1375,15 +1387,15 @@
           "resistances": [
             {
               "id": 9,
-              "duration": 0.3,
+              "duration": 0.25,
               "miss": 0.2,
-              "endurance": 0.3
+              "endurance": 0.25
             },
             {
               "id": 10,
-              "duration": 0.25,
+              "duration": 0.2,
               "miss": 0.15,
-              "endurance": 0.25
+              "endurance": 0.2
             },
             {
               "id": 11,
@@ -1409,15 +1421,15 @@
             },
             {
               "id": 9,
-              "duration": 0.4,
+              "duration": 0.35,
               "miss": 0.3,
-              "endurance": 0.4
+              "endurance": 0.35
             },
             {
               "id": 10,
-              "duration": 0.35,
+              "duration": 0.3,
               "miss": 0.25,
-              "endurance": 0.35
+              "endurance": 0.3
             },
             {
               "id": 11,
@@ -1427,9 +1439,9 @@
             },
             {
               "id": 12,
-              "duration": 0.3,
+              "duration": 0.2,
               "miss": 0.2,
-              "endurance": 0.3
+              "endurance": 0.25
             }
           ]
         },
@@ -1443,9 +1455,9 @@
             },
             {
               "id": 9,
-              "duration": 0.55,
-              "miss": 0.45,
-              "endurance": 0.55
+              "duration": 0.45,
+              "miss": 0.4,
+              "endurance": 0.45
             },
             {
               "id": 10,
@@ -1461,9 +1473,9 @@
             },
             {
               "id": 12,
-              "duration": 0.45,
-              "miss": 0.35,
-              "endurance": 0.45
+              "duration": 0.4,
+              "miss": 0.3,
+              "endurance": 0.4
             }
           ]
         },
@@ -1477,61 +1489,61 @@
             },
             {
               "id": 9,
-              "duration": 0.7,
-              "miss": 0.55,
-              "endurance": 0.7
-            },
-            {
-              "id": 10,
-              "duration": 0.6,
-              "miss": 0.45,
-              "endurance": 0.6
-            },
-            {
-              "id": 11,
-              "duration": 0.45,
-              "miss": 0.35,
-              "endurance": 0.45
-            },
-            {
-              "id": 12,
-              "duration": 0.5,
-              "miss": 0.45,
-              "endurance": 0.5
-            }
-          ]
-        },
-        {
-          "resistances": [
-            {
-              "id": 8,
-              "duration": 0.5,
-              "miss": 0.4,
-              "endurance": 0.5
-            },
-            {
-              "id": 9,
-              "duration": 0.8,
-              "miss": 0.8,
-              "endurance": 0.8
-            },
-            {
-              "id": 10,
-              "duration": 0.7,
-              "miss": 0.7,
-              "endurance": 0.7
-            },
-            {
-              "id": 11,
               "duration": 0.6,
               "miss": 0.5,
               "endurance": 0.6
             },
             {
+              "id": 10,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 11,
+              "duration": 0.45,
+              "miss": 0.35,
+              "endurance": 0.45
+            },
+            {
               "id": 12,
+              "duration": 0.45,
+              "miss": 0.35,
+              "endurance": 0.45
+            }
+          ]
+        },
+        {
+          "resistances": [
+            {
+              "id": 8,
+              "duration": 0.5,
+              "miss": 0.4,
+              "endurance": 0.5
+            },
+            {
+              "id": 9,
+              "duration": 0.7,
+              "miss": 0.7,
+              "endurance": 0.7
+            },
+            {
+              "id": 10,
               "duration": 0.6,
               "miss": 0.6,
               "endurance": 0.6
+            },
+            {
+              "id": 11,
+              "duration": 0.6,
+              "miss": 0.6,
+              "endurance": 0.6
+            },
+            {
+              "id": 12,
+              "duration": 0.55,
+              "miss": 0.5,
+              "endurance": 0.55
             }
           ]
         }
@@ -1579,13 +1591,21 @@
               "duration": 0.3,
               "miss": 0.2,
               "endurance": 0.3
-            },
+            }
+          ]
+        },
+        {
+          "resistances": [
             {
               "id": 7,
               "duration": 0.5,
               "miss": 0.4,
               "endurance": 0.5
-            },
+            }
+          ]
+        },
+        {
+          "resistances": [
             {
               "id": 7,
               "duration": 0.8,
@@ -1705,13 +1725,21 @@
               "duration": 0.3,
               "miss": 0.2,
               "endurance": 0.3
-            },
+            }
+          ]
+        },
+        {
+          "resistances": [
             {
               "id": 1,
               "duration": 0.5,
               "miss": 0.3,
               "endurance": 0.5
-            },
+            }
+          ]
+        },
+        {
+          "resistances": [
             {
               "id": 1,
               "duration": 0.7,

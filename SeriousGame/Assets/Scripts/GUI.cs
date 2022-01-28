@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using DateTime = System.DateTime;
 using Image = UnityEngine.UI.Image;
+using Math = System.Math;
 
 public class GUI : MonoBehaviour {
     [SerializeField] TextMeshProUGUI moneyText;
@@ -16,9 +17,9 @@ public class GUI : MonoBehaviour {
     /**
      * <summary>Displays the current (updated) values in the GUI</summary>
      */
-    public void Refresh(string money, string users, float reputation, DateTime dateTime) {
-        moneyText.SetText(money);
-        usersText.SetText(users);
+    public void Refresh(float money, float users, float reputation, DateTime dateTime) {
+        moneyText.SetText(Math.Round(money).ToString());
+        usersText.SetText(NumUtils.NumToString(Math.Round(users)));
         reputationText.SetText(Mathf.FloorToInt(reputation * 100).ToString() + "%");
         reputationBar.fillAmount = reputation;
         dateText.SetText(dateTime.ToString("d MMM yyyy"));

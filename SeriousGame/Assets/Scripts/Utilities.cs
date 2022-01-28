@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Math = System.Math;
 
 [System.Serializable]
 public class LogLine {
@@ -139,4 +140,15 @@ public static class COLOR {
     public static Color GREEN = new Color(.0f, 1f, .0f, 1f);
     public static Color YELLOW = new Color(1f, .8f, .0f, 1f);
     public static Color GREEN_DISABLED = new Color(.0f, .4f, .0f, 1f);
+}
+
+public static class NumUtils{
+    public static string NumToString(double val) {
+        string text;
+        if (val > 1000000000) text = (val / 1000000000).ToString(".#") + "B";
+        else if (val > 1000000) text = (val / 1000000).ToString(".#") + "M";
+        else if (val > 1000) text = (val / 1000).ToString(".#") + "K";
+        else text = val.ToString("0.");
+        return text;
+    }
 }
