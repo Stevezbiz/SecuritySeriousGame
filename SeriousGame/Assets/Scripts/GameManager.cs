@@ -222,15 +222,15 @@ public class GameManager : MonoBehaviour {
     }
 
     float GetActualDurationResistance(AttackCode id) {
-        return gc.duration[gc.actualResistanceMod] * resistances[id].duration;
+        return resistances[id].duration / gc.duration[gc.actualResistanceMod];
     }
 
     float GetActualMissResistance(AttackCode id) {
-        return gc.miss[gc.actualResistanceMod] * resistances[id].miss;
+        return resistances[id].miss * gc.miss[gc.actualResistanceMod];
     }
 
     float GetActualEnduranceResistance(AttackCode id) {
-        return gc.endurance[gc.actualResistanceMod] * resistances[id].endurance;
+        return resistances[id].endurance * gc.endurance[gc.actualResistanceMod];
     }
 
     /**
