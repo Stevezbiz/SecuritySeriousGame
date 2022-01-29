@@ -75,6 +75,8 @@ public class GameConfig {
     public int initEmployees;
     public int availableEmployees;
     public int hiredEmployees;
+    public float abilityOffset;
+    public float abilityFactor;
     public float money;
     public float users;
     public float reputation;

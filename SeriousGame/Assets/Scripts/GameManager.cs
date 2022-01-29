@@ -221,14 +221,26 @@ public class GameManager : MonoBehaviour {
         return new List<AttackInfo>(attacks.Values);
     }
 
+    float GetActualDurationResistance(AttackCode id) {
+        return gc.duration[gc.actualResistanceMod] * resistances[id].duration;
+    }
+
+    float GetActualMissResistance(AttackCode id) {
+        return gc.miss[gc.actualResistanceMod] * resistances[id].miss;
+    }
+
+    float GetActualEnduranceResistance(AttackCode id) {
+        return gc.endurance[gc.actualResistanceMod] * resistances[id].endurance;
+    }
+
     /**
      * <summary>Return the resistance to the specified attack</summary>
      */
     public Resistance GetResistance(AttackCode id) {
         if (!resistances.ContainsKey(id)) return null;
-        float duration = gc.duration[gc.actualResistanceMod] * resistances[id].duration;
-        float miss = gc.miss[gc.actualResistanceMod] * resistances[id].miss;
-        float endurance = gc.endurance[gc.actualResistanceMod] * resistances[id].endurance;
+        float duration = GetActualDurationResistance(id);
+        float miss = GetActualMissResistance(id);
+        float endurance = GetActualEnduranceResistance(id);
         return new Resistance(id, duration, miss, endurance);
     }
 
@@ -454,25 +466,25 @@ public class GameManager : MonoBehaviour {
         ShopItemInfo sii = shopItems[sid];
         int upgradeTime = sii.upgradeTime[sii.level];
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[sii.category];
-        return Mathf.CeilToInt(upgradeTime * (1f - 0.18f * (abilityLevel - 5f)));
+        return Mathf.CeilToInt(upgradeTime * (1f - gc.abilityFactor * (abilityLevel - gc.abilityOffset)));
     }
 
     public int GetUpgradeTaskDuration(EmployeeCode id, ShopItemCode sid) {
         ShopItemInfo sii = shopItems[sid];
         int upgradeTime = sii.upgradeTime[sii.level];
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[sii.category];
-        return Mathf.CeilToInt(upgradeTime * (1f - 0.18f * (abilityLevel - 5f)));
+        return Mathf.CeilToInt(upgradeTime * (1f - gc.abilityFactor * (abilityLevel - gc.abilityOffset)));
     }
 
     public int GetRepairTaskDuration(EmployeeCode id, AttackCode aid) {
-        float resMod = resistances[aid].duration;
+        float resMod = GetActualDurationResistance(aid);
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[aid].category];
-        return Mathf.CeilToInt((1f - gc.duration[gc.actualResistanceMod] * resMod) * attacks[aid].duration * (1 - 0.18f * (abilityLevel - 5f)));
+        return Mathf.CeilToInt((1f - resMod) * attacks[aid].duration * (1f - gc.abilityFactor * (abilityLevel - gc.abilityOffset)));
     }
 
     public float GetPreventProtection(EmployeeCode id, Category c) {
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[c];
-        return 0.2f + 0.04f * (abilityLevel - 5f);
+        return 0.2f + 0.04f * (abilityLevel - gc.abilityOffset);
     }
 
     public float GetTaskProgress(ShopItemCode id) {
@@ -606,7 +618,7 @@ public class GameManager : MonoBehaviour {
     void FinishUpgradeShopItem(ShopItemCode id) {
         foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
             resistances[r.id].miss -= r.miss;
-            resistances[r.id].duration -= r.duration;
+            resistances[r.id].duration /= (1 - r.duration);
             resistances[r.id].endurance -= r.endurance;
         }
         EnableShopItem(id);
@@ -623,7 +635,7 @@ public class GameManager : MonoBehaviour {
         foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
             if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
             resistances[r.id].miss += r.miss;
-            resistances[r.id].duration += r.duration;
+            resistances[r.id].duration *= (1 - r.duration);
             resistances[r.id].endurance += r.endurance;
         }
     }
@@ -638,7 +650,7 @@ public class GameManager : MonoBehaviour {
         // update resistances
         foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
             resistances[r.id].miss -= r.miss;
-            resistances[r.id].duration -= r.duration;
+            resistances[r.id].duration /= (1 - r.duration);
             resistances[r.id].endurance -= r.endurance;
         }
     }
@@ -876,9 +888,9 @@ public class GameManager : MonoBehaviour {
             }
         }
         foreach (Resistance r in shopItems[id].resistances[shopItems[id].level].resistances) {
-            res[r.id].duration *= gc.duration[gc.actualResistanceMod];
-            res[r.id].miss *= gc.miss[gc.actualResistanceMod];
-            res[r.id].endurance *= gc.endurance[gc.actualResistanceMod];
+            res[r.id].duration = GetActualDurationResistance(r.id);
+            res[r.id].miss = GetActualMissResistance(r.id);
+            res[r.id].endurance = GetActualEnduranceResistance(r.id);
         }
         return new List<Resistance>(res.Values);
     }
@@ -968,7 +980,7 @@ public class GameManager : MonoBehaviour {
             foreach (Resistance r in sii.resistances[sii.maxLevel - 1].resistances) {
                 if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
                 res[r.id].miss += r.miss;
-                res[r.id].duration += r.duration;
+                res[r.id].duration *= r.duration;
                 res[r.id].endurance += r.endurance;
             }
         }
@@ -1009,13 +1021,12 @@ public class GameManager : MonoBehaviour {
         Dictionary<Category, int> scores = new Dictionary<Category, int>();
         foreach(AttackCode id in attacks.Keys) {
             if(attackSchedule[id].status != AttackStatus.INACTIVE) {
-                Resistance r = GetResistance(id);
-                Category c = attacks[r.id].category;
-                if (r.duration >= BKTModel.GetDurationL(id)) scores[c]++;
+                Category c = attacks[id].category;
+                if (GetActualDurationResistance(id) >= BKTModel.GetDurationL(id)) scores[c]++;
                 else scores[c]--;
-                if (r.miss >= BKTModel.GetMissL(id)) scores[c]++;
+                if (GetActualMissResistance(id) >= BKTModel.GetMissL(id)) scores[c]++;
                 else scores[c]--;
-                if (r.endurance >= BKTModel.GetEnduranceL(id)) scores[c]++;
+                if (GetActualEnduranceResistance(id) >= BKTModel.GetEnduranceL(id)) scores[c]++;
                 else scores[c]--;
             }
         }
@@ -1070,9 +1081,9 @@ public class GameManager : MonoBehaviour {
         else score--;
         // 3. Is the countermeasure over-preventing an attack?
         foreach(Resistance r in res) {
-            if (resistances[r.id].duration > BKTModel.GetDurationH(r.id)) score--;
-            if (resistances[r.id].miss > BKTModel.GetMissH(r.id)) score--;
-            if (resistances[r.id].endurance > BKTModel.GetEnduranceH(r.id)) score--;
+            if (GetActualDurationResistance(r.id) > BKTModel.GetDurationH(r.id)) score--;
+            if (GetActualMissResistance(r.id) > BKTModel.GetMissH(r.id)) score--;
+            if (GetActualEnduranceResistance(r.id) > BKTModel.GetEnduranceH(r.id)) score--;
         }
         // Select the proper Knowledge Component
         SkillCode kc;
@@ -1124,9 +1135,9 @@ public class GameManager : MonoBehaviour {
         else score--;
         // 3. Is the countermeasure over-preventing an attack?
         foreach (Resistance r in res) {
-            if (resistances[r.id].duration > BKTModel.GetDurationH(r.id)) score--;
-            if (resistances[r.id].miss > BKTModel.GetMissH(r.id)) score--;
-            if (resistances[r.id].endurance > BKTModel.GetEnduranceH(r.id)) score--;
+            if (GetActualDurationResistance(r.id) > BKTModel.GetDurationH(r.id)) score--;
+            if (GetActualMissResistance(r.id) > BKTModel.GetMissH(r.id)) score--;
+            if (GetActualEnduranceResistance(r.id) > BKTModel.GetEnduranceH(r.id)) score--;
         }
         // Select the proper Knowledge Component
         SkillCode kc;

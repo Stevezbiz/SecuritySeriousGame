@@ -21,6 +21,8 @@
 		"initEmployees": 3,
 		"availableEmployees": 3,
 		"hiredEmployees": 3,
+		"abilityOffset": 5,
+		"abilityFactor": 0.18,
 		"money": 700,
 		"users": 100,
 		"reputation": 0.5,
