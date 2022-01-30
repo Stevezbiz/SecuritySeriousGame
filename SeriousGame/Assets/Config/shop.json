@@ -33,7 +33,13 @@
         0.2
       ],
       "status": 0,
-      "locked": true,
+      "locked": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         5,
         5,
@@ -41,7 +47,7 @@
         15,
         24
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -99,8 +105,22 @@
           ]
         }
       ],
-      "requirements": [
-        3
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
       ],
       "maxLevel": 5,
       "level": 0
@@ -142,7 +162,14 @@
         0.1
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         12,
         15,
@@ -151,7 +178,7 @@
         24,
         24
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -393,7 +420,26 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 6,
       "level": 0
     },
@@ -422,13 +468,17 @@
         0
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         15,
         18,
         24
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -496,7 +546,17 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 3,
       "level": 0
     },
@@ -537,7 +597,14 @@
         0.3
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         4,
         6,
@@ -546,7 +613,7 @@
         8,
         8
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -680,7 +747,26 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 6,
       "level": 0
     },
@@ -713,14 +799,19 @@
         0.2
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         20,
         24,
         28,
         32
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -852,7 +943,20 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 4,
       "level": 0
     },
@@ -885,14 +989,19 @@
         0
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         12,
         16,
         18,
         26
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -1006,7 +1115,20 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 4,
       "level": 0
     },
@@ -1039,14 +1161,19 @@
         0.3
       ],
       "status": 0,
-      "locked": true,
+      "locked": [
+        false,
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         18,
         20,
         24,
         32
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -1208,8 +1335,19 @@
           ]
         }
       ],
-      "requirements": [
-        3
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
       ],
       "maxLevel": 4,
       "level": 0
@@ -1239,13 +1377,17 @@
         0.15
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         15,
         17,
         20
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -1337,7 +1479,17 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 3,
       "level": 0
     },
@@ -1374,7 +1526,13 @@
         0.3
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         12,
         14,
@@ -1382,7 +1540,7 @@
         22,
         28
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -1548,7 +1706,23 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 5,
       "level": 0
     },
@@ -1577,13 +1751,17 @@
         -0.2
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         12,
         15,
         28
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -1615,7 +1793,17 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 3,
       "level": 0
     },
@@ -1644,13 +1832,17 @@
         -0.9
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         18,
         24,
         30
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -1682,7 +1874,17 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 3,
       "level": 0
     },
@@ -1711,13 +1913,17 @@
         -0.8
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         20,
         28,
         32
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -1749,7 +1955,17 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 3,
       "level": 0
     },
@@ -1778,13 +1994,17 @@
         0
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         12,
         16,
         20
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -1888,7 +2108,17 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 3,
       "level": 0
     },
@@ -1925,7 +2155,13 @@
         -0.5
       ],
       "status": 0,
-      "locked": false,
+      "locked": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       "upgradeTime": [
         12,
         15,
@@ -1933,7 +2169,7 @@
         24,
         28
       ],
-      "resistances": [
+      "resArray": [
         {
           "resistances": [
             {
@@ -2015,7 +2251,26 @@
           ]
         }
       ],
-      "requirements": [],
+      "reqArray": [
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        },
+        {
+          "requirements": []
+        }
+      ],
       "maxLevel": 5,
       "level": 0
     }

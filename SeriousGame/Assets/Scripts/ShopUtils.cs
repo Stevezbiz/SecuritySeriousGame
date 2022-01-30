@@ -30,6 +30,17 @@ public enum ShopItemStatus {
 }
 
 [System.Serializable]
+public class Requirement {
+    public ShopItemCode id;
+    public int level;
+}
+
+[System.Serializable]
+public class RequirementArray {
+    public Requirement[] requirements;
+}
+
+[System.Serializable]
 public class ShopItemInfo {
     public ShopItemCode id;
     public Category category;
@@ -39,10 +50,10 @@ public class ShopItemInfo {
     public float[] moneyMalus;
     public float[] usersMod;
     public ShopItemStatus status;
-    public bool locked;
+    public bool[] locked;
     public int[] upgradeTime;
-    public ResistanceArray[] resistances;
-    public ShopItemCode[] requirements;
+    public ResistanceArray[] resArray;
+    public RequirementArray[] reqArray;
     public int maxLevel;
     public int level;
 }
@@ -51,10 +62,10 @@ public class ShopItemInfo {
 public class ShopItemRecap {
     public ShopItemCode id;
     public ShopItemStatus status;
-    public bool locked;
+    public bool[] locked;
     public int level;
 
-    public ShopItemRecap(ShopItemCode id, ShopItemStatus status, bool locked, int level) {
+    public ShopItemRecap(ShopItemCode id, ShopItemStatus status, bool[] locked, int level) {
         this.id = id;
         this.status = status;
         this.locked = locked;
@@ -81,6 +92,7 @@ public static class ShopUtils {
         foreach (ShopItemRecap s in sir) {
             shopItems[s.id].status = s.status;
             shopItems[s.id].locked = s.locked;
+            shopItems[s.id].level = s.level;
         }
     }
 

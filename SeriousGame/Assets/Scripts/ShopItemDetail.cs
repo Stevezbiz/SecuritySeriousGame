@@ -21,9 +21,12 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] GameObject installButton;
     [SerializeField] GameObject upgradeButton;
     [SerializeField] GameObject upgradingButton;
-    [SerializeField] GameObject lockImage;
+    [SerializeField] GameObject purchaseLockImage;
     [SerializeField] TextMeshProUGUI purchaseText;
     [SerializeField] Outline purchaseOutline;
+    [SerializeField] GameObject upgradeLockImage;
+    [SerializeField] TextMeshProUGUI upgradeText;
+    [SerializeField] Outline upgradeOutline;
     [SerializeField] GameManager gameManager;
     [SerializeField] EmployeeChoice employeeChoice;
     [SerializeField] RectTransform content;
@@ -51,15 +54,13 @@ public class ShopItemDetail : MonoBehaviour {
         purchaseButton.GetComponentInChildren<Button>().interactable = true;
         purchaseText.color = COLOR.GREEN;
         purchaseOutline.effectColor = COLOR.GREEN;
-        lockImage.SetActive(false);
+        purchaseLockImage.SetActive(false);
+        upgradeButton.GetComponentInChildren<Button>().interactable = true;
+        upgradeText.color = COLOR.GREEN;
+        upgradeOutline.effectColor = COLOR.GREEN;
+        upgradeLockImage.SetActive(false);
         switch (sii.status) {
             case ShopItemStatus.NOT_OWNED:
-                if (sii.locked) {
-                    purchaseButton.GetComponentInChildren<Button>().interactable = false;
-                    purchaseText.color = COLOR.GREEN_DISABLED;
-                    purchaseOutline.effectColor = COLOR.GREEN_DISABLED;
-                    lockImage.SetActive(true);
-                }
                 purchaseButton.SetActive(true);
                 break;
             case ShopItemStatus.NOT_INSTALLED:
@@ -84,6 +85,20 @@ public class ShopItemDetail : MonoBehaviour {
                 Debug.Log("Error: undefined shopItemStatus");
                 break;
         }
+        if (sii.locked[sii.level]) {
+            if (sii.status == ShopItemStatus.NOT_OWNED) {
+                purchaseButton.GetComponentInChildren<Button>().interactable = false;
+                purchaseText.color = COLOR.GREEN_DISABLED;
+                purchaseOutline.effectColor = COLOR.GREEN_DISABLED;
+                purchaseLockImage.SetActive(true);
+            } else {
+                upgradeButton.GetComponentInChildren<Button>().interactable = false;
+                upgradeText.color = COLOR.GREEN_DISABLED;
+                upgradeOutline.effectColor = COLOR.GREEN_DISABLED;
+                upgradeLockImage.SetActive(true);
+            }
+            
+        }
         content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
     }
 
@@ -93,10 +108,10 @@ public class ShopItemDetail : MonoBehaviour {
     void ComposeDetails(ShopItemInfo sii) {
         // compose details of actual level
         if (sii.level > 0) {
-            actualDescriptionText.SetText("Livello " + sii.level + " (installato):\n" + sii.description[sii.level - 1]);
+            actualDescriptionText.SetText("LIVELLO " + sii.level + " (installato)\n" + sii.description[sii.level - 1]);
             ComposeLevelDetails(sii, sii.level - 1, true);
         } else {
-            actualDescriptionText.SetText("Livello 0: non hai ancora installato questo potenziamento");
+            actualDescriptionText.SetText("LIVELLO 0: non hai ancora installato questo potenziamento");
             actualResistancesText.SetText("");
             actualCostsText.SetText("");
         }
@@ -109,7 +124,7 @@ public class ShopItemDetail : MonoBehaviour {
             nextCostsText.SetText("");
         } else {
             costText.SetText(sii.cost[sii.level] + " Fondi");
-            nextDescriptionText.SetText("Livello " + (sii.level + 1) + ":\n" + sii.description[sii.level]);
+            nextDescriptionText.SetText("LIVELLO " + (sii.level + 1) + "\n" + sii.description[sii.level]);
             ComposeLevelDetails(sii, sii.level, false);
         }
     }
@@ -119,17 +134,17 @@ public class ShopItemDetail : MonoBehaviour {
         string resistances;
         string costs = "";
         // set the technical details about requirements
-        if (sii.locked) {
+        if (!actual && sii.locked[l]) {
             requirements += "Per sbloccare questo oggetto devi prima acquistare:\n";
-            foreach (ShopItemCode code in sii.requirements) {
-                requirements += "    " + gameManager.GetShopItem(code).name + "\n";
+            foreach (Requirement r in sii.reqArray[l].requirements) {
+                requirements += "    " + gameManager.GetShopItem(r.id).name.ToUpper() + " - Lv." + r.level + "\n";
             }
         }
         // set the technical details about resistances
         resistances = "Resistenze:\n";
         if (actual) {
             // cumulative resistances (possessed item)
-            foreach (Resistance r in sii.resistances[l].resistances) {
+            foreach (Resistance r in sii.resArray[l].resistances) {
                 resistances += "    " + gameManager.GetAttack(r.id).name.ToUpper() + "\n";
                 if (r.duration != 0) resistances += "        durata dell'attacco -" + (gameManager.GetActualDurationResistance(r.duration) * 100).ToString("0.") + "%\n";
                 if (r.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (gameManager.GetActualMissResistance(r.miss) * 100).ToString("0.") + "%\n";
@@ -145,7 +160,7 @@ public class ShopItemDetail : MonoBehaviour {
             }
         }
         
-        if (sii.resistances.Length == 0) resistances += "nessuna\n";
+        if (sii.resArray.Length == 0) resistances += "nessuna\n";
         // set the technical details about costs and usability
         float moneyMalus = sii.moneyMalus[l];
         float usersMod = sii.usersMod[l];

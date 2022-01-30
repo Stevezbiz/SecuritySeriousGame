@@ -31,18 +31,18 @@ public class ShopItem : MonoBehaviour {
         this.parent = parent;
         this.details = details;
         gameObject.name = "ShopItem" + id.ToString();
-        itemText.SetText(sii.name);
-        if (sii.locked) {
+        itemText.SetText(sii.name + " - Lv." + sii.level);
+        if (sii.locked[sii.level]) {
             bool ok = true;
-            foreach (ShopItemCode code in sii.requirements) {
-                if (!gameManager.ShopItemIsInstalled(code)) {
+            foreach (Requirement r in sii.reqArray[sii.level].requirements) {
+                if (!gameManager.RequirementIsSatisfied(r)) {
                     ok = false;
                     break;
                 }
             }
             if (ok) gameManager.ShopItemUnlock(id);
         }
-        if (sii.locked) {
+        if (sii.status == ShopItemStatus.NOT_OWNED && sii.locked[sii.level]) {
             Lock();
         } else {
             switch (sii.status) {

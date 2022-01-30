@@ -632,7 +632,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void FinishUpgradeShopItem(ShopItemCode id) {
-        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 2].resistances) {
+        foreach (Resistance r in shopItems[id].resArray[shopItems[id].level - 2].resistances) {
             resistances[r.id].miss -= r.miss;
             resistances[r.id].duration /= (1 - r.duration);
             resistances[r.id].endurance -= r.endurance;
@@ -648,7 +648,7 @@ public class GameManager : MonoBehaviour {
         logManager.LogPrintItem(shopItems[id].name, ActionCode.ENABLE_ITEM);
         shopItems[id].status = ShopItemStatus.ACTIVE;
         // update resistances
-        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
+        foreach (Resistance r in shopItems[id].resArray[shopItems[id].level - 1].resistances) {
             if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 1f, 0f, 0f));
             resistances[r.id].miss += r.miss;
             resistances[r.id].duration *= (1 - r.duration);
@@ -664,7 +664,7 @@ public class GameManager : MonoBehaviour {
         logManager.LogPrintItem(shopItems[id].name, ActionCode.DISABLE_ITEM);
         shopItems[id].status = ShopItemStatus.INACTIVE;
         // update resistances
-        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
+        foreach (Resistance r in shopItems[id].resArray[shopItems[id].level - 1].resistances) {
             resistances[r.id].miss -= r.miss;
             resistances[r.id].duration /= (1 - r.duration);
             resistances[r.id].endurance -= r.endurance;
@@ -682,14 +682,14 @@ public class GameManager : MonoBehaviour {
      * <summary>Unlocks the item of the shop</summary>
      */
     public void ShopItemUnlock(ShopItemCode id) {
-        shopItems[id].locked = false;
+        shopItems[id].locked[shopItems[id].level] = false;
     }
 
     /**
      * <summary>Returns true if the specified item of the shop is installed</summary>
      */
-    public bool ShopItemIsInstalled(ShopItemCode id) {
-        return ShopItemIsOwned(id) && shopItems[id].status != ShopItemStatus.INSTALLING;
+    public bool RequirementIsSatisfied(Requirement r) {
+        return shopItems[r.id].level >= r.level;
     }
 
     // EMPLOYEES
@@ -890,11 +890,11 @@ public class GameManager : MonoBehaviour {
 
     public List<Resistance> GetShopItemResistances(ShopItemCode id) {
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
-        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level].resistances) {
+        foreach (Resistance r in shopItems[id].resArray[shopItems[id].level].resistances) {
             res.Add(r.id, new Resistance(r));
         }
         if (shopItems[id].level > 0) {
-            foreach(Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
+            foreach(Resistance r in shopItems[id].resArray[shopItems[id].level - 1].resistances) {
                 if (res.ContainsKey(r.id)) {
                     res[r.id].duration -= r.duration;
                     res[r.id].miss -= r.miss;
@@ -993,7 +993,7 @@ public class GameManager : MonoBehaviour {
     void DebugPrint() {
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         foreach (ShopItemInfo sii in shopItems.Values) {
-            foreach (Resistance r in sii.resistances[sii.maxLevel - 1].resistances) {
+            foreach (Resistance r in sii.resArray[sii.maxLevel - 1].resistances) {
                 if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 1f, 0f, 0f));
                 res[r.id].duration *= (1 - r.duration);
                 res[r.id].miss += r.miss;
@@ -1012,7 +1012,7 @@ public class GameManager : MonoBehaviour {
         }
         string res = id + "\n";
         foreach(ShopItemInfo sii in shopItems.Values) {
-            foreach(Resistance r in sii.resistances[sii.maxLevel - 1].resistances) {
+            foreach(Resistance r in sii.resArray[sii.maxLevel - 1].resistances) {
                 if (r.id == id) res += "\t" + sii.id + " | " + "duration: " + r.duration + " | " + "miss: " + r.miss + " | " + "endurance: " + r.endurance + "\n";
             }
         }
@@ -1026,7 +1026,7 @@ public class GameManager : MonoBehaviour {
         }
         string res = id + "\n";
         ShopItemInfo sii = shopItems[id];
-        foreach (Resistance r in sii.resistances[sii.maxLevel - 1].resistances) {
+        foreach (Resistance r in sii.resArray[sii.maxLevel - 1].resistances) {
             res += "\t" + r.id + " | " + "duration: " + r.duration + " | " + "miss: " + r.miss + " | " + "endurance: " + r.endurance + "\n";
         }
         Debug.Log(res);
