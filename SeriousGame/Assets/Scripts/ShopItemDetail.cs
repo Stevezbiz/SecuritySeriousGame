@@ -6,10 +6,14 @@ using UnityEngine.UI;
 
 public class ShopItemDetail : MonoBehaviour {
     [SerializeField] TextMeshProUGUI titleText;
-    [SerializeField] TextMeshProUGUI descriptionText;
-    [SerializeField] TextMeshProUGUI requirementsText;
-    [SerializeField] TextMeshProUGUI resistancesText;
-    [SerializeField] TextMeshProUGUI costsText;
+    [SerializeField] TextMeshProUGUI costText;
+    [SerializeField] TextMeshProUGUI nextDescriptionText;
+    [SerializeField] TextMeshProUGUI nextRequirementsText;
+    [SerializeField] TextMeshProUGUI nextResistancesText;
+    [SerializeField] TextMeshProUGUI nextCostsText;
+    [SerializeField] TextMeshProUGUI actualDescriptionText;
+    [SerializeField] TextMeshProUGUI actualResistancesText;
+    [SerializeField] TextMeshProUGUI actualCostsText;
     [SerializeField] GameObject purchaseButton;
     [SerializeField] GameObject enableButton;
     [SerializeField] GameObject disableButton;
@@ -22,64 +26,11 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] Outline purchaseOutline;
     [SerializeField] GameManager gameManager;
     [SerializeField] EmployeeChoice employeeChoice;
+    [SerializeField] RectTransform content;
 
     ShopItem parent;
     ShopItemCode id;
     Task task;
-
-    /**
-     * <summary>Compose all the details of the item</summary>
-     */
-    void ComposeDetails(ShopItemInfo sii) {
-        int l = sii.level;
-        string title;
-        string description;
-        string requirements = "";
-        string resistances = "";
-        string costs = "";
-        if (l == sii.maxLevel) {
-            title = sii.name;
-            description = "Non ci sono potenziamenti disponibili";
-        } else {
-            title = sii.name + "\n" + sii.cost[l] + " Fondi";
-            description = sii.description[l];
-            // set the technical details about requirements
-            if (sii.locked) {
-                requirements += "Per sbloccare questo oggetto devi prima acquistare:\n";
-                foreach (ShopItemCode code in sii.requirements) {
-                    requirements += "    " + gameManager.GetShopItem(code).name + "\n";
-                }
-            }
-            // set the technical details about resistances
-            resistances += "Resistenze:\n";
-            foreach (Resistance r in gameManager.GetShopItemResistances(sii.id)) {
-                resistances += "    " + gameManager.GetAttack(r.id).name + "\n";
-                if (r.duration != 0) resistances += "        durata dell'attacco -" + (r.duration * 100) + "%\n";
-                if (r.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (r.miss * 100) + "%\n";
-                if (r.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (r.endurance * 100) + "%\n";
-            }
-            if (sii.resistances.Length == 0) resistances += "nessuna\n";
-            // set the technical details about costs and usability
-            float moneyMalus = sii.moneyMalus[l];
-            float usersMod = sii.usersMod[l];
-            if (l > 0) {
-                usersMod -= sii.usersMod[l - 1];
-                moneyMalus -= sii.moneyMalus[l - 1];
-            }
-            // possible bonuses
-            if (moneyMalus < 0) resistances += "Guadagno aggiuntivo: " + (-moneyMalus) + " F/h\n";
-            if (usersMod < 0) resistances += "Prestazioni e usabilità: +" + (-usersMod * 100) + "%\n";
-            // possible maluses
-            if (moneyMalus < 0) costs += "Costo: 0 F/h\n";
-            else costs += "Costo: " + moneyMalus + " F/h\n";
-            if (usersMod > 0) costs += "Prestazioni e usabilità: -" + (usersMod * 100) + "%\n";
-        }
-        titleText.SetText(title);
-        descriptionText.SetText(description);
-        requirementsText.SetText(requirements);
-        resistancesText.SetText(resistances);
-        costsText.SetText(costs);
-    }
 
     /**
      * <summary>Populate the item of the shop with all the elements to show</summary>
@@ -133,6 +84,91 @@ public class ShopItemDetail : MonoBehaviour {
                 Debug.Log("Error: undefined shopItemStatus");
                 break;
         }
+        content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
+    }
+
+    /**
+     * <summary>Compose all the details of the item</summary>
+     */
+    void ComposeDetails(ShopItemInfo sii) {
+        // compose details of actual level
+        if (sii.level > 0) {
+            actualDescriptionText.SetText("Livello " + sii.level + " (installato):\n" + sii.description[sii.level - 1]);
+            ComposeLevelDetails(sii, sii.level - 1, true);
+        } else {
+            actualDescriptionText.SetText("Livello 0: non hai ancora installato questo potenziamento");
+            actualResistancesText.SetText("");
+            actualCostsText.SetText("");
+        }
+        titleText.SetText(sii.name.ToLower());
+        if (sii.level == sii.maxLevel) {
+            costText.SetText("");
+            nextDescriptionText.SetText("Non ci sono potenziamenti disponibili");
+            nextRequirementsText.SetText("");
+            nextResistancesText.SetText("");
+            nextCostsText.SetText("");
+        } else {
+            costText.SetText(sii.cost[sii.level] + " Fondi");
+            nextDescriptionText.SetText("Livello " + (sii.level + 1) + ":\n" + sii.description[sii.level]);
+            ComposeLevelDetails(sii, sii.level, false);
+        }
+    }
+
+    void ComposeLevelDetails(ShopItemInfo sii, int l, bool actual) {
+        string requirements = "";
+        string resistances;
+        string costs = "";
+        // set the technical details about requirements
+        if (sii.locked) {
+            requirements += "Per sbloccare questo oggetto devi prima acquistare:\n";
+            foreach (ShopItemCode code in sii.requirements) {
+                requirements += "    " + gameManager.GetShopItem(code).name + "\n";
+            }
+        }
+        // set the technical details about resistances
+        resistances = "Resistenze:\n";
+        if (actual) {
+            // cumulative resistances (possessed item)
+            foreach (Resistance r in sii.resistances[l].resistances) {
+                resistances += "    " + gameManager.GetAttack(r.id).name.ToUpper() + "\n";
+                if (r.duration != 0) resistances += "        durata dell'attacco -" + (gameManager.GetActualDurationResistance(r.duration) * 100).ToString("0.") + "%\n";
+                if (r.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (gameManager.GetActualMissResistance(r.miss) * 100).ToString("0.") + "%\n";
+                if (r.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (gameManager.GetActualEnduranceResistance(r.endurance) * 100).ToString("0.") + "%\n";
+            }
+        } else {
+            // differential resistances (next level)
+            foreach (Resistance r in gameManager.GetShopItemResistances(sii.id)) {
+                resistances += "    " + gameManager.GetAttack(r.id).name.ToUpper() + "\n";
+                if (r.duration != 0) resistances += "        durata dell'attacco -" + (r.duration * 100).ToString("0.") + "%\n";
+                if (r.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (r.miss * 100).ToString("0.") + "%\n";
+                if (r.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (r.endurance * 100).ToString("0.") + "%\n";
+            }
+        }
+        
+        if (sii.resistances.Length == 0) resistances += "nessuna\n";
+        // set the technical details about costs and usability
+        float moneyMalus = sii.moneyMalus[l];
+        float usersMod = sii.usersMod[l];
+        if (!actual && l > 0) {
+            usersMod -= sii.usersMod[l - 1];
+            moneyMalus -= sii.moneyMalus[l - 1];
+        }
+        // possible bonuses
+        if (moneyMalus < 0) resistances += "Guadagno aggiuntivo: " + (-moneyMalus) + " F/h\n";
+        if (usersMod < 0) resistances += "Prestazioni e usabilità: +" + (-usersMod * 100) + "%\n";
+        // possible maluses
+        if (moneyMalus < 0) costs += "Costo: 0 F/h\n";
+        else costs += "Costo: " + moneyMalus + " F/h\n";
+        if (usersMod > 0) costs += "Prestazioni e usabilità: -" + (usersMod * 100) + "%\n";
+        if (actual) {
+            actualResistancesText.SetText(resistances);
+            actualCostsText.SetText(costs);
+        } else {
+            nextRequirementsText.SetText(requirements);
+            nextResistancesText.SetText(resistances);
+            nextCostsText.SetText(costs);
+        }
+        
     }
 
     /**

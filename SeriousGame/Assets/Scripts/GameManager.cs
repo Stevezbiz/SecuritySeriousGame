@@ -222,7 +222,9 @@ public class GameManager : MonoBehaviour {
     }
 
     float GetActualDurationResistance(AttackCode id) {
-        return resistances[id].duration / gc.duration[gc.actualResistanceMod];
+        float val = (1 - resistances[id].duration) * gc.duration[gc.actualResistanceMod];
+        if (val < 0.99f) return val;
+        else return 0.99f;
     }
 
     float GetActualMissResistance(AttackCode id) {
@@ -231,6 +233,20 @@ public class GameManager : MonoBehaviour {
 
     float GetActualEnduranceResistance(AttackCode id) {
         return resistances[id].endurance * gc.endurance[gc.actualResistanceMod];
+    }
+
+    public float GetActualDurationResistance(float duration) {
+        float val = duration * gc.duration[gc.actualResistanceMod];
+        if (val < 0.99f) return val;
+        else return 0.99f;
+    }
+
+    public float GetActualMissResistance(float miss) {
+        return miss * gc.miss[gc.actualResistanceMod];
+    }
+
+    public float GetActualEnduranceResistance(float endurance) {
+        return endurance * gc.endurance[gc.actualResistanceMod];
     }
 
     /**
@@ -616,7 +632,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void FinishUpgradeShopItem(ShopItemCode id) {
-        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
+        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 2].resistances) {
             resistances[r.id].miss -= r.miss;
             resistances[r.id].duration /= (1 - r.duration);
             resistances[r.id].endurance -= r.endurance;
@@ -633,7 +649,7 @@ public class GameManager : MonoBehaviour {
         shopItems[id].status = ShopItemStatus.ACTIVE;
         // update resistances
         foreach (Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
-            if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
+            if (!resistances.ContainsKey(r.id)) resistances.Add(r.id, new Resistance(r.id, 1f, 0f, 0f));
             resistances[r.id].miss += r.miss;
             resistances[r.id].duration *= (1 - r.duration);
             resistances[r.id].endurance += r.endurance;
@@ -875,7 +891,7 @@ public class GameManager : MonoBehaviour {
     public List<Resistance> GetShopItemResistances(ShopItemCode id) {
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         foreach (Resistance r in shopItems[id].resistances[shopItems[id].level].resistances) {
-            res.Add(r.id, r);
+            res.Add(r.id, new Resistance(r));
         }
         if (shopItems[id].level > 0) {
             foreach(Resistance r in shopItems[id].resistances[shopItems[id].level - 1].resistances) {
@@ -883,14 +899,14 @@ public class GameManager : MonoBehaviour {
                     res[r.id].duration -= r.duration;
                     res[r.id].miss -= r.miss;
                     res[r.id].endurance -= r.endurance;
-                    if (r.duration == 0 && r.miss == 0 && r.endurance == 0) res.Remove(r.id);
+                    if (res[r.id].duration == 0 && res[r.id].miss == 0 && res[r.id].endurance == 0) res.Remove(r.id);
                 }
             }
         }
-        foreach (Resistance r in shopItems[id].resistances[shopItems[id].level].resistances) {
-            res[r.id].duration = GetActualDurationResistance(r.id);
-            res[r.id].miss = GetActualMissResistance(r.id);
-            res[r.id].endurance = GetActualEnduranceResistance(r.id);
+        foreach (AttackCode k in res.Keys) {
+            res[k].duration *= gc.duration[gc.actualResistanceMod];
+            res[k].miss *= gc.duration[gc.actualResistanceMod];
+            res[k].endurance *= gc.duration[gc.actualResistanceMod];
         }
         return new List<Resistance>(res.Values);
     }
@@ -978,9 +994,9 @@ public class GameManager : MonoBehaviour {
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         foreach (ShopItemInfo sii in shopItems.Values) {
             foreach (Resistance r in sii.resistances[sii.maxLevel - 1].resistances) {
-                if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 0, 0f, 0f));
+                if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 1f, 0f, 0f));
+                res[r.id].duration *= (1 - r.duration);
                 res[r.id].miss += r.miss;
-                res[r.id].duration *= r.duration;
                 res[r.id].endurance += r.endurance;
             }
         }
