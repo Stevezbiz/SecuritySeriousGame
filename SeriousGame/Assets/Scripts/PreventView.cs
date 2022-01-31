@@ -31,7 +31,7 @@ public class PreventView : MonoBehaviour {
         EmployeeInfo e = gameManager.GetEmployee(id);
         nameText.SetText(e.name.ToLower());
         descriptionText.SetText(e.description);
-        moneyGainText.SetText(e.moneyGain.ToString());
+        moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
         Dictionary<Category, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
         networkBar.fillAmount = abilities[Category.NETWORK] / 10;
         accessBar.fillAmount = abilities[Category.ACCESS] / 10;
