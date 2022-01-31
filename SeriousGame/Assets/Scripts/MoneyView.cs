@@ -66,41 +66,41 @@ public class MoneyView : MonoBehaviour {
      * <summary>Open a window with a brief explanation of the value</summary>
      */
     public void MoneyGainButton() {
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Guadagno utenti: numero di fondi guadagnati in base al numero di utenti che utilizzano il servizio", ActionCode.CONTINUE);
+        gameManager.DisplayMessage("Guadagno utenti: numero di fondi guadagnati in base al numero di utenti che utilizzano il servizio", ActionCode.CONTINUE, Role.CEO);
     }
 
     /**
      * <summary>Open a window with a brief explanation of the value</summary>
      */
     public void MoneyMalusButton() {
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Costi: fondi spesi per mantenere attivi servizi e difese", ActionCode.CONTINUE);
+        gameManager.DisplayMessage("Costi: fondi spesi per mantenere attivi servizi e difese", ActionCode.CONTINUE, Role.CEO);
     }
 
     /**
      * <summary>Open a window with a brief explanation of the value</summary>
      */
     public void AttackMoneyMalusButton() {
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Malus attacchi: riduzione applicata al guadagno utenti, dovuta agli attacchi in corso", ActionCode.CONTINUE);
+        gameManager.DisplayMessage("Malus attacchi: riduzione applicata al guadagno utenti, dovuta agli attacchi in corso", ActionCode.CONTINUE, Role.CEO);
     }
 
     /**
          * <summary>Open a window with a brief explanation of the value</summary>
          */
     public void UsersGainButton() {
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Nuovi utenti: numero di nuovi utenti che si iscrivono al servizio", ActionCode.CONTINUE);
+        gameManager.DisplayMessage("Nuovi utenti: numero di nuovi utenti che si iscrivono al servizio", ActionCode.CONTINUE, Role.CEO);
     }
 
     /**
          * <summary>Open a window with a brief explanation of the value</summary>
          */
     public void UsersModButton() {
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Modificatore usabilità: modificatore applicato al numero di nuovi utenti. Indica il grado di semplicità/difficoltà che gli utenti incontrano nell'utilizzare il servizio", ActionCode.CONTINUE);
+        gameManager.DisplayMessage("Modificatore usabilità: modificatore applicato al numero di nuovi utenti. Indica il grado di semplicità/difficoltà che gli utenti incontrano nell'utilizzare il servizio", ActionCode.CONTINUE, Role.CEO);
     }
 
     /**
          * <summary>Open a window with a brief explanation of the value</summary>
          */
     public void AttackUsersMalusButton() {
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Malus attacchi: riduzione applicata al numero di nuovi utenti, dovuta agli attacchi in corso", ActionCode.CONTINUE);
+        gameManager.DisplayMessage("Malus attacchi: riduzione applicata al numero di nuovi utenti, dovuta agli attacchi in corso", ActionCode.CONTINUE, Role.CEO);
     }
 }

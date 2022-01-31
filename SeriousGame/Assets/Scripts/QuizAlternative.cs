@@ -12,7 +12,7 @@ public class QuizAlternative : MonoBehaviour {
     public void Load(QuizQuestion quizQuestion, int id, string text) {
         this.quizQuestion = quizQuestion;
         this.id = id;
-        answerText.SetText(text.ToLower());
+        answerText.SetText(text);
     }
 
     public void OnClick() {

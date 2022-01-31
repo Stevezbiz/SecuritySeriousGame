@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] Guide guide;
     [SerializeField] QuizQuestion quizQuestion;
     [SerializeField] LearningReport learningReport;
-    [SerializeField] GameObject windowPopUp;
+    [SerializeField] Message message;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset shopFileJSON;
@@ -279,44 +279,44 @@ public class GameManager : MonoBehaviour {
                 ScheduleAttack(AttackCode.DOS);
                 ScheduleAttack(AttackCode.BRUTE_FORCE);
                 ScheduleAttack(AttackCode.WORM);
-                DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.DOS].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.DOS].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 120: // day 5
                 ScheduleAttack(AttackCode.MITM);
                 SetAttackTrend();
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 168: // day 7
                 ScheduleAttack(AttackCode.VIRUS);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.VIRUS].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.VIRUS].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 240: // day 10
                 ScheduleAttack(AttackCode.SOCIAL_ENGINEERING);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 288: // day 12
                 ScheduleAttack(AttackCode.API_VULNERABILITY);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 360: // day 15
                 ScheduleAttack(AttackCode.DICTIONARY);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DICTIONARY].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DICTIONARY].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 408: // day 17
                 ScheduleAttack(AttackCode.PHISHING);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.PHISHING].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.PHISHING].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 480: // day 20
                 ScheduleAttack(AttackCode.SPYWARE);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SPYWARE].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SPYWARE].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 528: // day 22
                 ScheduleAttack(AttackCode.RAINBOW_TABLE);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 600: // day 25
                 ScheduleAttack(AttackCode.RANSOMWARE);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RANSOMWARE].name, ActionCode.CONTINUE);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RANSOMWARE].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             default:
                 break;
@@ -352,7 +352,7 @@ public class GameManager : MonoBehaviour {
         attackStats[id].n++;
         attackStats[id].hit++;
         // generate a message
-        DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE);
+        DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE, Role.SECURITY);
     }
 
     /**
@@ -378,7 +378,7 @@ public class GameManager : MonoBehaviour {
         // re-schedule the attack
         ScheduleAttack(id);
         // generate a message
-        DisplayMessage("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name, ActionCode.CONTINUE);
+        DisplayMessage("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name, ActionCode.CONTINUE, Role.SECURITY);
     }
 
     /**
@@ -417,7 +417,7 @@ public class GameManager : MonoBehaviour {
         }
         gc.actualAttackTrend = possibleTrends[Random.Range(0, possibleTrends.Count)];
         gc.attackTrendTimer = Random.Range(gc.attackTrendTime, 2 * gc.attackTrendTime);
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Attenzione: secondo le nostre analisi gli attacchi di tipo " + attacks[gc.actualAttackTrend].name + " sono in aumento!", ActionCode.CONTINUE);
+        DisplayMessage("Attenzione: secondo le nostre analisi gli attacchi di tipo " + attacks[gc.actualAttackTrend].name + " sono in aumento!", ActionCode.CONTINUE, Role.SECURITY);
     }
 
     void UpdateResistanceAging() {
@@ -957,7 +957,7 @@ public class GameManager : MonoBehaviour {
 
     int CalculateEmployees() {
         if (gc.availableEmployees < gc.employeeGoals.Length + gc.initEmployees && gc.users >= gc.employeeGoals[gc.availableEmployees - gc.initEmployees]) {
-            DisplayMessage("Hai raggiunto " + NumUtils.NumToString(gc.employeeGoals[gc.availableEmployees - gc.initEmployees]) + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE);
+            DisplayMessage("Hai raggiunto " + NumUtils.NumToString(gc.employeeGoals[gc.availableEmployees - gc.initEmployees]) + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE, Role.CEO);
             return gc.availableEmployees + 1;
         }
         return gc.availableEmployees;
@@ -968,7 +968,7 @@ public class GameManager : MonoBehaviour {
      */
     void GameOver() {
         Time.timeScale = 0;
-        DisplayMessage("GAME OVER", ActionCode.CONTINUE);
+        DisplayMessage("Oh no! Il bilancio è dissestato! Non sei stato all'altezza del tuo ruolo, dovrò assumere un nuovo CIO", ActionCode.CONTINUE, Role.CEO);
     }
 
     /**
@@ -986,12 +986,13 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Creates a pop-up window message</summary>
      */
-    void DisplayMessage(string message, ActionCode action) {
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load(message, action);
+    public void DisplayMessage(string message, ActionCode action, Role role) {
+        this.message.Load(message, action, avatars[role]);
     }
 
     void DebugPrint() {
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
+        float totalMoney = 0f;
         foreach (ShopItemInfo sii in shopItems.Values) {
             foreach (Resistance r in sii.resArray[sii.maxLevel - 1].resistances) {
                 if (!res.ContainsKey(r.id)) res.Add(r.id, new Resistance(r.id, 1f, 0f, 0f));
@@ -999,10 +1000,12 @@ public class GameManager : MonoBehaviour {
                 res[r.id].miss += r.miss;
                 res[r.id].endurance += r.endurance;
             }
+            totalMoney += sii.moneyMalus[sii.maxLevel - 1];
         }
         foreach (Resistance r in res.Values) {
             Debug.Log(r.id + " | " + "duration: " + r.duration + " | " + "miss: " + r.miss + " | " + "endurance: " + r.endurance);
         }
+        Debug.Log("Total moneyMalus: " + totalMoney);
     }
 
     public void DebugPrintAttack(AttackCode id) {

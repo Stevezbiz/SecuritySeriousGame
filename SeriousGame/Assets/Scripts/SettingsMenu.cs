@@ -49,7 +49,7 @@ public class SettingsMenu : MonoBehaviour {
         BKTModel.SaveModel(gameManager.SaveModel());
         GameObject newWindow = Instantiate(windowPopUp, new Vector3(0, 0, 0), Quaternion.identity);
         newWindow.transform.SetParent(gameObject.transform, false);
-        newWindow.GetComponent<WindowPopUp>().Load("Partita salvata", ActionCode.CONTINUE);
+        gameManager.DisplayMessage("Partita salvata", ActionCode.CONTINUE, Role.SECURITY);
     }
 
     /**

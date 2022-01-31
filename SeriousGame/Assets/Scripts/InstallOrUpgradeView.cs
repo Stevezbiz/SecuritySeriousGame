@@ -41,7 +41,7 @@ public class InstallOrUpgradeView : MonoBehaviour {
         tasks.Clear();
         tasks = gameManager.GetAvailableTasksByType(TaskType.INSTALL);
         if (tasks.Count == 0) {
-            Instantiate(windowPopUp, gameManager.gameObject.transform, false).GetComponent<WindowPopUp>().Load("Non ci sono installazioni richieste al momento", ActionCode.CONTINUE);
+            gameManager.DisplayMessage("Non ci sono installazioni richieste al momento", ActionCode.CONTINUE, Role.SECURITY);
         } else {
             employee = id;
             List<string> options = new List<string>();

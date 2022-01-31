@@ -155,8 +155,7 @@ public class AttackView : MonoBehaviour {
     }
 
     public void ResistancesButton() {
-
-        Instantiate(windowPopUp, gameObject.transform, false).GetComponent<WindowPopUp>().Load("Le difese attive conferiscono resistenza ad attacchi specifici. Sono indicati i livelli di resistenza minimi consigliati per ottenere una protezione adeguata.", ActionCode.CONTINUE);
+        gameManager.DisplayMessage("Le difese attive conferiscono resistenza ad attacchi specifici. Sono indicati i livelli di resistenza minimi consigliati per ottenere una protezione adeguata.", ActionCode.CONTINUE, Role.SECURITY);
     }
 
     void SetColor(Resistance res) {
