@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] Guide guide;
     [SerializeField] QuizQuestion quizQuestion;
     [SerializeField] LearningReport learningReport;
-    [SerializeField] Message message;
+    [SerializeField] GameObject message;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset shopFileJSON;
@@ -278,15 +278,15 @@ public class GameManager : MonoBehaviour {
         // all the attacks are introduced at the end of the indicated day 
         switch (gc.totalTime) {
             case 48: // day 2
-                ScheduleAttack(AttackCode.DOS);
+                ScheduleAttack(AttackCode.MITM);
                 ScheduleAttack(AttackCode.BRUTE_FORCE);
                 ScheduleAttack(AttackCode.WORM);
-                DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.DOS].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.MITM].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 120: // day 5
-                ScheduleAttack(AttackCode.MITM);
+                ScheduleAttack(AttackCode.DOS);
                 SetAttackTrend();
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DOS].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 168: // day 7
                 ScheduleAttack(AttackCode.VIRUS);
@@ -393,20 +393,20 @@ public class GameManager : MonoBehaviour {
             if (gc.attackTrendTimer == 0) SetAttackTrend();
         }
         // manage the the attacks
-        foreach (AttackPlan attack in attackSchedule.Values) {
-            if (attack.status == AttackStatus.PLANNING && attack.timer-- == 0) {
+        foreach (AttackCode id in new List<AttackCode>(attackSchedule.Keys)) {
+            if (attackSchedule[id].status == AttackStatus.PLANNING && attackSchedule[id].timer-- == 0) {
                 // start the attack
-                if (Random.Range(0f, attack.missMod) > GetAttackMiss(attack.id)) {
+                if (Random.Range(0f, attackSchedule[id].missMod) > GetAttackMiss(attackSchedule[id].id)) {
                     // hit
-                    StartAttack(attack.id);
-                    logManager.LogPrintAttack(attacks[attack.id].name, true);
+                    StartAttack(attackSchedule[id].id);
+                    logManager.LogPrintAttack(attacks[attackSchedule[id].id].name, true);
                     // generate new repair task
-                    Task newTask = new Task(TaskType.REPAIR, attack.id, attacks[attack.id].category);
+                    Task newTask = new Task(TaskType.REPAIR, attackSchedule[id].id, attacks[attackSchedule[id].id].category);
                     waitingTasks.Add(newTask.id, newTask);
                 } else {
                     // miss
-                    MissedAttack(attack.id);
-                    logManager.LogPrintAttack(attacks[attack.id].name, false);
+                    MissedAttack(attackSchedule[id].id);
+                    logManager.LogPrintAttack(attacks[attackSchedule[id].id].name, false);
                 }
             }
         }
@@ -949,7 +949,7 @@ public class GameManager : MonoBehaviour {
                 return;
             }
             employees[id].owned = true;
-            DisplayMessage("Hai raggiunto " + NumUtils.NumToString(gc.employeeGoals[gc.employeeLevel]) + " utenti! Per questo ho deciso di assumere un nuovo dipendente, " + employees[id].name, ActionCode.CONTINUE, Role.CEO);
+            DisplayMessage("Hai raggiunto " + NumUtils.NumToString(gc.employeeGoals[gc.employeeLevel]) + " utenti! Per questo ho deciso di assumere un nuovo dipendente, si chiama " + employees[id].name, ActionCode.CONTINUE, Role.CEO);
             gc.employeeLevel++;
         }
     }
@@ -978,7 +978,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Creates a pop-up window message</summary>
      */
     public void DisplayMessage(string message, ActionCode action, Role role) {
-        this.message.Load(message, action, avatars[role]);
+        Instantiate(this.message, gameObject.transform, false).GetComponent<Message>().Load(message, action, avatars[role]);
     }
 
     void DebugPrint() {

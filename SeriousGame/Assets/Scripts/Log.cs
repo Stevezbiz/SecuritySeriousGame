@@ -11,7 +11,6 @@ public class Log : MonoBehaviour {
     [SerializeField] GameObject previous;
     [SerializeField] GameObject bottomPanel;
 
-    float oldTimeScale;
     int nLines = 0;
     int nPages = 1;
     int currentPage;
@@ -101,8 +100,7 @@ public class Log : MonoBehaviour {
      * <summary>Open the logs</summary>
      */
     public void OpenLog() {
-        oldTimeScale = Time.timeScale;
-        Time.timeScale = 0;
+        TimeManager.Pause();
         // print the page
         currentPage = nPages;
         PrintCurrentPage();
@@ -116,7 +114,7 @@ public class Log : MonoBehaviour {
      * <summary>Close the logs</summary>
      */
     public void CloseLog() {
-        Time.timeScale = oldTimeScale;
+        TimeManager.Resume();
         gameObject.SetActive(false);
         previous.SetActive(false);
         next.SetActive(false);

@@ -12,7 +12,6 @@ public class QuizQuestion : MonoBehaviour {
     [SerializeField] RectTransform answers;
     [SerializeField] GameObject quizAlternative;
 
-    float oldTimeScale = 1f;
     Quiz q;
     List<GameObject> toDestroy = new List<GameObject>();
 
@@ -26,8 +25,7 @@ public class QuizQuestion : MonoBehaviour {
             toDestroy[i].GetComponent<QuizAlternative>().Load(this, i, q.answers[i].text);
         }
         gameObject.SetActive(true);
-        oldTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
+        TimeManager.Pause();
     }
 
     public void EvaluateAnswer(int id) {
@@ -36,7 +34,7 @@ public class QuizQuestion : MonoBehaviour {
     }
 
     public void Close() {
-        Time.timeScale = oldTimeScale;
+        TimeManager.Resume();
         foreach (GameObject g in toDestroy) Destroy(g);
         toDestroy.Clear();
         gameObject.SetActive(false);

@@ -17,7 +17,6 @@ public class EmployeeView : MonoBehaviour {
     [SerializeField] RepairView repairView;
     [SerializeField] PreventView preventView;
 
-    float oldTimeScale = 1f;
     List<EmployeeInfo> employees;
     List<GameObject> toDestroy = new List<GameObject>();
     EmployeeCode selected;
@@ -101,15 +100,14 @@ public class EmployeeView : MonoBehaviour {
     }
 
     public void OpenView() {
-        oldTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
+        TimeManager.Pause();
         Load();
         bottomPanel.SetActive(false);
         gameObject.SetActive(true);
     }
 
     public void CloseView() {
-        Time.timeScale = oldTimeScale;
+        TimeManager.Resume();
         bottomPanel.SetActive(true);
         gameObject.SetActive(false);
     }

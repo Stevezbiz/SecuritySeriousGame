@@ -144,6 +144,6 @@ public static class EmployeeUtils {
             if (!e.owned) candidates.Add(e.id);
         }
         if (candidates.Count == 0) return EmployeeCode.NONE;
-        return (EmployeeCode)Random.Range(0, candidates.Count);
+        return candidates[Random.Range(0, candidates.Count)];
     }
 }

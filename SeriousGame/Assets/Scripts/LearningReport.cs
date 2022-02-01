@@ -14,7 +14,6 @@ public class LearningReport : MonoBehaviour {
     [SerializeField] GameObject bottomPanel;
     [SerializeField] TMP_InputField inputField;
 
-    float oldTomeScale = 1f;
     ActionCode action;
     Dictionary<SkillCode, KnowledgeComponent> kcs;
     Dictionary<SkillCode, LearningRecord> records = new Dictionary<SkillCode, LearningRecord>();
@@ -36,8 +35,7 @@ public class LearningReport : MonoBehaviour {
     }
 
     public void Load(ActionCode action) {
-        oldTomeScale = Time.timeScale;
-        Time.timeScale = 0f;
+        TimeManager.Pause();
         this.action = action;
         foreach (KnowledgeComponent kc in kcs.Values) {
             records[kc.id].Load(kc);
@@ -47,7 +45,7 @@ public class LearningReport : MonoBehaviour {
     }
 
     public void Close() {
-        Time.timeScale = oldTomeScale;
+        TimeManager.Resume();
         bottomPanel.SetActive(true);
         gameObject.SetActive(false);
         if (action == ActionCode.GAME_OVER) SceneLoader.LoadScene("MainMenu");

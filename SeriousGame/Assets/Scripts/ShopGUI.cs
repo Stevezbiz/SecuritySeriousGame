@@ -11,8 +11,6 @@ public class ShopGUI : MonoBehaviour {
     [SerializeField] GameObject details;
     [SerializeField] GameObject bottomPanel;
 
-    float oldTimeScale = 1f;
-
     /**
      * <summary>Initialize the data structures</summary>
      */
@@ -28,8 +26,7 @@ public class ShopGUI : MonoBehaviour {
      * <summary>Open the shop view</summary>
      */
     public void OpenShop() {
-        oldTimeScale = Time.timeScale;
-        Time.timeScale = 0;
+        TimeManager.Pause();
         bottomPanel.SetActive(false);
         gameObject.SetActive(true);
     }
@@ -38,7 +35,7 @@ public class ShopGUI : MonoBehaviour {
      * <summary>Close the shop view</summary>
      */
     public void CloseShop() {
-        Time.timeScale = oldTimeScale;
+        TimeManager.Resume();
         gameObject.SetActive(false);
         networkShop.SetActive(false);
         accessShop.SetActive(false);

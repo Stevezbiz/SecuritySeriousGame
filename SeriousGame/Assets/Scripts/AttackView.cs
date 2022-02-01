@@ -32,7 +32,6 @@ public class AttackView : MonoBehaviour {
     [SerializeField] RectTransform enduranceMarker;
     [SerializeField] GameObject bars;
 
-    float oldTimeScale = 1f;
     List<AttackInfo> attacks;
     List<Task> tasks;
     List<GameObject> toDestroy = new List<GameObject>();
@@ -137,8 +136,7 @@ public class AttackView : MonoBehaviour {
      * <summary>Open the view</summary>
      */
     public void OpenView() {
-        oldTimeScale = Time.timeScale;
-        Time.timeScale = 0;
+        TimeManager.Pause();
         Load();
         bottomPanel.SetActive(false);
         gameObject.SetActive(true);
@@ -148,7 +146,7 @@ public class AttackView : MonoBehaviour {
      * <summary>Close the view</summary>
      */
     public void CloseView() {
-        Time.timeScale = oldTimeScale;
+        TimeManager.Resume();
         gameObject.SetActive(false);
         bottomPanel.SetActive(true);
     }

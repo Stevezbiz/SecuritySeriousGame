@@ -15,8 +15,6 @@ public class MoneyView : MonoBehaviour {
     [SerializeField] TextMeshProUGUI actualUsersGainText;
     [SerializeField] GameObject bottomPanel;
 
-    float oldTimeScale = 1f;
-
     /**
      * <summary>Populate the view with the values to show</summary>
      */
@@ -45,8 +43,7 @@ public class MoneyView : MonoBehaviour {
      * <summary>Open the view</summary>
      */
     public void OpenView() {
-        oldTimeScale = Time.timeScale;
-        Time.timeScale = 0;
+        TimeManager.Pause();
         Load();
         bottomPanel.SetActive(false);
         gameObject.SetActive(true);
@@ -56,7 +53,7 @@ public class MoneyView : MonoBehaviour {
      * <summary>Close the view</summary>
      */
     public void CloseView() {
-        Time.timeScale = oldTimeScale;
+        TimeManager.Resume();
         gameObject.SetActive(false);
         bottomPanel.SetActive(true);
     }

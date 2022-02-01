@@ -10,14 +10,11 @@ public class SettingsMenu : MonoBehaviour {
     [SerializeField] TextMeshProUGUI loadText;
     [SerializeField] Outline loadOutline;
 
-    float oldTimeScale = 1;
-
     /**
      * <summary>Open the setting menu</summary>
      */
     public void OpenSettings() {
-        oldTimeScale = Time.timeScale;
-        Time.timeScale = 0;
+        TimeManager.Pause();
         // disable the possibility to load a game in case of missing save file
         string path = Application.persistentDataPath + "/savedata.data";
         if (!System.IO.File.Exists(path)) {
@@ -36,7 +33,7 @@ public class SettingsMenu : MonoBehaviour {
      * <summary>Close the setting menu and resume the game</summary>
      */
     public void CancelButton() {
-        Time.timeScale = oldTimeScale;
+        TimeManager.Resume();
         gameObject.SetActive(false);
     }
 

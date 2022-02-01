@@ -5,12 +5,10 @@ using UnityEngine;
 using Image = UnityEngine.UI.Image;
 
 public class Message : MonoBehaviour {
-    [SerializeField] GameManager gameManager;
     [SerializeField] TextMeshProUGUI messageText;
     [SerializeField] TextMeshProUGUI nameText;
     [SerializeField] Image image;
 
-    float oldTimeScale;
     ActionCode action;
 
     /**
@@ -19,9 +17,8 @@ public class Message : MonoBehaviour {
     public void Load(string message, ActionCode action, Person p) {
         nameText.SetText(p.name.ToLower());
         image.sprite = p.sprite;
-        oldTimeScale = Time.timeScale;
         this.action = action;
-        Time.timeScale = 0;
+        TimeManager.Pause();
         messageText.SetText(message);
         gameObject.SetActive(true);
     }
@@ -32,18 +29,16 @@ public class Message : MonoBehaviour {
     public void CloseButton() {
         switch (action) {
             case ActionCode.CONTINUE:
-                Time.timeScale = oldTimeScale;
                 gameObject.SetActive(false);
                 break;
             case ActionCode.GAME_OVER:
-                Time.timeScale = 0f;
                 gameObject.SetActive(false);
-                gameManager.PrintFinalReport();
+                gameObject.transform.parent.GetComponent<GameManager>().PrintFinalReport();
                 break;
             default:
-                Time.timeScale = oldTimeScale;
                 gameObject.SetActive(false);
                 break;
         }
+        TimeManager.Resume();
     }
 }
