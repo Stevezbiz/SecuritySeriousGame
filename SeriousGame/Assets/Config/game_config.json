@@ -1,35 +1,74 @@
 {
-	"gameConfig":
-	{
-		"totalTime": 0,
-		"endTime": 1440,
-		"negativeTime": 0,
-		"maxNegative": 72,
-		"evaluationTime": 288,
-		"quizTime": 72,
-		"actualQuiz": 0,
-		"quizTimer": 0,
-		"attackTrendTime": 72,
-		"actualAttackTrend": 0,
-		"attackTrendTimer": 0,
-		"resistanceModStep": 240,
-		"actualResistanceMod": 0,
-		"noAttackTime": 0,
-		"noAttackStep": 10,
-		"ongoingAttacks": 0,
-		"userLevel": 0,
-		"employeeLevel": 0,
-		"abilityOffset": 5,
-		"abilityFactor": 0.18,
-		"money": 500,
-		"users": 100,
-		"reputation": 0.5,
-		"duration": [ 1.5, 1.3, 1.1, 0.9, 0.8, 0.7 ],
-		"endurance": [ 1.5, 1.3, 1.1, 0.9, 0.8, 0.7 ],
-		"miss": [ 1.5, 1.3, 1.1, 0.9, 0.8, 0.7 ],
-		"usersGain": [0.05, 0.03, 0.02, 0.01, 0.005, 0.003],
-		"usersGoals": [1000, 10000, 100000, 1000000, 10000000],
-		"employeeGoals": [1000, 10000, 100000, 1000000, 10000000],
-		"date": "1/1/2000"
-	}
+  "gameConfig": {
+    "totalTime": 0,
+    "endTime": 1440,
+    "negativeTime": 0,
+    "maxNegative": 72,
+    "evaluationTime": 288,
+    "quizTime": 72,
+    "actualQuiz": 0,
+    "quizTimer": 0,
+    "attackTrendTime": 72,
+    "actualAttackTrend": 0,
+    "attackTrendTimer": 0,
+    "resistanceModStep": 240,
+    "actualResistanceMod": 0,
+    "noAttackTime": 0,
+    "noAttackStep": 10,
+    "ongoingAttacks": 0,
+    "userLevel": 0,
+    "employeeLevel": 0,
+    "abilityOffset": 5,
+    "abilityFactor": 0.18,
+    "money": 500,
+    "users": 100,
+    "reputation": 0.5,
+    "duration": [
+      1.5,
+      1.3,
+      1.1,
+      0.9,
+      0.8,
+      0.7
+    ],
+    "endurance": [
+      1.5,
+      1.3,
+      1.1,
+      0.9,
+      0.8,
+      0.7
+    ],
+    "miss": [
+      1.5,
+      1.3,
+      1.1,
+      0.9,
+      0.8,
+      0.7
+    ],
+    "usersGain": [
+      0.05,
+      0.03,
+      0.02,
+      0.01,
+      0.005,
+      0.003
+    ],
+    "usersGoals": [
+      1000,
+      10000,
+      100000,
+      1000000,
+      10000000
+    ],
+    "employeeGoals": [
+      1000,
+      10000,
+      100000,
+      1000000,
+      10000000
+    ],
+    "date": "1/1/2000"
+  }
 }

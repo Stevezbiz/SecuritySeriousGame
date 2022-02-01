@@ -28,7 +28,6 @@ public class EmployeeView : MonoBehaviour {
         }
         toDestroy.Clear();
         employees = gameManager.GetHiredEmployees();
-        Debug.Log("EmployeeView::employees.Count: " + employees.Count);
         foreach (EmployeeInfo e in employees) {
             GameObject newEmployee = Instantiate(employeeCard, content, false);
             newEmployee.GetComponent<EmployeeCard>().Load(e, gameManager, this);

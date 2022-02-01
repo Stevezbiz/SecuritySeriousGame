@@ -275,6 +275,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Schedule new attacks when the game reaches some checkpoints</summary>
      */
     void ActivateAttacks() {
+        // all the attacks are introduced at the end of the indicated day 
         switch (gc.totalTime) {
             case 48: // day 2
                 ScheduleAttack(AttackCode.DOS);

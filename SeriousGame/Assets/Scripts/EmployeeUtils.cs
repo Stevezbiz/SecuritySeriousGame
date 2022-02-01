@@ -117,7 +117,6 @@ public static class EmployeeUtils {
 
         foreach (EmployeeInfo el in e.Values) {
             if (el.owned) employees.Add(el);
-            Debug.Log("EmployeeUtils::employee: " + el.id + " owned: " + el.owned);
         }
         return employees;
     }
