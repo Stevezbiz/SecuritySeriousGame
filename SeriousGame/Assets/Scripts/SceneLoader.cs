@@ -12,6 +12,7 @@ public static class SceneLoader {
      * <summary>Load the specified scene</summary>
      */
     public static void LoadScene(string sceneName) {
+        TimeManager.Reset();
         SceneManager.LoadScene(sceneName);
     }
 
@@ -19,6 +20,7 @@ public static class SceneLoader {
      * <summary>Load the specified scene</summary>
      */
     public static void ReloadScene() {
+        TimeManager.Reset();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

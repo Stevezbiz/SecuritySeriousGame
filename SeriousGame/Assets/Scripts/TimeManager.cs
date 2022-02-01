@@ -22,4 +22,9 @@ public static class TimeManager {
             Time.timeScale = timeScale;
         }
     }
+    
+    public static void Reset() {
+        n = 0;
+        Time.timeScale = 1f;
+    }
 }
