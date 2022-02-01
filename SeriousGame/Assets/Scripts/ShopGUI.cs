@@ -8,7 +8,6 @@ public class ShopGUI : MonoBehaviour {
     [SerializeField] GameObject softwareShop;
     [SerializeField] GameObject assetShop;
     [SerializeField] GameObject servicesShop;
-    [SerializeField] GameObject employeeView;
     [SerializeField] GameObject details;
     [SerializeField] GameObject bottomPanel;
 
@@ -23,14 +22,6 @@ public class ShopGUI : MonoBehaviour {
         softwareShop.GetComponent<Shop>().Init(Category.SOFTWARE);
         assetShop.GetComponent<Shop>().Init(Category.ASSET);
         servicesShop.GetComponent<Shop>().Init(Category.SERVICES);
-        employeeView.GetComponent<EmployeeShop>().Init();
-    }
-
-    /**
-     * <summary>Load all the items in the shop</summary>
-     */
-    public void Load() {
-        employeeView.GetComponent<EmployeeShop>().Load();
     }
 
     /**
@@ -54,7 +45,6 @@ public class ShopGUI : MonoBehaviour {
         softwareShop.SetActive(false);
         assetShop.SetActive(false);
         servicesShop.SetActive(false);
-        employeeView.SetActive(false);
         details.SetActive(false);
         bottomPanel.SetActive(true);
     }

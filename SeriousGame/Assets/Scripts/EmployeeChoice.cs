@@ -19,9 +19,7 @@ public class EmployeeChoice : MonoBehaviour {
     [SerializeField] GameObject softwareOutline;
     [SerializeField] GameObject assetOutline;
     [SerializeField] GameObject servicesOutline;
-    [SerializeField] GameObject windowPopUp;
     [SerializeField] TextMeshProUGUI durationText;
-
 
     ShopItemDetail shopItemDetail;
     AttackView attackView;

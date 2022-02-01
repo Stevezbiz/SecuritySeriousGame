@@ -7,7 +7,6 @@ using Image = UnityEngine.UI.Image;
 public class InstallOrUpgradeView : MonoBehaviour {
     [SerializeField] GameManager gameManager;
     [SerializeField] TMP_Dropdown dropdown;
-    [SerializeField] GameObject windowPopUp;
     [SerializeField] TextMeshProUGUI durationText;
     [SerializeField] EmployeeView employeeView;
     [SerializeField] TextMeshProUGUI nameText;

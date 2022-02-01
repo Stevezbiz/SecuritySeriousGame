@@ -7,7 +7,6 @@ using Image = UnityEngine.UI.Image;
 public class PreventView : MonoBehaviour {
     [SerializeField] GameManager gameManager;
     [SerializeField] TMP_Dropdown dropdown;
-    [SerializeField] GameObject windowPopUp;
     [SerializeField] TextMeshProUGUI protectionText;
     [SerializeField] EmployeeView employeeView;
     [SerializeField] TextMeshProUGUI nameText;

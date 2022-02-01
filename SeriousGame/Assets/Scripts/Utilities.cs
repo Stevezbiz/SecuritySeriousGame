@@ -72,9 +72,7 @@ public class GameConfig {
     public int noAttackStep;
     public int ongoingAttacks;
     public int userLevel;
-    public int initEmployees;
-    public int availableEmployees;
-    public int hiredEmployees;
+    public int employeeLevel;
     public float abilityOffset;
     public float abilityFactor;
     public float money;

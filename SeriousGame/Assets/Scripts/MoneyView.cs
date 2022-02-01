@@ -13,7 +13,6 @@ public class MoneyView : MonoBehaviour {
     [SerializeField] TextMeshProUGUI usersModText;
     [SerializeField] TextMeshProUGUI attackUsersMalusText;
     [SerializeField] TextMeshProUGUI actualUsersGainText;
-    [SerializeField] GameObject windowPopUp;
     [SerializeField] GameObject bottomPanel;
 
     float oldTimeScale = 1f;

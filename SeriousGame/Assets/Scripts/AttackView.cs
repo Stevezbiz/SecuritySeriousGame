@@ -30,7 +30,6 @@ public class AttackView : MonoBehaviour {
     [SerializeField] RectTransform durationMarker;
     [SerializeField] RectTransform missMarker;
     [SerializeField] RectTransform enduranceMarker;
-    [SerializeField] GameObject windowPopUp;
     [SerializeField] GameObject bars;
 
     float oldTimeScale = 1f;

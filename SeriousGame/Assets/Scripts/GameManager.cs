@@ -18,7 +18,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset shopFileJSON;
-    [SerializeField] TextAsset quizFileJSON;
+    [SerializeField] TextAsset quizzesFileJSON;
+    [SerializeField] TextAsset employeesFileJSON;
     [SerializeField] TextAsset modelFileJSON;
     [SerializeField] List<Sprite> avatarImages;
     
@@ -75,7 +76,7 @@ public class GameManager : MonoBehaviour {
             gc.money += GetActualMoneyGain();
             gc.users += GetActualUsersGain();
             gc.reputation = CalculateReputation();
-            gc.availableEmployees = CalculateEmployees();
+            UpdateEmployees();
             // refresh
             gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
             // update the stats for possible game over
@@ -112,7 +113,9 @@ public class GameManager : MonoBehaviour {
         // load the guide structure
         guide.Init();
         // load the quizzes from file
-        quizzes = QuizUtils.LoadFromFile(quizFileJSON);
+        quizzes = QuizUtils.LoadFromFile(quizzesFileJSON);
+        // load the employees from file
+        employees = EmployeeUtils.LoadFromFile(employeesFileJSON);
         // load the avatars
         for (int i = 0; i < avatarImages.Count; i++) {
             avatars.Add((Role)i, new Person(avatarImages[i].name, avatarImages[i]));
@@ -137,8 +140,6 @@ public class GameManager : MonoBehaviour {
             // initialize the BKT model
             kcs = BKTModel.Init(modelFileJSON);
         }
-        // generate all the objects in the shop
-        shop.Load();
         // initialize the report structure
         learningReport.Init(kcs);
         // refresh the GUI for the first time
@@ -702,14 +703,6 @@ public class GameManager : MonoBehaviour {
         return employees[id];
     }
 
-    /**
-     * <summary>Applies the effects of hiring an employee</summary>
-     */
-    public void HireEmployee(EmployeeCode id) {
-        employees[id].owned = true;
-        gc.hiredEmployees++;
-    }
-
     public bool CheckEmployeeAvailability() {
         return EmployeeUtils.CheckEmployeeAvailability(employees);
     }
@@ -911,14 +904,6 @@ public class GameManager : MonoBehaviour {
         return new List<Resistance>(res.Values);
     }
 
-    public int GetTotalEmployeesN() {
-        return gc.availableEmployees;
-    }
-
-    public int GetHiredEmployeesN() {
-        return gc.hiredEmployees;
-    }
-
     public List<EmployeeInfo> GetHiredEmployees() {
         return EmployeeUtils.GetHiredEmployees(employees);
     }
@@ -955,12 +940,17 @@ public class GameManager : MonoBehaviour {
         else return rep;
     }
 
-    int CalculateEmployees() {
-        if (gc.availableEmployees < gc.employeeGoals.Length + gc.initEmployees && gc.users >= gc.employeeGoals[gc.availableEmployees - gc.initEmployees]) {
-            DisplayMessage("Hai raggiunto " + NumUtils.NumToString(gc.employeeGoals[gc.availableEmployees - gc.initEmployees]) + " utenti! Ora puoi assumere un nuovo dipendente", ActionCode.CONTINUE, Role.CEO);
-            return gc.availableEmployees + 1;
+    void UpdateEmployees() {
+        if (gc.employeeLevel < gc.employeeGoals.Length && gc.users >= gc.employeeGoals[gc.employeeLevel]) {
+            EmployeeCode id = EmployeeUtils.ChooseNewEmployee(employees);
+            if (id == EmployeeCode.NONE) {
+                Debug.Log("Error: unexpected EmployeeCode");
+                return;
+            }
+            employees[id].owned = true;
+            DisplayMessage("Hai raggiunto " + NumUtils.NumToString(gc.employeeGoals[gc.employeeLevel]) + " utenti! Per questo ho deciso di assumere un nuovo dipendente, " + employees[id].name, ActionCode.CONTINUE, Role.CEO);
+            gc.employeeLevel++;
         }
-        return gc.availableEmployees;
     }
 
     /**
@@ -1191,27 +1181,6 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void EvaluateEmployeeManagement(EmployeeCode id) {
-        // identify the type of the task
-        switch (employees[id].status) {
-            case TaskType.INSTALL:
-                kcs[SkillCode.MANAGEMENT].AddTestResult(EmployeeTestResult(id, assignedTasks[id].category));
-                break;
-            case TaskType.REPAIR:
-                kcs[SkillCode.MANAGEMENT].AddTestResult(EmployeeTestResult(id, assignedTasks[id].category));
-                break;
-            case TaskType.UPGRADE:
-                kcs[SkillCode.MANAGEMENT].AddTestResult(EmployeeTestResult(id, assignedTasks[id].category));
-                break;
-            case TaskType.PREVENT:
-                kcs[SkillCode.MANAGEMENT].AddTestResult(EmployeeTestResult(id, assignedTasks[id].category));
-                break;
-            default:
-                Debug.Log("Error: undefined taskType");
-                break;
-        }
-    }
-
     public void EvaluateQuiz(int qid, int aid) {
         QuizAnswer qa = quizzes[qid].answers[aid];
         // send the test to the model
@@ -1249,9 +1218,10 @@ public class GameManager : MonoBehaviour {
         if (gc.quizTimer-- == 0) quizQuestion.Load(quizzes[gc.actualQuiz], avatars[quizzes[gc.actualQuiz].person]);
     }
 
-    bool EmployeeTestResult(EmployeeCode id, Category category) {
+    void EvaluateEmployeeManagement(EmployeeCode id) {
         int score = 0;
         EmployeeInfo employee = employees[id];
+        Category category = assignedTasks[id].category;
         // 1. How good is the selected employee in the category of the task?
         score += EmployeeUtils.GetAbility(employee.abilities, category);
         
@@ -1274,10 +1244,10 @@ public class GameManager : MonoBehaviour {
         // Decide the result of the evaluation
         if (score >= 0) {
             // correct
-            return true;
+            kcs[SkillCode.MANAGEMENT].AddTestResult(true);
         } else {
             // wrong
-            return false;
+            kcs[SkillCode.MANAGEMENT].AddTestResult(false);
         }
     }
 

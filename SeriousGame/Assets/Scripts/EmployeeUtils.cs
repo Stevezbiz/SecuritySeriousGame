@@ -68,6 +68,15 @@ public class EmployeesJSON {
 }
 
 public static class EmployeeUtils {
+    public static Dictionary<EmployeeCode, EmployeeInfo> LoadFromFile(TextAsset file) {
+        Dictionary<EmployeeCode, EmployeeInfo> employees = new Dictionary<EmployeeCode, EmployeeInfo>();
+        EmployeesJSON empployeesJSON = JsonUtility.FromJson<EmployeesJSON>(file.text);
+        foreach (EmployeeInfo e in empployeesJSON.employees) {
+            employees.Add(e.id, e);
+        }
+        return employees;
+    }
+
     public static void UpdateEmployees(Dictionary<EmployeeCode, EmployeeInfo> employees, EmployeeRecap[] er) {
         foreach (EmployeeRecap e in er) {
             employees[e.id].owned = e.owned;
@@ -108,8 +117,8 @@ public static class EmployeeUtils {
 
         foreach (EmployeeInfo el in e.Values) {
             if (el.owned) employees.Add(el);
+            Debug.Log("EmployeeUtils::employee: " + el.id + " owned: " + el.owned);
         }
-
         return employees;
     }
 
@@ -128,5 +137,14 @@ public static class EmployeeUtils {
         }
 
         return employees;
+    }
+
+    public static EmployeeCode ChooseNewEmployee(Dictionary<EmployeeCode, EmployeeInfo> employees) {
+        List<EmployeeCode> candidates = new List<EmployeeCode>();
+        foreach(EmployeeInfo e in employees.Values) {
+            if (!e.owned) candidates.Add(e.id);
+        }
+        if (candidates.Count == 0) return EmployeeCode.NONE;
+        return (EmployeeCode)Random.Range(0, candidates.Count);
     }
 }
