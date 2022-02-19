@@ -8,9 +8,9 @@ using Image = UnityEngine.UI.Image;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] GUI gui;
-    [SerializeField] ShopGUI shop;
+    [SerializeField] Shop shop;
     [SerializeField] Log logManager;
-    [SerializeField] AttackView attackView;
+    [SerializeField] SecurityView securityView;
     [SerializeField] Guide guide;
     [SerializeField] QuizQuestion quizQuestion;
     [SerializeField] LearningReport learningReport;
@@ -22,7 +22,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField] TextAsset employeesFileJSON;
     [SerializeField] TextAsset modelFileJSON;
     [SerializeField] List<Sprite> avatarImages;
-    
+    [SerializeField] List<Sprite> categoryImages;
+
     float startTime;
     int updateTime = 1;
     DateTime dateTime;
@@ -40,6 +41,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
     Dictionary<int, Quiz> quizzes = new Dictionary<int, Quiz>();
     Dictionary<Role, Person> avatars = new Dictionary<Role, Person>();
+    Dictionary<Category, Sprite> categories = new Dictionary<Category, Sprite>();
 
     // Start is called before the first frame update
     void Start() {
@@ -109,7 +111,7 @@ public class GameManager : MonoBehaviour {
         shop.Init();
         // load the attacks from the file and initialize the view
         attacks = AttackUtils.LoadFromFile(attacksFileJSON);
-        attackView.Init();
+        securityView.Init();
         // load the guide structure
         guide.Init();
         // load the quizzes from file
@@ -119,6 +121,10 @@ public class GameManager : MonoBehaviour {
         // load the avatars
         for (int i = 0; i < avatarImages.Count; i++) {
             avatars.Add((Role)i, new Person(avatarImages[i].name, avatarImages[i]));
+        }
+        // load the category images
+        for (int i = 0; i < categoryImages.Count; i++) {
+            categories.Add((Category)i, categoryImages[i]);
         }
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
@@ -753,6 +759,10 @@ public class GameManager : MonoBehaviour {
     }
 
     // MISC
+
+    public Sprite GetCategoryImage(Category c) {
+        return categories[c];
+    }
 
     /**
      * <summary>Return a string containing the date in the format 'dd-MMM-yyyy-HH:mm'</summary>

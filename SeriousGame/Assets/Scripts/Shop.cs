@@ -7,15 +7,18 @@ public class Shop : MonoBehaviour {
     [SerializeField] RectTransform content;
     [SerializeField] ShopItemDetail details;
     [SerializeField] GameManager gameManager;
+    [SerializeField] GameObject bottomPanel;
 
-    List<ShopItemCode> indexes;
+    List<ShopItemCode> indexes = new List<ShopItemCode>();
     List<GameObject> toDestroy = new List<GameObject>();
 
     /**
      * <summary>Initialize the data structures</summary>
      */
-    public void Init(Category category) {
-        indexes = gameManager.GetShopItemsByCategory(category);
+    public void Init() {
+        foreach (Category c in typeof(Category).GetEnumValues()) {
+            indexes.AddRange(gameManager.GetShopItemsByCategory(c));
+        }
     }
 
     /**
@@ -44,7 +47,9 @@ public class Shop : MonoBehaviour {
     /**
      * <summary>Open the list of items</summary>
      */
-    public void OpenList() {
+    public void OpenShop() {
+        TimeManager.Pause();
+        bottomPanel.SetActive(false);
         Load();
         gameObject.SetActive(true);
     }
@@ -52,7 +57,10 @@ public class Shop : MonoBehaviour {
     /**
      * <summary>Close the list of items</summary>
      */
-    public void CloseList() {
+    public void CloseShop() {
+        TimeManager.Resume();
+        details.gameObject.SetActive(false);
+        bottomPanel.SetActive(true);
         gameObject.SetActive(false);
     }
 }

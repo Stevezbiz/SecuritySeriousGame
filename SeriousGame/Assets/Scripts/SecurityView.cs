@@ -5,7 +5,7 @@ using UnityEngine;
 using Image = UnityEngine.UI.Image;
 using Outline = UnityEngine.UI.Outline;
 
-public class AttackView : MonoBehaviour {
+public class SecurityView : MonoBehaviour {
     [SerializeField] GameManager gameManager;
     [SerializeField] TMP_Dropdown attackDropdown;
     [SerializeField] TextMeshProUGUI hitValue;

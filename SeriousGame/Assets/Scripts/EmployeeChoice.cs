@@ -22,7 +22,7 @@ public class EmployeeChoice : MonoBehaviour {
     [SerializeField] TextMeshProUGUI durationText;
 
     ShopItemDetail shopItemDetail;
-    AttackView attackView;
+    SecurityView securityView;
     List<EmployeeInfo> employees;
     ShopItemCode sid;
     AttackCode aid;
@@ -51,10 +51,10 @@ public class EmployeeChoice : MonoBehaviour {
         }
     }
 
-    public void Load(AttackCode id, Category category, AttackView attackView) {
+    public void Load(AttackCode id, Category category, SecurityView securityView) {
         this.aid = id;
         this.category = category;
-        this.attackView = attackView;
+        this.securityView = securityView;
         type = TaskType.REPAIR;
         // fill the options of the dropdown element
         employees = gameManager.GetAvailableEmployees();
@@ -134,7 +134,7 @@ public class EmployeeChoice : MonoBehaviour {
                 shopItemDetail.InstallItem(employees[employeeDropdown.value].id);
                 break;
             case TaskType.REPAIR:
-                attackView.Repair(employees[employeeDropdown.value].id);
+                securityView.Repair(employees[employeeDropdown.value].id);
                 break;
             case TaskType.UPGRADE:
                 shopItemDetail.UpgradeItem(employees[employeeDropdown.value].id);
