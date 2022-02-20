@@ -141,26 +141,27 @@ public class ShopItemDetail : MonoBehaviour {
             }
         }
         // set the technical details about resistances
-        resistances = "Resistenze:\n";
+        resistances = "Resistenze:";
         if (actual) {
             // cumulative resistances (possessed item)
             foreach (Resistance r in sii.resArray[l].resistances) {
-                resistances += "    " + gameManager.GetAttack(r.id).name.ToUpper() + "\n";
-                if (r.duration != 0) resistances += "        durata dell'attacco -" + (gameManager.GetActualDurationResistance(r.duration) * 100).ToString("0.") + "%\n";
-                if (r.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (gameManager.GetActualMissResistance(r.miss) * 100).ToString("0.") + "%\n";
-                if (r.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (gameManager.GetActualEnduranceResistance(r.endurance) * 100).ToString("0.") + "%\n";
+                resistances += string.Format("\n    {0,-24}",gameManager.GetAttack(r.id).name.ToUpper());
+                if (r.duration != 0) resistances += string.Format(" || durata {0,3}%", (gameManager.GetActualDurationResistance(r.duration) * -100).ToString("-0."));
+                if (r.miss != 0) resistances += string.Format(" | difesa {0,3}%", (gameManager.GetActualMissResistance(r.miss) * 100).ToString("+0."));
+                if (r.endurance != 0) resistances += string.Format(" | complessità {0,3}%", (gameManager.GetActualEnduranceResistance(r.endurance) * 100).ToString("+0."));
             }
         } else {
             // differential resistances (next level)
             foreach (Resistance r in gameManager.GetShopItemResistances(sii.id)) {
-                resistances += "    " + gameManager.GetAttack(r.id).name.ToUpper() + "\n";
-                if (r.duration != 0) resistances += "        durata dell'attacco -" + (r.duration * 100).ToString("0.") + "%\n";
-                if (r.miss != 0) resistances += "        probabilità di bloccare l'attacco +" + (r.miss * 100).ToString("0.") + "%\n";
-                if (r.endurance != 0) resistances += "        tempo medio tra 2 attacchi consecutivi +" + (r.endurance * 100).ToString("0.") + "%\n";
+                resistances += string.Format("\n    {0,-24}", gameManager.GetAttack(r.id).name.ToUpper());
+                if (r.duration != 0) resistances += string.Format(" || durata {0,3}%", (r.duration * 100).ToString("-0."));
+                if (r.miss != 0) resistances += string.Format(" | difesa {0,3}%", (r.miss * 100).ToString("+0."));
+                if (r.endurance != 0) resistances += string.Format(" | complessità {0,3}%", (r.endurance * 100).ToString("+0."));
             }
         }
         
-        if (sii.resArray.Length == 0) resistances += "nessuna\n";
+        if (sii.resArray.Length == 0) resistances += " nessuna";
+        resistances += "\n";
         // set the technical details about costs and usability
         float moneyMalus = sii.moneyMalus[l];
         float usersMod = sii.usersMod[l];

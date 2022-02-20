@@ -155,6 +155,18 @@ public class SecurityView : MonoBehaviour {
         gameManager.DisplayMessage("Le difese attive conferiscono resistenza ad attacchi specifici. Sono indicati i livelli di resistenza minimi consigliati per ottenere una protezione adeguata.", ActionCode.CONTINUE, Role.SECURITY);
     }
 
+    public void EnduranceButton() {
+        gameManager.DisplayMessage("Complessità: influisce sulla frequenza degli attacchi, aumentando il tempo medio tra 2 attacchi consecutivi.", ActionCode.CONTINUE, Role.SECURITY);
+    }
+
+    public void MissButton() {
+        gameManager.DisplayMessage("Difesa: aumenta la probabilità di evitare un attacco.", ActionCode.CONTINUE, Role.SECURITY);
+    }
+
+    public void DurationButton() {
+        gameManager.DisplayMessage("Durata: riduce il tempo necessario a riparare i danni causati da un attacco.", ActionCode.CONTINUE, Role.SECURITY);
+    }
+
     void SetColor(Resistance res) {
         Color c1;
         Color c2;
