@@ -27,9 +27,9 @@ public class EmployeeChoice : MonoBehaviour {
     ShopItemCode sid;
     AttackCode aid;
     TaskType type;
-    Category category;
+    CategoryCode category;
 
-    public void Load(ShopItemCode id, Category category, ShopItemDetail shopItemDetail, TaskType type) {
+    public void Load(ShopItemCode id, CategoryCode category, ShopItemDetail shopItemDetail, TaskType type) {
         this.sid = id;
         this.category = category;
         this.shopItemDetail = shopItemDetail;
@@ -51,7 +51,7 @@ public class EmployeeChoice : MonoBehaviour {
         }
     }
 
-    public void Load(AttackCode id, Category category, SecurityView securityView) {
+    public void Load(AttackCode id, CategoryCode category, SecurityView securityView) {
         this.aid = id;
         this.category = category;
         this.securityView = securityView;
@@ -76,12 +76,12 @@ public class EmployeeChoice : MonoBehaviour {
     public void Display(int err) {
         EmployeeInfo e = employees[employeeDropdown.value];
         descriptionText.SetText(e.description);
-        Dictionary<Category, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
-        networkBar.fillAmount = abilities[Category.NETWORK] / 10;
-        accessBar.fillAmount = abilities[Category.ACCESS] / 10;
-        softwareBar.fillAmount = abilities[Category.SOFTWARE] / 10;
-        assetBar.fillAmount = abilities[Category.ASSET] / 10;
-        servicesBar.fillAmount = abilities[Category.SERVICES] / 10;
+        Dictionary<CategoryCode, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
+        networkBar.fillAmount = abilities[CategoryCode.NETWORK] / 10;
+        accessBar.fillAmount = abilities[CategoryCode.ACCESS] / 10;
+        softwareBar.fillAmount = abilities[CategoryCode.SOFTWARE] / 10;
+        assetBar.fillAmount = abilities[CategoryCode.ASSET] / 10;
+        servicesBar.fillAmount = abilities[CategoryCode.SERVICES] / 10;
         moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
         switch (type) {
             case TaskType.NONE:
@@ -105,19 +105,19 @@ public class EmployeeChoice : MonoBehaviour {
         assetOutline.SetActive(false);
         servicesOutline.SetActive(false);
         switch (category) {
-            case Category.NETWORK:
+            case CategoryCode.NETWORK:
                 networkOutline.SetActive(true);
                 break;
-            case Category.ACCESS:
+            case CategoryCode.ACCESS:
                 accessOutline.SetActive(true);
                 break;
-            case Category.SOFTWARE:
+            case CategoryCode.SOFTWARE:
                 softwareOutline.SetActive(true);
                 break;
-            case Category.ASSET:
+            case CategoryCode.ASSET:
                 assetOutline.SetActive(true);
                 break;
-            case Category.SERVICES:
+            case CategoryCode.SERVICES:
                 servicesOutline.SetActive(true);
                 break;
             default:

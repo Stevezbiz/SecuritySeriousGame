@@ -21,12 +21,12 @@ public class EmployeeDetails : MonoBehaviour {
         this.gameManager = gameManager;
         titleText.SetText(e.name);
         descriptionText.SetText(e.description);
-        Dictionary<Category, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
-        networkBar.fillAmount = abilities[Category.NETWORK] / 10;
-        accessBar.fillAmount = abilities[Category.ACCESS] / 10;
-        softwareBar.fillAmount = abilities[Category.SOFTWARE] / 10;
-        assetBar.fillAmount = abilities[Category.ASSET] / 10;
-        servicesBar.fillAmount = abilities[Category.SERVICES] / 10;
+        Dictionary<CategoryCode, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
+        networkBar.fillAmount = abilities[CategoryCode.NETWORK] / 10;
+        accessBar.fillAmount = abilities[CategoryCode.ACCESS] / 10;
+        softwareBar.fillAmount = abilities[CategoryCode.SOFTWARE] / 10;
+        assetBar.fillAmount = abilities[CategoryCode.ASSET] / 10;
+        servicesBar.fillAmount = abilities[CategoryCode.SERVICES] / 10;
         moneyGainText.SetText("Guadagno: " + e.GetMoneyGain() + " F/h");
         switch (e.status) {
             case TaskType.NONE:
@@ -47,20 +47,20 @@ public class EmployeeDetails : MonoBehaviour {
                 break;
             case TaskType.PREVENT:
                 string category;
-                switch ((Category)gameManager.GetTaskTarget(e.id)) {
-                    case Category.NETWORK:
+                switch ((CategoryCode)gameManager.GetTaskTarget(e.id)) {
+                    case CategoryCode.NETWORK:
                         category = "Rete";
                         break;
-                    case Category.ACCESS:
+                    case CategoryCode.ACCESS:
                         category = "Accesso";
                         break;
-                    case Category.SOFTWARE:
+                    case CategoryCode.SOFTWARE:
                         category = "Software";
                         break;
-                    case Category.ASSET:
+                    case CategoryCode.ASSET:
                         category = "Risorse";
                         break;
-                    case Category.SERVICES:
+                    case CategoryCode.SERVICES:
                         category = "Servizi";
                         break;
                     default:

@@ -10,10 +10,6 @@ public class ShopItem : MonoBehaviour {
     [SerializeField] GameObject installButton;
     [SerializeField] GameObject installingImage;
     [SerializeField] GameObject lockedImage;
-    [SerializeField] GameObject unlockedImage;
-    [SerializeField] GameObject slider;
-    [SerializeField] Image enableBar;
-    [SerializeField] Image enableHandle;
     [SerializeField] Image installBar;
     [SerializeField] Image installText;
     [SerializeField] Image category;
@@ -22,7 +18,6 @@ public class ShopItem : MonoBehaviour {
     Shop parent;
     ShopItemDetail details;
     ShopItemCode id;
-    int lastValue = 0;
 
     /**
      * <summary>Populate the item of the shop with all the elements to show</summary>
@@ -62,13 +57,9 @@ public class ShopItem : MonoBehaviour {
                     Upgrading();
                     break;
                 case ShopItemStatus.ACTIVE:
-                    lastValue = 1;
-                    slider.GetComponent<Slider>().value = 1;
                     Enable();
                     break;
                 case ShopItemStatus.INACTIVE:
-                    lastValue = 0;
-                    slider.GetComponent<Slider>().value = 0;
                     Disable();
                     break;
                 default:
@@ -90,8 +81,6 @@ public class ShopItem : MonoBehaviour {
         installButton.SetActive(false);
         installingImage.SetActive(false);
         lockedImage.SetActive(false);
-        unlockedImage.SetActive(true);
-        slider.SetActive(false);
     }
 
     /**
@@ -101,8 +90,6 @@ public class ShopItem : MonoBehaviour {
         installButton.SetActive(true);
         installingImage.SetActive(false);
         lockedImage.SetActive(false);
-        unlockedImage.SetActive(false);
-        slider.SetActive(false);
     }
 
     /**
@@ -115,8 +102,6 @@ public class ShopItem : MonoBehaviour {
         installButton.SetActive(false);
         installingImage.SetActive(true);
         lockedImage.SetActive(false);
-        unlockedImage.SetActive(false);
-        slider.SetActive(false);
     }
 
     public void Upgrading() {
@@ -126,8 +111,6 @@ public class ShopItem : MonoBehaviour {
         installButton.SetActive(false);
         installingImage.SetActive(true);
         lockedImage.SetActive(false);
-        unlockedImage.SetActive(false);
-        slider.SetActive(false);
     }
 
     /**
@@ -137,11 +120,6 @@ public class ShopItem : MonoBehaviour {
         installButton.SetActive(false);
         installingImage.SetActive(false);
         lockedImage.SetActive(false);
-        unlockedImage.SetActive(false);
-        slider.SetActive(true);
-        enableBar.color = COLOR.GREEN;
-        enableHandle.color = COLOR.GREEN;
-        slider.GetComponent<Slider>().value = 1;
     }
 
     /**
@@ -151,11 +129,6 @@ public class ShopItem : MonoBehaviour {
         installButton.SetActive(false);
         installingImage.SetActive(false);
         lockedImage.SetActive(false);
-        unlockedImage.SetActive(false);
-        slider.SetActive(true);
-        enableBar.color = COLOR.GREEN_DISABLED;
-        enableHandle.color = COLOR.GREEN_DISABLED;
-        slider.GetComponent<Slider>().value = 0;
     }
 
     /**
@@ -165,18 +138,6 @@ public class ShopItem : MonoBehaviour {
         installButton.SetActive(false);
         installingImage.SetActive(false);
         lockedImage.SetActive(true);
-        unlockedImage.SetActive(false);
-        slider.SetActive(false);
-    }
-
-    public void SliderValueChange() {
-        int newValue = (int)slider.GetComponent<Slider>().value;
-        if (lastValue != newValue) {
-            details.Load(id, this);
-            lastValue = newValue;
-            if (newValue == 1) details.EnableItem();
-            else details.DisableItem();
-        }
     }
 
     public void SelectEmployee() {

@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
     Dictionary<int, Quiz> quizzes = new Dictionary<int, Quiz>();
     Dictionary<Role, Person> avatars = new Dictionary<Role, Person>();
-    Dictionary<Category, Sprite> categories = new Dictionary<Category, Sprite>();
+    Dictionary<CategoryCode, Category> categories = new Dictionary<CategoryCode, Category>();
 
     // Start is called before the first frame update
     void Start() {
@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour {
         }
         // load the category images
         for (int i = 0; i < categoryImages.Count; i++) {
-            categories.Add((Category)i, categoryImages[i]);
+            categories.Add((CategoryCode)i, new Category(categoryImages[i].name, categoryImages[i]));
         }
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
@@ -506,7 +506,7 @@ public class GameManager : MonoBehaviour {
         return Mathf.CeilToInt((1f - resMod) * attacks[aid].duration * (1f - gc.abilityFactor * (abilityLevel - gc.abilityOffset)));
     }
 
-    public float GetPreventProtection(EmployeeCode id, Category c) {
+    public float GetPreventProtection(EmployeeCode id, CategoryCode c) {
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[c];
         return 0.2f + 0.04f * (abilityLevel - gc.abilityOffset);
     }
@@ -566,7 +566,7 @@ public class GameManager : MonoBehaviour {
         return null;
     }
 
-    public Task GetPreventionTask(Category c) {
+    public Task GetPreventionTask(CategoryCode c) {
         foreach (Task t in waitingTasks.Values) {
             if (t.type == TaskType.PREVENT && t.category == c) {
                 return t;
@@ -596,7 +596,7 @@ public class GameManager : MonoBehaviour {
         return shopItems[id];
     }
 
-    public List<ShopItemCode> GetShopItemsByCategory(Category category) {
+    public List<ShopItemCode> GetShopItemsByCategory(CategoryCode category) {
         List<ShopItemCode> codes = new List<ShopItemCode>();
         foreach(ShopItemInfo sii in shopItems.Values) {
             if (sii.category == category) codes.Add(sii.id);
@@ -760,8 +760,12 @@ public class GameManager : MonoBehaviour {
 
     // MISC
 
-    public Sprite GetCategoryImage(Category c) {
+    public Category GetCategory(CategoryCode c) {
         return categories[c];
+    }
+
+    public Sprite GetCategoryImage(CategoryCode c) {
+        return categories[c].sprite;
     }
 
     /**
@@ -1038,10 +1042,10 @@ public class GameManager : MonoBehaviour {
 
     void EvaluateSecurityStatus() {
         // every x time evaluate the status of the countermeasures of the active attacks
-        Dictionary<Category, int> scores = new Dictionary<Category, int>();
+        Dictionary<CategoryCode, int> scores = new Dictionary<CategoryCode, int>();
         foreach(AttackCode id in attacks.Keys) {
             if(attackSchedule[id].status != AttackStatus.INACTIVE) {
-                Category c = attacks[id].category;
+                CategoryCode c = attacks[id].category;
                 if (GetActualDurationResistance(id) >= BKTModel.GetDurationL(id)) scores[c]++;
                 else scores[c]--;
                 if (GetActualMissResistance(id) >= BKTModel.GetMissL(id)) scores[c]++;
@@ -1050,23 +1054,23 @@ public class GameManager : MonoBehaviour {
                 else scores[c]--;
             }
         }
-        foreach(KeyValuePair<Category, int> s in scores) {
+        foreach(KeyValuePair<CategoryCode, int> s in scores) {
             // Select the proper Knowledge Component
             SkillCode kc;
             switch (s.Key) {
-                case Category.NETWORK:
+                case CategoryCode.NETWORK:
                     kc = SkillCode.NETWORK;
                     break;
-                case Category.ACCESS:
+                case CategoryCode.ACCESS:
                     kc = SkillCode.ACCESS;
                     break;
-                case Category.SOFTWARE:
+                case CategoryCode.SOFTWARE:
                     kc = SkillCode.SOFTWARE;
                     break;
-                case Category.ASSET:
+                case CategoryCode.ASSET:
                     kc = SkillCode.ASSET;
                     break;
-                case Category.SERVICES:
+                case CategoryCode.SERVICES:
                     kc = SkillCode.SERVICES;
                     break;
                 default:
@@ -1109,19 +1113,19 @@ public class GameManager : MonoBehaviour {
         SkillCode kc;
 
         switch (sii.category) {
-            case Category.NETWORK:
+            case CategoryCode.NETWORK:
                 kc = SkillCode.NETWORK;
                 break;
-            case Category.ACCESS:
+            case CategoryCode.ACCESS:
                 kc = SkillCode.ACCESS;
                 break;
-            case Category.SOFTWARE:
+            case CategoryCode.SOFTWARE:
                 kc = SkillCode.SOFTWARE;
                 break;
-            case Category.ASSET:
+            case CategoryCode.ASSET:
                 kc = SkillCode.ASSET;
                 break;
-            case Category.SERVICES:
+            case CategoryCode.SERVICES:
                 kc = SkillCode.SERVICES;
                 break;
             default:
@@ -1163,19 +1167,19 @@ public class GameManager : MonoBehaviour {
         SkillCode kc;
 
         switch (sii.category) {
-            case Category.NETWORK:
+            case CategoryCode.NETWORK:
                 kc = SkillCode.NETWORK;
                 break;
-            case Category.ACCESS:
+            case CategoryCode.ACCESS:
                 kc = SkillCode.ACCESS;
                 break;
-            case Category.SOFTWARE:
+            case CategoryCode.SOFTWARE:
                 kc = SkillCode.SOFTWARE;
                 break;
-            case Category.ASSET:
+            case CategoryCode.ASSET:
                 kc = SkillCode.ASSET;
                 break;
-            case Category.SERVICES:
+            case CategoryCode.SERVICES:
                 kc = SkillCode.SERVICES;
                 break;
             default:
@@ -1232,7 +1236,7 @@ public class GameManager : MonoBehaviour {
     void EvaluateEmployeeManagement(EmployeeCode id) {
         int score = 0;
         EmployeeInfo employee = employees[id];
-        Category category = assignedTasks[id].category;
+        CategoryCode category = assignedTasks[id].category;
         // 1. How good is the selected employee in the category of the task?
         score += EmployeeUtils.GetAbility(employee.abilities, category);
         

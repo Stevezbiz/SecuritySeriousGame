@@ -19,7 +19,7 @@ public class Task {
     public EmployeeCode executor;
     public ShopItemCode shopItem;
     public AttackCode attack;
-    public Category category;
+    public CategoryCode category;
     public int duration;
     public int progress;
     public float protection;
@@ -36,7 +36,7 @@ public class Task {
         this.protection = t.protection;
     }
 
-    public Task(TaskType type, ShopItemCode shopItem, Category category) {
+    public Task(TaskType type, ShopItemCode shopItem, CategoryCode category) {
         this.id = _id++;
         this.type = type;
         this.executor = EmployeeCode.NONE;
@@ -48,7 +48,7 @@ public class Task {
         this.protection = 0f;
     }
 
-    public Task(TaskType type, AttackCode attack, Category category) {
+    public Task(TaskType type, AttackCode attack, CategoryCode category) {
         this.id = _id++;
         this.type = type;
         this.executor = EmployeeCode.NONE;
@@ -60,7 +60,7 @@ public class Task {
         this.protection = 0f;
     }
 
-    public Task(TaskType type, Category category) {
+    public Task(TaskType type, CategoryCode category) {
         this.id = _id++;
         this.type = type;
         this.executor = EmployeeCode.NONE;
@@ -88,7 +88,7 @@ public class Task {
 
 public static class TaskUtils {
     public static void SetupTasks(Dictionary<int, Task> waitingTasks) {
-        foreach(Category c in typeof(Category).GetEnumValues()) {
+        foreach(CategoryCode c in typeof(CategoryCode).GetEnumValues()) {
             Task t = new Task(TaskType.PREVENT, c);
             waitingTasks.Add(t.id, t);
         }

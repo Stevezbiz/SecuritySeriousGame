@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using Outline = UnityEngine.UI.Outline;
+using Button = UnityEngine.UI.Button;
 
 public class ShopItemDetail : MonoBehaviour {
     [SerializeField] TextMeshProUGUI titleText;
@@ -11,12 +12,7 @@ public class ShopItemDetail : MonoBehaviour {
     [SerializeField] TextMeshProUGUI nextRequirementsText;
     [SerializeField] TextMeshProUGUI nextResistancesText;
     [SerializeField] TextMeshProUGUI nextCostsText;
-    [SerializeField] TextMeshProUGUI actualDescriptionText;
-    [SerializeField] TextMeshProUGUI actualResistancesText;
-    [SerializeField] TextMeshProUGUI actualCostsText;
     [SerializeField] GameObject purchaseButton;
-    [SerializeField] GameObject enableButton;
-    [SerializeField] GameObject disableButton;
     [SerializeField] GameObject installingButton;
     [SerializeField] GameObject installButton;
     [SerializeField] GameObject upgradeButton;
@@ -45,8 +41,6 @@ public class ShopItemDetail : MonoBehaviour {
         ComposeDetails(sii);
         // set the visual aspect
         purchaseButton.SetActive(false);
-        enableButton.SetActive(false);
-        disableButton.SetActive(false);
         installingButton.SetActive(false);
         installButton.SetActive(false);
         upgradeButton.SetActive(false);
@@ -74,11 +68,9 @@ public class ShopItemDetail : MonoBehaviour {
                 upgradingButton.SetActive(true);
                 break;
             case ShopItemStatus.ACTIVE:
-                disableButton.SetActive(true);
                 if (sii.level != sii.maxLevel) upgradeButton.SetActive(true);
                 break;
             case ShopItemStatus.INACTIVE:
-                enableButton.SetActive(true);
                 if (sii.level != sii.maxLevel) upgradeButton.SetActive(true);
                 break;
             default:
@@ -106,15 +98,7 @@ public class ShopItemDetail : MonoBehaviour {
      * <summary>Compose all the details of the item</summary>
      */
     void ComposeDetails(ShopItemInfo sii) {
-        // compose details of actual level
-        if (sii.level > 0) {
-            actualDescriptionText.SetText("LIVELLO " + sii.level + " (installato)\n" + sii.description[sii.level - 1]);
-            ComposeLevelDetails(sii, sii.level - 1, true);
-        } else {
-            actualDescriptionText.SetText("LIVELLO 0: non hai ancora installato questo potenziamento");
-            actualResistancesText.SetText("");
-            actualCostsText.SetText("");
-        }
+        // compose details of next level
         titleText.SetText(sii.name.ToLower());
         if (sii.level == sii.maxLevel) {
             costText.SetText("");
@@ -123,68 +107,47 @@ public class ShopItemDetail : MonoBehaviour {
             nextResistancesText.SetText("");
             nextCostsText.SetText("");
         } else {
+            string requirements = "";
+            string resistances;
+            string costs = "";
+            int l = sii.level;
             costText.SetText(sii.cost[sii.level] + " Fondi");
-            nextDescriptionText.SetText("LIVELLO " + (sii.level + 1) + "\n" + sii.description[sii.level]);
-            ComposeLevelDetails(sii, sii.level, false);
-        }
-    }
-
-    void ComposeLevelDetails(ShopItemInfo sii, int l, bool actual) {
-        string requirements = "";
-        string resistances;
-        string costs = "";
-        // set the technical details about requirements
-        if (!actual && sii.locked[l]) {
-            requirements += "Per sbloccare questo oggetto devi prima acquistare:\n";
-            foreach (Requirement r in sii.reqArray[l].requirements) {
-                requirements += "    " + gameManager.GetShopItem(r.id).name.ToUpper() + " - Lv." + r.level + "\n";
+            nextDescriptionText.SetText("LIVELLO " + (sii.level + 1) + "\n" + sii.description[l]);
+            // set the technical details about requirements
+            if (sii.locked[l]) {
+                requirements += "Per sbloccare questo oggetto devi prima acquistare:\n";
+                foreach (Requirement r in sii.reqArray[l].requirements) {
+                    requirements += "    " + gameManager.GetShopItem(r.id).name.ToUpper() + " - Lv." + r.level + "\n";
+                }
             }
-        }
-        // set the technical details about resistances
-        resistances = "Resistenze:";
-        if (actual) {
-            // cumulative resistances (possessed item)
-            foreach (Resistance r in sii.resArray[l].resistances) {
-                resistances += string.Format("\n    {0,-24}",gameManager.GetAttack(r.id).name.ToUpper());
-                if (r.duration != 0) resistances += string.Format(" || durata {0,3}%", (gameManager.GetActualDurationResistance(r.duration) * -100).ToString("-0."));
-                if (r.miss != 0) resistances += string.Format(" | difesa {0,3}%", (gameManager.GetActualMissResistance(r.miss) * 100).ToString("+0."));
-                if (r.endurance != 0) resistances += string.Format(" | complessità {0,3}%", (gameManager.GetActualEnduranceResistance(r.endurance) * 100).ToString("+0."));
-            }
-        } else {
-            // differential resistances (next level)
+            // set the technical details about resistances
+            resistances = "Resistenze:";
             foreach (Resistance r in gameManager.GetShopItemResistances(sii.id)) {
                 resistances += string.Format("\n    {0,-24}", gameManager.GetAttack(r.id).name.ToUpper());
                 if (r.duration != 0) resistances += string.Format(" || durata {0,3}%", (r.duration * 100).ToString("-0."));
                 if (r.miss != 0) resistances += string.Format(" | difesa {0,3}%", (r.miss * 100).ToString("+0."));
                 if (r.endurance != 0) resistances += string.Format(" | complessità {0,3}%", (r.endurance * 100).ToString("+0."));
             }
-        }
-        
-        if (sii.resArray.Length == 0) resistances += " nessuna";
-        resistances += "\n";
-        // set the technical details about costs and usability
-        float moneyMalus = sii.moneyMalus[l];
-        float usersMod = sii.usersMod[l];
-        if (!actual && l > 0) {
-            usersMod -= sii.usersMod[l - 1];
-            moneyMalus -= sii.moneyMalus[l - 1];
-        }
-        // possible bonuses
-        if (moneyMalus < 0) resistances += "Guadagno aggiuntivo: " + (-moneyMalus) + " F/h\n";
-        if (usersMod < 0) resistances += "Prestazioni e usabilità: +" + (-usersMod * 100) + "%\n";
-        // possible maluses
-        if (moneyMalus < 0) costs += "Costo: 0 F/h\n";
-        else costs += "Costo: " + moneyMalus + " F/h\n";
-        if (usersMod > 0) costs += "Prestazioni e usabilità: -" + (usersMod * 100) + "%\n";
-        if (actual) {
-            actualResistancesText.SetText(resistances);
-            actualCostsText.SetText(costs);
-        } else {
+            if (sii.resArray.Length == 0) resistances += " nessuna";
+            resistances += "\n";
+            // set the technical details about costs and usability
+            float moneyMalus = sii.moneyMalus[l];
+            float usersMod = sii.usersMod[l];
+            if (l > 0) {
+                usersMod -= sii.usersMod[l - 1];
+                moneyMalus -= sii.moneyMalus[l - 1];
+            }
+            // possible bonuses
+            if (moneyMalus < 0) resistances += "Guadagno aggiuntivo: " + (-moneyMalus) + " F/h\n";
+            if (usersMod < 0) resistances += "Prestazioni e usabilità: +" + (-usersMod * 100) + "%\n";
+            // possible maluses
+            if (moneyMalus < 0) costs += "Costo: 0 F/h\n";
+            else costs += "Costo: " + moneyMalus + " F/h\n";
+            if (usersMod > 0) costs += "Prestazioni e usabilità: -" + (usersMod * 100) + "%\n";
             nextRequirementsText.SetText(requirements);
             nextResistancesText.SetText(resistances);
             nextCostsText.SetText(costs);
         }
-        
     }
 
     /**
@@ -211,29 +174,7 @@ public class ShopItemDetail : MonoBehaviour {
         gameManager.AssignEmployee(eid, task.id);
         parent.Upgrading();
         upgradeButton.SetActive(false);
-        enableButton.SetActive(false);
-        disableButton.SetActive(false);
         upgradingButton.SetActive(true);
-    }
-
-    /**
-     * <summary>Applies the effects of enabling an item of the shop</summary>
-     */
-    public void EnableItem() {
-        gameManager.EnableShopItem(id);
-        parent.Enable();
-        disableButton.SetActive(true);
-        enableButton.SetActive(false);
-    }
-
-    /**
-     * <summary>Applies the effects of disabling an item of the shop</summary>
-     */
-    public void DisableItem() {
-        gameManager.DisableShopItem(id);
-        parent.Disable();
-        enableButton.SetActive(true);
-        disableButton.SetActive(false);
     }
 
     /**

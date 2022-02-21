@@ -57,20 +57,20 @@ public class EmployeeView : MonoBehaviour {
             case TaskType.PREVENT:
                 endTaskButton.SetActive(true);
                 string category;
-                switch ((Category)gameManager.GetTaskTarget(id)) {
-                    case Category.NETWORK:
+                switch ((CategoryCode)gameManager.GetTaskTarget(id)) {
+                    case CategoryCode.NETWORK:
                         category = "Rete";
                         break;
-                    case Category.ACCESS:
+                    case CategoryCode.ACCESS:
                         category = "Accesso";
                         break;
-                    case Category.SOFTWARE:
+                    case CategoryCode.SOFTWARE:
                         category = "Software";
                         break;
-                    case Category.ASSET:
+                    case CategoryCode.ASSET:
                         category = "Risorse";
                         break;
-                    case Category.SERVICES:
+                    case CategoryCode.SERVICES:
                         category = "Servizi";
                         break;
                     default:

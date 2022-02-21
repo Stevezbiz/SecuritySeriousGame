@@ -58,7 +58,7 @@ public class EmployeeRecap {
 
 [System.Serializable]
 public class EmployeeAbility {
-    public Category category;
+    public CategoryCode category;
     public int level;
 }
 
@@ -94,8 +94,8 @@ public static class EmployeeUtils {
         return er.ToArray();
     }
 
-    public static Dictionary<Category, float> GetAbilities(EmployeeAbility[] a) {
-        Dictionary<Category, float> abilities = new Dictionary<Category, float>();
+    public static Dictionary<CategoryCode, float> GetAbilities(EmployeeAbility[] a) {
+        Dictionary<CategoryCode, float> abilities = new Dictionary<CategoryCode, float>();
 
         foreach (EmployeeAbility ability in a) {
             abilities.Add(ability.category, ability.level);
@@ -104,7 +104,7 @@ public static class EmployeeUtils {
         return abilities;
     }
 
-    public static int GetAbility(EmployeeAbility[] abilities, Category c) {
+    public static int GetAbility(EmployeeAbility[] abilities, CategoryCode c) {
         foreach(EmployeeAbility a in abilities) {
             if (a.category == c) return a.level;
         }

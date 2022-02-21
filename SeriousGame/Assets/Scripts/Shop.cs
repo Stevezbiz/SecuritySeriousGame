@@ -16,7 +16,7 @@ public class Shop : MonoBehaviour {
      * <summary>Initialize the data structures</summary>
      */
     public void Init() {
-        foreach (Category c in typeof(Category).GetEnumValues()) {
+        foreach (CategoryCode c in typeof(CategoryCode).GetEnumValues()) {
             indexes.AddRange(gameManager.GetShopItemsByCategory(c));
         }
     }

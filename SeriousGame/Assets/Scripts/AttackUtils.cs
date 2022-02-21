@@ -54,7 +54,7 @@ public class ResistanceArray {
 [System.Serializable]
 public class AttackInfo {
     public AttackCode id;
-    public Category category;
+    public CategoryCode category;
     public string name;
     public string description;
     public float moneyLoss;

@@ -102,6 +102,16 @@ public class Person {
     }
 }
 
+public class Category {
+    public string name;
+    public Sprite sprite;
+
+    public Category(string name, Sprite sprite) {
+        this.name = name;
+        this.sprite = sprite;
+    }
+}
+
 // error codes used in the project
 public enum ECode {
     OK, // no error
@@ -118,7 +128,7 @@ public enum ActionCode {
     DISABLE_ITEM
 }
 
-public enum Category {
+public enum CategoryCode {
     NETWORK,
     ACCESS,
     SOFTWARE,

@@ -43,7 +43,7 @@ public class RequirementArray {
 [System.Serializable]
 public class ShopItemInfo {
     public ShopItemCode id;
-    public Category category;
+    public CategoryCode category;
     public string name;
     public string[] description;
     public int[] cost;

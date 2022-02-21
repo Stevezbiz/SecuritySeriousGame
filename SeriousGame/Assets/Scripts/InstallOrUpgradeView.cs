@@ -31,12 +31,12 @@ public class InstallOrUpgradeView : MonoBehaviour {
         nameText.SetText(e.name.ToLower());
         descriptionText.SetText(e.description);
         moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
-        Dictionary<Category, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
-        networkBar.fillAmount = abilities[Category.NETWORK] / 10;
-        accessBar.fillAmount = abilities[Category.ACCESS] / 10;
-        softwareBar.fillAmount = abilities[Category.SOFTWARE] / 10;
-        assetBar.fillAmount = abilities[Category.ASSET] / 10;
-        servicesBar.fillAmount = abilities[Category.SERVICES] / 10;
+        Dictionary<CategoryCode, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
+        networkBar.fillAmount = abilities[CategoryCode.NETWORK] / 10;
+        accessBar.fillAmount = abilities[CategoryCode.ACCESS] / 10;
+        softwareBar.fillAmount = abilities[CategoryCode.SOFTWARE] / 10;
+        assetBar.fillAmount = abilities[CategoryCode.ASSET] / 10;
+        servicesBar.fillAmount = abilities[CategoryCode.SERVICES] / 10;
         tasks.Clear();
         tasks = gameManager.GetAvailableTasksByType(TaskType.INSTALL);
         if (tasks.Count == 0) {
@@ -78,19 +78,19 @@ public class InstallOrUpgradeView : MonoBehaviour {
         assetOutline.SetActive(false);
         servicesOutline.SetActive(false);
         switch (sii.category) {
-            case Category.NETWORK:
+            case CategoryCode.NETWORK:
                 networkOutline.SetActive(true);
                 break;
-            case Category.ACCESS:
+            case CategoryCode.ACCESS:
                 accessOutline.SetActive(true);
                 break;
-            case Category.SOFTWARE:
+            case CategoryCode.SOFTWARE:
                 softwareOutline.SetActive(true);
                 break;
-            case Category.ASSET:
+            case CategoryCode.ASSET:
                 assetOutline.SetActive(true);
                 break;
-            case Category.SERVICES:
+            case CategoryCode.SERVICES:
                 servicesOutline.SetActive(true);
                 break;
             default:
