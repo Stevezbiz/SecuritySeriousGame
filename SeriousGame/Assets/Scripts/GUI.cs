@@ -12,6 +12,7 @@ public class GUI : MonoBehaviour {
     [SerializeField] TextMeshProUGUI reputationText;
     [SerializeField] TextMeshProUGUI dateText;
     [SerializeField] TextMeshProUGUI timeText;
+    [SerializeField] TextMeshProUGUI clockText;
     [SerializeField] Image reputationBar;
 
     /**
@@ -24,5 +25,6 @@ public class GUI : MonoBehaviour {
         reputationBar.fillAmount = reputation;
         dateText.SetText(dateTime.ToString("d MMM yyyy"));
         timeText.SetText(dateTime.ToString("HH:mm"));
+        clockText.SetText(dateTime.ToString("HH:mm"));
     }
 }
