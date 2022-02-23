@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField] QuizQuestion quizQuestion;
     [SerializeField] LearningReport learningReport;
     [SerializeField] GameObject message;
+    [SerializeField] GameObject personMoving;
+    [SerializeField] RectTransform personParent;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset shopFileJSON;
@@ -1226,11 +1228,15 @@ public class GameManager : MonoBehaviour {
     void UpdateQuiz() {
         if ((gc.totalTime - 1) % gc.quizTime == 0) {
             // random quiz and time choice
-            gc.quizTimer = Random.Range(1, gc.quizTime);
+            gc.quizTimer = Random.Range(5, gc.quizTime);
             gc.actualQuiz = Random.Range(0, quizzes.Count);
         }
         // launch quiz
-        if (gc.quizTimer-- == 0) quizQuestion.Load(quizzes[gc.actualQuiz], avatars[quizzes[gc.actualQuiz].person]);
+        if (gc.quizTimer-- == 0) Instantiate(personMoving, personParent, false).GetComponent<PersonController>().Load(this, avatars[quizzes[gc.actualQuiz].person]);
+    }
+
+    public void LaunchQuiz() {
+        quizQuestion.Load(quizzes[gc.actualQuiz], avatars[quizzes[gc.actualQuiz].person]);
     }
 
     void EvaluateEmployeeManagement(EmployeeCode id) {
