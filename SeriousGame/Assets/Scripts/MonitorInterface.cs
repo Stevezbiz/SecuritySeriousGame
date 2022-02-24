@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Image = UnityEngine.UI.Image;
 
 public class MonitorInterface : MonoBehaviour {
     [SerializeField] CategoryView categoryView;
@@ -9,6 +10,11 @@ public class MonitorInterface : MonoBehaviour {
     [SerializeField] GameObject softwareAttackIcon;
     [SerializeField] GameObject assetAttackIcon;
     [SerializeField] GameObject servicesAttackIcon;
+    [SerializeField] GameObject networkEmployeeIcon;
+    [SerializeField] GameObject accessEmployeeIcon;
+    [SerializeField] GameObject softwareEmployeeIcon;
+    [SerializeField] GameObject assetEmployeeIcon;
+    [SerializeField] GameObject servicesEmployeeIcon;
 
     Dictionary<CategoryCode, int> counters = new Dictionary<CategoryCode, int>() {
         { CategoryCode.NETWORK, 0 },
@@ -87,6 +93,57 @@ public class MonitorInterface : MonoBehaviour {
             case CategoryCode.SERVICES:
                 counters[c]--;
                 if (counters[c] == 0) servicesAttackIcon.SetActive(false);
+                break;
+            default:
+                Debug.Log("Error: unexpected CategoryCode");
+                break;
+        }
+    }
+
+    public void EnableEmployeeIcon(CategoryCode c, Sprite s) {
+        switch (c) {
+            case CategoryCode.NETWORK:
+                networkEmployeeIcon.GetComponent<Image>().sprite = s;
+                networkEmployeeIcon.SetActive(true);
+                break;
+            case CategoryCode.ACCESS:
+                accessEmployeeIcon.GetComponent<Image>().sprite = s;
+                accessEmployeeIcon.SetActive(true);
+                break;
+            case CategoryCode.SOFTWARE:
+                softwareEmployeeIcon.GetComponent<Image>().sprite = s;
+                softwareEmployeeIcon.SetActive(true);
+                break;
+            case CategoryCode.ASSET:
+                assetEmployeeIcon.GetComponent<Image>().sprite = s;
+                assetEmployeeIcon.SetActive(true);
+                break;
+            case CategoryCode.SERVICES:
+                servicesEmployeeIcon.GetComponent<Image>().sprite = s;
+                servicesEmployeeIcon.SetActive(true);
+                break;
+            default:
+                Debug.Log("Error: unexpected CategoryCode");
+                break;
+        }
+    }
+
+    public void DisableEmployeeIcon(CategoryCode c) {
+        switch (c) {
+            case CategoryCode.NETWORK:
+                networkEmployeeIcon.SetActive(false);
+                break;
+            case CategoryCode.ACCESS:
+                accessEmployeeIcon.SetActive(false);
+                break;
+            case CategoryCode.SOFTWARE:
+                softwareEmployeeIcon.SetActive(false);
+                break;
+            case CategoryCode.ASSET:
+                assetEmployeeIcon.SetActive(false);
+                break;
+            case CategoryCode.SERVICES:
+                servicesEmployeeIcon.SetActive(false);
                 break;
             default:
                 Debug.Log("Error: unexpected CategoryCode");

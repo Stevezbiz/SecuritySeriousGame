@@ -486,6 +486,7 @@ public class GameManager : MonoBehaviour {
             case TaskType.PREVENT:
                 employees[t.executor].status = TaskType.NONE;
                 waitingTasks.Add(t.id, t);
+                monitorInterface.DisableEmployeeIcon(t.category);
                 assignedTasks.Remove(t.executor);
                 break;
             default:
@@ -757,6 +758,7 @@ public class GameManager : MonoBehaviour {
                         r.miss += t.protection;
                     }
                 }
+                monitorInterface.EnableEmployeeIcon(t.category, avatarIcons[0]);
                 break;
             default:
                 Debug.Log("Error: undefined taskType");
