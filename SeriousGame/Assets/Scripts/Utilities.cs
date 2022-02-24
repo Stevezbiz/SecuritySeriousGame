@@ -94,11 +94,13 @@ public class GameConfigJSON {
 
 public class Person {
     public string name;
-    public Sprite sprite;
+    public Sprite icon;
+    public Sprite figure;
 
-    public Person(string name, Sprite sprite) {
+    public Person(string name, Sprite icon, Sprite figure) {
         this.name = name;
-        this.sprite = sprite;
+        this.icon = icon;
+        this.figure = figure;
     }
 }
 

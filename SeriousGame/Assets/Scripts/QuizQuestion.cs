@@ -18,7 +18,7 @@ public class QuizQuestion : MonoBehaviour {
     public void Load(Quiz q, Person p) {
         this.q = q;
         nameText.SetText(p.name.ToLower());
-        image.sprite = p.sprite;
+        image.sprite = p.icon;
         questionText.SetText(q.question);
         for (int i = 0; i < q.answers.Length; i++) {
             toDestroy.Add(Instantiate(quizAlternative, answers, false));

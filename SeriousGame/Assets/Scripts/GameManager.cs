@@ -23,7 +23,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField] TextAsset quizzesFileJSON;
     [SerializeField] TextAsset employeesFileJSON;
     [SerializeField] TextAsset modelFileJSON;
-    [SerializeField] List<Sprite> avatarImages;
+    [SerializeField] List<Sprite> avatarIcons;
+    [SerializeField] List<Sprite> avatarFigures;
     [SerializeField] List<Sprite> categoryImages;
 
     float startTime;
@@ -121,8 +122,8 @@ public class GameManager : MonoBehaviour {
         // load the employees from file
         employees = EmployeeUtils.LoadFromFile(employeesFileJSON);
         // load the avatars
-        for (int i = 0; i < avatarImages.Count; i++) {
-            avatars.Add((Role)i, new Person(avatarImages[i].name, avatarImages[i]));
+        for (int i = 0; i < avatarIcons.Count; i++) {
+            avatars.Add((Role)i, new Person(avatarIcons[i].name, avatarIcons[i], avatarFigures[i]));
         }
         // load the category images
         for (int i = 0; i < categoryImages.Count; i++) {

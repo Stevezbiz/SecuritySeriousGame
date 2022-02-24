@@ -16,7 +16,7 @@ public class Message : MonoBehaviour {
      */
     public void Load(string message, ActionCode action, Person p) {
         nameText.SetText(p.name.ToLower());
-        image.sprite = p.sprite;
+        image.sprite = p.icon;
         this.action = action;
         TimeManager.Pause();
         messageText.SetText(message);
