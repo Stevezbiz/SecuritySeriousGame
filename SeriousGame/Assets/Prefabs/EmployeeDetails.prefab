@@ -1219,6 +1219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   titleText: {fileID: 5730788747613745657}
+  icon: {fileID: 165632453762152568}
   descriptionText: {fileID: 5730788748126491888}
   moneyGainText: {fileID: 5730788748584252464}
   networkBar: {fileID: 5730788748161883633}

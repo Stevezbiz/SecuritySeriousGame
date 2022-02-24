@@ -6,6 +6,7 @@ using Image = UnityEngine.UI.Image;
 
 public class EmployeeDetails : MonoBehaviour {
     [SerializeField] TextMeshProUGUI titleText;
+    [SerializeField] Image icon;
     [SerializeField] TextMeshProUGUI descriptionText;
     [SerializeField] TextMeshProUGUI moneyGainText;
     [SerializeField] Image networkBar;
@@ -20,6 +21,7 @@ public class EmployeeDetails : MonoBehaviour {
     public void Load(EmployeeInfo e, GameManager gameManager) {
         this.gameManager = gameManager;
         titleText.SetText(e.name);
+        icon.sprite = gameManager.GetEmployeeIcon(e.id);
         descriptionText.SetText(e.description);
         Dictionary<CategoryCode, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
         networkBar.fillAmount = abilities[CategoryCode.NETWORK] / 10;

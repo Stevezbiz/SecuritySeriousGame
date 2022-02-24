@@ -24,9 +24,10 @@ public class GameManager : MonoBehaviour {
     [SerializeField] TextAsset quizzesFileJSON;
     [SerializeField] TextAsset employeesFileJSON;
     [SerializeField] TextAsset modelFileJSON;
-    [SerializeField] List<Sprite> avatarIcons;
-    [SerializeField] List<Sprite> avatarFigures;
-    [SerializeField] List<Sprite> categoryImages;
+    [SerializeField] List<Sprite> roleIcons;
+    [SerializeField] List<Sprite> roleFigures;
+    [SerializeField] List<Sprite> categoryIcons;
+    [SerializeField] List<Sprite> employeeIcons;
 
     float startTime;
     int updateTime = 1;
@@ -44,8 +45,9 @@ public class GameManager : MonoBehaviour {
     Dictionary<EmployeeCode, EmployeeInfo> employees = new Dictionary<EmployeeCode, EmployeeInfo>();
     Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
     Dictionary<int, Quiz> quizzes = new Dictionary<int, Quiz>();
-    Dictionary<Role, Person> avatars = new Dictionary<Role, Person>();
+    Dictionary<Role, Person> roleAvatars = new Dictionary<Role, Person>();
     Dictionary<CategoryCode, Category> categories = new Dictionary<CategoryCode, Category>();
+    Dictionary<EmployeeCode, Sprite> employeeAvatars = new Dictionary<EmployeeCode, Sprite>();
 
     // Start is called before the first frame update
     void Start() {
@@ -123,12 +125,15 @@ public class GameManager : MonoBehaviour {
         // load the employees from file
         employees = EmployeeUtils.LoadFromFile(employeesFileJSON);
         // load the avatars
-        for (int i = 0; i < avatarIcons.Count; i++) {
-            avatars.Add((Role)i, new Person(avatarIcons[i].name, avatarIcons[i], avatarFigures[i]));
+        for (int i = 0; i < employeeIcons.Count; i++) {
+            employeeAvatars.Add((EmployeeCode)i, employeeIcons[i]);
+        }
+        for (int i = 0; i < roleIcons.Count; i++) {
+            roleAvatars.Add((Role)i, new Person(roleIcons[i].name, roleIcons[i], roleFigures[i]));
         }
         // load the category images
-        for (int i = 0; i < categoryImages.Count; i++) {
-            categories.Add((CategoryCode)i, new Category(categoryImages[i].name, categoryImages[i]));
+        for (int i = 0; i < categoryIcons.Count; i++) {
+            categories.Add((CategoryCode)i, new Category(categoryIcons[i].name, categoryIcons[i]));
         }
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
@@ -758,7 +763,7 @@ public class GameManager : MonoBehaviour {
                         r.miss += t.protection;
                     }
                 }
-                monitorInterface.EnableEmployeeIcon(t.category, avatarIcons[0]);
+                monitorInterface.EnableEmployeeIcon(t.category, employeeAvatars[t.executor]);
                 break;
             default:
                 Debug.Log("Error: undefined taskType");
@@ -776,6 +781,10 @@ public class GameManager : MonoBehaviour {
 
     public Sprite GetCategoryImage(CategoryCode c) {
         return categories[c].sprite;
+    }
+
+    public Sprite GetEmployeeIcon(EmployeeCode id) {
+        return employeeAvatars[id];
     }
 
     /**
@@ -1002,7 +1011,7 @@ public class GameManager : MonoBehaviour {
      * <summary>Creates a pop-up window message</summary>
      */
     public void DisplayMessage(string message, ActionCode action, Role role) {
-        Instantiate(this.message, gameObject.transform, false).GetComponent<Message>().Load(message, action, avatars[role]);
+        Instantiate(this.message, gameObject.transform, false).GetComponent<Message>().Load(message, action, roleAvatars[role]);
     }
 
     void DebugPrint() {
@@ -1240,11 +1249,11 @@ public class GameManager : MonoBehaviour {
             gc.actualQuiz = Random.Range(0, quizzes.Count);
         }
         // launch quiz
-        if (gc.quizTimer-- == 0) Instantiate(personMoving, personParent, false).GetComponent<PersonController>().Load(this, avatars[quizzes[gc.actualQuiz].person]);
+        if (gc.quizTimer-- == 0) Instantiate(personMoving, personParent, false).GetComponent<PersonController>().Load(this, roleAvatars[quizzes[gc.actualQuiz].person]);
     }
 
     public void LaunchQuiz() {
-        quizQuestion.Load(quizzes[gc.actualQuiz], avatars[quizzes[gc.actualQuiz].person]);
+        quizQuestion.Load(quizzes[gc.actualQuiz], roleAvatars[quizzes[gc.actualQuiz].person]);
     }
 
     void EvaluateEmployeeManagement(EmployeeCode id) {

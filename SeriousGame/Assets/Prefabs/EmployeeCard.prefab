@@ -675,6 +675,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 4860831116114792672}
+  icon: {fileID: 4860831115571006174}
   statusText: {fileID: 2157941214897503608}
   employeeDetails: {fileID: 5730788747857698220, guid: e3ca9ea0867a605489e870489c841197, type: 3}
   progressBar: {fileID: 6434859305165564123}

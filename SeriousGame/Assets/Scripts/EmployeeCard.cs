@@ -6,6 +6,7 @@ using Image = UnityEngine.UI.Image;
 
 public class EmployeeCard : MonoBehaviour {
     [SerializeField] TextMeshProUGUI nameText;
+    [SerializeField] Image icon;
     [SerializeField] TextMeshProUGUI statusText;
     [SerializeField] GameObject employeeDetails;
     [SerializeField] GameObject progressBar;
@@ -23,6 +24,7 @@ public class EmployeeCard : MonoBehaviour {
         this.gameManager = gameManager;
         this.parent = parent;
         nameText.SetText(e.name.ToLower());
+        icon.sprite = gameManager.GetEmployeeIcon(e.id);
         switch (e.status) {
             case TaskType.NONE:
                 statusText.SetText("DISPONIBILE");
