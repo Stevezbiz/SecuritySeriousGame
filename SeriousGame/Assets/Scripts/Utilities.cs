@@ -152,6 +152,7 @@ public static class COLOR {
     public static Color GREEN = new Color(.0f, 1f, .0f, 1f);
     public static Color YELLOW = new Color(1f, .8f, .0f, 1f);
     public static Color GREEN_DISABLED = new Color(.0f, .4f, .0f, 1f);
+    public static Color DISABLED = new Color(.0f, .0f, .0f, .0f);
 }
 
 public static class NumUtils{
