@@ -111,7 +111,7 @@ public class PreventView : MonoBehaviour {
     }
 
     public void Close() {
-        employeeView.Load();
+        //employeeView.Load();
         gameObject.SetActive(false);
     }
 }

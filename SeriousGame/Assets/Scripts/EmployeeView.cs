@@ -7,101 +7,63 @@ public class EmployeeView : MonoBehaviour {
     [SerializeField] GameManager gameManager;
     [SerializeField] GameObject bottomPanel;
     [SerializeField] GameObject employeeCard;
+    [SerializeField] EmployeeList employeeList;
+    [SerializeField] GameObject employeeChoice;
     [SerializeField] RectTransform content;
-    [SerializeField] GameObject installButton;
-    [SerializeField] GameObject repairButton;
-    [SerializeField] GameObject preventButton;
-    [SerializeField] GameObject endTaskButton;
-    [SerializeField] TextMeshProUGUI labelText;
-    [SerializeField] InstallOrUpgradeView installView;
-    [SerializeField] RepairView repairView;
-    [SerializeField] PreventView preventView;
+    [SerializeField] GameObject selection;
+    [SerializeField] GameObject unselection;
+    [SerializeField] GameObject assignButton;
+    [SerializeField] TextMeshProUGUI employeeText;
+    [SerializeField] TextMeshProUGUI valueText;
+    [SerializeField] TextMeshProUGUI titleText;
 
-    List<EmployeeInfo> employees;
     List<GameObject> toDestroy = new List<GameObject>();
     EmployeeCode selected;
+    Task task;
 
-    public void Load() {
-        foreach (GameObject obj in toDestroy) {
-            Destroy(obj);
+    public void Load(Task t) {
+        this.task = t;
+        foreach (GameObject o in toDestroy) {
+            Destroy(o);
         }
         toDestroy.Clear();
-        employees = gameManager.GetHiredEmployees();
-        foreach (EmployeeInfo e in employees) {
-            GameObject newEmployee = Instantiate(employeeCard, content, false);
-            newEmployee.GetComponent<EmployeeCard>().Load(e, gameManager, this);
-            toDestroy.Add(newEmployee);
+        foreach(EmployeeInfo e in gameManager.GetAvailableEmployees()) {
+            GameObject newItem = Instantiate(employeeCard, content, false);
+            newItem.GetComponent<EmployeeCard>().Load(gameManager, e, this, t);
+            toDestroy.Add(newItem);
         }
-        DisableButtons();
-        labelText.SetText("Seleziona un impiegato per visualizzare le varie opzioni");
-    }
-
-    public void Select(EmployeeCode id) {
-        selected = id;
-        EmployeeInfo employee = gameManager.GetEmployee(id);
-        DisableButtons();
-        switch (employee.status) {
-            case TaskType.NONE:
-                EnableButtons();
-                labelText.SetText("Cosa deve fare " + employee.name + "?");
-                break;
-            case TaskType.INSTALL:
-                labelText.SetText(employee.name + " sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(id)).name);
-                break;
-            case TaskType.REPAIR:
-                labelText.SetText(employee.name + " sta riparando i danni provocati dall'attacco " + gameManager.GetAttack((AttackCode)gameManager.GetTaskTarget(id)).name);
-                break;
-            case TaskType.UPGRADE:
-                labelText.SetText(employee.name + " sta installando " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(id)).name);
-                break;
-            case TaskType.PREVENT:
-                endTaskButton.SetActive(true);
-                string category;
-                switch ((CategoryCode)gameManager.GetTaskTarget(id)) {
-                    case CategoryCode.NETWORK:
-                        category = "Rete";
-                        break;
-                    case CategoryCode.ACCESS:
-                        category = "Accesso";
-                        break;
-                    case CategoryCode.SOFTWARE:
-                        category = "Software";
-                        break;
-                    case CategoryCode.ASSET:
-                        category = "Risorse";
-                        break;
-                    case CategoryCode.SERVICES:
-                        category = "Servizi";
-                        break;
-                    default:
-                        Debug.Log("Error: undefined Category");
-                        category = "";
-                        break;
-                }
-                labelText.SetText(employee.name + " sta facendo prevenzione nel settore " + category);
-                break;
-            default:
-                Debug.Log("Error: undefined TaskType");
-                break;
+        if (toDestroy.Count == 0) {
+            gameManager.DisplayMessage("Nessun impiegato è al momento disponibile.", ActionCode.CONTINUE, Role.SECURITY);
+        } else {
+            switch (task.type) {
+                case TaskType.NONE:
+                    break;
+                case TaskType.INSTALL:
+                    titleText.SetText("INSTALLAZIONE " + gameManager.GetShopItem(task.shopItem).name);
+                    break;
+                case TaskType.UPGRADE:
+                    titleText.SetText("POTENZIAMENTO " + gameManager.GetShopItem(task.shopItem).name);
+                    break;
+                case TaskType.REPAIR:
+                    titleText.SetText("RIPARAZIONE " + gameManager.GetAttack(task.attack).name);
+                    break;
+                case TaskType.PREVENT:
+                    titleText.SetText("PREVENZIONE " + gameManager.GetCategory(task.category).name);
+                    break;
+                default:
+                    Debug.Log("Error: unexpected TaskType");
+                    break;
+            }
+            selection.SetActive(false);
+            assignButton.SetActive(false);
+            unselection.SetActive(true);
+            employeeChoice.SetActive(true);
         }
-    }
-
-    void EnableButtons() {
-        installButton.SetActive(true);
-        repairButton.SetActive(true);
-        preventButton.SetActive(true);
-    }
-
-    void DisableButtons() {
-        installButton.SetActive(false);
-        repairButton.SetActive(false);
-        preventButton.SetActive(false);
-        endTaskButton.SetActive(false);
     }
 
     public void OpenView() {
         TimeManager.Pause();
-        Load();
+        employeeList.OpenView();
         bottomPanel.SetActive(false);
         gameObject.SetActive(true);
     }
@@ -109,23 +71,44 @@ public class EmployeeView : MonoBehaviour {
     public void CloseView() {
         TimeManager.Resume();
         bottomPanel.SetActive(true);
+        employeeChoice.SetActive(false);
         gameObject.SetActive(false);
     }
 
-    public void Install() {
-        installView.Load(selected);
+    public void Back() {
+        employeeChoice.SetActive(false);
     }
 
-    public void Repair() {
-        repairView.Load(selected);
+    public void SelectEmployee(EmployeeCode id) {
+        selected = id;
+        unselection.SetActive(false);
+        selection.SetActive(true);
+        assignButton.SetActive(true);
+        employeeText.SetText("Impiegato: " + gameManager.GetEmployee(id).name);
+        Debug.Log(task.type);
+        switch (task.type) {
+            case TaskType.NONE:
+                break;
+            case TaskType.INSTALL:
+                valueText.SetText("Durata: " + gameManager.GetInstallTaskDuration(id, task.shopItem) + " h");
+                break;
+            case TaskType.UPGRADE:
+                valueText.SetText("Durata: " + gameManager.GetUpgradeTaskDuration(id, task.shopItem) + " h");
+                break;
+            case TaskType.REPAIR:
+                valueText.SetText("Durata: " + gameManager.GetRepairTaskDuration(id, task.attack) + " h");
+                break;
+            case TaskType.PREVENT:
+                valueText.SetText("Protezione: " + (100 * gameManager.GetPreventProtection(id, task.category)).ToString("+0.") + "%");
+                break;
+            default:
+                Debug.Log("Error: unexpected TaskType");
+                break;
+        }
     }
 
-    public void Prevent() {
-        preventView.Load(selected);
-    }
-
-    public void EndTask() {
-        gameManager.EndTask(gameManager.GetPreventionTask(selected));
-        Load();
+    public void Assign() {
+        gameManager.AssignEmployee(selected, task.id);
+        employeeChoice.SetActive(false);
     }
 }

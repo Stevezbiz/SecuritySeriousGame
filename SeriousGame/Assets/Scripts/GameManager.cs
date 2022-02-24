@@ -447,6 +447,14 @@ public class GameManager : MonoBehaviour {
 
     // TASK
 
+    public List<Task> GetAssignedTasks() {
+        return new List<Task>(assignedTasks.Values);
+    }
+
+    public List<Task> GetWaitingTasks() {
+        return new List<Task>(waitingTasks.Values);
+    }
+
     public List<Task> GetAvailableTasksByType(TaskType type) {
         List<Task> res = new List<Task>();
         foreach (Task t in waitingTasks.Values) {
