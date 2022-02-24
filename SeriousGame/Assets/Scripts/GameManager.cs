@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] Guide guide;
     [SerializeField] QuizQuestion quizQuestion;
     [SerializeField] LearningReport learningReport;
+    [SerializeField] MonitorInterface monitorInterface;
     [SerializeField] GameObject message;
     [SerializeField] GameObject personMoving;
     [SerializeField] RectTransform personParent;
@@ -362,6 +363,8 @@ public class GameManager : MonoBehaviour {
         // update statistics
         attackStats[id].n++;
         attackStats[id].hit++;
+        // update graphics
+        monitorInterface.EnableAttackIcon(attacks[id].category);
         // generate a message
         DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE, Role.SECURITY);
     }
@@ -374,6 +377,8 @@ public class GameManager : MonoBehaviour {
         gc.ongoingAttacks--;
         ScheduleAttack(id);
         attackSchedule[id].timer--;
+        // update graphics
+        monitorInterface.DisableAttackIcon(attacks[id].category);
     }
 
     /**
