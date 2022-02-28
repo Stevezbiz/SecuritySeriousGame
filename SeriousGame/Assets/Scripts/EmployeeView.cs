@@ -85,7 +85,6 @@ public class EmployeeView : MonoBehaviour {
         selection.SetActive(true);
         assignButton.SetActive(true);
         employeeText.SetText("Impiegato: " + gameManager.GetEmployee(id).name);
-        Debug.Log(task.type);
         switch (task.type) {
             case TaskType.NONE:
                 break;
@@ -109,6 +108,7 @@ public class EmployeeView : MonoBehaviour {
 
     public void Assign() {
         gameManager.AssignEmployee(selected, task.id);
+        employeeList.OpenView();
         employeeChoice.SetActive(false);
     }
 }
