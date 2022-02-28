@@ -66,6 +66,7 @@ public class TaskItem : MonoBehaviour {
             button.interactable = false;
             statusText.SetText("ASSEGNATO A\n" + gameManager.GetEmployee(t.executor).name.ToUpper());
         } else {
+            button.interactable = true;
             statusText.SetText("NON ASSEGNATO");
         }
     }
