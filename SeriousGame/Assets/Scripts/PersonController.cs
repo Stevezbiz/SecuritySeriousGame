@@ -8,7 +8,7 @@ public class PersonController : MonoBehaviour {
     float speed;
     bool arrived;
     bool up;
-    
+
     void FixedUpdate() {
         if (!arrived) {
             WalkRight();

@@ -44,7 +44,7 @@ public static class GuideUtils {
         Dictionary<GuideEntryCode, GuideEntryData> entries = new Dictionary<GuideEntryCode, GuideEntryData>();
 
         GuideJSON guideJSON = JsonUtility.FromJson<GuideJSON>(file.text);
-        foreach(GuideEntryData data in guideJSON.entries) {
+        foreach (GuideEntryData data in guideJSON.entries) {
             entries.Add(data.id, data);
         }
 

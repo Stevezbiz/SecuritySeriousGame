@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using Slider = UnityEngine.UI.Slider;
+using UnityEngine;
 using Image = UnityEngine.UI.Image;
+using Slider = UnityEngine.UI.Slider;
 
 public class CountermeasureItem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI nameText;

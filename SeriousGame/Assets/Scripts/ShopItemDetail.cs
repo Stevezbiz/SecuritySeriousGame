@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Outline = UnityEngine.UI.Outline;
 using Button = UnityEngine.UI.Button;
+using Outline = UnityEngine.UI.Outline;
 
 public class ShopItemDetail : MonoBehaviour {
     [SerializeField] TextMeshProUGUI titleText;
@@ -89,7 +89,7 @@ public class ShopItemDetail : MonoBehaviour {
                 upgradeOutline.effectColor = COLOR.GREEN_DISABLED;
                 upgradeLockImage.SetActive(true);
             }
-            
+
         }
         content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
     }

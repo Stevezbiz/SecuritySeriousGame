@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
 
 public enum SkillCode {
     NONE,
@@ -104,10 +104,10 @@ public static class BKTModel {
         foreach (KCData kc in modelJSON.modelConfig.kcs) {
             kcs.Add(kc.id, new KnowledgeComponent(kc.id, kc.name));
         }
-        foreach(ResistanceRequirements r in modelJSON.modelConfig.requirements) {
+        foreach (ResistanceRequirements r in modelJSON.modelConfig.requirements) {
             resistanceRequirements.Add(r.id, r);
         }
-        foreach(int slot in modelJSON.modelConfig.timeSlots) {
+        foreach (int slot in modelJSON.modelConfig.timeSlots) {
             timeSlots.Add(slot);
         }
         return kcs;
@@ -121,7 +121,7 @@ public static class BKTModel {
         fs.Close();
         actualTimeSlot = modelSave.actualTimeSlot;
         Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
-        foreach(KCRecord r in modelSave.records) {
+        foreach (KCRecord r in modelSave.records) {
             kcs.Add(r.id, new KnowledgeComponent(r));
         }
         return kcs;
@@ -234,7 +234,7 @@ public class KnowledgeComponent {
             max_score = score;
             bestTransitionPos = tests.Count;
         }
-        
+
         // If transitionPos = 0 we can consider it also as an edge case: skill learned before start
         transitionPos = bestTransitionPos;
     }
@@ -364,7 +364,7 @@ public class KnowledgeComponent {
 
     public string GetLearnedVector() {
         string str = "";
-        for(int i=0; i < tests.Count; i++) {
+        for (int i = 0; i < tests.Count; i++) {
             if (i < transitionPos) str += "0";
             else str += "1";
         }

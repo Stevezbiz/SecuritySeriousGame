@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using Image = UnityEngine.UI.Image;
+using UnityEngine;
 using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.UI.Image;
 
 public class TaskItem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI typeText;

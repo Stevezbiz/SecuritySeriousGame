@@ -179,7 +179,7 @@ public class SecurityView : MonoBehaviour {
         else c3 = COLOR.YELLOW;
         durationBar.color = c1;
         durationOutline.effectColor = c1;
-        foreach(Image i in durationMarker.GetComponentsInChildren<Image>()) i.color = c1;
+        foreach (Image i in durationMarker.GetComponentsInChildren<Image>()) i.color = c1;
         missBar.color = c2;
         missOutline.effectColor = c2;
         foreach (Image i in missMarker.GetComponentsInChildren<Image>()) i.color = c2;

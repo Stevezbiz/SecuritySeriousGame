@@ -27,7 +27,7 @@ public class EmployeeView : MonoBehaviour {
             Destroy(o);
         }
         toDestroy.Clear();
-        foreach(EmployeeInfo e in gameManager.GetAvailableEmployees()) {
+        foreach (EmployeeInfo e in gameManager.GetAvailableEmployees()) {
             GameObject newItem = Instantiate(employeeCard, content, false);
             newItem.GetComponent<EmployeeCard>().Load(gameManager, e, this, t);
             toDestroy.Add(newItem);

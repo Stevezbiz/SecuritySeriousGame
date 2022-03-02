@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DateTime = System.DateTime;
 using DateTimeKind = System.DateTimeKind;
-using Math = System.Math;
 using Image = UnityEngine.UI.Image;
+using Math = System.Math;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] GUI gui;
@@ -433,7 +433,7 @@ public class GameManager : MonoBehaviour {
 
     void SetAttackTrend() {
         List<AttackCode> possibleTrends = new List<AttackCode>();
-        foreach(AttackPlan p in attackSchedule.Values) {
+        foreach (AttackPlan p in attackSchedule.Values) {
             if (p.status != AttackStatus.INACTIVE) possibleTrends.Add(p.id);
         }
         gc.actualAttackTrend = possibleTrends[Random.Range(0, possibleTrends.Count)];
@@ -474,7 +474,7 @@ public class GameManager : MonoBehaviour {
                 t.progress++;
             }
         }
-        foreach(EmployeeCode id in toRemove) {
+        foreach (EmployeeCode id in toRemove) {
             assignedTasks.Remove(id);
         }
     }
@@ -620,14 +620,14 @@ public class GameManager : MonoBehaviour {
 
     public List<ShopItemCode> GetShopItemsByCategory(CategoryCode category) {
         List<ShopItemCode> codes = new List<ShopItemCode>();
-        foreach(ShopItemInfo sii in shopItems.Values) {
+        foreach (ShopItemInfo sii in shopItems.Values) {
             if (sii.category == category) codes.Add(sii.id);
         }
         return codes;
     }
 
     public bool IsToUpgrade(ShopItemCode id) {
-        foreach(Task t in waitingTasks.Values) {
+        foreach (Task t in waitingTasks.Values) {
             if (t.type == TaskType.UPGRADE && t.shopItem == id) return true;
         }
         return false;
@@ -766,7 +766,7 @@ public class GameManager : MonoBehaviour {
                 assignedTasks[id].AssignEmployee(id, GetPreventProtection(id, t.category));
                 waitingTasks.Remove(tid);
                 List<Resistance> res = new List<Resistance>();
-                foreach(Resistance r in resistances.Values) {
+                foreach (Resistance r in resistances.Values) {
                     if (attacks[r.id].category == t.category) {
                         r.miss += t.protection;
                     }
@@ -929,7 +929,7 @@ public class GameManager : MonoBehaviour {
             res.Add(r.id, new Resistance(r));
         }
         if (shopItems[id].level > 0) {
-            foreach(Resistance r in shopItems[id].resArray[shopItems[id].level - 1].resistances) {
+            foreach (Resistance r in shopItems[id].resArray[shopItems[id].level - 1].resistances) {
                 if (res.ContainsKey(r.id)) {
                     res[r.id].duration -= r.duration;
                     res[r.id].miss -= r.miss;
@@ -1023,6 +1023,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void DebugPrint() {
+        Debug.Log(IOUtils.rootPath);
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         float totalMoney = 0f;
         foreach (ShopItemInfo sii in shopItems.Values) {
@@ -1046,8 +1047,8 @@ public class GameManager : MonoBehaviour {
             return;
         }
         string res = id + "\n";
-        foreach(ShopItemInfo sii in shopItems.Values) {
-            foreach(Resistance r in sii.resArray[sii.maxLevel - 1].resistances) {
+        foreach (ShopItemInfo sii in shopItems.Values) {
+            foreach (Resistance r in sii.resArray[sii.maxLevel - 1].resistances) {
                 if (r.id == id) res += "\t" + sii.id + " | " + "duration: " + r.duration + " | " + "miss: " + r.miss + " | " + "endurance: " + r.endurance + "\n";
             }
         }
@@ -1070,8 +1071,8 @@ public class GameManager : MonoBehaviour {
     void EvaluateSecurityStatus() {
         // every x time evaluate the status of the countermeasures of the active attacks
         Dictionary<CategoryCode, int> scores = new Dictionary<CategoryCode, int>();
-        foreach(AttackCode id in attacks.Keys) {
-            if(attackSchedule[id].status != AttackStatus.INACTIVE) {
+        foreach (AttackCode id in attacks.Keys) {
+            if (attackSchedule[id].status != AttackStatus.INACTIVE) {
                 CategoryCode c = attacks[id].category;
                 if (GetActualDurationResistance(id) >= BKTModel.GetDurationL(id)) scores[c]++;
                 else scores[c]--;
@@ -1081,7 +1082,7 @@ public class GameManager : MonoBehaviour {
                 else scores[c]--;
             }
         }
-        foreach(KeyValuePair<CategoryCode, int> s in scores) {
+        foreach (KeyValuePair<CategoryCode, int> s in scores) {
             // Select the proper Knowledge Component
             SkillCode kc;
             switch (s.Key) {
@@ -1114,15 +1115,15 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
-    
+
     void EvaluatePurchaseShopItem(ShopItemCode id) {
         // Consider various aspects of the purchase
         int score = 0;
         ShopItemInfo sii = shopItems[id];
         List<Resistance> res = GetShopItemResistances(id);
-        
+
         // 1. Are the attacks mitigated by the item active, so that the countermeasure is needed?
-        foreach(Resistance r in res) {
+        foreach (Resistance r in res) {
             if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score--;
             else score++;
             if (r.id == gc.actualAttackTrend) score++;
@@ -1131,7 +1132,7 @@ public class GameManager : MonoBehaviour {
         if (GetActualMoneyGain() - sii.cost[0] > 0) score++;
         else score--;
         // 3. Is the countermeasure over-preventing an attack?
-        foreach(Resistance r in res) {
+        foreach (Resistance r in res) {
             if (GetActualDurationResistance(r.id) > BKTModel.GetDurationH(r.id)) score--;
             if (GetActualMissResistance(r.id) > BKTModel.GetMissH(r.id)) score--;
             if (GetActualEnduranceResistance(r.id) > BKTModel.GetEnduranceH(r.id)) score--;
@@ -1228,7 +1229,7 @@ public class GameManager : MonoBehaviour {
         // send the test to the model
         kcs[quizzes[qid].skill].AddTestResult(qa.correct);
         // apply the effects of the answer
-        foreach(AnswerEffect effect in qa.effects) {
+        foreach (AnswerEffect effect in qa.effects) {
             switch (effect.target) {
                 case Element.REPUTATION:
                     gc.reputation += effect.modifier;
@@ -1270,10 +1271,10 @@ public class GameManager : MonoBehaviour {
         CategoryCode category = assignedTasks[id].category;
         // 1. How good is the selected employee in the category of the task?
         score += EmployeeUtils.GetAbility(employee.abilities, category);
-        
+
         bool good1 = true;
         bool good2 = true;
-        foreach(EmployeeInfo e in GetAvailableEmployees()) {
+        foreach (EmployeeInfo e in GetAvailableEmployees()) {
             // 2. Are there better solutions?
             if (EmployeeUtils.GetAbility(employee.abilities, category) < EmployeeUtils.GetAbility(e.abilities, category)) {
                 good1 = false;
@@ -1300,7 +1301,7 @@ public class GameManager : MonoBehaviour {
     public ModelSave SaveModel() {
         List<KCRecord> records = new List<KCRecord>();
 
-        foreach(KnowledgeComponent kc in kcs.Values) {
+        foreach (KnowledgeComponent kc in kcs.Values) {
             records.Add(new KCRecord(kc.id, kc.name, kc.GetTransitionPos(), kc.GetTests()));
         }
 

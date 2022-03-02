@@ -87,7 +87,7 @@ public static class ShopUtils {
         }
         return shopItems;
     }
-    
+
     public static void UpdateShopItems(Dictionary<ShopItemCode, ShopItemInfo> shopItems, ShopItemRecap[] sir) {
         foreach (ShopItemRecap s in sir) {
             shopItems[s.id].status = s.status;

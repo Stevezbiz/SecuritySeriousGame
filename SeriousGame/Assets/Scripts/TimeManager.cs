@@ -5,7 +5,7 @@ using UnityEngine;
 public static class TimeManager {
     static float timeScale = 0f;
     static int n;
-    
+
     public static void Pause() {
         if (n == 0) {
             // first to pause
@@ -22,7 +22,7 @@ public static class TimeManager {
             Time.timeScale = timeScale;
         }
     }
-    
+
     public static void Reset() {
         n = 0;
         Time.timeScale = 1f;

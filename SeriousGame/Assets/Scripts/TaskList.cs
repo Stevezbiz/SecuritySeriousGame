@@ -12,7 +12,7 @@ public class TaskList : MonoBehaviour {
     List<GameObject> toDestroy = new List<GameObject>();
 
     void Load() {
-        foreach(GameObject o in toDestroy) {
+        foreach (GameObject o in toDestroy) {
             Destroy(o);
         }
         toDestroy.Clear();

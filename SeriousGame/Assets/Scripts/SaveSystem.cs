@@ -12,7 +12,7 @@ public static class SaveSystem {
      */
     public static void SaveGame(GameSave gameSave) {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/savedata.data";
+        string path = Path.Combine(IOUtils.rootPath, "savedata.data");
         FileStream fs = new FileStream(path, FileMode.Create);
         formatter.Serialize(fs, gameSave);
         fs.Close();
@@ -23,7 +23,7 @@ public static class SaveSystem {
      */
     public static GameSave LoadGame() {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/savedata.data";
+        string path = Path.Combine(IOUtils.rootPath, "savedata.data");
         FileStream fs = new FileStream(path, FileMode.Open);
         GameSave gameSave = formatter.Deserialize(fs) as GameSave;
         fs.Close();

@@ -6,7 +6,7 @@ using Image = UnityEngine.UI.Image;
 public class ImageBlink : MonoBehaviour {
     Image image;
     float speed = 1f;
-    
+
     void Awake() {
         image = gameObject.GetComponent<Image>();
     }

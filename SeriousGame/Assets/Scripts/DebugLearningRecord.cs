@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class DebugLearningRecord : MonoBehaviour {
     [SerializeField] TextMeshProUGUI skillText;
@@ -18,7 +18,7 @@ public class DebugLearningRecord : MonoBehaviour {
         posText.SetText("pos(T) = " + kc.GetTransitionPos());
         testText.SetText("tests:\t" +
             kc.GetTestsVector() + "\n" +
-            "learned:\t" + 
+            "learned:\t" +
             kc.GetLearnedVector());
     }
 }

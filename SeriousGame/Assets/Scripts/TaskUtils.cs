@@ -88,12 +88,12 @@ public class Task {
 
 public static class TaskUtils {
     public static void SetupTasks(Dictionary<int, Task> waitingTasks) {
-        foreach(CategoryCode c in typeof(CategoryCode).GetEnumValues()) {
+        foreach (CategoryCode c in typeof(CategoryCode).GetEnumValues()) {
             Task t = new Task(TaskType.PREVENT, c);
             waitingTasks.Add(t.id, t);
         }
     }
-    
+
     public static void UpdateTasks(Dictionary<int, Task> waitingTasks, Task[] t1, Dictionary<EmployeeCode, Task> assignedTasks, Task[] t2) {
         foreach (Task t in t1) {
             Task newTask = new Task(t);

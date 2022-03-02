@@ -155,7 +155,7 @@ public static class COLOR {
     public static Color DISABLED = new Color(.0f, .0f, .0f, .0f);
 }
 
-public static class NumUtils{
+public static class NumUtils {
     public static string NumToString(double val) {
         string text;
         if (val > 1000000000) text = (val / 1000000000).ToString(".#") + "B";

@@ -15,7 +15,7 @@ public class EmployeeList : MonoBehaviour {
             Destroy(o);
         }
         toDestroy.Clear();
-        foreach(EmployeeInfo e in gameManager.GetHiredEmployees()) {
+        foreach (EmployeeInfo e in gameManager.GetHiredEmployees()) {
             GameObject newItem = Instantiate(employeeItem, content, false);
             newItem.GetComponent<EmployeeItem>().Load(gameManager, e, gameManager.GetEmployeeIcon(e.id));
             toDestroy.Add(newItem);

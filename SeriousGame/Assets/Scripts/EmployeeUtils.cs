@@ -105,7 +105,7 @@ public static class EmployeeUtils {
     }
 
     public static int GetAbility(EmployeeAbility[] abilities, CategoryCode c) {
-        foreach(EmployeeAbility a in abilities) {
+        foreach (EmployeeAbility a in abilities) {
             if (a.category == c) return a.level;
         }
         Debug.Log("Error: unexpected Category");
@@ -140,7 +140,7 @@ public static class EmployeeUtils {
 
     public static EmployeeCode ChooseNewEmployee(Dictionary<EmployeeCode, EmployeeInfo> employees) {
         List<EmployeeCode> candidates = new List<EmployeeCode>();
-        foreach(EmployeeInfo e in employees.Values) {
+        foreach (EmployeeInfo e in employees.Values) {
             if (!e.owned) candidates.Add(e.id);
         }
         if (candidates.Count == 0) return EmployeeCode.NONE;

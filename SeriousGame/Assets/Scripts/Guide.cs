@@ -19,7 +19,7 @@ public class Guide : MonoBehaviour {
         // populate the guide index
         int i = 0;
         GameObject column = null;
-        foreach(GuideEntryData entry in entries.Values) {
+        foreach (GuideEntryData entry in entries.Values) {
             if (i == 0) column = Instantiate(guideIndexColumn, content, false);
             Instantiate(guideEntry, column.transform, false).GetComponent<GuideEntry>().Load(entry.id, guideDetails, entry.entryName);
             i = (i + 1) % COLUMN_CAPACITY;

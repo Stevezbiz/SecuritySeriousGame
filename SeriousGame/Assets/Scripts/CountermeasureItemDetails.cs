@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using Outline = UnityEngine.UI.Outline;
+using UnityEngine;
 using Button = UnityEngine.UI.Button;
+using Outline = UnityEngine.UI.Outline;
 
 public class CountermeasureItemDetails : MonoBehaviour {
     [SerializeField] TextMeshProUGUI titleText;
