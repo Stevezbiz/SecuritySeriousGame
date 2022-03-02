@@ -25311,10 +25311,10 @@ MonoBehaviour:
   assetAttackIcon: {fileID: 1707741105}
   servicesAttackIcon: {fileID: 1274727866}
   networkEmployeeIcon: {fileID: 263432057}
-  accessEmployeeIcon: {fileID: 0}
-  softwareEmployeeIcon: {fileID: 0}
-  assetEmployeeIcon: {fileID: 0}
-  servicesEmployeeIcon: {fileID: 0}
+  accessEmployeeIcon: {fileID: 1895219074}
+  softwareEmployeeIcon: {fileID: 878868348}
+  assetEmployeeIcon: {fileID: 811926259}
+  servicesEmployeeIcon: {fileID: 1207548990}
 --- !u!1 &921115499
 GameObject:
   m_ObjectHideFlags: 0
