@@ -32,4 +32,12 @@ public static class IOUtils {
     public static string GetPlayerDirPath(string player) {
         return Path.Combine(new string[] { gameDataDirPath, player });
     }
+
+    public static string GetPlayerGameSavePath(string player) {
+        return Path.Combine(new string[] { gameDataDirPath, player, "game_save.data" });
+    }
+
+    public static string GetPlayerModelSavePath(string player) {
+        return Path.Combine(new string[] { gameDataDirPath, player, "model_save.data" });
+    }
 }

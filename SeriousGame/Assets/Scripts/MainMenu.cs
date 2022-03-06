@@ -12,8 +12,7 @@ public class MainMenu : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         // disable the possibility to load a game in case of missing save file
-        string path = Application.persistentDataPath + "/savedata.data";
-        if (!System.IO.File.Exists(path)) {
+        if (!System.IO.File.Exists(IOUtils.GetPlayerGameSavePath(SaveSystem.player))) {
             loadButton.interactable = false;
             loadText.color = COLOR.GREEN_DISABLED;
             loadOutline.effectColor = COLOR.GREEN_DISABLED;

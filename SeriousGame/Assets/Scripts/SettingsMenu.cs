@@ -42,7 +42,7 @@ public class SettingsMenu : MonoBehaviour {
      */
     public void SaveButton() {
         SaveSystem.SaveGame(gameManager.SaveGame());
-        BKTModel.SaveModel(gameManager.SaveModel());
+        SaveSystem.SaveModel(gameManager.SaveModel());
         gameManager.DisplayMessage("Partita salvata", ActionCode.CONTINUE, Role.SECURITY);
     }
 

@@ -6,15 +6,22 @@ using UnityEngine;
 
 public static class SaveSystem {
     public static bool load = false;
+    public static string player = "";
 
     /**
-     * <summary>Save the game data on a flie</summary>
+     * <summary>Save the game data on a file</summary>
      */
     public static void SaveGame(GameSave gameSave) {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Path.Combine(IOUtils.rootPath, "savedata.data");
-        FileStream fs = new FileStream(path, FileMode.Create);
+        FileStream fs = new FileStream(IOUtils.GetPlayerGameSavePath(player), FileMode.Create);
         formatter.Serialize(fs, gameSave);
+        fs.Close();
+    }
+
+    public static void SaveModel(ModelSave modelSave) {
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream fs = new FileStream(IOUtils.GetPlayerModelSavePath(player), FileMode.Create);
+        formatter.Serialize(fs, modelSave);
         fs.Close();
     }
 
@@ -23,11 +30,18 @@ public static class SaveSystem {
      */
     public static GameSave LoadGame() {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Path.Combine(IOUtils.rootPath, "savedata.data");
-        FileStream fs = new FileStream(path, FileMode.Open);
+        FileStream fs = new FileStream(IOUtils.GetPlayerGameSavePath(player), FileMode.Open);
         GameSave gameSave = formatter.Deserialize(fs) as GameSave;
         fs.Close();
         load = false;
         return gameSave;
+    }
+
+    public static ModelSave LoadModel() {
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream fs = new FileStream(IOUtils.GetPlayerModelSavePath(player), FileMode.Open);
+        ModelSave modelSave = formatter.Deserialize(fs) as ModelSave;
+        fs.Close();
+        return modelSave;
     }
 }

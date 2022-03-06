@@ -114,25 +114,13 @@ public static class BKTModel {
     }
 
     public static Dictionary<SkillCode, KnowledgeComponent> LoadModel() {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/bktmodel.data";
-        FileStream fs = new FileStream(path, FileMode.Open);
-        ModelSave modelSave = formatter.Deserialize(fs) as ModelSave;
-        fs.Close();
+        ModelSave modelSave = SaveSystem.LoadModel();
         actualTimeSlot = modelSave.actualTimeSlot;
         Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
         foreach (KCRecord r in modelSave.records) {
             kcs.Add(r.id, new KnowledgeComponent(r));
         }
         return kcs;
-    }
-
-    public static void SaveModel(ModelSave modelSave) {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/bktmodel.data";
-        FileStream fs = new FileStream(path, FileMode.Create);
-        formatter.Serialize(fs, modelSave);
-        fs.Close();
     }
 
     public static void UpdateModel(int time) {

@@ -63,6 +63,7 @@ public class LoginManager : MonoBehaviour {
         }
         if (correct) {
             // login successful
+            SaveSystem.player = username;
             SceneLoader.LoadScene("MainMenu");
         } else {
             // login failed
