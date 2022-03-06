@@ -17,12 +17,16 @@ public class PlayerData {
 [System.Serializable]
 public class PlayerList {
     public List<PlayerData> list;
+
+    public PlayerList() {
+        list = new List<PlayerData>();
+    }
 }
 
 public static class IOUtils {
     public static string rootPath = Application.persistentDataPath;
     public static string playersDirPath = Path.Combine(new string[] { rootPath, "Players" });
-    public static string playersFilePath = Path.Combine(new string[] { rootPath, playersDirPath, "players.data" });
+    public static string playersFilePath = Path.Combine(new string[] { playersDirPath, "players.data" });
     public static string gameDataDirPath = Path.Combine(new string[] { rootPath, "GameData" });
 
     public static string GetPlayerDirPath(string player) {
