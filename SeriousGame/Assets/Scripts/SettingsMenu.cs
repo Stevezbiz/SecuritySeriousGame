@@ -15,17 +15,7 @@ public class SettingsMenu : MonoBehaviour {
      */
     public void OpenSettings() {
         TimeManager.Pause();
-        // disable the possibility to load a game in case of missing save file
-        string path = Application.persistentDataPath + "/savedata.data";
-        if (!System.IO.File.Exists(path)) {
-            loadButton.interactable = false;
-            loadText.color = COLOR.GREEN_DISABLED;
-            loadOutline.effectColor = COLOR.GREEN_DISABLED;
-        } else {
-            loadButton.interactable = true;
-            loadText.color = COLOR.GREEN;
-            loadOutline.effectColor = COLOR.GREEN;
-        }
+        CheckGameSave();
         gameObject.SetActive(true);
     }
 
@@ -44,6 +34,7 @@ public class SettingsMenu : MonoBehaviour {
         SaveSystem.SaveGame(gameManager.SaveGame());
         SaveSystem.SaveModel(gameManager.SaveModel());
         gameManager.DisplayMessage("Partita salvata", ActionCode.CONTINUE, Role.SECURITY);
+        CheckGameSave();
     }
 
     /**
@@ -59,5 +50,18 @@ public class SettingsMenu : MonoBehaviour {
      */
     public void ExitButton() {
         SceneLoader.LoadScene("MainMenu");
+    }
+
+    void CheckGameSave() {
+        // disable the possibility to load a game in case of missing save file
+        if (!System.IO.File.Exists(IOUtils.GetPlayerGameSavePath(SaveSystem.player))) {
+            loadButton.interactable = false;
+            loadText.color = COLOR.GREEN_DISABLED;
+            loadOutline.effectColor = COLOR.GREEN_DISABLED;
+        } else {
+            loadButton.interactable = true;
+            loadText.color = COLOR.GREEN;
+            loadOutline.effectColor = COLOR.GREEN;
+        }
     }
 }

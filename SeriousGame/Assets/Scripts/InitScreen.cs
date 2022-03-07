@@ -14,6 +14,6 @@ public class InitScreen : MonoBehaviour {
      * <summary>Load the scene of the main menu</summary>
      */
     public void PlayButton() {
-        SceneLoader.LoadScene("MainMenu");
+        SceneLoader.LoadScene("LoginMenu");
     }
 }
