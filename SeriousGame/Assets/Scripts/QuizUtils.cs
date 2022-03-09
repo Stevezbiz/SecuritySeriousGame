@@ -19,6 +19,7 @@ public class AnswerEffect {
 public class QuizAnswer {
     public string text;
     public bool correct;
+    public string description;
     public AnswerEffect[] effects;
     public AttackCode triggeredAttack;
 }

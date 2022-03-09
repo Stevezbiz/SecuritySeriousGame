@@ -276,6 +276,10 @@ public class GameManager : MonoBehaviour {
         return new Resistance(id, duration, miss, endurance);
     }
 
+    public bool AttackIsScheduled(AttackCode id) {
+        return attackSchedule[id].status != AttackStatus.INACTIVE;
+    }
+
     /**
      * <summary>Insert an instance of the specified attack among the scheduled ones</summary>
      */
@@ -1238,7 +1242,7 @@ public class GameManager : MonoBehaviour {
                     gc.money += effect.modifier;
                     break;
                 case Element.USERS:
-                    gc.users *= effect.modifier;
+                    gc.users *= (1f - effect.modifier);
                     break;
                 default:
                     Debug.Log("Error: unexpected Element");

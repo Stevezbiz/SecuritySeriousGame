@@ -11,6 +11,10 @@ public class QuizQuestion : MonoBehaviour {
     [SerializeField] Image image;
     [SerializeField] RectTransform answers;
     [SerializeField] GameObject quizAlternative;
+    [SerializeField] GameObject quizQuestion;
+    [SerializeField] GameObject quizEffects;
+    [SerializeField] TextMeshProUGUI effectsDescriptionText;
+    [SerializeField] TextMeshProUGUI effectsValuesText;
 
     Quiz q;
     List<GameObject> toDestroy = new List<GameObject>();
@@ -30,13 +34,39 @@ public class QuizQuestion : MonoBehaviour {
 
     public void EvaluateAnswer(int id) {
         gameManager.EvaluateQuiz(q.id, id);
-        Close();
+        effectsDescriptionText.SetText(q.answers[id].description);
+        string effects = "Conseguenze:\n";
+        // show the effects of the answer
+        foreach (AnswerEffect effect in q.answers[id].effects) {
+            switch (effect.target) {
+                case Element.REPUTATION:
+                    effects += string.Format("    {0,-12} {1,4}%\n", "Reputazione", (100 * effect.modifier).ToString("+0.;-#."));
+                    break;
+                case Element.MONEY:
+                    effects += string.Format("    {0,-12} {1,4}\n", "Fondi", effect.modifier.ToString("+0.;-#."));
+                    break;
+                case Element.USERS:
+                    effects += string.Format("    {0,-12} {1,4}%\n", "Utenti", (100 * effect.modifier).ToString("+0.;-#."));
+                    break;
+                default:
+                    Debug.Log("Error: unexpected Element");
+                    return;
+            }
+        }
+        if (q.answers[id].triggeredAttack != AttackCode.NONE && gameManager.AttackIsScheduled(q.answers[id].triggeredAttack)) {
+            effects += "    Vulnerabilità x2 all'attacco " + gameManager.GetAttack(q.answers[id].triggeredAttack).name;
+        }
+        effectsValuesText.SetText(effects);
+        quizQuestion.SetActive(false);
+        quizEffects.SetActive(true);
     }
 
     public void Close() {
         TimeManager.Resume();
         foreach (GameObject g in toDestroy) Destroy(g);
         toDestroy.Clear();
+        quizQuestion.SetActive(true);
+        quizEffects.SetActive(false);
         gameObject.SetActive(false);
     }
 }
