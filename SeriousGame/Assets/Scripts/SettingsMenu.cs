@@ -9,6 +9,8 @@ public class SettingsMenu : MonoBehaviour {
     [SerializeField] Button loadButton;
     [SerializeField] TextMeshProUGUI loadText;
     [SerializeField] Outline loadOutline;
+    [SerializeField] GameObject audioSettings;
+    [SerializeField] AudioSource audioSource;
 
     /**
      * <summary>Open the setting menu</summary>
