@@ -118,7 +118,7 @@ public static class BKTModel {
         actualTimeSlot = modelSave.actualTimeSlot;
         Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
         foreach (KCRecord r in modelSave.records) {
-            kcs.Add(r.id, new KnowledgeComponent(r));
+            kcs[r.id] = new KnowledgeComponent(r);
         }
         return kcs;
     }

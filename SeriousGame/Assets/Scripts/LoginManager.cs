@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine;
+using Crypto = System.Security.Cryptography;
 
 public class LoginManager : MonoBehaviour {
     [SerializeField] GameObject loginView;
@@ -16,11 +18,13 @@ public class LoginManager : MonoBehaviour {
     [SerializeField] TMP_InputField registerPasswordConfirm;
     [SerializeField] GameObject registerErrorMessage;
     [SerializeField] TextMeshProUGUI registerErrorMessageText;
+    [SerializeField] TMP_InputField pathField;
+
+    Crypto.RNGCryptoServiceProvider rng = new Crypto.RNGCryptoServiceProvider();
 
     // Start is called before the first frame update
     void Start() {
         if (!Directory.Exists(IOUtils.playersDirPath)) {
-            // create storge structures
             Directory.CreateDirectory(IOUtils.playersDirPath);
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream fs = new FileStream(IOUtils.playersFilePath, FileMode.Create);
@@ -28,7 +32,6 @@ public class LoginManager : MonoBehaviour {
             fs.Close();
         }
         if (!Directory.Exists(IOUtils.gameDataDirPath)) {
-            // create storge structures
             Directory.CreateDirectory(IOUtils.gameDataDirPath);
         }
     }
@@ -37,8 +40,8 @@ public class LoginManager : MonoBehaviour {
         string username = loginUsername.text;
         string password = loginPassword.text;
         string path = IOUtils.GetPlayerDirPath(username);
-        
-        if(username == "" || password == "") {
+
+        if (username == "" || password == "") {
             // void fields
             loginErrorMessage.SetActive(true);
             return;
@@ -56,10 +59,12 @@ public class LoginManager : MonoBehaviour {
         fs.Close();
         bool correct = false;
         foreach (PlayerData p in playerList.list) {
-            if (p.password == password) {
-                correct = true;
-                break;
+            using (Crypto.SHA256 sha256 = Crypto.SHA256.Create()) {
+                byte[] saltPassword = p.salt.Concat(System.Text.Encoding.ASCII.GetBytes(password)).ToArray();
+                byte[] hash = sha256.ComputeHash(saltPassword);
+                if (p.password.SequenceEqual(hash)) correct = true;
             }
+            if (correct) break;
         }
         if (correct) {
             // login successful
@@ -102,12 +107,20 @@ public class LoginManager : MonoBehaviour {
             registerErrorMessage.SetActive(true);
             return;
         }
+        PlayerData playerData;
+        using (Crypto.SHA256 sha256 = Crypto.SHA256.Create()) {
+            byte[] salt = new byte[5];
+            rng.GetBytes(salt);
+            byte[] saltPassword = salt.Concat(System.Text.Encoding.ASCII.GetBytes(password)).ToArray();
+            byte[] hash = sha256.ComputeHash(saltPassword);
+            playerData = new PlayerData(username, hash, salt);
+        }
         // add the new player
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream fs = new FileStream(IOUtils.playersFilePath, FileMode.Open);
         PlayerList playerList = formatter.Deserialize(fs) as PlayerList;
         fs.Close();
-        playerList.list.Add(new PlayerData(username, password));
+        playerList.list.Add(playerData);
         fs = new FileStream(IOUtils.playersFilePath, FileMode.Open);
         formatter.Serialize(fs, playerList);
         fs.Close();

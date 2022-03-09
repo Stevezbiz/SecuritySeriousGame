@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.196, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7205,6 +7205,7 @@ MonoBehaviour:
   registerPasswordConfirm: {fileID: 1281393999}
   registerErrorMessage: {fileID: 477304226}
   registerErrorMessageText: {fileID: 1528399133}
+  pathField: {fileID: 0}
 --- !u!114 &2106800098
 MonoBehaviour:
   m_ObjectHideFlags: 0

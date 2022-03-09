@@ -19,10 +19,7 @@ public static class SaveSystem {
     }
 
     public static void SaveModel(ModelSave modelSave) {
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream fs = new FileStream(IOUtils.GetPlayerModelSavePath(player), FileMode.Create);
-        formatter.Serialize(fs, modelSave);
-        fs.Close();
+        File.WriteAllText(IOUtils.GetPlayerModelSavePath(player), JsonUtility.ToJson(modelSave));
     }
 
     /**
@@ -38,10 +35,6 @@ public static class SaveSystem {
     }
 
     public static ModelSave LoadModel() {
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream fs = new FileStream(IOUtils.GetPlayerModelSavePath(player), FileMode.Open);
-        ModelSave modelSave = formatter.Deserialize(fs) as ModelSave;
-        fs.Close();
-        return modelSave;
+        return JsonUtility.FromJson<ModelSave>(File.ReadAllText(IOUtils.GetPlayerModelSavePath(player)));
     }
 }

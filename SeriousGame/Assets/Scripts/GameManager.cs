@@ -135,6 +135,8 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < categoryIcons.Count; i++) {
             categories.Add((CategoryCode)i, new Category(categoryIcons[i].name, categoryIcons[i]));
         }
+        // initialize the BKT model
+        kcs = BKTModel.Init(modelFileJSON);
         if (SaveSystem.load) {
             // load the game data of the saved run from the file 
             LoadGameData(SaveSystem.LoadGame());
@@ -152,8 +154,6 @@ public class GameManager : MonoBehaviour {
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
             UpdateAttacks();
-            // initialize the BKT model
-            kcs = BKTModel.Init(modelFileJSON);
         }
         // initialize the report structure
         learningReport.Init(kcs);

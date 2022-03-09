@@ -40,4 +40,10 @@ public class MainMenu : MonoBehaviour {
     public void ExitButton() {
         SceneLoader.ExitGame();
     }
+
+    public void Logout() {
+        SaveSystem.player = "";
+        SaveSystem.load = false;
+        SceneLoader.LoadScene("LoginMenu");
+    }
 }

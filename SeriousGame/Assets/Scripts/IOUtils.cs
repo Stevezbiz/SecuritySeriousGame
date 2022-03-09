@@ -6,11 +6,13 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData {
     public string username;
-    public string password;
+    public byte[] password;
+    public byte[] salt;
 
-    public PlayerData(string username, string password) {
+    public PlayerData(string username, byte[] password, byte[] salt) {
         this.username = username;
         this.password = password;
+        this.salt = salt;
     }
 }
 
@@ -26,7 +28,7 @@ public class PlayerList {
 public static class IOUtils {
     public static string rootPath = Application.persistentDataPath;
     public static string playersDirPath = Path.Combine(new string[] { rootPath, "Players" });
-    public static string playersFilePath = Path.Combine(new string[] { playersDirPath, "players.data" });
+    public static string playersFilePath = Path.Combine(new string[] { playersDirPath, "players.txt" });
     public static string gameDataDirPath = Path.Combine(new string[] { rootPath, "GameData" });
 
     public static string GetPlayerDirPath(string player) {
