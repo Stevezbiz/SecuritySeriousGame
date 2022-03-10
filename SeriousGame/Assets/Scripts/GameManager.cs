@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour {
     int updateTime = 1;
     DateTime dateTime;
     GameConfig gc;
+    bool messageShown = false;
 
     List<LogLine> logs = new List<LogLine>();
     Dictionary<AttackCode, AttackPlan> attackSchedule = new Dictionary<AttackCode, AttackPlan>();
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour {
     Dictionary<Role, Person> roleAvatars = new Dictionary<Role, Person>();
     Dictionary<CategoryCode, Category> categories = new Dictionary<CategoryCode, Category>();
     Dictionary<EmployeeCode, Sprite> employeeAvatars = new Dictionary<EmployeeCode, Sprite>();
+    Queue<Message> messages = new Queue<Message>();
 
     // Start is called before the first frame update
     void Start() {
@@ -91,6 +93,7 @@ public class GameManager : MonoBehaviour {
             if (gc.money < 0) gc.negativeTime++;
             else gc.negativeTime = 0;
         }
+        UpdateMessages();
     }
 
     // LOAD-SAVE GAME
@@ -1023,7 +1026,20 @@ public class GameManager : MonoBehaviour {
      * <summary>Creates a pop-up window message</summary>
      */
     public void DisplayMessage(string message, ActionCode action, Role role) {
-        Instantiate(this.message, gameObject.transform, false).GetComponent<Message>().Load(message, action, roleAvatars[role]);
+        GameObject m = Instantiate(this.message, gameObject.transform, false);
+        m.GetComponent<Message>().Load(this, message, action, roleAvatars[role]);
+        messages.Enqueue(m.GetComponent<Message>());
+    }
+
+    public void UpdateMessages() {
+        if (messages.Count > 0 && messageShown == false) {
+            messageShown = true;
+            messages.Dequeue().Show();
+        }
+    }
+
+    public void CloseMessage() {
+        messageShown = false;
     }
 
     void DebugPrint() {
@@ -1267,6 +1283,7 @@ public class GameManager : MonoBehaviour {
 
     public void LaunchQuiz() {
         quizQuestion.Load(quizzes[gc.actualQuiz], roleAvatars[quizzes[gc.actualQuiz].person]);
+        messageShown = true;
     }
 
     void EvaluateEmployeeManagement(EmployeeCode id) {

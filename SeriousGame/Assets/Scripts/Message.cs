@@ -9,17 +9,23 @@ public class Message : MonoBehaviour {
     [SerializeField] TextMeshProUGUI nameText;
     [SerializeField] Image image;
 
+    GameManager gameManager;
     ActionCode action;
 
     /**
      * <summary>Populate the message with the text to show</summary>
      */
-    public void Load(string message, ActionCode action, Person p) {
+    public void Load(GameManager gameManager, string message, ActionCode action, Person p) {
         nameText.SetText(p.name.ToLower());
         image.sprite = p.icon;
+        this.gameManager = gameManager;
         this.action = action;
-        TimeManager.Pause();
         messageText.SetText(message);
+        gameObject.SetActive(false);
+    }
+
+    public void Show() {
+        TimeManager.Pause();
         gameObject.SetActive(true);
     }
 
@@ -27,18 +33,19 @@ public class Message : MonoBehaviour {
      * <summary>Close the pop-up window</summary>
      */
     public void CloseButton() {
+        TimeManager.Resume();
+        gameManager.CloseMessage();
         switch (action) {
             case ActionCode.CONTINUE:
-                gameObject.SetActive(false);
+                Destroy(gameObject);
                 break;
             case ActionCode.GAME_OVER:
-                gameObject.SetActive(false);
                 gameObject.transform.parent.GetComponent<GameManager>().PrintFinalReport();
+                Destroy(gameObject);
                 break;
             default:
-                gameObject.SetActive(false);
+                Destroy(gameObject);
                 break;
         }
-        TimeManager.Resume();
     }
 }

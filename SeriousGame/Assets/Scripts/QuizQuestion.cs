@@ -63,6 +63,7 @@ public class QuizQuestion : MonoBehaviour {
 
     public void Close() {
         TimeManager.Resume();
+        gameManager.CloseMessage();
         foreach (GameObject g in toDestroy) Destroy(g);
         toDestroy.Clear();
         quizQuestion.SetActive(true);
