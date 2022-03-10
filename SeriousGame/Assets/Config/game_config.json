@@ -69,6 +69,10 @@
       1000000,
       10000000
     ],
-    "date": "1/1/2000"
+    "date": "1/1/2000",
+    "musicVolume": 0.6,
+    "musicMute": false,
+    "effectsVolume": 0.6,
+    "effectsMute": false
   }
 }

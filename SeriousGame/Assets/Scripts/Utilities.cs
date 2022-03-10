@@ -85,6 +85,10 @@ public class GameConfig {
     public float[] usersGoals;
     public float[] employeeGoals;
     public string date;
+    public float musicVolume;
+    public bool musicMute;
+    public float effectsVolume;
+    public bool effectsMute;
 }
 
 [System.Serializable]

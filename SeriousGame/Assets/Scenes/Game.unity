@@ -20943,6 +20943,7 @@ MonoBehaviour:
   message: {fileID: 4413586227670815899, guid: e4993ad59fc080c42b2c56c20c9000db, type: 3}
   personMoving: {fileID: 7105309104209436135, guid: f15dbe5277089a14c88b7cfb664134be, type: 3}
   personParent: {fileID: 1694123536}
+  audioSettingsMenu: {fileID: 911330003}
   gameConfigJSON: {fileID: 4900000, guid: e60745214a7362142996acefa56014bf, type: 3}
   attacksFileJSON: {fileID: 4900000, guid: a1d2035f2e9207a42b7fc1d02bfb87f2, type: 3}
   shopFileJSON: {fileID: 4900000, guid: 0a609eea7f3d08f4f957eb804e31d289, type: 3}
@@ -26561,6 +26562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7ec7ea350e90244f8c87c26f5242c21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 709143596}
   soundtrack: {fileID: 2124819460}
   musicImage: {fileID: 631256273}
   effectsImage: {fileID: 1835517753}

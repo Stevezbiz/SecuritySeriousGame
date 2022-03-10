@@ -6,6 +6,7 @@ using Outline = UnityEngine.UI.Outline;
 using Slider = UnityEngine.UI.Slider;
 
 public class AudioSettingsMenu : MonoBehaviour {
+    [SerializeField] GameManager gameManager;
     [SerializeField] AudioSource soundtrack;
     //[SerializeField] AudioSource effects;
     [SerializeField] Image musicImage;
@@ -14,6 +15,13 @@ public class AudioSettingsMenu : MonoBehaviour {
     [SerializeField] Outline effectsOutline;
     [SerializeField] Slider musicBar;
     [SerializeField] Slider effectsBar;
+
+    public void Setup(GameConfig gameConfig) {
+        soundtrack.volume = gameConfig.musicVolume;
+        soundtrack.mute = gameConfig.musicMute;
+        //effects.volume = gameConfig.effectsVolume;
+        //effects.mute = gameConfig.effectsMute;
+    }
 
     public void OpenAudioSettings() {
         if(soundtrack.mute) {
@@ -42,6 +50,8 @@ public class AudioSettingsMenu : MonoBehaviour {
     }
 
     public void CloseAudioSettings() {
+        gameManager.SaveAudioSettings(soundtrack.volume, soundtrack.mute, .6f, false);
+        //gameManager.SaveAudioSettings(soundtrack.volume, soundtrack.mute, effects.volume, effects.mute);
         gameObject.SetActive(false);
     }
 

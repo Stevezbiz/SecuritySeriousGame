@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameObject message;
     [SerializeField] GameObject personMoving;
     [SerializeField] RectTransform personParent;
+    [SerializeField] AudioSettingsMenu audioSettingsMenu;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset shopFileJSON;
@@ -158,6 +159,8 @@ public class GameManager : MonoBehaviour {
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
             UpdateAttacks();
         }
+        // initialize the audio settings
+        audioSettingsMenu.Setup(gc);
         // initialize the report structure
         learningReport.Init(kcs);
         // refresh the GUI for the first time
@@ -789,6 +792,13 @@ public class GameManager : MonoBehaviour {
     }
 
     // MISC
+
+    public void SaveAudioSettings(float musicVolume, bool musicMute, float effectsVolume, bool effectsMute) {
+        gc.musicVolume = musicVolume;
+        gc.musicMute = musicMute;
+        gc.effectsVolume = effectsVolume;
+        gc.effectsMute = effectsMute;
+    }
 
     public Category GetCategory(CategoryCode c) {
         return categories[c];
