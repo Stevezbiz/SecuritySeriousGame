@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Math = System.Math;
 
 [System.Serializable]
 public class LogLine {

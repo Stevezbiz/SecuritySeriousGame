@@ -1,112 +1,143 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine;
 using Crypto = System.Security.Cryptography;
+using UnityWebRequest = UnityEngine.Networking.UnityWebRequest;
 
 public class LoginManager : MonoBehaviour {
     [SerializeField] GameObject loginView;
     [SerializeField] GameObject registerView;
     [SerializeField] TMP_InputField loginUsername;
     [SerializeField] TMP_InputField loginPassword;
-    [SerializeField] GameObject loginErrorMessage;
     [SerializeField] TMP_InputField registerUsername;
     [SerializeField] TMP_InputField registerPassword;
     [SerializeField] TMP_InputField registerPasswordConfirm;
-    [SerializeField] GameObject registerErrorMessage;
-    [SerializeField] TextMeshProUGUI registerErrorMessageText;
-    [SerializeField] TMP_InputField pathField;
-
-    Crypto.RNGCryptoServiceProvider rng = new Crypto.RNGCryptoServiceProvider();
+    [SerializeField] GameObject errorMessage;
+    [SerializeField] TextMeshProUGUI errorMessageText;
+    
+    readonly Crypto.RNGCryptoServiceProvider rng = new Crypto.RNGCryptoServiceProvider();
 
     // Start is called before the first frame update
     void Start() {
-        if (!Directory.Exists(IOUtils.playersDirPath)) {
-            Directory.CreateDirectory(IOUtils.playersDirPath);
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream fs = new FileStream(IOUtils.playersFilePath, FileMode.Create);
-            formatter.Serialize(fs, new PlayerList());
-            fs.Close();
-        }
-        if (!Directory.Exists(IOUtils.gameDataDirPath)) {
-            Directory.CreateDirectory(IOUtils.gameDataDirPath);
-        }
+        Debug.Log("Address: " + IOUtils.rootPath);
+        // initialize file structure
+        StartCoroutine(CreateMainDataFolder());
     }
 
-    public void Login() {
-        string username = loginUsername.text;
-        string password = loginPassword.text;
-        string path = IOUtils.GetPlayerDirPath(username);
-
-        if (username == "" || password == "") {
-            // void fields
-            loginErrorMessage.SetActive(true);
-            return;
-        }
-        // verify that the user is present
-        if (!Directory.Exists(path)) {
-            // player not present
-            loginErrorMessage.SetActive(true);
-            return;
-        }
-        // player registered, verify the password
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream fs = new FileStream(IOUtils.playersFilePath, FileMode.Open);
-        PlayerList playerList = formatter.Deserialize(fs) as PlayerList;
-        fs.Close();
-        bool correct = false;
-        foreach (PlayerData p in playerList.list) {
-            using (Crypto.SHA256 sha256 = Crypto.SHA256.Create()) {
-                byte[] saltPassword = p.salt.Concat(System.Text.Encoding.ASCII.GetBytes(password)).ToArray();
-                byte[] hash = sha256.ComputeHash(saltPassword);
-                if (p.password.SequenceEqual(hash)) correct = true;
-            }
-            if (correct) break;
-        }
-        if (correct) {
-            // login successful
-            SaveSystem.player = username;
-            SceneLoader.LoadScene("MainMenu");
+    IEnumerator CreateMainDataFolder() {
+        WWWForm form = new WWWForm();
+        form.AddField("dataFolder", IOUtils.dataFolder);
+        // send request
+        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.createDataFolderScript, form);
+        yield return www.SendWebRequest();
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError) {
+            errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
+            errorMessage.SetActive(true);
+            Debug.Log(www.error);
         } else {
-            // login failed
-            loginErrorMessage.SetActive(true);
-            return;
+            // check response
+            if (www.downloadHandler.text == "Error Creating Folder") {
+                Debug.Log("Error Creating Folder");
+            } else {
+                Debug.Log("Folder Created");
+            }
         }
     }
 
-    public void Register() {
-        string username = registerUsername.text;
-        string password = registerPassword.text;
-        string passwordConfirm = registerPasswordConfirm.text;
-        string path = IOUtils.GetPlayerDirPath(username);
+    IEnumerator CreatePlayerFolder(string username, string password) {
+        WWWForm form = new WWWForm();
+        form.AddField("playerFolder", IOUtils.GetPlayerFolder(username));
+        // send request
+        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.createPlayerFolderScript, form);
+        yield return www.SendWebRequest();
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError) {
+            errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
+            errorMessage.SetActive(true);
+            Debug.Log(www.error);
+        } else {
+            // check response
+            if (www.downloadHandler.text == "Error Creating Folder") {
+                Debug.Log("Error Creating Folder");
+            } else {
+                // prepare login
+                errorMessageText.SetText("Registrazione completata: benvenuto/a " + username);
+                errorMessage.SetActive(true);
+                OpenLoginView();
+                loginUsername.text = username;
+                loginPassword.text = password;
+            }
+        }
+    }
 
-        if (username == "" || password == "" || passwordConfirm == "") {
-            // void fields
-            registerErrorMessageText.SetText("Completa tutti i campi");
-            registerErrorMessage.SetActive(true);
-            return;
+    IEnumerator UpdatePlayerList(PlayerList players, string username, string password) {
+        WWWForm form = new WWWForm();
+        form.AddField("mode", "w");
+        form.AddField("playersFile", IOUtils.playersFile);
+        form.AddField("playerList", JsonUtility.ToJson(players));
+        // send request
+        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.LoginOrRegisterScript, form);
+        yield return www.SendWebRequest();
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError) {
+            errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
+            errorMessage.SetActive(true);
+            Debug.Log(www.error);
+        } else {
+            // check response
+            if (www.downloadHandler.text == "Error Reading File") {
+                Debug.Log("Error Updating List");
+            } else {
+                Debug.Log("Player List Updated");
+                StartCoroutine(CreatePlayerFolder(username, password));
+            }
         }
-        if (Directory.Exists(path)) {
-            // player already exists
-            registerErrorMessageText.SetText("Username non disponibile");
-            registerErrorMessage.SetActive(true);
-            return;
+    }
+
+    IEnumerator LoginRoutine(string username, string password) {
+        WWWForm form = new WWWForm();
+        form.AddField("mode", "r");
+        form.AddField("playersFile", IOUtils.playersFile);
+        // send request
+        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.LoginOrRegisterScript, form);
+        yield return www.SendWebRequest();
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError) {
+            errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
+            errorMessage.SetActive(true);
+            Debug.Log(www.error);
+        } else {
+            // check response
+            if (www.downloadHandler.text == "File Created" || www.downloadHandler.text == "File Empty") {
+                Debug.Log("Giocatore non registrato");
+                errorMessageText.SetText("Le credenziali sono errate, riprova");
+                errorMessage.SetActive(true);
+            } else {
+                PlayerList playerList = JsonUtility.FromJson<PlayerList>(www.downloadHandler.text);
+                bool correct = false;
+                foreach (PlayerData p in playerList.list) {
+                    if (username == p.username) {
+                        using (Crypto.SHA256 sha256 = Crypto.SHA256.Create()) {
+                            byte[] saltedPassword = p.salt.Concat(System.Text.Encoding.ASCII.GetBytes(password)).ToArray();
+                            byte[] hash = sha256.ComputeHash(saltedPassword);
+                            if (p.password.SequenceEqual(hash)) correct = true;
+                        }
+                        if (correct) break;
+                    }
+                }
+                if (correct) {
+                    // login successful
+                    SaveSystem.player = username;
+                    SceneLoader.LoadScene("MainMenu");
+                } else {
+                    // login failed
+                    errorMessageText.SetText("Le credenziali sono errate, riprova");
+                    errorMessage.SetActive(true);
+                }
+            }
         }
-        if (password.Length < 8) {
-            // short password
-            registerErrorMessageText.SetText("Password troppo breve: deve essere lunga almeno 8 caratteri");
-            registerErrorMessage.SetActive(true);
-            return;
-        }
-        if (password != passwordConfirm) {
-            // different passwords
-            registerErrorMessageText.SetText("Le password inserite non coincidono");
-            registerErrorMessage.SetActive(true);
-            return;
-        }
+    }
+
+    IEnumerator RegisterRoutine(string username, string password) {
         PlayerData playerData;
         using (Crypto.SHA256 sha256 = Crypto.SHA256.Create()) {
             byte[] salt = new byte[5];
@@ -115,21 +146,65 @@ public class LoginManager : MonoBehaviour {
             byte[] hash = sha256.ComputeHash(saltPassword);
             playerData = new PlayerData(username, hash, salt);
         }
-        // add the new player
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream fs = new FileStream(IOUtils.playersFilePath, FileMode.Open);
-        PlayerList playerList = formatter.Deserialize(fs) as PlayerList;
-        fs.Close();
-        playerList.list.Add(playerData);
-        fs = new FileStream(IOUtils.playersFilePath, FileMode.Open);
-        formatter.Serialize(fs, playerList);
-        fs.Close();
-        Directory.CreateDirectory(path);
-        registerErrorMessageText.SetText("Registrazione completata: benvenuto/a " + username);
-        registerErrorMessage.SetActive(true);
-        OpenLoginView();
-        loginUsername.text = username;
-        loginPassword.text = password;
+        WWWForm form = new WWWForm();
+        form.AddField("mode", "r");
+        form.AddField("playersFile", IOUtils.playersFile);
+        // send request
+        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.LoginOrRegisterScript, form);
+        yield return www.SendWebRequest();
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError) {
+            errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
+            errorMessage.SetActive(true);
+            Debug.Log(www.error);
+        } else {
+            PlayerList playerList = new PlayerList();
+            // check response
+            if (www.downloadHandler.text == "File Created" || www.downloadHandler.text == "File Empty") {
+                playerList.list.Add(playerData);
+                StartCoroutine(UpdatePlayerList(playerList, username, password));
+            } else {
+                // check if username is already registered
+                playerList = JsonUtility.FromJson<PlayerList>(www.downloadHandler.text);
+                foreach (PlayerData p in playerList.list) {
+                    if (username == p.username) {
+                        errorMessageText.SetText("Username non disponibile");
+                        errorMessage.SetActive(true);
+                        yield break;
+                    }
+                }
+                playerList.list.Add(playerData);
+                StartCoroutine(UpdatePlayerList(playerList, username, password));
+            }
+        }
+    }
+
+    public void Login() {
+        string username = loginUsername.text;
+        string password = loginPassword.text;
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) {
+            // void fields
+            errorMessageText.SetText("Completa tutti i campi");
+            errorMessage.SetActive(true);
+        } else StartCoroutine(LoginRoutine(username, password));
+    }
+
+    public void Register() {
+        string username = registerUsername.text;
+        string password = registerPassword.text;
+        string passwordConfirm = registerPasswordConfirm.text;
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(passwordConfirm)) {
+            // void fields
+            errorMessageText.SetText("Completa tutti i campi");
+            errorMessage.SetActive(true);
+        } else if (password.Length < 8) {
+            // short password
+            errorMessageText.SetText("Password troppo breve: deve essere lunga almeno 8 caratteri");
+            errorMessage.SetActive(true);
+        } else if (password != passwordConfirm) {
+            // different passwords
+            errorMessageText.SetText("Le password inserite non coincidono");
+            errorMessage.SetActive(true);
+        } else StartCoroutine(RegisterRoutine(username, password));
     }
 
     public void OpenLoginView() {
@@ -148,7 +223,6 @@ public class LoginManager : MonoBehaviour {
     }
 
     public void CloseMessage() {
-        loginErrorMessage.SetActive(false);
-        registerErrorMessage.SetActive(false);
+        errorMessage.SetActive(false);
     }
 }

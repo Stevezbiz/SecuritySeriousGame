@@ -24,7 +24,7 @@ public class AudioSettingsMenu : MonoBehaviour {
     }
 
     public void OpenAudioSettings() {
-        if(soundtrack.mute) {
+        if (soundtrack.mute) {
             musicImage.color = COLOR.GREEN_DISABLED;
             musicOutline.effectColor = COLOR.GREEN_DISABLED;
             musicBar.SetValueWithoutNotify(0f);
