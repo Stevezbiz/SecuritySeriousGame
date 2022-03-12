@@ -127,6 +127,7 @@ public enum ECode {
 public enum ActionCode {
     GAME_OVER,
     CONTINUE,
+    BYPASS_LOADING,
     PURCHASE_ITEM,
     UPGRADE_ITEM,
     ENABLE_ITEM,

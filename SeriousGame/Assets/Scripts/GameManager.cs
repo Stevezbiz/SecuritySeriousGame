@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DateTime = System.DateTime;
 using DateTimeKind = System.DateTimeKind;
-using Image = UnityEngine.UI.Image;
 using Math = System.Math;
 
 public class GameManager : MonoBehaviour {
@@ -19,6 +18,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameObject personMoving;
     [SerializeField] RectTransform personParent;
     [SerializeField] AudioSettingsMenu audioSettingsMenu;
+    [SerializeField] SaveSystem saveSystem;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset shopFileJSON;
@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour {
     Dictionary<AttackCode, AttackStats> attackStats = new Dictionary<AttackCode, AttackStats>();
     Dictionary<ShopItemCode, ShopItemInfo> shopItems = new Dictionary<ShopItemCode, ShopItemInfo>();
     Dictionary<EmployeeCode, EmployeeInfo> employees = new Dictionary<EmployeeCode, EmployeeInfo>();
-    Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
     Dictionary<int, Quiz> quizzes = new Dictionary<int, Quiz>();
     Dictionary<Role, Person> roleAvatars = new Dictionary<Role, Person>();
     Dictionary<CategoryCode, Category> categories = new Dictionary<CategoryCode, Category>();
@@ -54,8 +53,11 @@ public class GameManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
+        TimeManager.Pause();
+        TimeManager.Pause();
         Load();
         DebugPrint();
+        TimeManager.Resume();
     }
 
     // Update is called once per frame
@@ -115,7 +117,6 @@ public class GameManager : MonoBehaviour {
     void Load() {
         // initialize the data structures and the settings
         startTime = Time.time;
-        Time.timeScale = 0;
         // initialize the shop structure
         shopItems = ShopUtils.LoadFromFile(shopFileJSON);
         shop.Init();
@@ -140,12 +141,10 @@ public class GameManager : MonoBehaviour {
             categories.Add((CategoryCode)i, new Category(categoryIcons[i].name, categoryIcons[i]));
         }
         // initialize the BKT model
-        kcs = BKTModel.Init(modelFileJSON);
-        if (SaveSystem.load) {
-            // load the game data of the saved run from the file 
-            LoadGameData(SaveSystem.LoadGame());
-            // load the model data saved on file
-            kcs = BKTModel.LoadModel();
+        BKTModel.Init(modelFileJSON);
+        if (IOUtils.load) {
+            // load the game data of the saved run 
+            saveSystem.LoadGame();
         } else {
             // load the game data for a new game
             GameConfigJSON gameConfigContent = JsonUtility.FromJson<GameConfigJSON>(gameConfigJSON.text);
@@ -158,13 +157,14 @@ public class GameManager : MonoBehaviour {
             DateTime dt = DateTime.Now.AddMonths(1);
             dateTime = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, 0, DateTimeKind.Local);
             UpdateAttacks();
+            // initialize the audio settings
+            audioSettingsMenu.Setup(gc);
+            // initialize the report structure
+            learningReport.Init(BKTModel.kcs);
+            // refresh the GUI for the first time
+            gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
+            TimeManager.Resume();
         }
-        // initialize the audio settings
-        audioSettingsMenu.Setup(gc);
-        // initialize the report structure
-        learningReport.Init(kcs);
-        // refresh the GUI for the first time
-        gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
     }
 
     /**
@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour {
     /**
      * <summary>Load the game data needed to resume a previously saved run</summary>
      */
-    void LoadGameData(GameSave gameSave) {
+    public void LoadGameData(GameSave gameSave) {
         // load the basic config
         LoadGameConfig(gameSave.gc);
         // update the status of the items in the shop
@@ -190,6 +190,12 @@ public class GameManager : MonoBehaviour {
         // load the data structures
         AttackUtils.UpdateAll(resistances, attackStats, attackSchedule, gameSave.res, gameSave.aStats, gameSave.aSchedule);
         TaskUtils.UpdateTasks(waitingTasks, gameSave.waitingTasks, assignedTasks, gameSave.assignedTasks);
+        // initialize the audio settings
+        audioSettingsMenu.Setup(gc);
+        // initialize the report structure
+        learningReport.Init(BKTModel.kcs);
+        // refresh the GUI for the first time
+        gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
     }
 
     // LOG
@@ -1053,7 +1059,6 @@ public class GameManager : MonoBehaviour {
     }
 
     void DebugPrint() {
-        Debug.Log(IOUtils.rootPath);
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         float totalMoney = 0f;
         foreach (ShopItemInfo sii in shopItems.Values) {
@@ -1138,10 +1143,10 @@ public class GameManager : MonoBehaviour {
             // Decide the result of the evaluation
             if (s.Value >= 0) {
                 // correct
-                kcs[kc].AddTestResult(true);
+                BKTModel.kcs[kc].AddTestResult(true);
             } else {
                 // wrong
-                kcs[kc].AddTestResult(false);
+                BKTModel.kcs[kc].AddTestResult(false);
             }
         }
     }
@@ -1193,10 +1198,10 @@ public class GameManager : MonoBehaviour {
         // Decide the result of the evaluation
         if (score >= 0) {
             // correct
-            kcs[kc].AddTestResult(true);
+            BKTModel.kcs[kc].AddTestResult(true);
         } else {
             // wrong
-            kcs[kc].AddTestResult(false);
+            BKTModel.kcs[kc].AddTestResult(false);
         }
     }
 
@@ -1247,17 +1252,17 @@ public class GameManager : MonoBehaviour {
         // Decide the result of the evaluation
         if (score >= 0) {
             // correct
-            kcs[kc].AddTestResult(true);
+            BKTModel.kcs[kc].AddTestResult(true);
         } else {
             // wrong
-            kcs[kc].AddTestResult(false);
+            BKTModel.kcs[kc].AddTestResult(false);
         }
     }
 
     public void EvaluateQuiz(int qid, int aid) {
         QuizAnswer qa = quizzes[qid].answers[aid];
         // send the test to the model
-        kcs[quizzes[qid].skill].AddTestResult(qa.correct);
+        BKTModel.kcs[quizzes[qid].skill].AddTestResult(qa.correct);
         // apply the effects of the answer
         foreach (AnswerEffect effect in qa.effects) {
             switch (effect.target) {
@@ -1322,17 +1327,17 @@ public class GameManager : MonoBehaviour {
         // Decide the result of the evaluation
         if (score >= 0) {
             // correct
-            kcs[SkillCode.MANAGEMENT].AddTestResult(true);
+            BKTModel.kcs[SkillCode.MANAGEMENT].AddTestResult(true);
         } else {
             // wrong
-            kcs[SkillCode.MANAGEMENT].AddTestResult(false);
+            BKTModel.kcs[SkillCode.MANAGEMENT].AddTestResult(false);
         }
     }
 
     public ModelSave SaveModel() {
         List<KCRecord> records = new List<KCRecord>();
 
-        foreach (KnowledgeComponent kc in kcs.Values) {
+        foreach (KnowledgeComponent kc in BKTModel.kcs.Values) {
             records.Add(new KCRecord(kc.id, kc.name, kc.GetTransitionPos(), kc.GetTests()));
         }
 

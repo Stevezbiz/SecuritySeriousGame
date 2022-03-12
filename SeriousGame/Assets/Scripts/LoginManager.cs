@@ -16,7 +16,7 @@ public class LoginManager : MonoBehaviour {
     [SerializeField] TMP_InputField registerPasswordConfirm;
     [SerializeField] GameObject errorMessage;
     [SerializeField] TextMeshProUGUI errorMessageText;
-    
+
     readonly Crypto.RNGCryptoServiceProvider rng = new Crypto.RNGCryptoServiceProvider();
 
     // Start is called before the first frame update
@@ -48,7 +48,7 @@ public class LoginManager : MonoBehaviour {
 
     IEnumerator CreatePlayerFolder(string username, string password) {
         WWWForm form = new WWWForm();
-        form.AddField("playerFolder", IOUtils.GetPlayerFolder(username));
+        form.AddField("playerFolder", IOUtils.GetPlayerFolder());
         // send request
         using UnityWebRequest www = UnityWebRequest.Post(IOUtils.createPlayerFolderScript, form);
         yield return www.SendWebRequest();
@@ -126,7 +126,7 @@ public class LoginManager : MonoBehaviour {
                 }
                 if (correct) {
                     // login successful
-                    SaveSystem.player = username;
+                    IOUtils.player = username;
                     SceneLoader.LoadScene("MainMenu");
                 } else {
                     // login failed

@@ -87,11 +87,11 @@ public static class BKTModel {
     public static double baseLearned;
     public static int actualTimeSlot;
     public static List<int> timeSlots = new List<int>();
+    public static Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
 
     static Dictionary<AttackCode, ResistanceRequirements> resistanceRequirements = new Dictionary<AttackCode, ResistanceRequirements>();
 
-    public static Dictionary<SkillCode, KnowledgeComponent> Init(TextAsset file) {
-        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
+    public static void Init(TextAsset file) {
         ModelJSON modelJSON = JsonUtility.FromJson<ModelJSON>(file.text);
         COGNITIVE_MASTERY = modelJSON.modelConfig.COGNITIVE_MASTERY;
         N_FIRST_EMPIRICAL_TEST = modelJSON.modelConfig.N_FIRST_EMPIRICAL_TEST;
@@ -102,25 +102,20 @@ public static class BKTModel {
         baseLearned = modelJSON.modelConfig.baseLearned;
         actualTimeSlot = modelJSON.modelConfig.actualTimeSlot;
         foreach (KCData kc in modelJSON.modelConfig.kcs) {
-            kcs.Add(kc.id, new KnowledgeComponent(kc.id, kc.name));
+            kcs[kc.id] = new KnowledgeComponent(kc.id, kc.name);
         }
         foreach (ResistanceRequirements r in modelJSON.modelConfig.requirements) {
-            resistanceRequirements.Add(r.id, r);
+            resistanceRequirements[r.id] = r;
         }
-        foreach (int slot in modelJSON.modelConfig.timeSlots) {
-            timeSlots.Add(slot);
-        }
-        return kcs;
+        timeSlots = new List<int>(modelJSON.modelConfig.timeSlots);
     }
 
-    public static Dictionary<SkillCode, KnowledgeComponent> LoadModel() {
-        ModelSave modelSave = SaveSystem.LoadModel();
+    public static void LoadModel(ModelSave modelSave) {
         actualTimeSlot = modelSave.actualTimeSlot;
-        Dictionary<SkillCode, KnowledgeComponent> kcs = new Dictionary<SkillCode, KnowledgeComponent>();
         foreach (KCRecord r in modelSave.records) {
             kcs[r.id] = new KnowledgeComponent(r);
         }
-        return kcs;
+        TimeManager.Resume();
     }
 
     public static void UpdateModel(int time) {

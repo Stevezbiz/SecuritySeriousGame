@@ -37,16 +37,20 @@ public static class IOUtils {
     public static string LoginOrRegisterScript = Path.Combine(new string[] { scriptsFolder, "loginOrRegister.php" });
     public static string createDataFolderScript = Path.Combine(new string[] { scriptsFolder, "createDataFolder.php" });
     public static string createPlayerFolderScript = Path.Combine(new string[] { scriptsFolder, "createPlayerFolder.php" });
+    public static string saveGameScript = Path.Combine(new string[] { scriptsFolder, "saveGame.php" });
+    public static string saveModelScript = Path.Combine(new string[] { scriptsFolder, "saveModel.php" });
+    public static bool load = false;
+    public static string player = "";
 
-    public static string GetPlayerFolder(string player) {
+    public static string GetPlayerFolder() {
         return Path.Combine(new string[] { dataFolder, player });
     }
 
-    public static string GetPlayerGameSavePath(string player) {
-        return Path.Combine(new string[] { rootPath, player, "game_save.data" });
+    public static string GetPlayerGameSavePath() {
+        return Path.Combine(new string[] { dataFolder, player, "game_save.data" });
     }
 
-    public static string GetPlayerModelSavePath(string player) {
-        return Path.Combine(new string[] { rootPath, player, "model_save.data" });
+    public static string GetPlayerModelSavePath() {
+        return Path.Combine(new string[] { dataFolder, player, "model_save.data" });
     }
 }

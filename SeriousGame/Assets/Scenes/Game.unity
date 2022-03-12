@@ -20824,6 +20824,7 @@ GameObject:
   - component: {fileID: 709143594}
   - component: {fileID: 709143593}
   - component: {fileID: 709143596}
+  - component: {fileID: 709143597}
   m_Layer: 5
   m_Name: GUI
   m_TagString: GUI
@@ -20944,6 +20945,7 @@ MonoBehaviour:
   personMoving: {fileID: 7105309104209436135, guid: f15dbe5277089a14c88b7cfb664134be, type: 3}
   personParent: {fileID: 1694123536}
   audioSettingsMenu: {fileID: 911330003}
+  saveSystem: {fileID: 709143597}
   gameConfigJSON: {fileID: 4900000, guid: e60745214a7362142996acefa56014bf, type: 3}
   attacksFileJSON: {fileID: 4900000, guid: a1d2035f2e9207a42b7fc1d02bfb87f2, type: 3}
   shopFileJSON: {fileID: 4900000, guid: 0a609eea7f3d08f4f957eb804e31d289, type: 3}
@@ -20978,6 +20980,21 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0bae98df4d3f95a41b8a6230807b6e67, type: 3}
   - {fileID: 21300000, guid: 6f3947a1230d4274285726510a3928e3, type: 3}
   - {fileID: 21300000, guid: 178aea46cdaed5a4eb153565a7702e20, type: 3}
+--- !u!114 &709143597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709143591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5f421a6550a2a4a98fa1f8203f3d54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 709143596}
+  waitingMessage: {fileID: 5070559163865985329, guid: 8c53afa7353cb7f4fa8bd75dc4677867, type: 3}
+  errorMessage: {fileID: 5707012250544223018, guid: 20f6190f2b048b34d8bdec776fc17ba1, type: 3}
 --- !u!1 &709549545
 GameObject:
   m_ObjectHideFlags: 0
@@ -22508,7 +22525,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 768037224}
   m_OnClick:
     m_PersistentCalls:
@@ -29943,7 +29960,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1014341536}
   m_OnClick:
     m_PersistentCalls:
@@ -51025,11 +51042,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 709143596}
-  loadButton: {fileID: 1236402522}
-  loadText: {fileID: 1956014050}
-  loadOutline: {fileID: 608863331}
   audioSettings: {fileID: 911329998}
   audioSource: {fileID: 2124819460}
+  saveSystem: {fileID: 709143597}
 --- !u!114 &1784087731
 MonoBehaviour:
   m_ObjectHideFlags: 0
