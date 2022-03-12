@@ -37,23 +37,20 @@ public class SaveSystem : MonoBehaviour {
             GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
             eMessage.Load("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva", ActionCode.BYPASS_LOADING);
             message.Close();
+        } else if (www.downloadHandler.text == "Error Loading File") {
+            Debug.Log("Error Loading File");
+            GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
+            eMessage.Load("Errore: impossibile caricare il salvataggio", ActionCode.BYPASS_LOADING);
+            message.Close();
+        } else if (www.downloadHandler.text == "Save Not Present") {
+            Debug.Log("Save Not Present");
+            GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
+            eMessage.Load("Non è presente nessun salvataggio", ActionCode.BYPASS_LOADING);
+            message.Close();
         } else {
-            // check response
-            if (www.downloadHandler.text == "Error Loading File") {
-                Debug.Log("Error Loading File");
-                GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
-                eMessage.Load("Errore: impossibile caricare il salvataggio", ActionCode.BYPASS_LOADING);
-                message.Close();
-            } else if (www.downloadHandler.text == "Save Not Present") {
-                Debug.Log("Save Not Present");
-                GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
-                eMessage.Load("Non è presente nessun salvataggio", ActionCode.BYPASS_LOADING);
-                message.Close();
-            } else {
-                // success
-                gameManager.LoadGameData(JsonUtility.FromJson<GameSave>(www.downloadHandler.text));
-                StartCoroutine(LoadModelRoutine(message));
-            }
+            // success
+            gameManager.LoadGameData(JsonUtility.FromJson<GameSave>(www.downloadHandler.text));
+            StartCoroutine(LoadModelRoutine(message));
         }
     }
 
@@ -68,23 +65,20 @@ public class SaveSystem : MonoBehaviour {
             GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
             eMessage.Load("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva", ActionCode.BYPASS_LOADING);
             message.Close();
+        } else if (www.downloadHandler.text == "Error Loading File") {
+            Debug.Log("Error Loading File");
+            GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
+            eMessage.Load("Errore: impossibile caricare il salvataggio", ActionCode.BYPASS_LOADING);
+            message.Close();
+        } else if (www.downloadHandler.text == "Save Not Present") {
+            Debug.Log("Save Not Present");
+            GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
+            eMessage.Load("Non è presente nessun salvataggio", ActionCode.BYPASS_LOADING);
+            message.Close();
         } else {
-            // check response
-            if (www.downloadHandler.text == "Error Loading File") {
-                Debug.Log("Error Loading File");
-                GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
-                eMessage.Load("Errore: impossibile caricare il salvataggio", ActionCode.BYPASS_LOADING);
-                message.Close();
-            } else if (www.downloadHandler.text == "Save Not Present") {
-                Debug.Log("Save Not Present");
-                GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
-                eMessage.Load("Non è presente nessun salvataggio", ActionCode.BYPASS_LOADING);
-                message.Close();
-            } else {
-                // success
-                BKTModel.LoadModel(JsonUtility.FromJson<ModelSave>(www.downloadHandler.text));
-                message.Close();
-            }
+            // success
+            BKTModel.LoadModel(JsonUtility.FromJson<ModelSave>(www.downloadHandler.text));
+            message.Close();
         }
     }
 
@@ -102,18 +96,15 @@ public class SaveSystem : MonoBehaviour {
             GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
             eMessage.Load("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva", ActionCode.CONTINUE);
             message.Close();
+        } else if (www.downloadHandler.text == "Error Saving File") {
+            Debug.Log("Error Saving File");
+            GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
+            eMessage.Load("Errore: impossibile effettuare il salvataggio", ActionCode.CONTINUE);
+            message.Close();
         } else {
-            // check response
-            if (www.downloadHandler.text == "Error Saving File") {
-                Debug.Log("Error Saving File");
-                GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
-                eMessage.Load("Errore: impossibile effettuare il salvataggio", ActionCode.CONTINUE);
-                message.Close();
-            } else {
-                // success
-                Debug.Log(www.downloadHandler.text);
-                StartCoroutine(SaveModelRoutine(modelSave, message));
-            }
+            // success
+            Debug.Log(www.downloadHandler.text);
+            StartCoroutine(SaveModelRoutine(modelSave, message));
         }
     }
 
@@ -129,20 +120,17 @@ public class SaveSystem : MonoBehaviour {
             GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
             eMessage.Load("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva", ActionCode.CONTINUE);
             message.Close();
+        } else if (www.downloadHandler.text == "Error Saving File") {
+            Debug.Log("Error Saving File");
+            GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
+            eMessage.Load("Errore: impossibile effettuare il salvataggio", ActionCode.CONTINUE);
+            message.Close();
         } else {
-            // check response
-            if (www.downloadHandler.text == "Error Saving File") {
-                Debug.Log("Error Saving File");
-                GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
-                eMessage.Load("Errore: impossibile effettuare il salvataggio", ActionCode.CONTINUE);
-                message.Close();
-            } else {
-                // success
-                Debug.Log(www.downloadHandler.text);
-                message.Close();
-                GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
-                eMessage.Load("Salvataggio completato", ActionCode.CONTINUE);
-            }
+            // success
+            Debug.Log(www.downloadHandler.text);
+            message.Close();
+            GenericMessage eMessage = Instantiate(errorMessage, gameObject.transform, false).GetComponent<GenericMessage>();
+            eMessage.Load("Salvataggio completato", ActionCode.CONTINUE);
         }
     }
 }
