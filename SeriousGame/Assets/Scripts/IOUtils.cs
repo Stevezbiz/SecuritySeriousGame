@@ -42,8 +42,8 @@ public static class IOUtils {
     public static bool load = false;
     public static string player = "";
 
-    public static string GetPlayerFolder() {
-        return Path.Combine(new string[] { dataFolder, player });
+    public static string GetPlayerFolder(string username) {
+        return Path.Combine(new string[] { dataFolder, username });
     }
 
     public static string GetPlayerGameSavePath() {
