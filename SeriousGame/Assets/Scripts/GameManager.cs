@@ -1112,6 +1112,7 @@ public class GameManager : MonoBehaviour {
         foreach (AttackCode id in attacks.Keys) {
             if (attackSchedule[id].status != AttackStatus.INACTIVE) {
                 CategoryCode c = attacks[id].category;
+                if (!scores.ContainsKey(c)) scores[c] = 0;
                 if (GetActualDurationResistance(id) >= BKTModel.GetDurationL(id)) scores[c]++;
                 else scores[c]--;
                 if (GetActualMissResistance(id) >= BKTModel.GetMissL(id)) scores[c]++;
