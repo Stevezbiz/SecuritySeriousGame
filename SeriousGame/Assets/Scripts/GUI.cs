@@ -14,6 +14,7 @@ public class GUI : MonoBehaviour {
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] TextMeshProUGUI clockText;
     [SerializeField] Image reputationBar;
+    [SerializeField] TextMeshProUGUI attackTrendText;
 
     /**
      * <summary>Displays the current (updated) values in the GUI</summary>
@@ -26,5 +27,9 @@ public class GUI : MonoBehaviour {
         dateText.SetText(dateTime.ToString("d MMM yyyy"));
         timeText.SetText(dateTime.ToString("HH:mm"));
         clockText.SetText(dateTime.ToString("HH:mm"));
+    }
+
+    public void SetNewTrend(string attack) {
+        attackTrendText.SetText(attack);
     }
 }

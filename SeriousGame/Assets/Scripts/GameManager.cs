@@ -196,6 +196,8 @@ public class GameManager : MonoBehaviour {
         learningReport.Init(BKTModel.kcs);
         // refresh the GUI for the first time
         gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
+        // set attack trend
+        if (gc.actualAttackTrend != AttackCode.NONE) gui.SetNewTrend(attacks[gc.actualAttackTrend].name);
     }
 
     // LOG
@@ -455,6 +457,7 @@ public class GameManager : MonoBehaviour {
         gc.actualAttackTrend = possibleTrends[Random.Range(0, possibleTrends.Count)];
         gc.attackTrendTimer = Random.Range(gc.attackTrendTime, 2 * gc.attackTrendTime);
         DisplayMessage("Attenzione: secondo le nostre analisi gli attacchi di tipo " + attacks[gc.actualAttackTrend].name + " sono in aumento!", ActionCode.CONTINUE, Role.SECURITY);
+        gui.SetNewTrend(attacks[gc.actualAttackTrend].name);
     }
 
     void UpdateResistanceAging() {
