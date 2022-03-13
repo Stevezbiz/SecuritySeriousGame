@@ -28,7 +28,7 @@ public class SaveSystem : MonoBehaviour {
         WWWForm form = new WWWForm();
         form.AddField("mode", "r");
         form.AddField("saveFile", IOUtils.GetPlayerGameSavePath());
-        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.saveGameScript, form);
+        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.saveOrLoadGameScript, form);
         GenericMessage message = Instantiate(waitingMessage, gameObject.transform, false).GetComponent<GenericMessage>();
         message.Load("Caricamento in corso...", ActionCode.CONTINUE);
         yield return www.SendWebRequest();
@@ -58,7 +58,7 @@ public class SaveSystem : MonoBehaviour {
         WWWForm form = new WWWForm();
         form.AddField("mode", "r");
         form.AddField("saveFile", IOUtils.GetPlayerModelSavePath());
-        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.saveGameScript, form);
+        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.saveOrLoadGameScript, form);
         yield return www.SendWebRequest();
         if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError) {
             Debug.Log(www.error);
@@ -87,7 +87,7 @@ public class SaveSystem : MonoBehaviour {
         form.AddField("mode", "w");
         form.AddField("saveFile", IOUtils.GetPlayerGameSavePath());
         form.AddField("gameSave", JsonUtility.ToJson(gameSave));
-        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.saveGameScript, form);
+        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.saveOrLoadGameScript, form);
         GenericMessage message = Instantiate(waitingMessage, gameObject.transform, false).GetComponent<GenericMessage>();
         message.Load("Salvataggio in corso...", ActionCode.CONTINUE);
         yield return www.SendWebRequest();
@@ -113,7 +113,7 @@ public class SaveSystem : MonoBehaviour {
         form.AddField("mode", "w");
         form.AddField("saveFile", IOUtils.GetPlayerModelSavePath());
         form.AddField("modelSave", JsonUtility.ToJson(modelSave));
-        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.saveModelScript, form);
+        using UnityWebRequest www = UnityWebRequest.Post(IOUtils.saveOrLoadModelScript, form);
         yield return www.SendWebRequest();
         if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError) {
             Debug.Log(www.error);

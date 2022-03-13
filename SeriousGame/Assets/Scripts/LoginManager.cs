@@ -36,19 +36,16 @@ public class LoginManager : MonoBehaviour {
             errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
             errorMessage.SetActive(true);
             Debug.Log(www.error);
+        } else if (www.downloadHandler.text == "Error Creating Folder") {
+            Debug.Log("Error Creating Folder");
         } else {
-            // check response
-            if (www.downloadHandler.text == "Error Creating Folder") {
-                Debug.Log("Error Creating Folder");
-            } else {
-                Debug.Log("Folder Created");
-            }
+            Debug.Log("Folder Created");
         }
     }
 
     IEnumerator CreatePlayerFolder(string username, string password) {
         WWWForm form = new WWWForm();
-        form.AddField("playerFolder", IOUtils.GetPlayerFolder());
+        form.AddField("playerFolder", IOUtils.GetPlayerFolder(username));
         // send request
         using UnityWebRequest www = UnityWebRequest.Post(IOUtils.createPlayerFolderScript, form);
         yield return www.SendWebRequest();
@@ -56,18 +53,15 @@ public class LoginManager : MonoBehaviour {
             errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
             errorMessage.SetActive(true);
             Debug.Log(www.error);
+        } else if (www.downloadHandler.text == "Error Creating Folder") {
+            Debug.Log("Error Creating Folder");
         } else {
-            // check response
-            if (www.downloadHandler.text == "Error Creating Folder") {
-                Debug.Log("Error Creating Folder");
-            } else {
-                // prepare login
-                errorMessageText.SetText("Registrazione completata: benvenuto/a " + username);
-                errorMessage.SetActive(true);
-                OpenLoginView();
-                loginUsername.text = username;
-                loginPassword.text = password;
-            }
+            // prepare login
+            errorMessageText.SetText("Registrazione completata: benvenuto/a " + username);
+            errorMessage.SetActive(true);
+            OpenLoginView();
+            loginUsername.text = username;
+            loginPassword.text = password;
         }
     }
 
@@ -83,14 +77,11 @@ public class LoginManager : MonoBehaviour {
             errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
             errorMessage.SetActive(true);
             Debug.Log(www.error);
+        } else if (www.downloadHandler.text == "Error Reading File") {
+            Debug.Log("Error Updating List");
         } else {
-            // check response
-            if (www.downloadHandler.text == "Error Reading File") {
-                Debug.Log("Error Updating List");
-            } else {
-                Debug.Log("Player List Updated");
-                StartCoroutine(CreatePlayerFolder(username, password));
-            }
+            Debug.Log("Player List Updated");
+            StartCoroutine(CreatePlayerFolder(username, password));
         }
     }
 
@@ -105,34 +96,31 @@ public class LoginManager : MonoBehaviour {
             errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
             errorMessage.SetActive(true);
             Debug.Log(www.error);
+        } else if (www.downloadHandler.text == "File Created" || www.downloadHandler.text == "File Empty") {
+            Debug.Log("Giocatore non registrato");
+            errorMessageText.SetText("Le credenziali sono errate, riprova");
+            errorMessage.SetActive(true);
         } else {
-            // check response
-            if (www.downloadHandler.text == "File Created" || www.downloadHandler.text == "File Empty") {
-                Debug.Log("Giocatore non registrato");
+            PlayerList playerList = JsonUtility.FromJson<PlayerList>(www.downloadHandler.text);
+            bool correct = false;
+            foreach (PlayerData p in playerList.list) {
+                if (username == p.username) {
+                    using (Crypto.SHA256 sha256 = Crypto.SHA256.Create()) {
+                        byte[] saltedPassword = p.salt.Concat(System.Text.Encoding.ASCII.GetBytes(password)).ToArray();
+                        byte[] hash = sha256.ComputeHash(saltedPassword);
+                        if (p.password.SequenceEqual(hash)) correct = true;
+                    }
+                    if (correct) break;
+                }
+            }
+            if (correct) {
+                // login successful
+                IOUtils.player = username;
+                SceneLoader.LoadScene("MainMenu");
+            } else {
+                // login failed
                 errorMessageText.SetText("Le credenziali sono errate, riprova");
                 errorMessage.SetActive(true);
-            } else {
-                PlayerList playerList = JsonUtility.FromJson<PlayerList>(www.downloadHandler.text);
-                bool correct = false;
-                foreach (PlayerData p in playerList.list) {
-                    if (username == p.username) {
-                        using (Crypto.SHA256 sha256 = Crypto.SHA256.Create()) {
-                            byte[] saltedPassword = p.salt.Concat(System.Text.Encoding.ASCII.GetBytes(password)).ToArray();
-                            byte[] hash = sha256.ComputeHash(saltedPassword);
-                            if (p.password.SequenceEqual(hash)) correct = true;
-                        }
-                        if (correct) break;
-                    }
-                }
-                if (correct) {
-                    // login successful
-                    IOUtils.player = username;
-                    SceneLoader.LoadScene("MainMenu");
-                } else {
-                    // login failed
-                    errorMessageText.SetText("Le credenziali sono errate, riprova");
-                    errorMessage.SetActive(true);
-                }
             }
         }
     }
@@ -156,25 +144,22 @@ public class LoginManager : MonoBehaviour {
             errorMessageText.SetText("Comunicazione con il server fallita: controlla che la tua connessione ad Internet sia attiva");
             errorMessage.SetActive(true);
             Debug.Log(www.error);
-        } else {
+        } else if (www.downloadHandler.text == "File Created" || www.downloadHandler.text == "File Empty") {
             PlayerList playerList = new PlayerList();
-            // check response
-            if (www.downloadHandler.text == "File Created" || www.downloadHandler.text == "File Empty") {
-                playerList.list.Add(playerData);
-                StartCoroutine(UpdatePlayerList(playerList, username, password));
-            } else {
-                // check if username is already registered
-                playerList = JsonUtility.FromJson<PlayerList>(www.downloadHandler.text);
-                foreach (PlayerData p in playerList.list) {
-                    if (username == p.username) {
-                        errorMessageText.SetText("Username non disponibile");
-                        errorMessage.SetActive(true);
-                        yield break;
-                    }
+            playerList.list.Add(playerData);
+            StartCoroutine(UpdatePlayerList(playerList, username, password));
+        } else {
+            // check if username is already registered
+            PlayerList playerList = JsonUtility.FromJson<PlayerList>(www.downloadHandler.text);
+            foreach (PlayerData p in playerList.list) {
+                if (username == p.username) {
+                    errorMessageText.SetText("Username non disponibile");
+                    errorMessage.SetActive(true);
+                    yield break;
                 }
-                playerList.list.Add(playerData);
-                StartCoroutine(UpdatePlayerList(playerList, username, password));
             }
+            playerList.list.Add(playerData);
+            StartCoroutine(UpdatePlayerList(playerList, username, password));
         }
     }
 

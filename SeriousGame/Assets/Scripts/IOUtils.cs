@@ -37,8 +37,8 @@ public static class IOUtils {
     public static string LoginOrRegisterScript = Path.Combine(new string[] { scriptsFolder, "loginOrRegister.php" });
     public static string createDataFolderScript = Path.Combine(new string[] { scriptsFolder, "createDataFolder.php" });
     public static string createPlayerFolderScript = Path.Combine(new string[] { scriptsFolder, "createPlayerFolder.php" });
-    public static string saveGameScript = Path.Combine(new string[] { scriptsFolder, "saveGame.php" });
-    public static string saveModelScript = Path.Combine(new string[] { scriptsFolder, "saveModel.php" });
+    public static string saveOrLoadGameScript = Path.Combine(new string[] { scriptsFolder, "saveOrLoadGame.php" });
+    public static string saveOrLoadModelScript = Path.Combine(new string[] { scriptsFolder, "saveOrLoadModel.php" });
     public static bool load = false;
     public static string player = "";
 
