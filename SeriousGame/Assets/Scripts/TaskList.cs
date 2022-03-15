@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using Button = UnityEngine.UI.Button;
 
 public class TaskList : MonoBehaviour {
     [SerializeField] GameManager gameManager;
@@ -8,6 +10,8 @@ public class TaskList : MonoBehaviour {
     [SerializeField] EmployeeList empoyeeList;
     [SerializeField] RectTransform content;
     [SerializeField] EmployeeView employeeView;
+    [SerializeField] TextMeshProUGUI selector;
+    [SerializeField] Button selectorButton;
 
     List<GameObject> toDestroy = new List<GameObject>();
 
@@ -30,12 +34,16 @@ public class TaskList : MonoBehaviour {
     }
 
     public void OpenView() {
+        selector.color = COLOR.GREEN;
+        selectorButton.interactable = false;
         empoyeeList.CloseView();
         Load();
         gameObject.SetActive(true);
     }
 
     public void CloseView() {
+        selector.color = COLOR.GREEN_DISABLED;
+        selectorButton.interactable = true;
         gameObject.SetActive(false);
     }
 }

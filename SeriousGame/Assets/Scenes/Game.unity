@@ -4453,6 +4453,8 @@ MonoBehaviour:
   employeeItem: {fileID: 8942104082262174181, guid: 39c89ea0b6aef5d4884ee1ff76f6ffc6, type: 3}
   taskList: {fileID: 1880883002}
   content: {fileID: 296218828}
+  selector: {fileID: 469214510}
+  selectorButton: {fileID: 1503900520}
 --- !u!1 &163860237
 GameObject:
   m_ObjectHideFlags: 0
@@ -31830,7 +31832,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.39215687, g: 0, b: 0, a: 1}
     m_PressedColor: {r: 0.5882353, g: 0, b: 0, a: 1}
     m_SelectedColor: {r: 0.3921569, g: 0, b: 0, a: 1}
-    m_DisabledColor: {r: 0.19607845, g: 0, b: 0, a: 0.5019608}
+    m_DisabledColor: {r: 0.3921569, g: 0, b: 0, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -39598,7 +39600,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.39215687, g: 0, b: 0, a: 1}
     m_PressedColor: {r: 0.5882353, g: 0, b: 0, a: 1}
     m_SelectedColor: {r: 0.3921569, g: 0, b: 0, a: 1}
-    m_DisabledColor: {r: 0.19607845, g: 0, b: 0, a: 0.5019608}
+    m_DisabledColor: {r: 0.3921569, g: 0, b: 0, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -48518,6 +48520,8 @@ MonoBehaviour:
   empoyeeList: {fileID: 157360783}
   content: {fileID: 1916246590}
   employeeView: {fileID: 417635149}
+  selector: {fileID: 94698239}
+  selectorButton: {fileID: 1176882269}
 --- !u!1 &1882663260
 GameObject:
   m_ObjectHideFlags: 0
