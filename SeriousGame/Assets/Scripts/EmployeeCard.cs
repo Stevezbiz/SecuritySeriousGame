@@ -21,34 +21,43 @@ public class EmployeeCard : MonoBehaviour {
     [SerializeField] GameObject servicesOutline;
 
     EmployeeInfo employee;
-    GameManager gameManager;
-    EmployeeView parent;
-    Task task;
+    EmployeeView employeeView;
+    EmployeeChoice employeeChoice;
 
     /**
      * <summary>Populate the item with all the elements to show</summary>
      */
-    public void Load(GameManager gameManager, EmployeeInfo e, EmployeeView parent, Task t) {
+    public void Load(GameManager gameManager, EmployeeInfo e, EmployeeView parent, CategoryCode c) {
         this.employee = e;
-        this.gameManager = gameManager;
-        this.parent = parent;
-        this.task = t;
-        nameText.SetText(e.name.ToLower());
-        icon.sprite = gameManager.GetEmployeeIcon(e.id);
-        descriptionText.SetText(e.description);
-        Dictionary<CategoryCode, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
+        _Load(gameManager, c);
+        this.employeeView = parent;
+    }
+
+    public void Load(GameManager gameManager, EmployeeInfo e, EmployeeChoice parent, CategoryCode c) {
+        this.employee = e;
+        _Load(gameManager, c);
+        this.employeeChoice = parent;
+    }
+
+    void _Load(GameManager gameManager, CategoryCode c) {
+        this.employeeChoice = null;
+        this.employeeView = null;
+        nameText.SetText(employee.name.ToLower());
+        icon.sprite = gameManager.GetEmployeeIcon(employee.id);
+        descriptionText.SetText(employee.description);
+        Dictionary<CategoryCode, float> abilities = EmployeeUtils.GetAbilities(employee.abilities);
         networkBar.fillAmount = abilities[CategoryCode.NETWORK] / 10;
         accessBar.fillAmount = abilities[CategoryCode.ACCESS] / 10;
         softwareBar.fillAmount = abilities[CategoryCode.SOFTWARE] / 10;
         assetBar.fillAmount = abilities[CategoryCode.ASSET] / 10;
         servicesBar.fillAmount = abilities[CategoryCode.SERVICES] / 10;
-        moneyGainText.SetText("Guadagno: " + e.GetMoneyGain() + " F/h");
+        moneyGainText.SetText("Guadagno: " + employee.GetMoneyGain() + " F/h");
         networkOutline.SetActive(false);
         accessOutline.SetActive(false);
         softwareOutline.SetActive(false);
         assetOutline.SetActive(false);
         servicesOutline.SetActive(false);
-        switch (t.category) {
+        switch (c) {
             case CategoryCode.NETWORK:
                 networkOutline.SetActive(true);
                 break;
@@ -74,6 +83,7 @@ public class EmployeeCard : MonoBehaviour {
      * <summary>Function called when the element is clicked</summary>
      */
     public void OnClick() {
-        parent.SelectEmployee(employee.id);
+        if (employeeView != null) employeeView.SelectEmployee(employee.id);
+        else if (employeeChoice != null) employeeChoice.SelectEmployee(employee.id);
     }
 }

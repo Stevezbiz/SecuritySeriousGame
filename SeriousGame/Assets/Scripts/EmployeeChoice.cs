@@ -6,138 +6,102 @@ using Image = UnityEngine.UI.Image;
 
 public class EmployeeChoice : MonoBehaviour {
     [SerializeField] GameManager gameManager;
-    [SerializeField] TMP_Dropdown employeeDropdown;
-    [SerializeField] TextMeshProUGUI descriptionText;
-    [SerializeField] TextMeshProUGUI moneyGainText;
-    [SerializeField] Image networkBar;
-    [SerializeField] Image accessBar;
-    [SerializeField] Image softwareBar;
-    [SerializeField] Image assetBar;
-    [SerializeField] Image servicesBar;
-    [SerializeField] GameObject networkOutline;
-    [SerializeField] GameObject accessOutline;
-    [SerializeField] GameObject softwareOutline;
-    [SerializeField] GameObject assetOutline;
-    [SerializeField] GameObject servicesOutline;
-    [SerializeField] TextMeshProUGUI durationText;
+    [SerializeField] GameObject employeeCard;
+    [SerializeField] RectTransform content;
+    [SerializeField] GameObject selection;
+    [SerializeField] GameObject unselection;
+    [SerializeField] GameObject assignButton;
+    [SerializeField] TextMeshProUGUI employeeText;
+    [SerializeField] TextMeshProUGUI valueText;
+    [SerializeField] TextMeshProUGUI titleText;
+    [SerializeField] ShopItemDetail shopItemDetail;
+    [SerializeField] SecurityView securityView;
 
-    ShopItemDetail shopItemDetail;
-    SecurityView securityView;
-    List<EmployeeInfo> employees;
-    ShopItemCode sid;
-    AttackCode aid;
-    TaskType type;
-    CategoryCode category;
+    List<GameObject> toDestroy = new List<GameObject>();
+    EmployeeCode selected;
+    Task task;
 
-    public void Load(ShopItemCode id, CategoryCode category, ShopItemDetail shopItemDetail, TaskType type) {
-        this.sid = id;
-        this.category = category;
-        this.shopItemDetail = shopItemDetail;
-        this.type = type;
-        // fill the options of the dropdown element
-        employees = gameManager.GetAvailableEmployees();
-        if (employees.Count == 0) {
-            gameManager.DisplayMessage("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE, Role.SECURITY);
+    public void Load(Task t) {
+        this.task = t;
+        foreach (GameObject o in toDestroy) {
+            Destroy(o);
+        }
+        toDestroy.Clear();
+        foreach (EmployeeInfo e in gameManager.GetAvailableEmployees()) {
+            GameObject newItem = Instantiate(employeeCard, content, false);
+            newItem.GetComponent<EmployeeCard>().Load(gameManager, e, this, t.category);
+            toDestroy.Add(newItem);
+        }
+        if (toDestroy.Count == 0) {
+            gameManager.DisplayMessage("Nessun impiegato è al momento disponibile.", ActionCode.CONTINUE, Role.SECURITY);
         } else {
-            List<string> options = new List<string>();
-            foreach (EmployeeInfo el in employees) {
-                options.Add(el.name);
+            switch (task.type) {
+                case TaskType.NONE:
+                    break;
+                case TaskType.INSTALL:
+                    titleText.SetText("INSTALLAZIONE " + gameManager.GetShopItem(task.shopItem).name);
+                    break;
+                case TaskType.UPGRADE:
+                    titleText.SetText("POTENZIAMENTO " + gameManager.GetShopItem(task.shopItem).name);
+                    break;
+                case TaskType.REPAIR:
+                    titleText.SetText("RIPARAZIONE " + gameManager.GetAttack(task.attack).name);
+                    break;
+                case TaskType.PREVENT:
+                    break;
+                default:
+                    Debug.Log("Error: unexpected TaskType");
+                    break;
             }
-            employeeDropdown.ClearOptions();
-            employeeDropdown.AddOptions(options);
-            employeeDropdown.value = 0;
-            Display(0);
+            selection.SetActive(false);
+            assignButton.SetActive(false);
+            unselection.SetActive(true);
             gameObject.SetActive(true);
+            content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
         }
     }
 
-    public void Load(AttackCode id, CategoryCode category, SecurityView securityView) {
-        this.aid = id;
-        this.category = category;
-        this.securityView = securityView;
-        type = TaskType.REPAIR;
-        // fill the options of the dropdown element
-        employees = gameManager.GetAvailableEmployees();
-        if (employees.Count == 0) {
-            gameManager.DisplayMessage("Tutti gli impiegati sono già occupati", ActionCode.CONTINUE, Role.SECURITY);
-        } else {
-            List<string> options = new List<string>();
-            foreach (EmployeeInfo el in employees) {
-                options.Add(el.name);
-            }
-            employeeDropdown.ClearOptions();
-            employeeDropdown.AddOptions(options);
-            employeeDropdown.value = 0;
-            Display(0);
-            gameObject.SetActive(true);
-        }
-    }
-
-    public void Display(int err) {
-        EmployeeInfo e = employees[employeeDropdown.value];
-        descriptionText.SetText(e.description);
-        Dictionary<CategoryCode, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
-        networkBar.fillAmount = abilities[CategoryCode.NETWORK] / 10;
-        accessBar.fillAmount = abilities[CategoryCode.ACCESS] / 10;
-        softwareBar.fillAmount = abilities[CategoryCode.SOFTWARE] / 10;
-        assetBar.fillAmount = abilities[CategoryCode.ASSET] / 10;
-        servicesBar.fillAmount = abilities[CategoryCode.SERVICES] / 10;
-        moneyGainText.SetText("Guadagno: " + e.moneyGain + " F/h");
-        switch (type) {
+    public void SelectEmployee(EmployeeCode id) {
+        selected = id;
+        unselection.SetActive(false);
+        selection.SetActive(true);
+        assignButton.SetActive(true);
+        employeeText.SetText("Impiegato: " + gameManager.GetEmployee(id).name);
+        switch (task.type) {
             case TaskType.NONE:
                 break;
             case TaskType.INSTALL:
-                durationText.SetText("Durata: " + gameManager.GetInstallTaskDuration(e.id, sid) + " h");
-                break;
-            case TaskType.REPAIR:
-                durationText.SetText("Durata: " + gameManager.GetRepairTaskDuration(e.id, aid) + " h");
+                valueText.SetText("Durata: " + gameManager.GetInstallTaskDuration(id, task.shopItem) + " h");
                 break;
             case TaskType.UPGRADE:
-                durationText.SetText("Durata: " + gameManager.GetUpgradeTaskDuration(e.id, sid) + " h");
+                valueText.SetText("Durata: " + gameManager.GetUpgradeTaskDuration(id, task.shopItem) + " h");
+                break;
+            case TaskType.REPAIR:
+                valueText.SetText("Durata: " + gameManager.GetRepairTaskDuration(id, task.attack) + " h");
+                break;
+            case TaskType.PREVENT:
+                valueText.SetText("Protezione: " + (100 * gameManager.GetPreventProtection(id, task.category)).ToString("+0.") + "%");
                 break;
             default:
-                Debug.Log("Error: undefined TaskType");
-                break;
-        }
-        networkOutline.SetActive(false);
-        accessOutline.SetActive(false);
-        softwareOutline.SetActive(false);
-        assetOutline.SetActive(false);
-        servicesOutline.SetActive(false);
-        switch (category) {
-            case CategoryCode.NETWORK:
-                networkOutline.SetActive(true);
-                break;
-            case CategoryCode.ACCESS:
-                accessOutline.SetActive(true);
-                break;
-            case CategoryCode.SOFTWARE:
-                softwareOutline.SetActive(true);
-                break;
-            case CategoryCode.ASSET:
-                assetOutline.SetActive(true);
-                break;
-            case CategoryCode.SERVICES:
-                servicesOutline.SetActive(true);
-                break;
-            default:
-                Debug.Log("Error: undefined Category");
+                Debug.Log("Error: unexpected TaskType");
                 break;
         }
     }
 
     public void AssignEmployee() {
-        switch (type) {
+        switch (task.type) {
             case TaskType.NONE:
                 break;
             case TaskType.INSTALL:
-                shopItemDetail.InstallItem(employees[employeeDropdown.value].id);
+                shopItemDetail.InstallItem(selected);
                 break;
             case TaskType.REPAIR:
-                securityView.Repair(employees[employeeDropdown.value].id);
+                securityView.Repair(selected);
                 break;
             case TaskType.UPGRADE:
-                shopItemDetail.UpgradeItem(employees[employeeDropdown.value].id);
+                shopItemDetail.UpgradeItem(selected);
+                break;
+            case TaskType.PREVENT:
                 break;
             default:
                 Debug.Log("Error: undefined TaskType");

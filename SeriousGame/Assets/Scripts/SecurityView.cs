@@ -129,7 +129,7 @@ public class SecurityView : MonoBehaviour {
 
     public void OpenEmployeeChoice(Task t) {
         selected = t.id;
-        employeeChoice.Load(t.attack, gameManager.GetAttack(t.attack).category, this);
+        employeeChoice.Load(t);
     }
 
     /**

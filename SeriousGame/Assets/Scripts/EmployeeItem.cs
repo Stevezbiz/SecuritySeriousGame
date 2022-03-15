@@ -5,64 +5,57 @@ using UnityEngine;
 using Image = UnityEngine.UI.Image;
 
 public class EmployeeItem : MonoBehaviour {
-    [SerializeField] GameObject employeeDetails;
-    [SerializeField] Image icon;
     [SerializeField] TextMeshProUGUI nameText;
+    [SerializeField] Image icon;
+    [SerializeField] TextMeshProUGUI descriptionText;
+    [SerializeField] TextMeshProUGUI moneyGainText;
     [SerializeField] TextMeshProUGUI statusText;
-    [SerializeField] TextMeshProUGUI targetText;
-    [SerializeField] TextMeshProUGUI progressText;
+    [SerializeField] Image networkBar;
+    [SerializeField] Image accessBar;
+    [SerializeField] Image softwareBar;
+    [SerializeField] Image assetBar;
+    [SerializeField] Image servicesBar;
     [SerializeField] GameObject progressBar;
     [SerializeField] Image bar;
 
-    GameManager gameManager;
-    EmployeeInfo employee;
-
     public void Load(GameManager gameManager, EmployeeInfo e, Sprite s) {
-        this.gameManager = gameManager;
-        this.employee = e;
         icon.sprite = s;
         nameText.SetText(e.name.ToLower());
+        descriptionText.SetText(e.description);
+        Dictionary<CategoryCode, float> abilities = EmployeeUtils.GetAbilities(e.abilities);
+        networkBar.fillAmount = abilities[CategoryCode.NETWORK] / 10;
+        accessBar.fillAmount = abilities[CategoryCode.ACCESS] / 10;
+        softwareBar.fillAmount = abilities[CategoryCode.SOFTWARE] / 10;
+        assetBar.fillAmount = abilities[CategoryCode.ASSET] / 10;
+        servicesBar.fillAmount = abilities[CategoryCode.SERVICES] / 10;
+        moneyGainText.SetText("Guadagno: " + e.GetMoneyGain() + " F/h");
         switch (e.status) {
             case TaskType.NONE:
                 statusText.SetText("NON ASSEGNATO");
-                targetText.SetText("-");
-                progressText.SetText("-");
                 progressBar.SetActive(false);
                 break;
             case TaskType.INSTALL:
-                statusText.SetText("INSTALLAZIONE");
-                targetText.SetText(gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(e.id)).name);
-                progressText.SetText("");
+                statusText.SetText("INSTALLAZIONE " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(e.id)).name);
                 progressBar.SetActive(true);
                 bar.fillAmount = gameManager.GetTaskProgress(e.id);
                 break;
             case TaskType.UPGRADE:
-                statusText.SetText("POTENZIAMENTO");
-                targetText.SetText(gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(e.id)).name);
-                progressText.SetText("");
+                statusText.SetText("POTENZIAMENTO " + gameManager.GetShopItem((ShopItemCode)gameManager.GetTaskTarget(e.id)).name);
                 progressBar.SetActive(true);
                 bar.fillAmount = gameManager.GetTaskProgress(e.id);
                 break;
             case TaskType.REPAIR:
-                statusText.SetText("RIPARAZIONE");
-                targetText.SetText(gameManager.GetAttack((AttackCode)gameManager.GetTaskTarget(e.id)).name);
-                progressText.SetText("");
+                statusText.SetText("RIPARAZIONE " + gameManager.GetAttack((AttackCode)gameManager.GetTaskTarget(e.id)).name);
                 progressBar.SetActive(true);
                 bar.fillAmount = gameManager.GetTaskProgress(e.id);
                 break;
             case TaskType.PREVENT:
-                statusText.SetText("PREVENZIONE");
-                targetText.SetText(gameManager.GetCategory((CategoryCode)gameManager.GetTaskTarget(e.id)).name);
-                progressText.SetText("-");
+                statusText.SetText("PREVENZIONE " + gameManager.GetCategory((CategoryCode)gameManager.GetTaskTarget(e.id)).name);
                 progressBar.SetActive(false);
                 break;
             default:
                 Debug.Log("Error: unexpected TaskType");
                 break;
         }
-    }
-
-    public void OpenDetails() {
-        Instantiate(employeeDetails, gameManager.gameObject.transform, false).GetComponent<EmployeeDetails>().Load(employee, gameManager);
     }
 }

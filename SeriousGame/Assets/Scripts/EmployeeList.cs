@@ -20,6 +20,7 @@ public class EmployeeList : MonoBehaviour {
             newItem.GetComponent<EmployeeItem>().Load(gameManager, e, gameManager.GetEmployeeIcon(e.id));
             toDestroy.Add(newItem);
         }
+        content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
     }
 
     public void OpenView() {

@@ -29,7 +29,7 @@ public class EmployeeView : MonoBehaviour {
         toDestroy.Clear();
         foreach (EmployeeInfo e in gameManager.GetAvailableEmployees()) {
             GameObject newItem = Instantiate(employeeCard, content, false);
-            newItem.GetComponent<EmployeeCard>().Load(gameManager, e, this, t);
+            newItem.GetComponent<EmployeeCard>().Load(gameManager, e, this, t.category);
             toDestroy.Add(newItem);
         }
         if (toDestroy.Count == 0) {
@@ -58,6 +58,7 @@ public class EmployeeView : MonoBehaviour {
             assignButton.SetActive(false);
             unselection.SetActive(true);
             employeeChoice.SetActive(true);
+            content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
         }
     }
 

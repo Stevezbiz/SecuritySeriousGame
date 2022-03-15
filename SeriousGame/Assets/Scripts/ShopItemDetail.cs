@@ -185,10 +185,10 @@ public class ShopItemDetail : MonoBehaviour {
     }
 
     public void OpenEmployeeChoiceToInstall() {
-        employeeChoice.Load(id, gameManager.GetShopItem(id).category, this, TaskType.INSTALL);
+        employeeChoice.Load(new Task(TaskType.INSTALL, id, gameManager.GetShopItem(id).category));
     }
 
     public void OpenEmployeeChoiceToUpgrade() {
-        employeeChoice.Load(id, gameManager.GetShopItem(id).category, this, TaskType.UPGRADE);
+        employeeChoice.Load(new Task(TaskType.UPGRADE, id, gameManager.GetShopItem(id).category));
     }
 }
