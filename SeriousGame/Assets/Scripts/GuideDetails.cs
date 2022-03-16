@@ -16,7 +16,7 @@ public class GuideDetails : MonoBehaviour {
         titleText.SetText(entry.entryName.ToLower());
         descriptionText.SetText(entry.entryText);
         this.link = entry.link;
-        content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
+        content.localPosition = new Vector3(content.localPosition.x, 0f, content.localPosition.z);
     }
 
     public void Back() {

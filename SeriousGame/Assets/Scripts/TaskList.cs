@@ -30,7 +30,7 @@ public class TaskList : MonoBehaviour {
             newItem.GetComponent<TaskItem>().Load(gameManager, employeeView, t, false);
             toDestroy.Add(newItem);
         }
-        content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
+        content.localPosition = new Vector3(content.localPosition.x, 0f, content.localPosition.z);
     }
 
     public void OpenView() {

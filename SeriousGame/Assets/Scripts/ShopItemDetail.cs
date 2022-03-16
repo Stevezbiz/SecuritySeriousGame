@@ -91,7 +91,7 @@ public class ShopItemDetail : MonoBehaviour {
             }
 
         }
-        content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
+        content.localPosition = new Vector3(content.localPosition.x, 0f, content.localPosition.z);
     }
 
     /**
@@ -155,7 +155,7 @@ public class ShopItemDetail : MonoBehaviour {
      */
     public void PurchaseItem() {
         gameManager.PurchaseShopItem(id);
-        parent.NotInstalled();
+        if (parent != null) parent.NotInstalled();
         task = gameManager.GetInstallTask(id);
         purchaseButton.SetActive(false);
         installButton.SetActive(true);
@@ -163,7 +163,7 @@ public class ShopItemDetail : MonoBehaviour {
 
     public void InstallItem(EmployeeCode eid) {
         gameManager.AssignEmployee(eid, task.id);
-        parent.Installing();
+        if (parent != null) parent.Installing();
         installButton.SetActive(false);
         installingButton.SetActive(true);
     }
@@ -172,7 +172,7 @@ public class ShopItemDetail : MonoBehaviour {
         gameManager.StartUpgradeShopItem(id);
         task = gameManager.GetUpgradeTask(id);
         gameManager.AssignEmployee(eid, task.id);
-        parent.Upgrading();
+        if (parent != null) parent.Upgrading();
         upgradeButton.SetActive(false);
         upgradingButton.SetActive(true);
     }

@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] LearningReport learningReport;
     [SerializeField] MonitorInterface monitorInterface;
     [SerializeField] NotificationList notificationList;
+    [SerializeField] TutorialManager tutorialManager;
     [SerializeField] GameObject message;
     [SerializeField] GameObject personMoving;
     [SerializeField] RectTransform personParent;
@@ -164,7 +165,8 @@ public class GameManager : MonoBehaviour {
             learningReport.Init(BKTModel.kcs);
             // refresh the GUI for the first time
             gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
-            TimeManager.Resume();
+            // start the tutorial
+            tutorialManager.Load();
         }
     }
 
@@ -199,6 +201,10 @@ public class GameManager : MonoBehaviour {
         gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
         // set attack trend
         if (gc.actualAttackTrend != AttackCode.NONE) gui.SetNewTrend(attacks[gc.actualAttackTrend].name);
+    }
+
+    public void EndTutorial() {
+        TimeManager.Resume();
     }
 
     // LOG

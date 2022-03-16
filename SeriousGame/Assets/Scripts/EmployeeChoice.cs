@@ -57,7 +57,7 @@ public class EmployeeChoice : MonoBehaviour {
             assignButton.SetActive(false);
             unselection.SetActive(true);
             gameObject.SetActive(true);
-            content.SetPositionAndRotation(new Vector3(content.position.x, 0f, content.position.z), Quaternion.identity);
+            content.localPosition = new Vector3(content.localPosition.x, 0f, content.localPosition.z);
         }
     }
 
