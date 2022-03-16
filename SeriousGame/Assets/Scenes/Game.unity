@@ -739,7 +739,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 50
+  m_ScrollSensitivity: 100
   m_Viewport: {fileID: 1408867199}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 1512187368}
@@ -17637,7 +17637,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 50
+  m_ScrollSensitivity: 100
   m_Viewport: {fileID: 939287702}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 1925527178}
@@ -19065,7 +19065,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 50
+  m_ScrollSensitivity: 100
   m_Viewport: {fileID: 1087473875}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 1664314179}
@@ -35020,8 +35020,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.15661621, y: 0.000091552734}
-  m_SizeDelta: {x: -0.31323242, y: 110}
+  m_AnchoredPosition: {x: 0, y: 0.000091552734}
+  m_SizeDelta: {x: -240, y: 110}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1293670477
 MonoBehaviour:
@@ -40747,7 +40747,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 50
+  m_ScrollSensitivity: 100
   m_Viewport: {fileID: 1797123947}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 754825598}
@@ -44310,7 +44310,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 50
+  m_ScrollSensitivity: 100
   m_Viewport: {fileID: 737525491}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 1607185520}
