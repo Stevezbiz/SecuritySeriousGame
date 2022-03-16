@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] QuizQuestion quizQuestion;
     [SerializeField] LearningReport learningReport;
     [SerializeField] MonitorInterface monitorInterface;
+    [SerializeField] NotificationList notificationList;
     [SerializeField] GameObject message;
     [SerializeField] GameObject personMoving;
     [SerializeField] RectTransform personParent;
@@ -505,15 +506,18 @@ public class GameManager : MonoBehaviour {
                 employees[t.executor].status = TaskType.NONE;
                 shopItems[t.shopItem].level = 1;
                 EnableShopItem(t.shopItem);
+                notificationList.AddNotification("INSTALLAZIONE COMPLETA " + shopItems[t.shopItem].name, employees[t.executor].name, employeeAvatars[t.executor]);
                 break;
             case TaskType.REPAIR:
                 employees[t.executor].status = TaskType.NONE;
                 StopAttack(t.attack);
+                notificationList.AddNotification("RIPARAZIONE COMPLETA " + attacks[t.attack].name, employees[t.executor].name, employeeAvatars[t.executor]);
                 break;
             case TaskType.UPGRADE:
                 employees[t.executor].status = TaskType.NONE;
                 shopItems[t.shopItem].level++;
                 FinishUpgradeShopItem(t.shopItem);
+                notificationList.AddNotification("POTENZIAMENTO COMPLETO " + shopItems[t.shopItem].name, employees[t.executor].name, employeeAvatars[t.executor]);
                 break;
             case TaskType.PREVENT:
                 employees[t.executor].status = TaskType.NONE;
