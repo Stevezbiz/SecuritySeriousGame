@@ -11,6 +11,8 @@ public class TutorialManager : MonoBehaviour {
     [SerializeField] ShopItemDetail shopItemDetail;
     [SerializeField] EmployeeView employeeView;
     [SerializeField] TaskList taskList;
+    [SerializeField] SecurityView securityView;
+    [SerializeField] MoneyView moneyView;
     [SerializeField] RectTransform taskListContent;
     [SerializeField] RectTransform employeeChoiceContent;
 
@@ -27,7 +29,7 @@ public class TutorialManager : MonoBehaviour {
     void Page1() {
         // welcome message
         tutorialPages[0].SetActive(true);
-        description1.SetText("Benvenuto\a " + IOUtils.player + "!");
+        description1.SetText("Benvenuto/a " + IOUtils.player + "!");
     }
 
     public void Page2() {
@@ -130,5 +132,48 @@ public class TutorialManager : MonoBehaviour {
         employeeView.CloseView();
         tutorialPages[16].SetActive(true);
         tutorialPages[15].SetActive(false);
+    }
+
+    public void Page18() {
+        // open security view
+        securityView.OpenView();
+        tutorialPages[17].SetActive(true);
+        tutorialPages[16].SetActive(false);
+    }
+
+    public void Page19() {
+        tutorialPages[18].SetActive(true);
+        tutorialPages[17].SetActive(false);
+    }
+
+    public void Page20() {
+        tutorialPages[19].SetActive(true);
+        tutorialPages[18].SetActive(false);
+    }
+
+    public void Page21() {
+        // close security view
+        securityView.CloseView();
+        tutorialPages[20].SetActive(true);
+        tutorialPages[19].SetActive(false);
+    }
+
+    public void Page22() {
+        // open money view
+        moneyView.OpenView();
+        tutorialPages[21].SetActive(true);
+        tutorialPages[20].SetActive(false);
+    }
+
+    public void Page23() {
+        tutorialPages[22].SetActive(true);
+        tutorialPages[21].SetActive(false);
+    }
+
+    public void Page24() {
+        // close money view
+        moneyView.CloseView();
+        tutorialPages[23].SetActive(true);
+        tutorialPages[22].SetActive(false);
     }
 }
