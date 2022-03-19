@@ -13,6 +13,7 @@ public class TutorialManager : MonoBehaviour {
     [SerializeField] TaskList taskList;
     [SerializeField] SecurityView securityView;
     [SerializeField] MoneyView moneyView;
+    [SerializeField] Log log;
     [SerializeField] RectTransform taskListContent;
     [SerializeField] RectTransform employeeChoiceContent;
 
@@ -175,5 +176,19 @@ public class TutorialManager : MonoBehaviour {
         moneyView.CloseView();
         tutorialPages[23].SetActive(true);
         tutorialPages[22].SetActive(false);
+    }
+
+    public void Page25() {
+        // open log view
+        log.OpenLog();
+        tutorialPages[24].SetActive(true);
+        tutorialPages[23].SetActive(false);
+    }
+
+    public void Page26() {
+        // close log view
+        log.CloseLog();
+        tutorialPages[25].SetActive(true);
+        tutorialPages[24].SetActive(false);
     }
 }
