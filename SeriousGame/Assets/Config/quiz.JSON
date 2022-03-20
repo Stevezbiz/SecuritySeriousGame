@@ -334,10 +334,6 @@
             {
               "target": 1,
               "modifier": 0.03
-            },
-            {
-              "target": 2,
-              "modifier": 0
             }
           ],
           "triggeredAttack": 0
