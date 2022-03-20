@@ -9,7 +9,7 @@
         {
           "text": "Dobbiamo implementare una vpn",
           "correct": true,
-          "description": "",
+          "description": "La tecnologia VPN (Virtual Private Network) permette di utilizzare le reti pubbliche in modo sicuro.",
           "effects": [
             {
               "target": 1,
@@ -17,7 +17,7 @@
             },
             {
               "target": 2,
-              "modifier": -300
+              "modifier": -200
             }
           ],
           "triggeredAttack": 0
@@ -25,7 +25,7 @@
         {
           "text": "Puoi accedere da dove preferisci, ma solo usando la password $up3r$3cur3p4$$w0rd",
           "correct": false,
-          "description": "",
+          "description": "Il problema principale è che la rete pubblica di un bar non garantisce un adeguato livello di sicurezza. La tecnologia VPN (Virtual Private Network) permette di utilizzare le reti pubbliche in modo sicuro.",
           "effects": [
             {
               "target": 1,
@@ -35,14 +35,10 @@
           "triggeredAttack": 2
         },
         {
-          "text": "Mi spiace, dovrai rimandare",
-          "correct": true,
-          "description": "",
+          "text": "Mi spiace, dovrai rimandare perchè non è sicuro",
+          "correct": false,
+          "description": "Utilizzare una rete pubblica non è sicuro, tuttavia non è necessario arrendersi all'inattività. Al contrario si possono utilizzare metodi come la tecnologia VPN (Virtual Private Network), che permette di utilizzare le reti pubbliche in modo sicuro.",
           "effects": [
-            {
-              "target": 1,
-              "modifier": -0.05
-            },
             {
               "target": 2,
               "modifier": -100
@@ -61,7 +57,7 @@
         {
           "text": "I server possono sostenere il carico ancora per un po'",
           "correct": false,
-          "description": "",
+          "description": "Rimandare il problema non è mai una soluzione. In questo caso è una necessità sovradimensionare il sistema per sopportare meglio il carico, anche in vista di possibili attacchi DoS.",
           "effects": [
             {
               "target": 1,
@@ -77,7 +73,7 @@
         {
           "text": "Dobbiamo monitorare meglio il traffico della rete per ridurre il consumo di banda",
           "correct": false,
-          "description": "",
+          "description": "Si tratta di una manovra inefficace. In questo caso è una necessità sovradimensionare il sistema per sopportare meglio il carico, anche in vista di possibili attacchi DoS.",
           "effects": [
             {
               "target": 1,
@@ -93,7 +89,7 @@
         {
           "text": "Dobbiamo investire in server più numerosi e potenti",
           "correct": true,
-          "description": "",
+          "description": "In questo caso è una necessità sovradimensionare il sistema per sopportare meglio il carico, anche in vista di possibili attacchi DoS.",
           "effects": [
             {
               "target": 1,
@@ -101,7 +97,7 @@
             },
             {
               "target": 2,
-              "modifier": -300
+              "modifier": -200
             }
           ],
           "triggeredAttack": 0
@@ -117,7 +113,7 @@
         {
           "text": "Aldo99!",
           "correct": false,
-          "description": "",
+          "description": "Si tratta di una password troppo breve, nonostante contenga lettere, numeri e caratteri speciali. 'C0d1c3$3gr3t0' è la scelta migliore perchè contiene ogni tipo di carattere ed è facilmente memorizzabile (si tratta delle parole 'CodiceSegreto' in cui vengono sostituiti alcuni caratteri)",
           "effects": [
             {
               "target": 1,
@@ -127,9 +123,9 @@
           "triggeredAttack": 4
         },
         {
-          "text": "3G1u$t4P3rT3?",
+          "text": "C0d1c3$3gr3t0",
           "correct": true,
-          "description": "",
+          "description": "'C0d1c3$3gr3t0' è la scelta migliore perchè contiene ogni tipo di carattere ed è facilmente memorizzabile (si tratta delle parole 'CodiceSegreto' in cui vengono sostituiti alcuni caratteri)",
           "effects": [
             {
               "target": 1,
@@ -141,7 +137,7 @@
         {
           "text": "ks$fxVi98Mpl!2%cZc7qW35T",
           "correct": true,
-          "description": "",
+          "description": "Questa password è molto solida, tuttavia è anche estremamente complessa da ricordare. 'C0d1c3$3gr3t0' è la scelta migliore perchè contiene ogni tipo di carattere ed è facilmente memorizzabile (si tratta delle parole 'CodiceSegreto' in cui vengono sostituiti alcuni caratteri)",
           "effects": [
             {
               "target": 2,
@@ -153,7 +149,7 @@
         {
           "text": "password",
           "correct": false,
-          "description": "",
+          "description": "Questa è la prima password che qualcuno proverà ad inserire ed è quindi inutile utilizzarla. 'C0d1c3$3gr3t0' è la scelta migliore perchè contiene ogni tipo di carattere ed è facilmente memorizzabile (si tratta delle parole 'CodiceSegreto' in cui vengono sostituiti alcuni caratteri)",
           "effects": [
             {
               "target": 1,
@@ -173,19 +169,19 @@
         {
           "text": "La scrivo su un foglio",
           "correct": false,
-          "description": "",
+          "description": "Un metodo molto semplice e tuttavia estremamente insicuro. La soluzione più efficace è creare una password semplice di almeno 12 caratteri e sostiture alcune lettere per renderla complicata.",
           "effects": [
             {
               "target": 1,
               "modifier": -0.05
             }
           ],
-          "triggeredAttack": 4
+          "triggeredAttack": 8
         },
         {
-          "text": "Creo una password semplice e sostituisco le lettere per renderla complicata",
+          "text": "Creo una password semplice di almeno 12 caratteri e sostituisco le lettere per renderla complicata",
           "correct": true,
-          "description": "",
+          "description": "Questa soluzione garantisce allo stesso tempo una buona protezione e permette di ricordarsi facilmente della password.",
           "effects": [
             {
               "target": 1,
@@ -197,7 +193,7 @@
         {
           "text": "Uso la stessa password per tutto, tanto nessuno riuscirebbe mai a indovinarla",
           "correct": false,
-          "description": "",
+          "description": "Il problema di questa soluzione è che se un malintenzionato entra in possesso della password può causare un danno maggiore, avendo accesso a un vasto numero account diversi. La soluzione più efficace è creare una password semplice di almeno 12 caratteri e sostiture alcune lettere per renderla complicata.",
           "effects": [
             {
               "target": 1,
@@ -215,9 +211,9 @@
       "question": "C'è un nuovo aggiornamento per l'antivirus. Il problema è che per installarlo ora dovremmo sospendere momentaneamente il lavoro. Cosa facciamo?",
       "answers": [
         {
-          "text": "Aggiorniamo subito",
+          "text": "L'aggiornamento ha la precedenza, dovrai interrompere momentaneamente il lavoro",
           "correct": true,
-          "description": "",
+          "description": "Mantenere aggiornato e funzionante l'antivirus è necessario a contrastare la diffusione di malware.",
           "effects": [
             {
               "target": 1,
@@ -231,9 +227,9 @@
           "triggeredAttack": 0
         },
         {
-          "text": "Finiamo prima il lavoro",
+          "text": "Finiamo prima il lavoro e poi aggiorniamo l'antivirus una volta che avrai finito",
           "correct": false,
-          "description": "",
+          "description": "Occorre dare la precedenza alla sicurezza: un attacco malware potrebbe fare molti più danni di una breve interruzione del lavoro. Mantenere aggiornato e funzionante l'antivirus è necessario a contrastare la diffusione di malware.",
           "effects": [
             {
               "target": 1,
@@ -251,21 +247,21 @@
       "question": "Non mi trovo bene con il nuovo programma del calendario che abbiamo installato. Posso installare quello che ho già sul computer a casa?",
       "answers": [
         {
-          "text": "Va bene",
+          "text": "Ok, mi sembra ragionevole",
           "correct": false,
-          "description": "",
+          "description": "Introdurre software esterno è un problema perchè introduce di conseguenza delle vulnerabilità che possono essere sfruttate ad esempio dai malware. Anche se può risultare scomodo è importante per la sicurezza evitare di utilizzare software non autorizzato.",
           "effects": [
             {
               "target": 1,
               "modifier": -0.05
             }
           ],
-          "triggeredAttack": 10
+          "triggeredAttack": 11
         },
         {
           "text": "Dovrai imparare a usarlo",
           "correct": true,
-          "description": "",
+          "description": "Anche se può risultare scomodo è importante per la sicurezza evitare di utilizzare software non autorizzato.",
           "effects": [
             {
               "target": 1,
@@ -284,12 +280,12 @@
       "id": 6,
       "skill": 5,
       "person": 1,
-      "question": "Ho ricevuto una mail:\nCiao ...,\npurtroppo ho cancellato per errore il report di ieri sul progetto ... e vorrei dargli un'occhiata. Potresti inviarmelo di nuovo per favore?\n...\nE' strano perchè stamattina ... si è congratulata con me per l'ottimo lavoro svolto. Cosa sarà successo?",
+      "question": "Ho ricevuto una mail:\nCiao Sonia,\npurtroppo ho cancellato per errore il report di ieri sul progetto SuperSecretStrategy e vorrei dargli un'occhiata. Potresti inviarmelo di nuovo per favore?\nCarla\nE' strano perchè stamattina Carla si è congratulata con me per l'ottimo lavoro svolto. Cosa sarà successo?",
       "answers": [
         {
-          "text": "Probabilmente se ne sarà dimenticata",
+          "text": "Probabilmente se ne sarà dimenticata, rispondile e non andare a disturbarla per così poco",
           "correct": false,
-          "description": "",
+          "description": "Sottovalutare la situazione è molto rischioso. Potrebbe trattarsi di un tentativo di phishing (in questo caso molto mirato), quindi è meglio chiarire la situazione.",
           "effects": [
             {
               "target": 1,
@@ -301,7 +297,7 @@
         {
           "text": "Forse è meglio se vai a parlarle, per sicurezza",
           "correct": true,
-          "description": "",
+          "description": "Potrebbe trattarsi di un tentativo di phishing (in questo caso molto mirato), quindi è meglio chiarire la situazione.",
           "effects": [
             {
               "target": 1,
@@ -311,9 +307,9 @@
           "triggeredAttack": 0
         },
         {
-          "text": "Non ha senso, cancellala",
+          "text": "Ci deve essere stato un errore, cancellala per sicurezza e non pensiamoci più",
           "correct": false,
-          "description": "",
+          "description": "Non condividere informazioni confidenziali è una buona strategia, tuttavia è sempre meglio indagare. Potrebbe trattarsi di un tentativo di phishing (in questo caso molto mirato) che quindi potrebbe colpire altri colleghi se non allertati.",
           "effects": [
             {
               "target": 1,
@@ -328,12 +324,12 @@
       "id": 7,
       "skill": 5,
       "person": 0,
-      "question": "Abbiamo degli hard-disk completamente vuoti collegati alla rete aziendale. Se li utilizziamo per effettuare il backup possiamo risparmiare una somma notevole!",
+      "question": "Abbiamo un server collegato alla rete inutilizzato: se trasferiamo il backup su di esso possiamo risparmiare una somma notevole!",
       "answers": [
         {
-          "text": "Non è sicuro",
+          "text": "Non è sicuro, lasciamo le cose come stanno",
           "correct": true,
-          "description": "",
+          "description": "Il backup per essere efficace necessita di essere isolato dal sistema.",
           "effects": [
             {
               "target": 1,
@@ -341,15 +337,31 @@
             },
             {
               "target": 2,
-              "modifier": -100
+              "modifier": 0
             }
           ],
           "triggeredAttack": 0
         },
         {
-          "text": "Ottima idea",
+          "text": "Magari non tutto il backup, ma una parte la possiamo trasferire, per risparmiare.",
           "correct": false,
-          "description": "",
+          "description": "Non è un'idea vincente per la sicurezza. Il backup per essere efficace necessita di essere isolato dal sistema.",
+          "effects": [
+            {
+              "target": 1,
+              "modifier": -0.05
+            },
+            {
+              "target": 2,
+              "modifier": 100
+            }
+          ],
+          "triggeredAttack": 12
+        },
+        {
+          "text": "Ottima idea, facciamolo immediatamente",
+          "correct": false,
+          "description": "Questa decisione può sembrare vincente in ottica di ottimizzazione, ma sottovaluta i rischi di un attacco malware (ad esempio ransomware). Il backup per essere efficace necessita di essere isolato dal sistema.",
           "effects": [
             {
               "target": 1,
