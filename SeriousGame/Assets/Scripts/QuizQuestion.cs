@@ -6,6 +6,7 @@ using Image = UnityEngine.UI.Image;
 
 public class QuizQuestion : MonoBehaviour {
     [SerializeField] GameManager gameManager;
+    [SerializeField] AudioSource effectsSource;
     [SerializeField] TextMeshProUGUI questionText;
     [SerializeField] TextMeshProUGUI nameText;
     [SerializeField] Image image;
@@ -15,6 +16,8 @@ public class QuizQuestion : MonoBehaviour {
     [SerializeField] GameObject quizEffects;
     [SerializeField] TextMeshProUGUI effectsDescriptionText;
     [SerializeField] TextMeshProUGUI effectsValuesText;
+    [SerializeField] AudioClip positiveTone;
+    [SerializeField] AudioClip negativeTone;
 
     Quiz q;
     List<GameObject> toDestroy = new List<GameObject>();
@@ -33,6 +36,9 @@ public class QuizQuestion : MonoBehaviour {
     }
 
     public void EvaluateAnswer(int id) {
+        if (q.answers[id].correct) effectsSource.clip = positiveTone;
+        else effectsSource.clip = negativeTone;
+        effectsSource.Play();
         gameManager.EvaluateQuiz(q.id, id);
         effectsDescriptionText.SetText(q.answers[id].description);
         string effects = "Conseguenze:\n";

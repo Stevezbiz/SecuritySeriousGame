@@ -8,7 +8,7 @@ using Slider = UnityEngine.UI.Slider;
 public class AudioSettingsMenu : MonoBehaviour {
     [SerializeField] GameManager gameManager;
     [SerializeField] AudioSource soundtrack;
-    //[SerializeField] AudioSource effects;
+    [SerializeField] AudioSource effects;
     [SerializeField] Image musicImage;
     [SerializeField] Image effectsImage;
     [SerializeField] Outline musicOutline;
@@ -16,11 +16,14 @@ public class AudioSettingsMenu : MonoBehaviour {
     [SerializeField] Slider musicBar;
     [SerializeField] Slider effectsBar;
 
+    float sNorm = .3f;
+    float eNorm = 1f;
+
     public void Setup(GameConfig gameConfig) {
-        soundtrack.volume = gameConfig.musicVolume;
+        soundtrack.volume = sNorm * gameConfig.musicVolume;
         soundtrack.mute = gameConfig.musicMute;
-        //effects.volume = gameConfig.effectsVolume;
-        //effects.mute = gameConfig.effectsMute;
+        effects.volume = eNorm * gameConfig.effectsVolume;
+        effects.mute = gameConfig.effectsMute;
     }
 
     public void OpenAudioSettings() {
@@ -32,26 +35,25 @@ public class AudioSettingsMenu : MonoBehaviour {
         } else {
             musicImage.color = COLOR.GREEN;
             musicOutline.effectColor = COLOR.GREEN;
-            musicBar.SetValueWithoutNotify(soundtrack.volume);
+            musicBar.SetValueWithoutNotify(soundtrack.volume / sNorm);
             musicBar.interactable = true;
         }
-        //if (effects.mute) {
-        //    effectsImage.color = COLOR.GREEN_DISABLED;
-        //    effectsOutline.effectColor = COLOR.GREEN_DISABLED;
-        //    effectsBar.SetValueWithoutNotify(0f);
-        //    effectsBar.interactable = false;
-        //} else {
-        //    effectsImage.color = COLOR.GREEN;
-        //    effectsOutline.effectColor = COLOR.GREEN;
-        //    effectsBar.SetValueWithoutNotify(effects.volume);
-        //    effectsBar.interactable = true;
-        //}
+        if (effects.mute) {
+            effectsImage.color = COLOR.GREEN_DISABLED;
+            effectsOutline.effectColor = COLOR.GREEN_DISABLED;
+            effectsBar.SetValueWithoutNotify(0f);
+            effectsBar.interactable = false;
+        } else {
+            effectsImage.color = COLOR.GREEN;
+            effectsOutline.effectColor = COLOR.GREEN;
+            effectsBar.SetValueWithoutNotify(effects.volume / eNorm);
+            effectsBar.interactable = true;
+        }
         gameObject.SetActive(true);
     }
 
     public void CloseAudioSettings() {
-        gameManager.SaveAudioSettings(soundtrack.volume, soundtrack.mute, .6f, false);
-        //gameManager.SaveAudioSettings(soundtrack.volume, soundtrack.mute, effects.volume, effects.mute);
+        gameManager.SaveAudioSettings(soundtrack.volume / sNorm, soundtrack.mute, effects.volume / eNorm, effects.mute);
         gameObject.SetActive(false);
     }
 
@@ -60,7 +62,7 @@ public class AudioSettingsMenu : MonoBehaviour {
             soundtrack.mute = false;
             musicImage.color = COLOR.GREEN;
             musicOutline.effectColor = COLOR.GREEN;
-            musicBar.SetValueWithoutNotify(soundtrack.volume);
+            musicBar.SetValueWithoutNotify(soundtrack.volume / sNorm);
             musicBar.interactable = true;
         } else {
             soundtrack.mute = true;
@@ -72,26 +74,26 @@ public class AudioSettingsMenu : MonoBehaviour {
     }
 
     public void MuteUnmuteEffects() {
-        //if (effects.mute) {
-        //    effects.mute = false;
-        //    effectsImage.color = COLOR.GREEN;
-        //    effectsOutline.effectColor = COLOR.GREEN;
-        //    effectsBar.SetValueWithoutNotify(effects.volume);
-        //    effectsBar.interactable = true;
-        //} else {
-        //    effects.mute = true;
-        //    effectsImage.color = COLOR.GREEN_DISABLED;
-        //    effectsOutline.effectColor = COLOR.GREEN_DISABLED;
-        //    effectsBar.SetValueWithoutNotify(0f);
-        //    effectsBar.interactable = false;
-        //}
+        if (effects.mute) {
+            effects.mute = false;
+            effectsImage.color = COLOR.GREEN;
+            effectsOutline.effectColor = COLOR.GREEN;
+            effectsBar.SetValueWithoutNotify(effects.volume / eNorm);
+            effectsBar.interactable = true;
+        } else {
+            effects.mute = true;
+            effectsImage.color = COLOR.GREEN_DISABLED;
+            effectsOutline.effectColor = COLOR.GREEN_DISABLED;
+            effectsBar.SetValueWithoutNotify(0f);
+            effectsBar.interactable = false;
+        }
     }
 
     public void ChangeMusicVolume() {
-        soundtrack.volume = musicBar.value;
+        soundtrack.volume = sNorm * musicBar.value;
     }
 
     public void ChangeEffectsVolume() {
-        //effects.volume = effectsBar.value;
+        effects.volume = eNorm * effectsBar.value;
     }
 }

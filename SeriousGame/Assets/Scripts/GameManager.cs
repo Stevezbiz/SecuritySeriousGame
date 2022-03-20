@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField] RectTransform personParent;
     [SerializeField] AudioSettingsMenu audioSettingsMenu;
     [SerializeField] SaveSystem saveSystem;
+    [SerializeField] AudioSource effectsSource;
+    [SerializeField] AudioClip alarmTone;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset shopFileJSON;
@@ -397,6 +399,8 @@ public class GameManager : MonoBehaviour {
         monitorInterface.EnableAttackIcon(attacks[id].category);
         // generate a message
         DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE, Role.SECURITY);
+        effectsSource.clip = alarmTone;
+        effectsSource.Play();
     }
 
     /**
