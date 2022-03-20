@@ -513,23 +513,27 @@ public class GameManager : MonoBehaviour {
         t.progress = 0;
         switch (t.type) {
             case TaskType.INSTALL:
+                logManager.LogPrintEndTask(t);
                 employees[t.executor].status = TaskType.NONE;
                 shopItems[t.shopItem].level = 1;
                 EnableShopItem(t.shopItem);
                 notificationList.AddNotification("INSTALLAZIONE COMPLETA " + shopItems[t.shopItem].name, employees[t.executor].name, employeeAvatars[t.executor]);
                 break;
             case TaskType.REPAIR:
+                logManager.LogPrintEndTask(t);
                 employees[t.executor].status = TaskType.NONE;
                 StopAttack(t.attack);
                 notificationList.AddNotification("RIPARAZIONE COMPLETA " + attacks[t.attack].name, employees[t.executor].name, employeeAvatars[t.executor]);
                 break;
             case TaskType.UPGRADE:
+                logManager.LogPrintEndTask(t);
                 employees[t.executor].status = TaskType.NONE;
                 shopItems[t.shopItem].level++;
                 FinishUpgradeShopItem(t.shopItem);
                 notificationList.AddNotification("POTENZIAMENTO COMPLETO " + shopItems[t.shopItem].name, employees[t.executor].name, employeeAvatars[t.executor]);
                 break;
             case TaskType.PREVENT:
+                logManager.LogPrintEndTask(t);
                 employees[t.executor].status = TaskType.NONE;
                 waitingTasks.Add(t.id, t);
                 monitorInterface.DisableEmployeeIcon(t.category);
@@ -782,29 +786,32 @@ public class GameManager : MonoBehaviour {
                 assignedTasks.Add(id, t);
                 assignedTasks[id].AssignEmployee(id, GetInstallTaskDuration(id, t.shopItem));
                 waitingTasks.Remove(tid);
+                logManager.LogPrintStartTask(t);
                 break;
             case TaskType.REPAIR:
                 assignedTasks.Add(id, t);
                 assignedTasks[id].AssignEmployee(id, GetRepairTaskDuration(id, t.attack));
                 waitingTasks.Remove(tid);
+                logManager.LogPrintStartTask(t);
                 break;
             case TaskType.UPGRADE:
                 shopItems[t.shopItem].status = ShopItemStatus.UPGRADING;
                 assignedTasks.Add(id, t);
                 assignedTasks[id].AssignEmployee(id, GetUpgradeTaskDuration(id, t.shopItem));
                 waitingTasks.Remove(tid);
+                logManager.LogPrintStartTask(t);
                 break;
             case TaskType.PREVENT:
                 assignedTasks.Add(id, t);
                 assignedTasks[id].AssignEmployee(id, GetPreventProtection(id, t.category));
                 waitingTasks.Remove(tid);
-                List<Resistance> res = new List<Resistance>();
                 foreach (Resistance r in resistances.Values) {
                     if (attacks[r.id].category == t.category) {
                         r.miss += t.protection;
                     }
                 }
                 monitorInterface.EnableEmployeeIcon(t.category, employeeAvatars[t.executor]);
+                logManager.LogPrintStartTask(t);
                 break;
             default:
                 Debug.Log("Error: undefined taskType");

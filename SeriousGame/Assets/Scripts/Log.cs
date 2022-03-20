@@ -56,12 +56,7 @@ public class Log : MonoBehaviour {
             color = COLOR.BLUE;
         }
         // add the line to logs
-        gameManager.AddToLogs(new LogLine(dateTime + desc, Serialize(color)));
-        if (nLines == nLinesStep) {
-            nLines = 0;
-            nPages++;
-        }
-        nLines++;
+        AddToLogs(new LogLine(dateTime + desc, Serialize(color)));
     }
 
     /**
@@ -88,7 +83,59 @@ public class Log : MonoBehaviour {
                 return;
         }
         // add the line to logs
-        gameManager.AddToLogs(new LogLine(dateTime + desc, Serialize(COLOR.GREEN)));
+        AddToLogs(new LogLine(dateTime + desc, Serialize(COLOR.GREEN)));
+    }
+
+    public void LogPrintStartTask(Task t) {
+        string dateTime = gameManager.GetDateTime() + " | ";
+        string desc;
+        switch (t.type) {
+            case TaskType.INSTALL:
+                desc = gameManager.GetEmployee(t.executor).name + " ha iniziato l'installazione di " + gameManager.GetShopItem(t.shopItem).name;
+                break;
+            case TaskType.UPGRADE:
+                desc = gameManager.GetEmployee(t.executor).name + " ha iniziato il potenziamento di " + gameManager.GetShopItem(t.shopItem).name;
+                break;
+            case TaskType.REPAIR:
+                desc = gameManager.GetEmployee(t.executor).name + " ha iniziato la riparazione di " + gameManager.GetAttack(t.attack).name;
+                break;
+            case TaskType.PREVENT:
+                desc = gameManager.GetEmployee(t.executor).name + " è stato assegnato all'incarico di prevenzione in " + gameManager.GetCategory(t.category).name;
+                break;
+            default:
+                Debug.Log("Error: unexpected TaskType");
+                return;
+        }
+        // add the line to logs
+        AddToLogs(new LogLine(dateTime + desc, Serialize(COLOR.GREEN)));
+    }
+
+    public void LogPrintEndTask(Task t) {
+        string dateTime = gameManager.GetDateTime() + " | ";
+        string desc;
+        switch (t.type) {
+            case TaskType.INSTALL:
+                desc = gameManager.GetEmployee(t.executor).name + " ha terminato l'installazione di " + gameManager.GetShopItem(t.shopItem).name;
+                break;
+            case TaskType.UPGRADE:
+                desc = gameManager.GetEmployee(t.executor).name + " ha terminato il potenziamento di " + gameManager.GetShopItem(t.shopItem).name;
+                break;
+            case TaskType.REPAIR:
+                desc = gameManager.GetEmployee(t.executor).name + " ha terminato la riparazione di " + gameManager.GetAttack(t.attack).name;
+                break;
+            case TaskType.PREVENT:
+                desc = gameManager.GetEmployee(t.executor).name + " è stato rimosso dall'incarico di prevenzione in " + gameManager.GetCategory(t.category).name;
+                break;
+            default:
+                Debug.Log("Error: unexpected TaskType");
+                return;
+        }
+        // add the line to logs
+        AddToLogs(new LogLine(dateTime + desc, Serialize(COLOR.GREEN)));
+    }
+
+    void AddToLogs(LogLine logLine) {
+        gameManager.AddToLogs(logLine);
         if (nLines == nLinesStep) {
             nLines = 0;
             nPages++;
