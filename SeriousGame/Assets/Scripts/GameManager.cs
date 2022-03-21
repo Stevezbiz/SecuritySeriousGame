@@ -134,14 +134,14 @@ public class GameManager : MonoBehaviour {
         employees = EmployeeUtils.LoadFromFile(employeesFileJSON);
         // load the avatars
         for (int i = 0; i < employeeIcons.Count; i++) {
-            employeeAvatars.Add((EmployeeCode)i, employeeIcons[i]);
+            employeeAvatars[(EmployeeCode)i] = employeeIcons[i];
         }
         for (int i = 0; i < roleIcons.Count; i++) {
-            roleAvatars.Add((Role)i, new Person(roleIcons[i].name, roleIcons[i], roleFigures[i]));
+            roleAvatars[(Role)i] = new Person(roleIcons[i].name, roleIcons[i], roleFigures[i]);
         }
         // load the category images
         for (int i = 0; i < categoryIcons.Count; i++) {
-            categories.Add((CategoryCode)i, new Category(categoryIcons[i].name, categoryIcons[i]));
+            categories[(CategoryCode)i] = new Category(categoryIcons[i].name, categoryIcons[i]);
         }
         // initialize the BKT model
         BKTModel.Init(modelFileJSON);
@@ -167,7 +167,8 @@ public class GameManager : MonoBehaviour {
             // refresh the GUI for the first time
             gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
             // start the tutorial
-            tutorialManager.Load();
+            if (IOUtils.tutorial) tutorialManager.Load();
+            else TimeManager.Resume();
         }
     }
 
@@ -205,7 +206,9 @@ public class GameManager : MonoBehaviour {
     }
 
     public void EndTutorial() {
-        TimeManager.Resume();
+        // restart the scenario
+        IOUtils.tutorial = false;
+        SceneLoader.ReloadScene();
     }
 
     // LOG

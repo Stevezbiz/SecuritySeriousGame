@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour {
      * <summary>Create a new game</summary>
      */
     public void NewGameButton() {
+        IOUtils.tutorial = true;
         SceneLoader.LoadScene("Game");
     }
 

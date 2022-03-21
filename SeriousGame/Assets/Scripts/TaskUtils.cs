@@ -90,7 +90,7 @@ public static class TaskUtils {
     public static void SetupTasks(Dictionary<int, Task> waitingTasks) {
         foreach (CategoryCode c in typeof(CategoryCode).GetEnumValues()) {
             Task t = new Task(TaskType.PREVENT, c);
-            waitingTasks.Add(t.id, t);
+            waitingTasks[t.id] = t;
         }
     }
 

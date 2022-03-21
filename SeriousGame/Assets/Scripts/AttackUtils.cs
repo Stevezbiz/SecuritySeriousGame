@@ -124,9 +124,9 @@ public static class AttackUtils {
 
     public static void SetupAll(Dictionary<AttackCode, AttackInfo> attacks, Dictionary<AttackCode, Resistance> resistances, Dictionary<AttackCode, AttackStats> attackStats, Dictionary<AttackCode, AttackPlan> attackSchedule) {
         foreach (AttackInfo attack in attacks.Values) {
-            if (!resistances.ContainsKey(attack.id)) resistances.Add(attack.id, new Resistance(attack.id, 1f, 0f, 0f));
-            attackStats.Add(attack.id, new AttackStats(attack.id, 0, 0, 0));
-            attackSchedule.Add(attack.id, new AttackPlan(attack.id));
+            if (!resistances.ContainsKey(attack.id)) resistances[attack.id] = new Resistance(attack.id, 1f, 0f, 0f);
+            attackStats[attack.id] = new AttackStats(attack.id, 0, 0, 0);
+            attackSchedule[attack.id] = new AttackPlan(attack.id);
         }
     }
 

@@ -18,20 +18,24 @@ public class LearningReport : MonoBehaviour {
     Dictionary<SkillCode, KnowledgeComponent> kcs;
     Dictionary<SkillCode, LearningRecord> records = new Dictionary<SkillCode, LearningRecord>();
     Dictionary<SkillCode, DebugLearningRecord> debugRecords = new Dictionary<SkillCode, DebugLearningRecord>();
+    bool init = true;
 
     public void Init(Dictionary<SkillCode, KnowledgeComponent> kcs) {
         this.kcs = kcs;
         Transform lastRecord = null;
-        foreach (KnowledgeComponent kc in kcs.Values) {
-            lastRecord = Instantiate(learningRecord, content, false).transform;
-            records.Add(kc.id, lastRecord.gameObject.GetComponent<LearningRecord>());
-            records[kc.id].Init(kc);
+        if (init) {
+            init = false;
+            foreach (KnowledgeComponent kc in kcs.Values) {
+                lastRecord = Instantiate(learningRecord, content, false).transform;
+                records[kc.id] = lastRecord.gameObject.GetComponent<LearningRecord>();
+                records[kc.id].Init(kc);
+            }
+            if (lastRecord != null) {
+                footer.SetParent(lastRecord, false);
+                footer.localPosition = new Vector3(0, -50, 0);
+            }
+            InitDebugView();
         }
-        if (lastRecord != null) {
-            footer.SetParent(lastRecord, false);
-            footer.localPosition = new Vector3(0, -50, 0);
-        }
-        InitDebugView();
     }
 
     public void Load(ActionCode action) {
@@ -64,7 +68,7 @@ public class LearningReport : MonoBehaviour {
 
     void InitDebugView() {
         foreach (KnowledgeComponent kc in kcs.Values) {
-            debugRecords.Add(kc.id, Instantiate(debugLearningRecord, debugContent, false).GetComponent<DebugLearningRecord>());
+            debugRecords[kc.id] = Instantiate(debugLearningRecord, debugContent, false).GetComponent<DebugLearningRecord>();
             debugRecords[kc.id].Init(kc);
         }
     }

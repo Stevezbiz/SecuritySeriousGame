@@ -40,6 +40,7 @@ public static class IOUtils {
     public static string saveOrLoadGameScript = Path.Combine(new string[] { scriptsFolder, "saveOrLoadGame.php" });
     public static string saveOrLoadModelScript = Path.Combine(new string[] { scriptsFolder, "saveOrLoadModel.php" });
     public static bool load = false;
+    public static bool tutorial = false;
     public static string player = "";
 
     public static string GetPlayerFolder(string username) {
