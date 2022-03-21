@@ -3,6 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour {
+    [SerializeField] GameObject message;
+
+    public void OpenQuiz() {
+        Application.OpenURL("https://forms.gle/HcSwFLqoxUGMFFf76");
+        message.SetActive(false);
+    }
+
+    public void Back() {
+        message.SetActive(false);
+    }
+
     /**
      * <summary>Create a new game</summary>
      */
