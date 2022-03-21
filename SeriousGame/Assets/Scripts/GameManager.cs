@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] SaveSystem saveSystem;
     [SerializeField] AudioSource effectsSource;
     [SerializeField] AudioClip alarmTone;
+    [SerializeField] AudioClip positiveTone;
     [SerializeField] TextAsset gameConfigJSON;
     [SerializeField] TextAsset attacksFileJSON;
     [SerializeField] TextAsset shopFileJSON;
@@ -325,43 +326,55 @@ public class GameManager : MonoBehaviour {
                 ScheduleAttack(AttackCode.MITM);
                 ScheduleAttack(AttackCode.BRUTE_FORCE);
                 ScheduleAttack(AttackCode.WORM);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.MITM].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.BRUTE_FORCE].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.WORM].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.MITM].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 120: // day 5
                 ScheduleAttack(AttackCode.DOS);
                 SetAttackTrend();
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.DOS].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DOS].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 168: // day 7
                 ScheduleAttack(AttackCode.VIRUS);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.VIRUS].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.VIRUS].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 240: // day 10
                 ScheduleAttack(AttackCode.SOCIAL_ENGINEERING);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.SOCIAL_ENGINEERING].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 288: // day 12
                 ScheduleAttack(AttackCode.API_VULNERABILITY);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.API_VULNERABILITY].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 360: // day 15
                 ScheduleAttack(AttackCode.DICTIONARY);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.DICTIONARY].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DICTIONARY].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 408: // day 17
                 ScheduleAttack(AttackCode.PHISHING);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.PHISHING].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.PHISHING].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 480: // day 20
                 ScheduleAttack(AttackCode.SPYWARE);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.SPYWARE].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SPYWARE].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 528: // day 22
                 ScheduleAttack(AttackCode.RAINBOW_TABLE);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.RAINBOW_TABLE].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 600: // day 25
                 ScheduleAttack(AttackCode.RANSOMWARE);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.RANSOMWARE].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RANSOMWARE].name, ActionCode.CONTINUE, Role.SECURITY);
                 break;
             default:
@@ -400,6 +413,7 @@ public class GameManager : MonoBehaviour {
         // update graphics
         monitorInterface.EnableAttackIcon(attacks[id].category);
         // generate a message
+        notificationList.AddNotification("SUBITO ATTACCO " + attacks[id].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
         DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE, Role.SECURITY);
         effectsSource.clip = alarmTone;
         effectsSource.Play();
@@ -430,7 +444,10 @@ public class GameManager : MonoBehaviour {
         // re-schedule the attack
         ScheduleAttack(id);
         // generate a message
+        notificationList.AddNotification("SVENTATO ATTACCO " + attacks[id].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
         DisplayMessage("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name, ActionCode.CONTINUE, Role.SECURITY);
+        effectsSource.clip = positiveTone;
+        effectsSource.Play();
     }
 
     /**
