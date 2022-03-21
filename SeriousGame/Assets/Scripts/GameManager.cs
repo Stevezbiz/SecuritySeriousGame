@@ -97,8 +97,7 @@ public class GameManager : MonoBehaviour {
             // refresh
             gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
             // update the stats for possible game over
-            if (gc.money < 0) gc.negativeTime++;
-            else gc.negativeTime = 0;
+            CheckMoney();
         }
         UpdateMessages();
     }
@@ -1060,6 +1059,19 @@ public class GameManager : MonoBehaviour {
         if (gc.negativeTime > gc.maxNegative) GameOver();
         // game over if the reputation reaches 0%
         if (gc.reputation == 0) GameOver();
+    }
+
+    void CheckMoney() {
+        if (gc.money < 0) {
+            if (gc.firstNegative) {
+                gc.firstNegative = false;
+                DisplayMessage("ATTENZIONE! Il budget è in negativo, se non riesci a riportarlo in positivo in " + gc.maxNegative + " ore dovrò licenziarti!", ActionCode.CONTINUE, Role.CEO);
+                notificationList.AddNotification("Il budget è in negativo!\n" + gc.maxNegative + " ore rimaste", roleAvatars[Role.CEO].name, roleAvatars[Role.CEO].icon);
+            } else if (gc.maxNegative - gc.negativeTime == 24) {
+                notificationList.AddNotification("Il budget è in negativo!\n 24 ore rimaste", roleAvatars[Role.CEO].name, roleAvatars[Role.CEO].icon);
+            }
+            gc.negativeTime++;
+        } else gc.negativeTime = 0;
     }
 
     /**

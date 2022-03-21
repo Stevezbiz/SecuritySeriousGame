@@ -88,6 +88,7 @@ public class GameConfig {
     public bool musicMute;
     public float effectsVolume;
     public bool effectsMute;
+    public bool firstNegative;
 }
 
 [System.Serializable]
