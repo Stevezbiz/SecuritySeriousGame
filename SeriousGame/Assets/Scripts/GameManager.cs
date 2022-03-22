@@ -414,7 +414,7 @@ public class GameManager : MonoBehaviour {
         monitorInterface.EnableAttackIcon(attacks[id].category);
         // generate a message
         notificationList.AddNotification("SUBITO ATTACCO " + attacks[id].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-        DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description, ActionCode.CONTINUE, Role.SECURITY);
+        DisplayMessage("Individuato attacco " + attacks[id].name + "! " + attacks[id].description + " " + AttackUtils.PrintMotivation(id, false, shopItems), ActionCode.CONTINUE, Role.SECURITY);
         effectsSource.clip = alarmTone;
         effectsSource.Play();
     }
@@ -445,7 +445,7 @@ public class GameManager : MonoBehaviour {
         ScheduleAttack(id);
         // generate a message
         notificationList.AddNotification("SVENTATO ATTACCO " + attacks[id].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-        DisplayMessage("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name, ActionCode.CONTINUE, Role.SECURITY);
+        DisplayMessage("Le nostre difese hanno sventato un tentativo di attacco " + attacks[id].name + ". " + AttackUtils.PrintMotivation(id, true, shopItems), ActionCode.CONTINUE, Role.SECURITY);
         effectsSource.clip = positiveTone;
         effectsSource.Play();
     }
