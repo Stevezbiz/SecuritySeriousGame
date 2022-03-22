@@ -74,6 +74,6 @@
     "musicMute": false,
     "effectsVolume": 0.8,
     "effectsMute": false,
-    "firstNegative": false
+    "firstNegative": true
   }
 }

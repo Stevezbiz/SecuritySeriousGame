@@ -1066,7 +1066,9 @@ public class GameManager : MonoBehaviour {
      */
     void GameOver() {
         Time.timeScale = 0;
-        DisplayMessage("Oh no! Il bilancio è dissestato! Non sei stato all'altezza del tuo ruolo, dovrò assumere un nuovo CIO", ActionCode.CONTINUE, Role.CEO);
+        DisplayMessage("Oh no! Il bilancio è dissestato! Non sei stato all'altezza del tuo ruolo, dovrò assumere un nuovo CIO...", ActionCode.GAME_OVER, Role.CEO);
+        effectsSource.clip = alarmTone;
+        effectsSource.Play();
     }
 
     /**
@@ -1086,6 +1088,8 @@ public class GameManager : MonoBehaviour {
             if (gc.firstNegative) {
                 gc.firstNegative = false;
                 DisplayMessage("ATTENZIONE! Il budget è in negativo, se non riesci a riportarlo in positivo in " + gc.maxNegative + " ore dovrò licenziarti!", ActionCode.CONTINUE, Role.CEO);
+                notificationList.AddNotification("Il budget è in negativo!\n" + gc.maxNegative + " ore rimaste", roleAvatars[Role.CEO].name, roleAvatars[Role.CEO].icon);
+            } else if (gc.negativeTime == 0) {
                 notificationList.AddNotification("Il budget è in negativo!\n" + gc.maxNegative + " ore rimaste", roleAvatars[Role.CEO].name, roleAvatars[Role.CEO].icon);
             } else if (gc.maxNegative - gc.negativeTime == 24) {
                 notificationList.AddNotification("Il budget è in negativo!\n 24 ore rimaste", roleAvatars[Role.CEO].name, roleAvatars[Role.CEO].icon);

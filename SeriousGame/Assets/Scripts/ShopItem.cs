@@ -30,7 +30,7 @@ public class ShopItem : MonoBehaviour {
         gameObject.name = "ShopItem" + id.ToString();
         itemText.SetText(sii.name + " - Lv." + sii.level);
         category.sprite = gameManager.GetCategoryImage(sii.category);
-        if (sii.locked[sii.level]) {
+        if (sii.status == ShopItemStatus.NOT_OWNED && sii.locked[sii.level]) {
             bool ok = true;
             foreach (Requirement r in sii.reqArray[sii.level].requirements) {
                 if (!gameManager.RequirementIsSatisfied(r)) {

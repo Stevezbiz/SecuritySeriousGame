@@ -181,7 +181,7 @@
         {
           "text": "Creo una password semplice di almeno 12 caratteri e sostituisco le lettere per renderla complicata",
           "correct": true,
-          "description": "Questa soluzione garantisce allo stesso tempo una buona protezione e permette di ricordarsi facilmente della password.",
+          "description": "Questa soluzione garantisce allo stesso tempo una buona protezione e permette di ricordarsi facilmente la password.",
           "effects": [
             {
               "target": 1,
@@ -193,7 +193,7 @@
         {
           "text": "Uso la stessa password per tutto, tanto nessuno riuscirebbe mai a indovinarla",
           "correct": false,
-          "description": "Il problema di questa soluzione è che se un malintenzionato entra in possesso della password può causare un danno maggiore, avendo accesso a un vasto numero account diversi. La soluzione più efficace è creare una password semplice di almeno 12 caratteri e sostiture alcune lettere per renderla complicata.",
+          "description": "Il problema di questa soluzione è che se un malintenzionato entra in possesso della password può causare un danno maggiore, avendo accesso a un vasto numero di account diversi. La soluzione più efficace è creare una password semplice di almeno 12 caratteri e sostiture alcune lettere per renderla complicata.",
           "effects": [
             {
               "target": 1,
