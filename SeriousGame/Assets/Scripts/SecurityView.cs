@@ -115,9 +115,9 @@ public class SecurityView : MonoBehaviour {
             missBar.fillAmount = res.miss;
             enduranceBar.fillAmount = res.endurance;
             SetColor(res);
-            durationMarker.localPosition = new Vector3((float)(-durationBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetDurationL(res.id))), -20, 0);
-            missMarker.localPosition = new Vector3((float)(-missBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetMissL(res.id))), -20, 0);
-            enduranceMarker.localPosition = new Vector3((float)(-enduranceBar.rectTransform.sizeDelta.x * (1 - BKTModel.GetEnduranceL(res.id))), -20, 0);
+            durationMarker.anchoredPosition = new Vector2(-840f * (1f - BKTModel.GetDurationL(res.id)), durationMarker.anchoredPosition.y);
+            missMarker.anchoredPosition = new Vector2(-840f * (1f - BKTModel.GetMissL(res.id)), missMarker.anchoredPosition.y);
+            enduranceMarker.anchoredPosition = new Vector2(-840f * (1f - BKTModel.GetEnduranceL(res.id)), enduranceMarker.anchoredPosition.y);
             bars.SetActive(true);
         }
     }
@@ -171,11 +171,11 @@ public class SecurityView : MonoBehaviour {
         Color c1;
         Color c2;
         Color c3;
-        if (res.duration >= 0.5) c1 = COLOR.BLUE;
+        if (res.duration >= BKTModel.GetDurationL(res.id)) c1 = COLOR.BLUE;
         else c1 = COLOR.YELLOW;
-        if (res.miss >= 0.5) c2 = COLOR.BLUE;
+        if (res.miss >= BKTModel.GetMissL(res.id)) c2 = COLOR.BLUE;
         else c2 = COLOR.YELLOW;
-        if (res.endurance >= 0.5) c3 = COLOR.BLUE;
+        if (res.endurance >= BKTModel.GetEnduranceL(res.id)) c3 = COLOR.BLUE;
         else c3 = COLOR.YELLOW;
         durationBar.color = c1;
         durationOutline.effectColor = c1;

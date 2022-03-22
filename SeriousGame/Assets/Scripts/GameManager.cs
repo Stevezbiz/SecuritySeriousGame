@@ -322,60 +322,68 @@ public class GameManager : MonoBehaviour {
     void ActivateAttacks() {
         // all the attacks are introduced at the end of the indicated day 
         switch (gc.totalTime) {
-            case 48: // day 2
-                ScheduleAttack(AttackCode.MITM);
-                ScheduleAttack(AttackCode.BRUTE_FORCE);
+            case 24: // day 1
                 ScheduleAttack(AttackCode.WORM);
-                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.MITM].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.BRUTE_FORCE].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
                 notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.WORM].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovi attacchi: " + attacks[AttackCode.MITM].name + ", " + attacks[AttackCode.BRUTE_FORCE].name + ", " + attacks[AttackCode.WORM].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.WORM].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
                 break;
-            case 120: // day 5
+            case 48: // day 2
+                ScheduleAttack(AttackCode.BRUTE_FORCE);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.BRUTE_FORCE].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.BRUTE_FORCE].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
+                break;
+            case 72: // day 3
+                ScheduleAttack(AttackCode.MITM);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.MITM].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.MITM].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
+                break;
+            case 144: // day 6
                 ScheduleAttack(AttackCode.DOS);
-                SetAttackTrend();
                 notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.DOS].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DOS].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DOS].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 168: // day 7
+                SetAttackTrend();
+                break;
+            case 192: // day 9
                 ScheduleAttack(AttackCode.VIRUS);
                 notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.VIRUS].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.VIRUS].name, ActionCode.CONTINUE, Role.SECURITY);
-                break;
-            case 240: // day 10
-                ScheduleAttack(AttackCode.SOCIAL_ENGINEERING);
-                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.SOCIAL_ENGINEERING].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SOCIAL_ENGINEERING].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.VIRUS].name + "\nI nostri analisti hanno indicato che tra breve pdiventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 288: // day 12
-                ScheduleAttack(AttackCode.API_VULNERABILITY);
-                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.API_VULNERABILITY].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.API_VULNERABILITY].name, ActionCode.CONTINUE, Role.SECURITY);
+                ScheduleAttack(AttackCode.SOCIAL_ENGINEERING);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.SOCIAL_ENGINEERING].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SOCIAL_ENGINEERING].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
                 break;
             case 360: // day 15
+                ScheduleAttack(AttackCode.API_VULNERABILITY);
+                notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.API_VULNERABILITY].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.API_VULNERABILITY].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
+                break;
+            case 432: // day 18
                 ScheduleAttack(AttackCode.DICTIONARY);
                 notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.DICTIONARY].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DICTIONARY].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.DICTIONARY].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
                 break;
-            case 408: // day 17
+            case 504: // day 21
                 ScheduleAttack(AttackCode.PHISHING);
                 notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.PHISHING].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.PHISHING].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.PHISHING].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
                 break;
-            case 480: // day 20
+            case 576: // day 24
                 ScheduleAttack(AttackCode.SPYWARE);
                 notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.SPYWARE].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SPYWARE].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.SPYWARE].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
                 break;
-            case 528: // day 22
+            case 648: // day 27
                 ScheduleAttack(AttackCode.RAINBOW_TABLE);
                 notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.RAINBOW_TABLE].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RAINBOW_TABLE].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RAINBOW_TABLE].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
                 break;
-            case 600: // day 25
+            case 720: // day 30
                 ScheduleAttack(AttackCode.RANSOMWARE);
                 notificationList.AddNotification("NUOVO ATTACCO " + attacks[AttackCode.RANSOMWARE].name, roleAvatars[Role.SECURITY].name, roleAvatars[Role.SECURITY].icon);
-                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RANSOMWARE].name, ActionCode.CONTINUE, Role.SECURITY);
+                DisplayMessage("Nuovo attacco: " + attacks[AttackCode.RANSOMWARE].name + "\nI nostri analisti hanno indicato che tra breve diventeremo bersaglio di attacchi di questo tipo.", ActionCode.CONTINUE, Role.SECURITY);
                 break;
             default:
                 break;
@@ -586,7 +594,7 @@ public class GameManager : MonoBehaviour {
 
     public float GetPreventProtection(EmployeeCode id, CategoryCode c) {
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[c];
-        return 0.2f + 0.04f * (abilityLevel - gc.abilityOffset);
+        return 0.15f + 0.03f * (abilityLevel - gc.abilityOffset);
     }
 
     public float GetTaskProgress(ShopItemCode id) {
@@ -1057,6 +1065,7 @@ public class GameManager : MonoBehaviour {
             }
             employees[id].owned = true;
             DisplayMessage("Hai raggiunto " + NumUtils.NumToString(gc.employeeGoals[gc.employeeLevel]) + " utenti! Per questo ho deciso di assumere un nuovo dipendente, si chiama " + employees[id].name, ActionCode.CONTINUE, Role.CEO);
+            notificationList.AddNotification("OBIETTIVO RAGGIUNTO\nHo assunto " + employees[id].name, roleAvatars[Role.CEO].name, roleAvatars[Role.CEO].icon);
             gc.employeeLevel++;
         }
     }
@@ -1165,20 +1174,17 @@ public class GameManager : MonoBehaviour {
 
     void EvaluateSecurityStatus() {
         // every x time evaluate the status of the countermeasures of the active attacks
-        Dictionary<CategoryCode, int> scores = new Dictionary<CategoryCode, int>();
+        Dictionary<CategoryCode, float> scores = new Dictionary<CategoryCode, float>();
         foreach (AttackCode id in attacks.Keys) {
             if (attackSchedule[id].status != AttackStatus.INACTIVE) {
                 CategoryCode c = attacks[id].category;
-                if (!scores.ContainsKey(c)) scores[c] = 0;
-                if (GetActualDurationResistance(id) >= BKTModel.GetDurationL(id)) scores[c]++;
-                else scores[c]--;
-                if (GetActualMissResistance(id) >= BKTModel.GetMissL(id)) scores[c]++;
-                else scores[c]--;
-                if (GetActualEnduranceResistance(id) >= BKTModel.GetEnduranceL(id)) scores[c]++;
-                else scores[c]--;
+                if (!scores.ContainsKey(c)) scores[c] = 0f;
+                scores[c] += (GetActualDurationResistance(id) - BKTModel.GetDurationL(id)) * 0.8f;
+                scores[c] += (GetActualMissResistance(id) - BKTModel.GetMissL(id)) * 1f;
+                scores[c] += (GetActualEnduranceResistance(id) - BKTModel.GetEnduranceL(id)) * 0.6f;
             }
         }
-        foreach (KeyValuePair<CategoryCode, int> s in scores) {
+        foreach (KeyValuePair<CategoryCode, float> s in scores) {
             // Select the proper Knowledge Component
             SkillCode kc;
             switch (s.Key) {
@@ -1210,28 +1216,30 @@ public class GameManager : MonoBehaviour {
                 BKTModel.kcs[kc].AddTestResult(false);
             }
         }
+        // auto-save
+        saveSystem.SaveGame(SaveGame(), SaveModel());
     }
 
     void EvaluatePurchaseShopItem(ShopItemCode id) {
         // Consider various aspects of the purchase
-        int score = 0;
+        float score = 0f;
         ShopItemInfo sii = shopItems[id];
         List<Resistance> res = GetShopItemResistances(id);
 
         // 1. Are the attacks mitigated by the item active, so that the countermeasure is needed?
         foreach (Resistance r in res) {
-            if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score--;
-            else score++;
-            if (r.id == gc.actualAttackTrend) score++;
+            if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score -= (r.duration * 0.8f + r.miss * 1f + r.endurance * 0.6f) * 0.4f;
+            else score += (r.duration * 0.8f + r.miss * 1f + r.endurance * 0.6f) * 1f;
+            if (r.id == gc.actualAttackTrend) score += (r.duration * 0.8f + r.miss * 1f + r.endurance * 0.6f) * 1f;
         }
         // 2. How much is the impact on the money?
-        if (GetActualMoneyGain() - sii.cost[0] > 0) score++;
-        else score--;
+        if (GetActualMoneyGain() - sii.cost[0] > 0) score += 0.5f;
+        else score -= 0.5f;
         // 3. Is the countermeasure over-preventing an attack?
         foreach (Resistance r in res) {
-            if (GetActualDurationResistance(r.id) > BKTModel.GetDurationH(r.id)) score--;
-            if (GetActualMissResistance(r.id) > BKTModel.GetMissH(r.id)) score--;
-            if (GetActualEnduranceResistance(r.id) > BKTModel.GetEnduranceH(r.id)) score--;
+            if (GetActualDurationResistance(r.id) > BKTModel.GetDurationH(r.id)) score -= (GetActualDurationResistance(r.id) - BKTModel.GetDurationH(r.id)) * 0.8f;
+            if (GetActualMissResistance(r.id) > BKTModel.GetMissH(r.id)) score -= (GetActualMissResistance(r.id) - BKTModel.GetMissH(r.id)) * 1f;
+            if (GetActualEnduranceResistance(r.id) > BKTModel.GetEnduranceH(r.id)) score -= (GetActualEnduranceResistance(r.id) - BKTModel.GetEnduranceH(r.id)) * 0.6f;
         }
         // Select the proper Knowledge Component
         SkillCode kc;
@@ -1268,24 +1276,24 @@ public class GameManager : MonoBehaviour {
 
     void EvaluateUpgradeShopItem(ShopItemCode id) {
         // Consider various aspects of the upgrade
-        int score = 0;
+        float score = 0f;
         ShopItemInfo sii = shopItems[id];
         List<Resistance> res = GetShopItemResistances(id);
 
         // 1. Are the attacks mitigated by the item active, so that the upgrade of the countermeasure is needed?
         foreach (Resistance r in res) {
-            if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score--;
-            else score++;
-            if (r.id == gc.actualAttackTrend) score++;
+            if (attackSchedule[r.id].status == AttackStatus.INACTIVE) score -= (r.duration * 0.8f + r.miss * 1f + r.endurance * 0.6f) * 0.4f;
+            else score += (r.duration * 0.8f + r.miss * 1f + r.endurance * 0.6f) * 1f;
+            if (r.id == gc.actualAttackTrend) score += (r.duration * 0.8f + r.miss * 1f + r.endurance * 0.6f) * 1f;
         }
         // 2. How much is the impact on the money?
-        if (GetActualMoneyGain() - sii.cost[sii.level] > 0) score++;
-        else score--;
+        if (GetActualMoneyGain() - sii.cost[sii.level] > 0) score += 0.5f;
+        else score -= 0.5f;
         // 3. Is the countermeasure over-preventing an attack?
         foreach (Resistance r in res) {
-            if (GetActualDurationResistance(r.id) > BKTModel.GetDurationH(r.id)) score--;
-            if (GetActualMissResistance(r.id) > BKTModel.GetMissH(r.id)) score--;
-            if (GetActualEnduranceResistance(r.id) > BKTModel.GetEnduranceH(r.id)) score--;
+            if (GetActualDurationResistance(r.id) > BKTModel.GetDurationH(r.id)) score -= (GetActualDurationResistance(r.id) - BKTModel.GetDurationH(r.id)) * 0.8f;
+            if (GetActualMissResistance(r.id) > BKTModel.GetMissH(r.id)) score -= (GetActualMissResistance(r.id) - BKTModel.GetMissH(r.id)) * 1f;
+            if (GetActualEnduranceResistance(r.id) > BKTModel.GetEnduranceH(r.id)) score -= (GetActualEnduranceResistance(r.id) - BKTModel.GetEnduranceH(r.id)) * 0.6f;
         }
         // Select the proper Knowledge Component
         SkillCode kc;
@@ -1363,28 +1371,18 @@ public class GameManager : MonoBehaviour {
     }
 
     void EvaluateEmployeeManagement(EmployeeCode id) {
-        int score = 0;
+        float score = 0;
         EmployeeInfo employee = employees[id];
         CategoryCode category = assignedTasks[id].category;
         // 1. How good is the selected employee in the category of the task?
-        score += EmployeeUtils.GetAbility(employee.abilities, category);
+        score += EmployeeUtils.GetAbility(employee.abilities, category) * 0.5f;
 
-        bool good1 = true;
-        bool good2 = true;
         foreach (EmployeeInfo e in GetAvailableEmployees()) {
             // 2. Are there better solutions?
-            if (EmployeeUtils.GetAbility(employee.abilities, category) < EmployeeUtils.GetAbility(e.abilities, category)) {
-                good1 = false;
-                score--;
-            }
+            score += (EmployeeUtils.GetAbility(employee.abilities, category) - EmployeeUtils.GetAbility(e.abilities, category)) * 0.3f;
             // 3. How much is the impact on the money?
-            if (employee.moneyGain > e.moneyGain) {
-                good2 = false;
-                score--;
-            }
+            score += (employee.moneyGain - e.moneyGain) * 0.1f;
         }
-        if (good1) score++;
-        if (good2) score++;
         // Decide the result of the evaluation
         if (score >= 0) {
             // correct

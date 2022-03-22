@@ -19,41 +19,41 @@
     "userLevel": 0,
     "employeeLevel": 0,
     "abilityOffset": 5,
-    "abilityFactor": 0.18,
+    "abilityFactor": 0.12,
     "money": 500,
     "users": 100,
     "reputation": 0.5,
     "duration": [
-      1.5,
       1.3,
       1.1,
+      1,
       0.9,
       0.8,
       0.7
     ],
     "endurance": [
-      1.5,
       1.3,
       1.1,
+      1,
       0.9,
       0.8,
       0.7
     ],
     "miss": [
-      1.5,
       1.3,
       1.1,
+      1,
       0.9,
       0.8,
       0.7
     ],
     "usersGain": [
-      0.05,
-      0.03,
+      0.06,
+      0.04,
+      0.025,
       0.02,
-      0.01,
-      0.005,
-      0.003
+      0.015,
+      0.012
     ],
     "usersGoals": [
       1000,

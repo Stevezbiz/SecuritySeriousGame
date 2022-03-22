@@ -14,7 +14,7 @@ public class Log : MonoBehaviour {
     int nLines = 0;
     int nPages = 1;
     int currentPage;
-    const int nLinesStep = 20;
+    const int nLinesStep = 30;
     List<GameObject> toDestroy = new List<GameObject>();
 
     /**

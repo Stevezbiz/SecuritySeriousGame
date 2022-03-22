@@ -7,11 +7,11 @@
       "description": "Qualcuno sta sovraccaricando la nostra rete! I nostri clienti non riescono a connettersi e le transazioni sono diminuite drasticamente. Alcuni di loro potrebbero addirittura non utilizzare più il nostro servizio.",
       "moneyLoss": 0,
       "usersLoss": 0,
-      "moneyMalus": 0.3,
-      "usersMalus": 0.6,
+      "moneyMalus": 0.2,
+      "usersMalus": 0.4,
       "reputationMalus": 0.03,
-      "maxTime": 30,
-      "duration": 7
+      "maxTime": 40,
+      "duration": 15
     },
     {
       "id": 2,
@@ -20,11 +20,11 @@
       "description": "Qualcuno è riuscito ad entrare nel nostro sistema! Si è spacciato per un dipendente in smart working a cui ha rubato le credenziali di accesso e ha provocato ingenti danni economici.",
       "moneyLoss": 100,
       "usersLoss": 0,
-      "moneyMalus": 0.2,
+      "moneyMalus": 0.15,
       "usersMalus": 0,
       "reputationMalus": 0.04,
-      "maxTime": 40,
-      "duration": 5
+      "maxTime": 55,
+      "duration": 12
     },
     {
       "id": 3,
@@ -33,50 +33,50 @@
       "description": "Qualcuno è riuscito ad entrare nel nostro sistema! Dopo molti tentativi a vuoto ha trovato la password di accesso e ha provocato ingenti danni economici.",
       "moneyLoss": 100,
       "usersLoss": 0,
-      "moneyMalus": 0.2,
+      "moneyMalus": 0.15,
       "usersMalus": 0,
       "reputationMalus": 0.04,
-      "maxTime": 40,
-      "duration": 5
+      "maxTime": 50,
+      "duration": 12
     },
     {
       "id": 4,
       "category": 1,
       "name": "Dictionary attack",
       "description": "Qualcuno è riuscito ad entrare nel nostro sistema! Ha utilizzato qualche programma basato sui dizionari di password e dopo milioni di tentativi è riuscito ad individuare quella corretta. Ha provocato ingenti danni economici.",
-      "moneyLoss": 300,
+      "moneyLoss": 150,
       "usersLoss": 0,
-      "moneyMalus": 0.3,
+      "moneyMalus": 0.2,
       "usersMalus": 0,
       "reputationMalus": 0.05,
-      "maxTime": 50,
-      "duration": 5
+      "maxTime": 65,
+      "duration": 12
     },
     {
       "id": 5,
       "category": 1,
       "name": "Rainbow table attack",
       "description": "Qualcuno è riuscito ad entrare nel nostro sistema! Ha utilizzato sicuramente una rainbow table contenente milioni di password e hash per individuare una password corrispondente a una di quelle precedentemente intercettate. Ha provocato ingenti danni economici.",
-      "moneyLoss": 500,
+      "moneyLoss": 200,
       "usersLoss": 0,
-      "moneyMalus": 0.5,
+      "moneyMalus": 0.35,
       "usersMalus": 0,
       "reputationMalus": 0.05,
       "maxTime": 70,
-      "duration": 7
+      "duration": 15
     },
     {
       "id": 6,
       "category": 1,
       "name": "API vulnerability",
       "description": "Qualcuno è riuscito ad entrare nel nostro sistema! Ha sfruttato un bug presente nelle API di autenticazione per ottenere informazioni riservate di diversi utenti. Purtroppo verremo sanzionati per questo e la nostra reputazione ne risentirà.",
-      "moneyLoss": 300,
+      "moneyLoss": 150,
       "usersLoss": 0,
-      "moneyMalus": 0.3,
+      "moneyMalus": 0.2,
       "usersMalus": 0,
       "reputationMalus": 0.07,
-      "maxTime": 40,
-      "duration": 5
+      "maxTime": 55,
+      "duration": 12
     },
     {
       "id": 7,
@@ -86,23 +86,23 @@
       "moneyLoss": 0,
       "usersLoss": 0.1,
       "moneyMalus": 0,
-      "usersMalus": 0.3,
+      "usersMalus": 0.2,
       "reputationMalus": 0.03,
-      "maxTime": 50,
-      "duration": 7
+      "maxTime": 65,
+      "duration": 12
     },
     {
       "id": 8,
       "category": 3,
       "name": "Phishing",
       "description": "Si è verificato un data breach! I malintenzionati hanno raggirato un nostro dipendente tramite tecniche di social engineering e mail contraffatte e hanno ottenuto accesso al sistema, appropriandosi dei dati personali dei clienti e provocando all'azienda un danno economico e di immagine.",
-      "moneyLoss": 300,
+      "moneyLoss": 150,
       "usersLoss": 0,
-      "moneyMalus": 0.3,
+      "moneyMalus": 0.2,
       "usersMalus": 0,
       "reputationMalus": 0.07,
-      "maxTime": 60,
-      "duration": 5
+      "maxTime": 70,
+      "duration": 12
     },
     {
       "id": 9,
@@ -111,11 +111,11 @@
       "description": "Il sistema è infetto! Abbiamo individuato un worm che prolifera nei nostri sistemi e sta rallentando i server e gli utenti hanno difficoltà ad effettuare le transazioni. Questo inconveniente avrà conseguenze economiche e alcuni utenti potrebbero abbandonare il servizio.",
       "moneyLoss": 0,
       "usersLoss": 0,
-      "moneyMalus": 0.3,
-      "usersMalus": 0.6,
+      "moneyMalus": 0.2,
+      "usersMalus": 0.4,
       "reputationMalus": 0.03,
-      "maxTime": 30,
-      "duration": 7
+      "maxTime": 40,
+      "duration": 15
     },
     {
       "id": 10,
@@ -124,11 +124,11 @@
       "description": "Il sistema è infetto! Abbiamo individuato un virus che sta danneggiando il sistema. Speriamo di poter eradicare il virus e ripristinare velocemente il sistema. Ogni secondo di mancato servizio costerà parecchio.",
       "moneyLoss": 0,
       "usersLoss": 0,
-      "moneyMalus": 0.5,
+      "moneyMalus": 0.35,
       "usersMalus": 0,
       "reputationMalus": 0.05,
-      "maxTime": 40,
-      "duration": 7
+      "maxTime": 55,
+      "duration": 15
     },
     {
       "id": 11,
@@ -136,12 +136,12 @@
       "name": "Infezione di spyware",
       "description": "Il sistema è infetto! Si tratta sicuramente di spionaggio industriale messo in atto da un'azienda rivale. Alcuni utenti ci abbandoneranno ora che possono ottenere servizi migliori da chi si è appropriato del nostro lavoro.",
       "moneyLoss": 0,
-      "usersLoss": 0.2,
+      "usersLoss": 0.15,
       "moneyMalus": 0,
-      "usersMalus": 0.6,
+      "usersMalus": 0.4,
       "reputationMalus": 0.07,
-      "maxTime": 60,
-      "duration": 9
+      "maxTime": 70,
+      "duration": 17
     },
     {
       "id": 12,
@@ -150,11 +150,11 @@
       "description": "Il sistema è infetto! Un ransomware ha reso inaccessibili tutti i nostri dati. Dovremo ripristinare completamente il sistema. Speriamo che l'ultimo back-up sia recente, altrimenti i danni economici saranno gravi.",
       "moneyLoss": 0,
       "usersLoss": 0,
-      "moneyMalus": 1,
-      "usersMalus": 1,
+      "moneyMalus": 0.5,
+      "usersMalus": 0.5,
       "reputationMalus": 0.07,
       "maxTime": 80,
-      "duration": 9
+      "duration": 17
     }
   ]
 }
