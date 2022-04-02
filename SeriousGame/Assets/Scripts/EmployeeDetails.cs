@@ -37,6 +37,9 @@ public class EmployeeDetails : MonoBehaviour {
 
     GameManager gameManager;
 
+    /**
+     * <summary></summary>
+     */
     public void Load(EmployeeInfo e, GameManager gameManager) {
         this.gameManager = gameManager;
         titleText.SetText(e.name);
@@ -98,6 +101,9 @@ public class EmployeeDetails : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Close() {
         Destroy(gameObject);
     }

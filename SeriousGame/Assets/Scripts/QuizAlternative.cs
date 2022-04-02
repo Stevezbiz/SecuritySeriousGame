@@ -28,12 +28,18 @@ public class QuizAlternative : MonoBehaviour {
     QuizQuestion quizQuestion;
     int id;
 
+    /**
+     * <summary></summary>
+     */
     public void Load(QuizQuestion quizQuestion, int id, string text) {
         this.quizQuestion = quizQuestion;
         this.id = id;
         answerText.SetText(text);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OnClick() {
         quizQuestion.EvaluateAnswer(id);
     }

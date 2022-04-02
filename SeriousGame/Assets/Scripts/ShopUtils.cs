@@ -98,6 +98,9 @@ public class ShopJSON {
 }
 
 public static class ShopUtils {
+    /**
+     * <summary></summary>
+     */
     public static Dictionary<ShopItemCode, ShopItemInfo> LoadFromFile(TextAsset file) {
         Dictionary<ShopItemCode, ShopItemInfo> shopItems = new Dictionary<ShopItemCode, ShopItemInfo>();
         ShopJSON shopContent = JsonUtility.FromJson<ShopJSON>(file.text);
@@ -107,6 +110,9 @@ public static class ShopUtils {
         return shopItems;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static void UpdateShopItems(Dictionary<ShopItemCode, ShopItemInfo> shopItems, ShopItemRecap[] sir) {
         foreach (ShopItemRecap s in sir) {
             shopItems[s.id].status = s.status;
@@ -115,6 +121,9 @@ public static class ShopUtils {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public static ShopItemRecap[] GetShopItemRecap(Dictionary<ShopItemCode, ShopItemInfo> shopItems) {
         List<ShopItemRecap> sir = new List<ShopItemRecap>();
 

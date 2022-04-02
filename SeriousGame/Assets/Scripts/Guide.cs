@@ -32,6 +32,9 @@ public class Guide : MonoBehaviour {
     const int COLUMN_CAPACITY = 7;
     Dictionary<GuideEntryCode, GuideEntryData> entries = new Dictionary<GuideEntryCode, GuideEntryData>();
 
+    /**
+     * <summary></summary>
+     */
     public void Init() {
         // load the guide from file
         entries = GuideUtils.LoadFromFile(guideFileJSON);
@@ -64,6 +67,9 @@ public class Guide : MonoBehaviour {
         guideDetails.gameObject.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public GuideEntryData GetEntry(GuideEntryCode id) {
         return entries[id];
     }

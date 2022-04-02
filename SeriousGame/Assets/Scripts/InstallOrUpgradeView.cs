@@ -45,6 +45,9 @@ public class InstallOrUpgradeView : MonoBehaviour {
     EmployeeCode employee;
     List<Task> tasks = new List<Task>();
 
+    /**
+     * <summary></summary>
+     */
     public void Load(EmployeeCode id) {
         EmployeeInfo e = gameManager.GetEmployee(id);
         nameText.SetText(e.name.ToLower());
@@ -74,6 +77,9 @@ public class InstallOrUpgradeView : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Display(int err) {
         Task t = tasks[dropdown.value];
         ShopItemInfo sii = gameManager.GetShopItem(t.shopItem);
@@ -118,11 +124,17 @@ public class InstallOrUpgradeView : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void InstallItem() {
         gameManager.AssignEmployee(employee, tasks[dropdown.value].id);
         Close();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Close() {
         //employeeView.Load();
         gameObject.SetActive(false);

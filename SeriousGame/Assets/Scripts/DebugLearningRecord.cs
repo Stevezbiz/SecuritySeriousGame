@@ -28,10 +28,16 @@ public class DebugLearningRecord : MonoBehaviour {
     [SerializeField] TextMeshProUGUI posText;
     [SerializeField] TextMeshProUGUI testText;
 
+    /**
+     * <summary></summary>
+     */
     public void Init(KnowledgeComponent kc) {
         skillText.SetText(kc.name);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Load(KnowledgeComponent kc) {
         learnedText.SetText("p(L) = " + kc.GetLearned().ToString("0.###"));
         posText.SetText("pos(T) = " + kc.GetTransitionPos());

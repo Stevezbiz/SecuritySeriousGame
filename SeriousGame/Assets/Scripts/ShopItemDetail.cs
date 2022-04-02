@@ -180,6 +180,9 @@ public class ShopItemDetail : MonoBehaviour {
         installButton.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void InstallItem(EmployeeCode eid) {
         gameManager.AssignEmployee(eid, task.id);
         if (parent != null) parent.Installing();
@@ -187,6 +190,9 @@ public class ShopItemDetail : MonoBehaviour {
         installingButton.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void UpgradeItem(EmployeeCode eid) {
         gameManager.StartUpgradeShopItem(id);
         task = gameManager.GetUpgradeTask(id);
@@ -203,10 +209,16 @@ public class ShopItemDetail : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenEmployeeChoiceToInstall() {
         employeeChoice.Load(new Task(TaskType.INSTALL, id, gameManager.GetShopItem(id).category));
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenEmployeeChoiceToUpgrade() {
         employeeChoice.Load(new Task(TaskType.UPGRADE, id, gameManager.GetShopItem(id).category));
     }

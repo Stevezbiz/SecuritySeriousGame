@@ -36,6 +36,9 @@ public class CountermeasureItem : MonoBehaviour {
     ShopItemCode id;
     int lastValue = 0;
 
+    /**
+     * <summary></summary>
+     */
     public void Load(ShopItemInfo sii, CountermeasureItemDetails details) {
         this.id = sii.id;
         this.details = details;
@@ -82,6 +85,9 @@ public class CountermeasureItem : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void SliderValueChange() {
         int newValue = (int)slider.GetComponent<Slider>().value;
         if (lastValue != newValue) {
@@ -92,11 +98,17 @@ public class CountermeasureItem : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void ShowDetails() {
         details.Load(id, this);
         details.gameObject.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Enable() {
         enableBar.color = COLOR.GREEN;
         enableHandle.color = COLOR.GREEN;
@@ -104,6 +116,9 @@ public class CountermeasureItem : MonoBehaviour {
         slider.GetComponent<Slider>().value = 1;
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Disable() {
         enableBar.color = COLOR.GREEN_DISABLED;
         enableHandle.color = COLOR.GREEN_DISABLED;

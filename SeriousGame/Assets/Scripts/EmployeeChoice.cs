@@ -40,6 +40,9 @@ public class EmployeeChoice : MonoBehaviour {
     EmployeeCode selected;
     Task task;
 
+    /**
+     * <summary></summary>
+     */
     public void Load(Task t) {
         this.task = t;
         foreach (GameObject o in toDestroy) {
@@ -80,6 +83,9 @@ public class EmployeeChoice : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void SelectEmployee(EmployeeCode id) {
         selected = id;
         unselection.SetActive(false);
@@ -107,6 +113,9 @@ public class EmployeeChoice : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void AssignEmployee() {
         switch (task.type) {
             case TaskType.NONE:
@@ -129,6 +138,9 @@ public class EmployeeChoice : MonoBehaviour {
         Close();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Close() {
         gameObject.SetActive(false);
     }

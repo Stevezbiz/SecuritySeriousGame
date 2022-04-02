@@ -110,6 +110,9 @@ public static class BKTModel {
 
     static Dictionary<AttackCode, ResistanceRequirements> resistanceRequirements = new Dictionary<AttackCode, ResistanceRequirements>();
 
+    /**
+     * <summary></summary>
+     */
     public static void Init(TextAsset file) {
         ModelJSON modelJSON = JsonUtility.FromJson<ModelJSON>(file.text);
         COGNITIVE_MASTERY = modelJSON.modelConfig.COGNITIVE_MASTERY;
@@ -129,6 +132,9 @@ public static class BKTModel {
         timeSlots = new List<int>(modelJSON.modelConfig.timeSlots);
     }
 
+    /**
+     * <summary></summary>
+     */
     public static void LoadModel(ModelSave modelSave) {
         actualTimeSlot = modelSave.actualTimeSlot;
         foreach (KCRecord r in modelSave.records) {
@@ -137,30 +143,51 @@ public static class BKTModel {
         TimeManager.Resume();
     }
 
+    /**
+     * <summary></summary>
+     */
     public static void UpdateModel(int time) {
         if (time == timeSlots[actualTimeSlot]) actualTimeSlot++;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static float GetDurationL(AttackCode id) {
         return resistanceRequirements[id].durationL[actualTimeSlot];
     }
 
+    /**
+     * <summary></summary>
+     */
     public static float GetDurationH(AttackCode id) {
         return resistanceRequirements[id].durationH[actualTimeSlot];
     }
 
+    /**
+     * <summary></summary>
+     */
     public static float GetMissL(AttackCode id) {
         return resistanceRequirements[id].missL[actualTimeSlot];
     }
 
+    /**
+     * <summary></summary>
+     */
     public static float GetMissH(AttackCode id) {
         return resistanceRequirements[id].missH[actualTimeSlot];
     }
 
+    /**
+     * <summary></summary>
+     */
     public static float GetEnduranceL(AttackCode id) {
         return resistanceRequirements[id].enduranceL[actualTimeSlot];
     }
 
+    /**
+     * <summary></summary>
+     */
     public static float GetEnduranceH(AttackCode id) {
         return resistanceRequirements[id].enduranceH[actualTimeSlot];
     }
@@ -176,6 +203,9 @@ public class KnowledgeComponent {
     int transitionPos;                          // test number corresponding to the estimated transition
     List<bool> tests;                           // test results
 
+    /**
+     * <summary></summary>
+     */
     public KnowledgeComponent(SkillCode id, string name) {
         this.id = id;
         this.name = name;
@@ -187,6 +217,9 @@ public class KnowledgeComponent {
         tests = new List<bool>();
     }
 
+    /**
+     * <summary></summary>
+     */
     public KnowledgeComponent(KCRecord r) {
         id = r.id;
         name = r.name;
@@ -198,11 +231,17 @@ public class KnowledgeComponent {
         tests = new List<bool>(r.tests);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void AddTestResult(bool result) {
         tests.Add(result);
         FitThisParametersUpdate(result);
     }
 
+    /**
+     * <summary></summary>
+     */
     void EstimateEmpiricalProbabilityPosition() {
         double score;
         double max_score = -1;
@@ -241,6 +280,9 @@ public class KnowledgeComponent {
         transitionPos = bestTransitionPos;
     }
 
+    /**
+     * <summary></summary>
+     */
     void UpdateTransitionParameter() {
         // p(T) = p(Ln+1=1|Ln=0) = p(Ln+1=1 && Ln=0)/p(Ln=0)
         double num = 0, den = 0;
@@ -256,6 +298,9 @@ public class KnowledgeComponent {
         if (den != 0) transit = num / den;
     }
 
+    /**
+     * <summary></summary>
+     */
     void UpdateGuessParameter() {
         // p(G) = p(correct|Ln=0) = p(correct && Ln=0)/p(Ln=0)
         double num = 0, den = 0;
@@ -269,6 +314,9 @@ public class KnowledgeComponent {
         //if (guess > 0.3) guess = 0.3;
     }
 
+    /**
+     * <summary></summary>
+     */
     void UpdateSlipParameter() {
         // p(S) = p(wrong|Ln=1) = p(wrong && Ln=1)/p(Ln=1)
         double num = 0, den = 0;
@@ -282,6 +330,9 @@ public class KnowledgeComponent {
         //if (slip > 0.1) slip = 0.1;
     }
 
+    /**
+     * <summary></summary>
+     */
     void UpdateKnownParameter(bool LastPerformance) {
         double pLearnedBefore;
         if (LastPerformance == true) {
@@ -297,6 +348,9 @@ public class KnowledgeComponent {
         learned = pLearnedBefore + (1 - pLearnedBefore) * transit;
     }
 
+    /**
+     * <summary></summary>
+     */
     bool FirstEmpiricalDegenerationTest() {
         // If a student takes three correct actions in a row but the model’s estimated probability
         // that the student knows the skill is lower than before these three actions, the model failed
@@ -311,6 +365,9 @@ public class KnowledgeComponent {
         return degenerated;
     }
 
+    /**
+     * <summary></summary>
+     */
     bool SecondEmpiricalDegenerationTest() {
         // If a student takes ten correct actions in a row without reaching skill mastery, the model failed
 
@@ -324,6 +381,9 @@ public class KnowledgeComponent {
         return degenerated;
     }
 
+    /**
+     * <summary></summary>
+     */
     void FitThisParametersUpdate(bool result) {
         double oldTransit = transit;
         double oldGuess = guess;
@@ -344,26 +404,44 @@ public class KnowledgeComponent {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public double GetTransit() {
         return transit;
     }
 
+    /**
+     * <summary></summary>
+     */
     public double GetGuess() {
         return guess;
     }
 
+    /**
+     * <summary></summary>
+     */
     public double GetSlip() {
         return slip;
     }
 
+    /**
+     * <summary></summary>
+     */
     public double GetLearned() {
         return learned;
     }
 
+    /**
+     * <summary></summary>
+     */
     public int GetTransitionPos() {
         return transitionPos;
     }
 
+    /**
+     * <summary></summary>
+     */
     public string GetLearnedVector() {
         string str = "";
         for (int i = 0; i < tests.Count; i++) {
@@ -373,6 +451,9 @@ public class KnowledgeComponent {
         return str;
     }
 
+    /**
+     * <summary></summary>
+     */
     public string GetTestsVector() {
         string str = "";
         for (int i = 0; i < tests.Count; i++) {
@@ -382,6 +463,9 @@ public class KnowledgeComponent {
         return str;
     }
 
+    /**
+     * <summary></summary>
+     */
     public double GetAccuracy() {
         double score = 0;
         for (int i = 0; i < tests.Count; i++) {
@@ -396,14 +480,23 @@ public class KnowledgeComponent {
         return score / tests.Count;
     }
 
+    /**
+     * <summary></summary>
+     */
     public int GetTestN() {
         return tests.Count;
     }
 
+    /**
+     * <summary></summary>
+     */
     public bool[] GetTests() {
         return tests.ToArray();
     }
 
+    /**
+     * <summary></summary>
+     */
     public bool IsMastered() {
         return learned >= 0.95;
     }

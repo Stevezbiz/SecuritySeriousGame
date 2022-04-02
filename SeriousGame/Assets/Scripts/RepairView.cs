@@ -45,6 +45,9 @@ public class RepairView : MonoBehaviour {
     EmployeeCode employee;
     List<Task> tasks = new List<Task>();
 
+    /**
+     * <summary></summary>
+     */
     public void Load(EmployeeCode id) {
         EmployeeInfo e = gameManager.GetEmployee(id);
         nameText.SetText(e.name.ToLower());
@@ -74,6 +77,9 @@ public class RepairView : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Display(int err) {
         int duration = gameManager.GetRepairTaskDuration(employee, tasks[dropdown.value].attack);
         durationText.SetText("Durata: " + duration + " h");
@@ -104,11 +110,17 @@ public class RepairView : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void RepairAttack() {
         gameManager.AssignEmployee(employee, tasks[dropdown.value].id);
         Close();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Close() {
         //employeeView.Load();
         gameObject.SetActive(false);

@@ -33,6 +33,9 @@ public class EmployeeList : MonoBehaviour {
 
     List<GameObject> toDestroy = new List<GameObject>();
 
+    /**
+     * <summary></summary>
+     */
     void Load() {
         foreach (GameObject o in toDestroy) {
             Destroy(o);
@@ -46,6 +49,9 @@ public class EmployeeList : MonoBehaviour {
         content.localPosition = new Vector3(content.localPosition.x, 0f, content.localPosition.z);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenView() {
         selector.color = COLOR.GREEN;
         selectorButton.interactable = false;
@@ -54,6 +60,9 @@ public class EmployeeList : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CloseView() {
         selector.color = COLOR.GREEN_DISABLED;
         selectorButton.interactable = true;

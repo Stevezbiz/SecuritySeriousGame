@@ -28,12 +28,18 @@ public class GuideEntry : MonoBehaviour {
     GuideEntryCode id;
     GuideDetails guideDetails;
 
+    /**
+     * <summary></summary>
+     */
     public void Load(GuideEntryCode id, GuideDetails guideDetails, string name) {
         this.id = id;
         this.guideDetails = guideDetails;
         entryText.SetText(name.ToLower());
     }
 
+    /**
+     * <summary></summary>
+     */
     public void ShowEntry() {
         guideDetails.Load(id);
         guideDetails.gameObject.SetActive(true);

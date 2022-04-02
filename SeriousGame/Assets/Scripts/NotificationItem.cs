@@ -40,6 +40,9 @@ public class NotificationItem : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Load(string message, string name, Sprite s) {
         messageText.SetText(message);
         nameText.SetText(name.ToLower());
@@ -47,6 +50,9 @@ public class NotificationItem : MonoBehaviour {
         StartCoroutine(CountDownToDestroy());
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator CountDownToDestroy() {
         yield return new WaitForSeconds(seconds);
         fade = true;

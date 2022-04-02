@@ -87,6 +87,9 @@ public class EmployeesJSON {
 }
 
 public static class EmployeeUtils {
+    /**
+     * <summary></summary>
+     */
     public static Dictionary<EmployeeCode, EmployeeInfo> LoadFromFile(TextAsset file) {
         Dictionary<EmployeeCode, EmployeeInfo> employees = new Dictionary<EmployeeCode, EmployeeInfo>();
         EmployeesJSON empployeesJSON = JsonUtility.FromJson<EmployeesJSON>(file.text);
@@ -96,6 +99,9 @@ public static class EmployeeUtils {
         return employees;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static void UpdateEmployees(Dictionary<EmployeeCode, EmployeeInfo> employees, EmployeeRecap[] er) {
         foreach (EmployeeRecap e in er) {
             employees[e.id].owned = e.owned;
@@ -103,6 +109,9 @@ public static class EmployeeUtils {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public static EmployeeRecap[] GetEmployeeRecap(Dictionary<EmployeeCode, EmployeeInfo> employees) {
         List<EmployeeRecap> er = new List<EmployeeRecap>();
 
@@ -113,6 +122,9 @@ public static class EmployeeUtils {
         return er.ToArray();
     }
 
+    /**
+     * <summary></summary>
+     */
     public static Dictionary<CategoryCode, float> GetAbilities(EmployeeAbility[] a) {
         Dictionary<CategoryCode, float> abilities = new Dictionary<CategoryCode, float>();
 
@@ -123,6 +135,9 @@ public static class EmployeeUtils {
         return abilities;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static int GetAbility(EmployeeAbility[] abilities, CategoryCode c) {
         foreach (EmployeeAbility a in abilities) {
             if (a.category == c) return a.level;
@@ -131,6 +146,9 @@ public static class EmployeeUtils {
         return -1;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static List<EmployeeInfo> GetHiredEmployees(Dictionary<EmployeeCode, EmployeeInfo> e) {
         List<EmployeeInfo> employees = new List<EmployeeInfo>();
 
@@ -140,6 +158,9 @@ public static class EmployeeUtils {
         return employees;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static bool CheckEmployeeAvailability(Dictionary<EmployeeCode, EmployeeInfo> employees) {
         foreach (EmployeeInfo e in employees.Values) {
             if (e.owned && e.status == TaskType.NONE) return true;
@@ -147,6 +168,9 @@ public static class EmployeeUtils {
         return false;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static List<EmployeeInfo> GetAvailableEmployees(Dictionary<EmployeeCode, EmployeeInfo> e) {
         List<EmployeeInfo> employees = new List<EmployeeInfo>();
 
@@ -157,6 +181,9 @@ public static class EmployeeUtils {
         return employees;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static EmployeeCode ChooseNewEmployee(Dictionary<EmployeeCode, EmployeeInfo> employees) {
         List<EmployeeCode> candidates = new List<EmployeeCode>();
         foreach (EmployeeInfo e in employees.Values) {

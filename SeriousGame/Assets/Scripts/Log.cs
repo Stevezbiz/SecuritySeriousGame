@@ -105,6 +105,9 @@ public class Log : MonoBehaviour {
         AddToLogs(new LogLine(dateTime + desc, Serialize(COLOR.GREEN)));
     }
 
+    /**
+     * <summary></summary>
+     */
     public void LogPrintStartTask(Task t) {
         string dateTime = gameManager.GetDateTime() + " | ";
         string desc;
@@ -129,6 +132,9 @@ public class Log : MonoBehaviour {
         AddToLogs(new LogLine(dateTime + desc, Serialize(COLOR.GREEN)));
     }
 
+    /**
+     * <summary></summary>
+     */
     public void LogPrintEndTask(Task t) {
         string dateTime = gameManager.GetDateTime() + " | ";
         string desc;
@@ -153,6 +159,9 @@ public class Log : MonoBehaviour {
         AddToLogs(new LogLine(dateTime + desc, Serialize(COLOR.GREEN)));
     }
 
+    /**
+     * <summary></summary>
+     */
     void AddToLogs(LogLine logLine) {
         gameManager.AddToLogs(logLine);
         if (nLines == nLinesStep) {

@@ -48,6 +48,9 @@ public class GUI : MonoBehaviour {
         clockText.SetText(dateTime.ToString("HH:mm"));
     }
 
+    /**
+     * <summary></summary>
+     */
     public void SetNewTrend(string attack) {
         attackTrendText.SetText(attack);
     }

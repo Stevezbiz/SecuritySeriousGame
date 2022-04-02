@@ -25,11 +25,17 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] GameObject message;
     [SerializeField] GameObject credits;
 
+    /**
+     * <summary></summary>
+     */
     public void OpenQuiz() {
         Application.OpenURL("https://forms.gle/HcSwFLqoxUGMFFf76");
         message.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Back() {
         message.SetActive(false);
     }
@@ -57,16 +63,25 @@ public class MainMenu : MonoBehaviour {
         SceneLoader.ExitGame();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Logout() {
         IOUtils.player = "";
         IOUtils.load = false;
         SceneLoader.LoadScene("LoginMenu");
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CloseCredits() {
         credits.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenCredits() {
         credits.SetActive(true);
     }

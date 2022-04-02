@@ -125,11 +125,12 @@ public class AttackStats {
 [System.Serializable]
 public class AttacksJSON {
     public AttackInfo[] attacks;
-
-
 }
 
 public static class AttackUtils {
+    /**
+     * <summary></summary>
+     */
     public static Dictionary<AttackCode, AttackInfo> LoadFromFile(TextAsset file) {
         Dictionary<AttackCode, AttackInfo> attacks = new Dictionary<AttackCode, AttackInfo>();
 
@@ -141,6 +142,9 @@ public static class AttackUtils {
         return attacks;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static void SetupAll(Dictionary<AttackCode, AttackInfo> attacks, Dictionary<AttackCode, Resistance> resistances, Dictionary<AttackCode, AttackStats> attackStats, Dictionary<AttackCode, AttackPlan> attackSchedule) {
         foreach (AttackInfo attack in attacks.Values) {
             if (!resistances.ContainsKey(attack.id)) resistances[attack.id] = new Resistance(attack.id, 1f, 0f, 0f);
@@ -149,6 +153,9 @@ public static class AttackUtils {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public static void UpdateAll(Dictionary<AttackCode, Resistance> resistances, Dictionary<AttackCode, AttackStats> attackStats, Dictionary<AttackCode, AttackPlan> attackSchedule, Resistance[] ress, AttackStats[] aStats, AttackPlan[] aSchedules) {
         foreach (Resistance res in ress) {
             resistances.Add(res.id, res);
@@ -161,6 +168,9 @@ public static class AttackUtils {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public static string PrintMotivation(AttackCode id, bool missed, Dictionary<ShopItemCode, ShopItemInfo> shopItems) {
         if (!missed) {
             switch (id) {
@@ -402,6 +412,9 @@ public static class AttackUtils {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     static ShopItemCode SelectShopItem(ShopItemCode[] codes, Dictionary<ShopItemCode, ShopItemInfo> shopItems) {
         Dictionary<int, ShopItemCode> intervals = new Dictionary<int, ShopItemCode>();
         int tot = 0;

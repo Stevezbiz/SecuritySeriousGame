@@ -180,6 +180,9 @@ public static class COLOR {
 }
 
 public static class NumUtils {
+    /**
+     * <summary></summary>
+     */
     public static string NumToString(double val) {
         string text;
         if (val > 1000000000) text = (val / 1000000000).ToString(".#") + "B";

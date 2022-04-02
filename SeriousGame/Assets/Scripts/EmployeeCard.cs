@@ -52,12 +52,18 @@ public class EmployeeCard : MonoBehaviour {
         this.employeeView = parent;
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Load(GameManager gameManager, EmployeeInfo e, EmployeeChoice parent, CategoryCode c) {
         this.employee = e;
         _Load(gameManager, c);
         this.employeeChoice = parent;
     }
 
+    /**
+     * <summary></summary>
+     */
     void _Load(GameManager gameManager, CategoryCode c) {
         this.employeeChoice = null;
         this.employeeView = null;

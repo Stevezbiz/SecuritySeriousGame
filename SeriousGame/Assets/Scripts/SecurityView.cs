@@ -79,6 +79,9 @@ public class SecurityView : MonoBehaviour {
         LoadCurrentAttacks();
     }
 
+    /**
+     * <summary></summary>
+     */
     void LoadCurrentAttacks() {
         foreach (GameObject obj in toDestroy) {
             Destroy(obj);
@@ -141,11 +144,17 @@ public class SecurityView : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Repair(EmployeeCode id) {
         gameManager.AssignEmployee(id, selected);
         LoadCurrentAttacks();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenEmployeeChoice(Task t) {
         selected = t.id;
         employeeChoice.Load(t);
@@ -170,22 +179,37 @@ public class SecurityView : MonoBehaviour {
         bottomPanel.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void ResistancesButton() {
         gameManager.DisplayMessage("Le difese attive conferiscono resistenza ad attacchi specifici. Sono indicati i livelli di resistenza minimi consigliati per ottenere una protezione adeguata.", ActionCode.CONTINUE, Role.SECURITY);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void EnduranceButton() {
         gameManager.DisplayMessage("Complessità: influisce sulla frequenza degli attacchi, aumentando il tempo medio tra 2 attacchi consecutivi.", ActionCode.CONTINUE, Role.SECURITY);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void MissButton() {
         gameManager.DisplayMessage("Difesa: aumenta la probabilità di evitare un attacco.", ActionCode.CONTINUE, Role.SECURITY);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void DurationButton() {
         gameManager.DisplayMessage("Durata: riduce il tempo necessario a riparare i danni causati da un attacco.", ActionCode.CONTINUE, Role.SECURITY);
     }
 
+    /**
+     * <summary></summary>
+     */
     void SetColor(Resistance res) {
         Color c1;
         Color c2;

@@ -25,6 +25,9 @@ public static class TimeManager {
     static float timeScale = 0f;
     static int n;
 
+    /**
+     * <summary></summary>
+     */
     public static void Pause() {
         if (n == 0) {
             // first to pause
@@ -34,6 +37,9 @@ public static class TimeManager {
         n++;
     }
 
+    /**
+     * <summary></summary>
+     */
     public static void Resume() {
         n--;
         if (n == 0) {
@@ -42,6 +48,9 @@ public static class TimeManager {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public static void Reset() {
         n = 0;
         Time.timeScale = 1f;

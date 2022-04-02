@@ -62,14 +62,23 @@ public static class IOUtils {
     public static bool tutorial = false;
     public static string player = "";
 
+    /**
+     * <summary></summary>
+     */
     public static string GetPlayerFolder(string username) {
         return Path.Combine(new string[] { dataFolder, username });
     }
 
+    /**
+     * <summary></summary>
+     */
     public static string GetPlayerGameSavePath() {
         return Path.Combine(new string[] { dataFolder, player, "game_save.data" });
     }
 
+    /**
+     * <summary></summary>
+     */
     public static string GetPlayerModelSavePath() {
         return Path.Combine(new string[] { dataFolder, player, "model_save.data" });
     }

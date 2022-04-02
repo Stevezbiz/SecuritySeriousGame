@@ -38,6 +38,9 @@ public class TaskItem : MonoBehaviour {
     EmployeeView employeeView;
     Task task;
 
+    /**
+     * <summary></summary>
+     */
     public void Load(GameManager gameManager, EmployeeView employeeView, Task t, bool assigned) {
         this.task = t;
         this.employeeView = employeeView;
@@ -90,10 +93,16 @@ public class TaskItem : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenEmployeeChoice() {
         employeeView.Load(task);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void EndTask() {
         gameManager.EndTask(task);
         Load(gameManager, employeeView, task, false);

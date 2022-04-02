@@ -30,6 +30,9 @@ public class GuideDetails : MonoBehaviour {
 
     string link;
 
+    /**
+     * <summary></summary>
+     */
     public void Load(GuideEntryCode id) {
         GuideEntryData entry = guide.GetEntry(id);
         titleText.SetText(entry.entryName.ToLower());
@@ -38,10 +41,16 @@ public class GuideDetails : MonoBehaviour {
         content.localPosition = new Vector3(content.localPosition.x, 0f, content.localPosition.z);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Back() {
         gameObject.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenLink() {
         Application.OpenURL(link);
     }

@@ -41,6 +41,9 @@ public class QuizQuestion : MonoBehaviour {
     Quiz q;
     List<GameObject> toDestroy = new List<GameObject>();
 
+    /**
+     * <summary></summary>
+     */
     public void Load(Quiz q, Person p) {
         this.q = q;
         nameText.SetText(p.name.ToLower());
@@ -54,6 +57,9 @@ public class QuizQuestion : MonoBehaviour {
         TimeManager.Pause();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void EvaluateAnswer(int id) {
         if (q.answers[id].correct) effectsSource.clip = positiveTone;
         else effectsSource.clip = negativeTone;
@@ -86,6 +92,9 @@ public class QuizQuestion : MonoBehaviour {
         quizEffects.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Close() {
         TimeManager.Resume();
         gameManager.CloseMessage();

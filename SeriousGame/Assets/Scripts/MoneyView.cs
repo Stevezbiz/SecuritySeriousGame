@@ -99,22 +99,22 @@ public class MoneyView : MonoBehaviour {
     }
 
     /**
-         * <summary>Open a window with a brief explanation of the value</summary>
-         */
+     * <summary>Open a window with a brief explanation of the value</summary>
+     */
     public void UsersGainButton() {
         gameManager.DisplayMessage("Nuovi utenti: numero di nuovi utenti che si iscrivono al servizio", ActionCode.CONTINUE, Role.CEO);
     }
 
     /**
-         * <summary>Open a window with a brief explanation of the value</summary>
-         */
+     * <summary>Open a window with a brief explanation of the value</summary>
+     */
     public void UsersModButton() {
         gameManager.DisplayMessage("Modificatore usabilità: modificatore applicato al numero di nuovi utenti. Indica il grado di semplicità/difficoltà che gli utenti incontrano nell'utilizzare il servizio", ActionCode.CONTINUE, Role.CEO);
     }
 
     /**
-         * <summary>Open a window with a brief explanation of the value</summary>
-         */
+     * <summary>Open a window with a brief explanation of the value</summary>
+     */
     public void AttackUsersMalusButton() {
         gameManager.DisplayMessage("Malus attacchi: riduzione applicata al numero di nuovi utenti, dovuta agli attacchi in corso", ActionCode.CONTINUE, Role.CEO);
     }

@@ -35,18 +35,27 @@ public class BKTTest : MonoBehaviour {
         ResetButton();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CorrectAnswer() {
         // Apply the observation to the model
         kc.AddTestResult(true);
         Refresh();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void WrongAnswer() {
         // Apply the observation to the model
         kc.AddTestResult(false);
         Refresh();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void ResetButton() {
         kc = new KnowledgeComponent(SkillCode.NONE, "None");
         answers.SetText(kc.GetTestsVector());
@@ -56,6 +65,9 @@ public class BKTTest : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     void Refresh() {
         // Print the parameters of the model
         GameObject newRecord = Instantiate(new GameObject());

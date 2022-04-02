@@ -58,6 +58,9 @@ public class QuizQuestionsJSON {
 }
 
 public static class QuizUtils {
+    /**
+     * <summary></summary>
+     */
     public static Dictionary<int, Quiz> LoadFromFile(TextAsset file) {
         Dictionary<int, Quiz> entries = new Dictionary<int, Quiz>();
 

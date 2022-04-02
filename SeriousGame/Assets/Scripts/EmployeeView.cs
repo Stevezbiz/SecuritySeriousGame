@@ -40,6 +40,9 @@ public class EmployeeView : MonoBehaviour {
     EmployeeCode selected;
     Task task;
 
+    /**
+     * <summary></summary>
+     */
     public void Load(Task t) {
         this.task = t;
         foreach (GameObject o in toDestroy) {
@@ -81,6 +84,9 @@ public class EmployeeView : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenView() {
         TimeManager.Pause();
         employeeList.OpenView();
@@ -88,6 +94,9 @@ public class EmployeeView : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CloseView() {
         TimeManager.Resume();
         bottomPanel.SetActive(true);
@@ -95,10 +104,16 @@ public class EmployeeView : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Back() {
         employeeChoice.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void SelectEmployee(EmployeeCode id) {
         selected = id;
         unselection.SetActive(false);
@@ -126,6 +141,9 @@ public class EmployeeView : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Assign() {
         gameManager.AssignEmployee(selected, task.id);
         employeeList.OpenView();

@@ -39,6 +39,9 @@ public class LearningReport : MonoBehaviour {
     Dictionary<SkillCode, DebugLearningRecord> debugRecords = new Dictionary<SkillCode, DebugLearningRecord>();
     bool init = true;
 
+    /**
+     * <summary></summary>
+     */
     public void Init(Dictionary<SkillCode, KnowledgeComponent> kcs) {
         this.kcs = kcs;
         Transform lastRecord = null;
@@ -57,6 +60,9 @@ public class LearningReport : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Load(ActionCode action) {
         TimeManager.Pause();
         this.action = action;
@@ -67,6 +73,9 @@ public class LearningReport : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Close() {
         TimeManager.Resume();
         bottomPanel.SetActive(true);
@@ -74,6 +83,9 @@ public class LearningReport : MonoBehaviour {
         if (action == ActionCode.GAME_OVER) SceneLoader.LoadScene("MainMenu");
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenDebugView() {
         foreach (KnowledgeComponent kc in kcs.Values) {
             debugRecords[kc.id].Load(kc);
@@ -81,10 +93,16 @@ public class LearningReport : MonoBehaviour {
         debugView.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CloseDebugView() {
         debugView.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     void InitDebugView() {
         foreach (KnowledgeComponent kc in kcs.Values) {
             debugRecords[kc.id] = Instantiate(debugLearningRecord, debugContent, false).GetComponent<DebugLearningRecord>();
@@ -92,6 +110,9 @@ public class LearningReport : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void DebugPrint() {
         switch (inputField.text[0]) {
             case 'A':

@@ -37,6 +37,9 @@ public class EmployeeItem : MonoBehaviour {
     [SerializeField] GameObject progressBar;
     [SerializeField] Image bar;
 
+    /**
+     * <summary></summary>
+     */
     public void Load(GameManager gameManager, EmployeeInfo e, Sprite s) {
         icon.sprite = s;
         nameText.SetText(e.name.ToLower());

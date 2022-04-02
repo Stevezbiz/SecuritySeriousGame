@@ -27,6 +27,9 @@ public class GenericMessage : MonoBehaviour {
 
     ActionCode action;
 
+    /**
+     * <summary></summary>
+     */
     public void Close() {
         TimeManager.Resume();
         if (action == ActionCode.BYPASS_LOADING) {
@@ -37,6 +40,9 @@ public class GenericMessage : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Load(string message, ActionCode action) {
         TimeManager.Pause();
         this.action = action;

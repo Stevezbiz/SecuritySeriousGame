@@ -43,6 +43,9 @@ public class Message : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Show() {
         TimeManager.Pause();
         gameObject.SetActive(true);

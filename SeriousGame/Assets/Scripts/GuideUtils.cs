@@ -59,6 +59,9 @@ public class GuideJSON {
 }
 
 public static class GuideUtils {
+    /**
+     * <summary></summary>
+     */
     public static Dictionary<GuideEntryCode, GuideEntryData> LoadFromFile(TextAsset file) {
         Dictionary<GuideEntryCode, GuideEntryData> entries = new Dictionary<GuideEntryCode, GuideEntryData>();
 

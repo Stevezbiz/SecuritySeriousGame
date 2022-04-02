@@ -60,6 +60,9 @@ public class CategoryView : MonoBehaviour {
         toDestroy.Add(newItem);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenView(CategoryCode c) {
         TimeManager.Pause();
         Load(c);
@@ -67,6 +70,9 @@ public class CategoryView : MonoBehaviour {
         bottomPanel.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CloseView() {
         details.gameObject.SetActive(false);
         TimeManager.Resume();

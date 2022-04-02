@@ -45,6 +45,9 @@ public class PreventView : MonoBehaviour {
     EmployeeCode employee;
     List<Task> tasks = new List<Task>();
 
+    /**
+     * <summary></summary>
+     */
     public void Load(EmployeeCode id) {
         EmployeeInfo e = gameManager.GetEmployee(id);
         nameText.SetText(e.name.ToLower());
@@ -93,6 +96,9 @@ public class PreventView : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Display(int err) {
         Task t = tasks[dropdown.value];
         float protection = gameManager.GetPreventProtection(employee, t.category);
@@ -124,11 +130,17 @@ public class PreventView : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void PreventAttacks() {
         gameManager.AssignEmployee(employee, tasks[dropdown.value].id);
         Close();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Close() {
         //employeeView.Load();
         gameObject.SetActive(false);

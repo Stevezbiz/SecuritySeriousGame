@@ -27,6 +27,9 @@ public class NotificationList : MonoBehaviour {
     Queue<GameObject> notifications = new Queue<GameObject>();
     int N = 3;
 
+    /**
+     * <summary></summary>
+     */
     public void AddNotification(string message, string name, Sprite s) {
         if (notifications.Count == N) {
             if (notifications.Peek() == null) {

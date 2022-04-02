@@ -27,6 +27,9 @@ public class PauseManager : MonoBehaviour {
     [SerializeField] Button playButton;
     [SerializeField] Button fastButton;
 
+    /**
+     * <summary></summary>
+     */
     public void Pause() {
         pauseButton.interactable = false;
         playButton.interactable = true;
@@ -34,6 +37,9 @@ public class PauseManager : MonoBehaviour {
         Time.timeScale = 0f;
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Play() {
         pauseButton.interactable = true;
         playButton.interactable = false;
@@ -41,6 +47,9 @@ public class PauseManager : MonoBehaviour {
         Time.timeScale = 1f;
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Fast() {
         pauseButton.interactable = true;
         playButton.interactable = true;

@@ -45,16 +45,25 @@ public class PersonController : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     void WalkRight() {
         transform.Translate(Vector3.right * speed * Time.deltaTime);
         MoveVertically();
     }
 
+    /**
+     * <summary></summary>
+     */
     void WalkLeft() {
         transform.Translate(Vector3.left * speed * Time.deltaTime);
         MoveVertically();
     }
 
+    /**
+     * <summary></summary>
+     */
     void MoveVertically() {
         if (up) {
             transform.Translate(Vector3.up * (speed * 0.5f) * Time.deltaTime);
@@ -65,6 +74,9 @@ public class PersonController : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Load(GameManager gameManager, Person p) {
         this.gameManager = gameManager;
         gameObject.GetComponent<Image>().sprite = p.figure;

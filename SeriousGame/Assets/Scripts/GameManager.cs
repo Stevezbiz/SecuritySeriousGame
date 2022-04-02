@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour {
     // LOAD-SAVE GAME
 
     /**
-     * <summary>Return the data to be saved to resume correctly the game in future</summary>
+     * <summary>Return the data to be saved to resume correctly the game in the future</summary>
      */
     public GameSave SaveGame() {
         gc.date = dateTime.ToString();
@@ -225,6 +225,9 @@ public class GameManager : MonoBehaviour {
         if (gc.actualAttackTrend != AttackCode.NONE) gui.SetNewTrend(attacks[gc.actualAttackTrend].name);
     }
 
+    /**
+     * <summary>Reloads the scene and disables the tutorial</summary>
+     */
     public void EndTutorial() {
         // restart the scenario
         IOUtils.tutorial = false;
@@ -278,40 +281,61 @@ public class GameManager : MonoBehaviour {
         return attacks[id];
     }
 
+    /**
+     * <summary>Return all the attacks</summary>
+     */
     public List<AttackInfo> GetAttacks() {
         return new List<AttackInfo>(attacks.Values);
     }
 
+    /**
+     * <summary>Returns the duration resistance value of an attack</summary>
+     */
     float GetActualDurationResistance(AttackCode id) {
         float val = (1 - resistances[id].duration) * gc.duration[gc.actualResistanceMod];
         if (val < 0.99f) return val;
         else return 0.99f;
     }
 
+    /**
+     * <summary>Returns the miss resistance value of an attack</summary>
+     */
     float GetActualMissResistance(AttackCode id) {
         return resistances[id].miss * gc.miss[gc.actualResistanceMod];
     }
 
+    /**
+     * <summary>Returns the endurance resistance value of an attack</summary>
+     */
     float GetActualEnduranceResistance(AttackCode id) {
         return resistances[id].endurance * gc.endurance[gc.actualResistanceMod];
     }
 
+    /**
+     * <summary>Returns the duration resistance value by applying the actual modifier</summary>
+     */
     public float GetActualDurationResistance(float duration) {
         float val = duration * gc.duration[gc.actualResistanceMod];
         if (val < 0.99f) return val;
         else return 0.99f;
     }
 
+    /**
+     * <summary>Returns the miss resistance value by applying the actual modifier</summary>
+     */
     public float GetActualMissResistance(float miss) {
         return miss * gc.miss[gc.actualResistanceMod];
     }
 
+    /**
+     * <summary>Returns the endurance resistance value by applying the actual modifier</summary>
+     */
     public float GetActualEnduranceResistance(float endurance) {
         return endurance * gc.endurance[gc.actualResistanceMod];
     }
 
     /**
-     * <summary>Return the resistance to the specified attack</summary>
+     * <summary>Returns the resistances to the specified attack</summary>
      */
     public Resistance GetResistance(AttackCode id) {
         if (!resistances.ContainsKey(id)) return null;
@@ -321,6 +345,9 @@ public class GameManager : MonoBehaviour {
         return new Resistance(id, duration, miss, endurance);
     }
 
+    /**
+     * <summary>Returns true in the attack is unlocked</summary>
+     */
     public bool AttackIsScheduled(AttackCode id) {
         return attackSchedule[id].status != AttackStatus.INACTIVE;
     }
@@ -506,6 +533,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     void SetAttackTrend() {
         List<AttackCode> possibleTrends = new List<AttackCode>();
         foreach (AttackPlan p in attackSchedule.Values) {
@@ -517,20 +547,32 @@ public class GameManager : MonoBehaviour {
         gui.SetNewTrend(attacks[gc.actualAttackTrend].name);
     }
 
+    /**
+     * <summary></summary>
+     */
     void UpdateResistanceAging() {
         if (gc.totalTime % gc.resistanceModStep == 0) gc.actualResistanceMod++;
     }
 
     // TASK
 
+    /**
+     * <summary></summary>
+     */
     public List<Task> GetAssignedTasks() {
         return new List<Task>(assignedTasks.Values);
     }
 
+    /**
+     * <summary></summary>
+     */
     public List<Task> GetWaitingTasks() {
         return new List<Task>(waitingTasks.Values);
     }
 
+    /**
+     * <summary></summary>
+     */
     public List<Task> GetAvailableTasksByType(TaskType type) {
         List<Task> res = new List<Task>();
         foreach (Task t in waitingTasks.Values) {
@@ -539,6 +581,9 @@ public class GameManager : MonoBehaviour {
         return res;
     }
 
+    /**
+     * <summary></summary>
+     */
     void UpdateTasks() {
         List<EmployeeCode> toRemove = new List<EmployeeCode>();
         foreach (Task t in assignedTasks.Values) {
@@ -555,6 +600,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void EndTask(Task t) {
         t.progress = 0;
         switch (t.type) {
@@ -591,6 +639,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public int GetInstallTaskDuration(EmployeeCode id, ShopItemCode sid) {
         ShopItemInfo sii = shopItems[sid];
         int upgradeTime = sii.upgradeTime[sii.level];
@@ -598,6 +649,9 @@ public class GameManager : MonoBehaviour {
         return Mathf.CeilToInt(upgradeTime * (1f - gc.abilityFactor * (abilityLevel - gc.abilityOffset)));
     }
 
+    /**
+     * <summary></summary>
+     */
     public int GetUpgradeTaskDuration(EmployeeCode id, ShopItemCode sid) {
         ShopItemInfo sii = shopItems[sid];
         int upgradeTime = sii.upgradeTime[sii.level];
@@ -605,17 +659,26 @@ public class GameManager : MonoBehaviour {
         return Mathf.CeilToInt(upgradeTime * (1f - gc.abilityFactor * (abilityLevel - gc.abilityOffset)));
     }
 
+    /**
+     * <summary></summary>
+     */
     public int GetRepairTaskDuration(EmployeeCode id, AttackCode aid) {
         float resMod = GetActualDurationResistance(aid);
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[attacks[aid].category];
         return Mathf.CeilToInt((1f - resMod) * attacks[aid].duration * (1f - gc.abilityFactor * (abilityLevel - gc.abilityOffset)));
     }
 
+    /**
+     * <summary></summary>
+     */
     public float GetPreventProtection(EmployeeCode id, CategoryCode c) {
         float abilityLevel = EmployeeUtils.GetAbilities(employees[id].abilities)[c];
         return 0.15f + 0.03f * (abilityLevel - gc.abilityOffset);
     }
 
+    /**
+     * <summary></summary>
+     */
     public float GetTaskProgress(ShopItemCode id) {
         foreach (Task t in assignedTasks.Values) {
             if (t.shopItem == id) return (float)t.progress / (t.duration + 1);
@@ -624,10 +687,16 @@ public class GameManager : MonoBehaviour {
         return 0f;
     }
 
+    /**
+     * <summary></summary>
+     */
     public float GetTaskProgress(EmployeeCode id) {
         return (float)assignedTasks[id].progress / (assignedTasks[id].duration + 1);
     }
 
+    /**
+     * <summary></summary>
+     */
     public int GetTaskTarget(EmployeeCode id) {
         Task t = assignedTasks[id];
         switch (t.type) {
@@ -644,6 +713,9 @@ public class GameManager : MonoBehaviour {
         return 0;
     }
 
+    /**
+     * <summary></summary>
+     */
     public Task GetRepairTask(AttackCode id) {
         foreach (Task t in waitingTasks.Values) {
             if (t.type == TaskType.REPAIR && t.attack == id) {
@@ -653,6 +725,9 @@ public class GameManager : MonoBehaviour {
         return null;
     }
 
+    /**
+     * <summary></summary>
+     */
     public Task GetInstallTask(ShopItemCode id) {
         foreach (Task t in waitingTasks.Values) {
             if (t.type == TaskType.INSTALL && t.shopItem == id) {
@@ -662,6 +737,9 @@ public class GameManager : MonoBehaviour {
         return null;
     }
 
+    /**
+     * <summary></summary>
+     */
     public Task GetUpgradeTask(ShopItemCode id) {
         foreach (Task t in waitingTasks.Values) {
             if (t.type == TaskType.UPGRADE && t.shopItem == id) {
@@ -671,6 +749,9 @@ public class GameManager : MonoBehaviour {
         return null;
     }
 
+    /**
+     * <summary></summary>
+     */
     public Task GetPreventionTask(CategoryCode c) {
         foreach (Task t in waitingTasks.Values) {
             if (t.type == TaskType.PREVENT && t.category == c) {
@@ -680,6 +761,9 @@ public class GameManager : MonoBehaviour {
         return null;
     }
 
+    /**
+     * <summary></summary>
+     */
     public Task GetPreventionTask(EmployeeCode id) {
         return assignedTasks[id];
     }
@@ -701,6 +785,9 @@ public class GameManager : MonoBehaviour {
         return shopItems[id];
     }
 
+    /**
+     * <summary></summary>
+     */
     public List<ShopItemCode> GetShopItemsByCategory(CategoryCode category) {
         List<ShopItemCode> codes = new List<ShopItemCode>();
         foreach (ShopItemInfo sii in shopItems.Values) {
@@ -709,6 +796,9 @@ public class GameManager : MonoBehaviour {
         return codes;
     }
 
+    /**
+     * <summary></summary>
+     */
     public bool IsToUpgrade(ShopItemCode id) {
         foreach (Task t in waitingTasks.Values) {
             if (t.type == TaskType.UPGRADE && t.shopItem == id) return true;
@@ -732,6 +822,9 @@ public class GameManager : MonoBehaviour {
         gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void StartUpgradeShopItem(ShopItemCode id) {
         // print in the log
         logManager.LogPrintItem(shopItems[id].name, ActionCode.UPGRADE_ITEM);
@@ -744,6 +837,9 @@ public class GameManager : MonoBehaviour {
         gui.Refresh(gc.money, gc.users, gc.reputation, dateTime);
     }
 
+    /**
+     * <summary></summary>
+     */
     void FinishUpgradeShopItem(ShopItemCode id) {
         foreach (Resistance r in shopItems[id].resArray[shopItems[id].level - 2].resistances) {
             resistances[r.id].miss -= r.miss;
@@ -807,22 +903,37 @@ public class GameManager : MonoBehaviour {
 
     // EMPLOYEES
 
+    /**
+     * <summary></summary>
+     */
     public void AddToEmployees(EmployeeInfo e) {
         employees.Add(e.id, e);
     }
 
+    /**
+     * <summary></summary>
+     */
     public EmployeeInfo GetEmployee(EmployeeCode id) {
         return employees[id];
     }
 
+    /**
+     * <summary></summary>
+     */
     public bool CheckEmployeeAvailability() {
         return EmployeeUtils.CheckEmployeeAvailability(employees);
     }
 
+    /**
+     * <summary></summary>
+     */
     public List<EmployeeInfo> GetAvailableEmployees() {
         return EmployeeUtils.GetAvailableEmployees(employees);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void AssignEmployee(EmployeeCode id, int tid) {
         Task t = waitingTasks[tid];
         employees[id].status = t.type;
@@ -869,6 +980,9 @@ public class GameManager : MonoBehaviour {
 
     // MISC
 
+    /**
+     * <summary></summary>
+     */
     public void SaveAudioSettings(float musicVolume, bool musicMute, float effectsVolume, bool effectsMute) {
         gc.musicVolume = musicVolume;
         gc.musicMute = musicMute;
@@ -876,14 +990,23 @@ public class GameManager : MonoBehaviour {
         gc.effectsMute = effectsMute;
     }
 
+    /**
+     * <summary></summary>
+     */
     public Category GetCategory(CategoryCode c) {
         return categories[c];
     }
 
+    /**
+     * <summary></summary>
+     */
     public Sprite GetCategoryImage(CategoryCode c) {
         return categories[c].sprite;
     }
 
+    /**
+     * <summary></summary>
+     */
     public Sprite GetEmployeeIcon(EmployeeCode id) {
         return employeeAvatars[id];
     }
@@ -1016,6 +1139,9 @@ public class GameManager : MonoBehaviour {
         return (float)Math.Round(gc.usersGain[gc.userLevel] * Math.Round(gc.users) * Math.Round(attackUsersMalus, 2));
     }
 
+    /**
+     * <summary></summary>
+     */
     public List<Resistance> GetShopItemResistances(ShopItemCode id) {
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         foreach (Resistance r in shopItems[id].resArray[shopItems[id].level].resistances) {
@@ -1039,6 +1165,9 @@ public class GameManager : MonoBehaviour {
         return new List<Resistance>(res.Values);
     }
 
+    /**
+     * <summary></summary>
+     */
     public List<EmployeeInfo> GetHiredEmployees() {
         return EmployeeUtils.GetHiredEmployees(employees);
     }
@@ -1075,6 +1204,9 @@ public class GameManager : MonoBehaviour {
         else return rep;
     }
 
+    /**
+     * <summary></summary>
+     */
     void UpdateEmployees() {
         if (gc.employeeLevel < gc.employeeGoals.Length && gc.users >= gc.employeeGoals[gc.employeeLevel]) {
             EmployeeCode id = EmployeeUtils.ChooseNewEmployee(employees);
@@ -1111,6 +1243,9 @@ public class GameManager : MonoBehaviour {
         if (gc.reputation == 0) GameOver();
     }
 
+    /**
+     * <summary></summary>
+     */
     void CheckMoney() {
         if (gc.money < 0) {
             if (gc.firstNegative) {
@@ -1135,6 +1270,9 @@ public class GameManager : MonoBehaviour {
         messages.Enqueue(m.GetComponent<Message>());
     }
 
+    /**
+     * <summary></summary>
+     */
     public void UpdateMessages() {
         if (messages.Count > 0 && messageShown == false) {
             messageShown = true;
@@ -1142,10 +1280,16 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CloseMessage() {
         messageShown = false;
     }
 
+    /**
+     * <summary></summary>
+     */
     void DebugPrint() {
         Dictionary<AttackCode, Resistance> res = new Dictionary<AttackCode, Resistance>();
         float totalMoney = 0f;
@@ -1164,6 +1308,9 @@ public class GameManager : MonoBehaviour {
         Debug.Log("Total moneyMalus: " + totalMoney);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void DebugPrintAttack(AttackCode id) {
         if (!attacks.ContainsKey(id)) {
             Debug.Log("Unknown code");
@@ -1178,6 +1325,9 @@ public class GameManager : MonoBehaviour {
         Debug.Log(res);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void DebugPrintShopItem(ShopItemCode id) {
         if (!shopItems.ContainsKey(id)) {
             Debug.Log("Unknown code");
@@ -1191,6 +1341,9 @@ public class GameManager : MonoBehaviour {
         Debug.Log(res);
     }
 
+    /**
+     * <summary></summary>
+     */
     void EvaluateSecurityStatus() {
         // every x time evaluate the status of the countermeasures of the active attacks
         Dictionary<CategoryCode, float> scores = new Dictionary<CategoryCode, float>();
@@ -1239,6 +1392,9 @@ public class GameManager : MonoBehaviour {
         saveSystem.SaveGame(SaveGame(), SaveModel());
     }
 
+    /**
+     * <summary></summary>
+     */
     void EvaluatePurchaseShopItem(ShopItemCode id) {
         // Consider various aspects of the purchase
         float score = 0f;
@@ -1293,6 +1449,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     void EvaluateUpgradeShopItem(ShopItemCode id) {
         // Consider various aspects of the upgrade
         float score = 0f;
@@ -1347,6 +1506,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void EvaluateQuiz(int qid, int aid) {
         QuizAnswer qa = quizzes[qid].answers[aid];
         // send the test to the model
@@ -1374,6 +1536,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     void UpdateQuiz() {
         if ((gc.totalTime - 1) % gc.quizTime == 0) {
             // random quiz and time choice
@@ -1384,11 +1549,17 @@ public class GameManager : MonoBehaviour {
         if (gc.quizTimer-- == 0) Instantiate(personMoving, personParent, false).GetComponent<PersonController>().Load(this, roleAvatars[quizzes[gc.actualQuiz].person]);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void LaunchQuiz() {
         quizQuestion.Load(quizzes[gc.actualQuiz], roleAvatars[quizzes[gc.actualQuiz].person]);
         messageShown = true;
     }
 
+    /**
+     * <summary></summary>
+     */
     void EvaluateEmployeeManagement(EmployeeCode id) {
         float score = 0;
         EmployeeInfo employee = employees[id];
@@ -1412,6 +1583,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public ModelSave SaveModel() {
         List<KCRecord> records = new List<KCRecord>();
 
@@ -1422,10 +1596,16 @@ public class GameManager : MonoBehaviour {
         return new ModelSave(records.ToArray(), BKTModel.actualTimeSlot);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void PrintLearningReport() {
         learningReport.Load(ActionCode.CONTINUE);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void PrintFinalReport() {
         learningReport.Load(ActionCode.GAME_OVER);
     }

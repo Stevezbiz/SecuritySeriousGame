@@ -43,26 +43,44 @@ public class MonitorInterface : MonoBehaviour {
         { CategoryCode.SERVICES, 0 }
     };
 
+    /**
+     * <summary></summary>
+     */
     public void OpenNetworkView() {
         categoryView.OpenView(CategoryCode.NETWORK);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenAccessView() {
         categoryView.OpenView(CategoryCode.ACCESS);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenSoftwareView() {
         categoryView.OpenView(CategoryCode.SOFTWARE);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenAssetView() {
         categoryView.OpenView(CategoryCode.ASSET);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenServicesView() {
         categoryView.OpenView(CategoryCode.SERVICES);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void EnableAttackIcon(CategoryCode c) {
         switch (c) {
             case CategoryCode.NETWORK:
@@ -91,6 +109,9 @@ public class MonitorInterface : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void DisableAttackIcon(CategoryCode c) {
         switch (c) {
             case CategoryCode.NETWORK:
@@ -119,6 +140,9 @@ public class MonitorInterface : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void EnableEmployeeIcon(CategoryCode c, Sprite s) {
         switch (c) {
             case CategoryCode.NETWORK:
@@ -147,6 +171,9 @@ public class MonitorInterface : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void DisableEmployeeIcon(CategoryCode c) {
         switch (c) {
             case CategoryCode.NETWORK:

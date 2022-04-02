@@ -96,6 +96,9 @@ public class ShopItem : MonoBehaviour {
         details.gameObject.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void NotOwned() {
         installButton.SetActive(false);
         installingImage.SetActive(false);
@@ -123,6 +126,9 @@ public class ShopItem : MonoBehaviour {
         lockedImage.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Upgrading() {
         float fill = gameManager.GetTaskProgress(id);
         installBar.fillAmount = fill;
@@ -159,6 +165,9 @@ public class ShopItem : MonoBehaviour {
         lockedImage.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void SelectEmployee() {
         details.Load(id, this);
         details.OpenEmployeeChoiceToInstall();

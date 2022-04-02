@@ -43,6 +43,9 @@ public class SaveSystem : MonoBehaviour {
         StartCoroutine(LoadGameRoutine());
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator LoadGameRoutine() {
         WWWForm form = new WWWForm();
         form.AddField("mode", "r");
@@ -73,6 +76,9 @@ public class SaveSystem : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator LoadModelRoutine(GenericMessage message) {
         WWWForm form = new WWWForm();
         form.AddField("mode", "r");
@@ -101,6 +107,9 @@ public class SaveSystem : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator SaveGameRoutine(GameSave gameSave, ModelSave modelSave) {
         WWWForm form = new WWWForm();
         form.AddField("mode", "w");
@@ -127,6 +136,9 @@ public class SaveSystem : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator SaveModelRoutine(ModelSave modelSave, GenericMessage message) {
         WWWForm form = new WWWForm();
         form.AddField("mode", "w");

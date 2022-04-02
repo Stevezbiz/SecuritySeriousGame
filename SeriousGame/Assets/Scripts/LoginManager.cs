@@ -45,6 +45,9 @@ public class LoginManager : MonoBehaviour {
         StartCoroutine(CreateMainDataFolder());
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator CreateMainDataFolder() {
         WWWForm form = new WWWForm();
         form.AddField("dataFolder", IOUtils.dataFolder);
@@ -62,6 +65,9 @@ public class LoginManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator CreatePlayerFolder(string username, string password) {
         WWWForm form = new WWWForm();
         form.AddField("playerFolder", IOUtils.GetPlayerFolder(username));
@@ -84,6 +90,9 @@ public class LoginManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator UpdatePlayerList(PlayerList players, string username, string password) {
         WWWForm form = new WWWForm();
         form.AddField("mode", "w");
@@ -104,6 +113,9 @@ public class LoginManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator LoginRoutine(string username, string password) {
         WWWForm form = new WWWForm();
         form.AddField("mode", "r");
@@ -144,6 +156,9 @@ public class LoginManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     IEnumerator RegisterRoutine(string username, string password) {
         PlayerData playerData;
         using (Crypto.SHA256 sha256 = Crypto.SHA256.Create()) {
@@ -182,6 +197,9 @@ public class LoginManager : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Login() {
         string username = loginUsername.text;
         string password = loginPassword.text;
@@ -192,6 +210,9 @@ public class LoginManager : MonoBehaviour {
         } else StartCoroutine(LoginRoutine(username, password));
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Register() {
         string username = registerUsername.text;
         string password = registerPassword.text;
@@ -211,6 +232,9 @@ public class LoginManager : MonoBehaviour {
         } else StartCoroutine(RegisterRoutine(username, password));
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenLoginView() {
         loginUsername.text = "";
         loginPassword.text = "";
@@ -218,6 +242,9 @@ public class LoginManager : MonoBehaviour {
         registerView.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenRegisterView() {
         registerUsername.text = "";
         registerPassword.text = "";
@@ -226,6 +253,9 @@ public class LoginManager : MonoBehaviour {
         registerView.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CloseMessage() {
         errorMessage.SetActive(false);
     }

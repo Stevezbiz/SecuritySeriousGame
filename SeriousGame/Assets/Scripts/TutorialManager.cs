@@ -36,52 +36,82 @@ public class TutorialManager : MonoBehaviour {
     [SerializeField] RectTransform taskListContent;
     [SerializeField] RectTransform employeeChoiceContent;
 
+    /**
+     * <summary></summary>
+     */
     public void Load() {
         gameObject.SetActive(true);
         Page1();
     }
 
+    /**
+     * <summary></summary>
+     */
     public void EndTutorial() {
         gameManager.EndTutorial();
         Destroy(gameObject);
     }
 
+    /**
+     * <summary></summary>
+     */
     void Page1() {
         // welcome message
         tutorialPages[0].SetActive(true);
         description1.SetText("Benvenuto/a " + IOUtils.player + "!");
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page2() {
         tutorialPages[1].SetActive(true);
         tutorialPages[0].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page3() {
         tutorialPages[2].SetActive(true);
         tutorialPages[1].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page4() {
         tutorialPages[3].SetActive(true);
         tutorialPages[2].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page5() {
         tutorialPages[4].SetActive(true);
         tutorialPages[3].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page6() {
         tutorialPages[5].SetActive(true);
         tutorialPages[4].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page7() {
         tutorialPages[6].SetActive(true);
         tutorialPages[5].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page8() {
         // open shop
         shop.OpenShop();
@@ -89,6 +119,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[6].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page9() {
         // open firewall details
         shopItemDetail.Load(ShopItemCode.FIREWALL, null);
@@ -97,6 +130,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[7].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page10() {
         // purchase firewall
         shopItemDetail.PurchaseItem();
@@ -104,6 +140,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[8].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page11() {
         // close shop
         shop.CloseShop();
@@ -118,6 +157,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[10].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page13() {
         // open task list (bottom)
         taskList.OpenView();
@@ -126,11 +168,17 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[11].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page14() {
         tutorialPages[13].SetActive(true);
         tutorialPages[12].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page15() {
         // open employee choice (bottom)
         employeeView.Load(gameManager.GetInstallTask(ShopItemCode.FIREWALL));
@@ -139,6 +187,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[13].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page16() {
         // select sara
         employeeView.SelectEmployee(EmployeeCode.SARA);
@@ -146,6 +197,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[14].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page17() {
         // assign task and close employee view
         employeeView.Assign();
@@ -154,6 +208,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[15].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page18() {
         // open security view
         securityView.OpenView();
@@ -161,16 +218,25 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[16].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page19() {
         tutorialPages[18].SetActive(true);
         tutorialPages[17].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page20() {
         tutorialPages[19].SetActive(true);
         tutorialPages[18].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page21() {
         // close security view
         securityView.CloseView();
@@ -178,6 +244,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[19].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page22() {
         // open money view
         moneyView.OpenView();
@@ -185,11 +254,17 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[20].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page23() {
         tutorialPages[22].SetActive(true);
         tutorialPages[21].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page24() {
         // close money view
         moneyView.CloseView();
@@ -197,6 +272,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[22].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page25() {
         // open log view
         log.OpenLog();
@@ -204,6 +282,9 @@ public class TutorialManager : MonoBehaviour {
         tutorialPages[23].SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Page26() {
         // close log view
         log.CloseLog();

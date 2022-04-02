@@ -34,11 +34,17 @@ public class LearningRecord : MonoBehaviour {
     [SerializeField] RectTransform marker;
     [SerializeField] RectTransform bar;
 
+    /**
+     * <summary></summary>
+     */
     public void Init(KnowledgeComponent kc) {
         skillText.SetText("Competenza: " + kc.name);
         marker.localPosition = new Vector3((float)(-bar.sizeDelta.x * (1 - BKTModel.COGNITIVE_MASTERY)), 0, 0);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void Load(KnowledgeComponent kc) {
         valueText.SetText("Livello di abilità: " + (100 * kc.GetLearned()).ToString(".##") + "%");
         if (kc.IsMastered()) SetColor(COLOR.BLUE);
@@ -46,6 +52,9 @@ public class LearningRecord : MonoBehaviour {
         barImage.fillAmount = (float)kc.GetLearned();
     }
 
+    /**
+     * <summary></summary>
+     */
     void SetColor(Color color) {
         skillText.color = color;
         valueText.color = color;

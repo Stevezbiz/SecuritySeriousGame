@@ -38,6 +38,9 @@ public class AudioSettingsMenu : MonoBehaviour {
     float sNorm = .3f;
     float eNorm = 1f;
 
+    /**
+     * <summary></summary>
+     */
     public void Setup(GameConfig gameConfig) {
         soundtrack.volume = sNorm * gameConfig.musicVolume;
         soundtrack.mute = gameConfig.musicMute;
@@ -45,6 +48,9 @@ public class AudioSettingsMenu : MonoBehaviour {
         effects.mute = gameConfig.effectsMute;
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenAudioSettings() {
         if (soundtrack.mute) {
             musicImage.color = COLOR.GREEN_DISABLED;
@@ -71,11 +77,17 @@ public class AudioSettingsMenu : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CloseAudioSettings() {
         gameManager.SaveAudioSettings(soundtrack.volume / sNorm, soundtrack.mute, effects.volume / eNorm, effects.mute);
         gameObject.SetActive(false);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void MuteUnmuteMusic() {
         if (soundtrack.mute) {
             soundtrack.mute = false;
@@ -92,6 +104,9 @@ public class AudioSettingsMenu : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void MuteUnmuteEffects() {
         if (effects.mute) {
             effects.mute = false;
@@ -108,10 +123,16 @@ public class AudioSettingsMenu : MonoBehaviour {
         }
     }
 
+    /**
+     * <summary></summary>
+     */
     public void ChangeMusicVolume() {
         soundtrack.volume = sNorm * musicBar.value;
     }
 
+    /**
+     * <summary></summary>
+     */
     public void ChangeEffectsVolume() {
         effects.volume = eNorm * effectsBar.value;
     }

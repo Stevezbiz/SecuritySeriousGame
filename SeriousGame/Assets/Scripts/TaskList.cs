@@ -34,6 +34,9 @@ public class TaskList : MonoBehaviour {
 
     List<GameObject> toDestroy = new List<GameObject>();
 
+    /**
+     * <summary></summary>
+     */
     void Load() {
         foreach (GameObject o in toDestroy) {
             Destroy(o);
@@ -52,6 +55,9 @@ public class TaskList : MonoBehaviour {
         content.localPosition = new Vector3(content.localPosition.x, 0f, content.localPosition.z);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void OpenView() {
         selector.color = COLOR.GREEN;
         selectorButton.interactable = false;
@@ -60,6 +66,9 @@ public class TaskList : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
+    /**
+     * <summary></summary>
+     */
     public void CloseView() {
         selector.color = COLOR.GREEN_DISABLED;
         selectorButton.interactable = true;
